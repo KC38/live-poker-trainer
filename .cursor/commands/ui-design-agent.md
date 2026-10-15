@@ -26,7 +26,8 @@ Hard rules:
 - One run, one worktree, one PR: the primary KEY plus at most two
   companions (implement → validate → close each). You may **file**
   multiple tickets in the same run when the walk finds multiple distinct
-  bugs, each with its own current-issue screenshot. Never launch a
+  bugs, each with its own current-issue proof (clip+frames for motion /
+  SoftPulse / Hint; still OK for static copy). Never launch a
   subagent, a background agent, or a parallel run.
 - The iPhone 13 mini is the only device. Resolve it with
   `DEVICE="$(tools/iphone_13_mini_udid.sh)"`. Never hardcode a UDID. Never
@@ -203,7 +204,7 @@ learnings if useful, then release) and end with `JIRA_UNAVAILABLE`.
 | Create (Mac mini) | `tools/tee_exit.sh /tmp/jira-create-….log python3 tools/jira.py create --type Story --summary "…" --priority Medium --labels ui,ui-agent,lesson --body-file body.md --attach <surface>-issue.png` then `tools/wait_done.sh /tmp/jira-create-….done` (foreground create+PNG can hang 10+ min with no stdout — LPT-644) |
 | Create (GrokBot) | same `tee_exit` / `wait_done` pattern with `--type Bug` and labels `ui,grokbot,…` |
 | Edit fields or labels | `python3 tools/jira.py edit LPT-NN [--body-file body.md] [--add-label needs-human] [--remove-label …]` |
-| Comment with screenshots | `python3 tools/jira.py comment LPT-NN --body-file note.md --attach shot.png` |
+| Comment with proof | `python3 tools/jira.py comment LPT-NN --body-file note.md --attach clip.mp4 frame.png` |
 | Verify thumbs resolve | `python3 tools/jira.py verify-embeds LPT-NN` (must exit 0 before Done) |
 | Move | `python3 tools/jira.py transition LPT-NN --to "In Progress"` (statuses: To Do, In Progress, In Review, Done) |
 | Block | `python3 tools/jira.py link --type Blocks --inward LPT-A --outward LPT-B` (A blocks B) |
@@ -231,14 +232,19 @@ table in the design record, using the coverage ledger
 `at`, `sha`, `surface`, `result`, `ticket`, `leads`):
 
 1. A surface with `leads` from an earlier run: re-check those leads first.
-2. A surface never walked.
-3. A surface whose code changed since its last walk
+2. A **motion / multi-frame** surface from
+   `python3 tools/ui_motion_targets.py pick` that is never walked or
+   oldest — film it with `tools/sim_record.py` (see Motion check below).
+3. A surface never walked.
+4. A surface whose code changed since its last walk
    (`git diff --name-only <last sha>..HEAD -- <code path>` is not empty).
-4. The surface walked longest ago.
+5. The surface walked longest ago.
 
-Prefer surfaces that the **Known gaps** section names. When walking a
+Prefer surfaces that the **Known gaps** section names, then motion
+targets (`ui_motion_targets.py list` / `classes`). When walking a
 lesson surface, treat broken randomization, Hint, SoftPulse cues, coach
-copy, or heart loss/restore as higher priority than Home chrome polish.
+copy, heart loss/restore, or **motion/multi-frame** failures as higher
+priority than Home chrome polish.
 File every solid finding from the walk (step 5). Choose the primary KEY
 only among **`ui-agent`** tickets (never `grokbot`). If this surface
 produced only GrokBot filings (or nothing Mac-mini can fix), **do not**
@@ -285,24 +291,50 @@ like `Continue` can hit Home controls.
 `python3 tools/agent_tap.py tree` lists every visible label top-to-bottom
 with its rect, `[enabled]`/`[disabled]` tap state, `gold` (SoftPulse cue)
 or `cyan` (selection) glow, and widget key, plus a `gold SoftPulse:` summary
-line. After `openlesson` / a deal, wait with
+line. To assert Hint / coach / speech copy, use
+`python3 tools/agent_tap.py tree --contains "needle"` (exit 1 if missing) —
+never `tree | head | grep` (truncated trees false-fail VALIDATE; LPT-822).
+After `openlesson` / a deal, wait with
 `python3 tools/agent_tap.py wait-gold` (optional `--text` needle,
 `--timeout 45`) instead of bare sleep — early taps nomatch Home. Use
 `tree` to navigate, to check Hint disabled/enabled, one gold target,
-coach copy, and heart counts. Screenshot only the states you judge
-visually (layout, theme, Duolingo beat) and every issue/validated proof:
+coach copy, and heart counts.
+
+**Prefer short simulator video over a single still** for SoftPulse timing,
+Hint waves, deal / card land, coach transitions, and any bug that only
+shows while the UI is moving. Stills are fine for static copy/layout once
+you have already watched the motion. Record under the sim lock:
 
 ```bash
 mkdir -p "$PRIMARY/.cursor/tmp/ui-agent"
-python3 tools/sim_lock.py guard && xcrun simctl io "$DEVICE" screenshot "$PRIMARY/.cursor/tmp/ui-agent/<surface>-<n>.png"
+# Fixed-length clip (drives UI during the window, or use start/stop around taps):
+python3 tools/sim_record.py record \
+  --out "$PRIMARY/.cursor/tmp/ui-agent/<surface>-issue.mp4" --seconds 12
+# Or wrap the interaction:
+python3 tools/sim_record.py start --out "$PRIMARY/.cursor/tmp/ui-agent/<surface>-issue.mp4"
+# … agent_tap / wait-gold / Hint …
+python3 tools/sim_record.py stop
+# Extract frames the agent can Read (Cursor reads PNG, not MP4):
+python3 tools/sim_record.py frames \
+  --video "$PRIMARY/.cursor/tmp/ui-agent/<surface>-issue.mp4" \
+  --out-dir "$PRIMARY/.cursor/tmp/ui-agent" --every 1 --max 8
 ```
 
-Read each PNG you take. Walk the whole surface: every step of a lesson, both the
-right and the wrong answer, Hint, the dock, the result. On a lesson, also
-run the **Lesson content** checks below (randomization, hints, cues, coach
-text, hearts) — those are first-class findings, not polish. A surface you
-cannot reach with `agent_seed` + `agent_tap` is logged as `unreachable` in
-step 10. Choose another surface for this run.
+Still OK for a settled static state:
+
+```bash
+python3 tools/sim_lock.py guard && xcrun simctl io "$DEVICE" screenshot \
+  "$PRIMARY/.cursor/tmp/ui-agent/<surface>-<n>.png"
+```
+
+Read every extracted frame (and any still). Attach the **MP4 plus key
+frames** on the Jira issue/closeout (`jira.py … --attach clip.mp4 frame-*.png`).
+Walk the whole surface: every step of a lesson, both the right and the wrong
+answer, Hint, the dock, the result. On a lesson, also run the **Lesson
+content** checks below (randomization, hints, cues, coach text, hearts) —
+those are first-class findings, not polish. A surface you cannot reach with
+`agent_seed` + `agent_tap` is logged as `unreachable` in step 10. Choose
+another surface for this run.
 
 Judge each screen with this lens, in this order:
 
@@ -310,7 +342,7 @@ Judge each screen with this lens, in this order:
    actions on the felt)? A text list where the felt could carry the answer
    is a gap. The Lesson ledger's "Still a list" column is the known set.
 2. **Lesson content** (required on every lesson walk). Content bugs that
-   mis-teach or leave the learner stuck beat chrome. Check all six:
+   mis-teach or leave the learner stuck beat chrome. Check all seven:
    1. **Card randomization.** Lesson cards are randomized within the hand
       class each attempt; the coach copy follows the dealt cards (design
       record → Lesson tables). After you finish or leave a step, reopen the
@@ -364,12 +396,29 @@ Judge each screen with this lens, in this order:
       without a valid Practice/refill path is a bug.
    6. **Payoff chrome.** XP, streak, gems, and the daily goal celebrate as
       a beat on the lesson result / Home, not as a silent report.
+   7. **Motion & multi-frame** (required whenever the surface has more than
+      one press/beat, in-place motion, or traveling UI). Use
+      `python3 tools/ui_motion_targets.py classes` for the three classes.
+      Always film with `tools/sim_record.py` (start/stop around the beat or
+      `record --seconds …`); Read extracted frames — a single still is not
+      enough for this check.
+      - **Multi-frame:** every press/beat in sequence (SoftPulse advances
+        correctly; Hint per press; no gold race; no skipped beat).
+      - **Static move:** SoftPulse / empty-hearts / coach-mood motion stays
+        in place — no tile jump, resize, or layout hitch when the cue
+        breathes or toggles (film ≥2s idle on the gold/empty state).
+      - **Dynamic:** deal land, pot/stack travel, lesson-result or
+        section-end ceremony enter/exit — film from before motion until
+        settled; no empty coach mid-deal; no stuck mid-ceremony frame.
+      If the surface is on `ui_motion_targets.py list`, run this check even
+      on a queue pickup. File temporal bugs with MP4 + frames.
 3. **One table.** `LessonActionSpot`, `LessonTableScene`, a mini felt, or a
    loose row of cards where the full table belongs.
 4. **Live realism.** Deal order and pacing, posted blinds, visible folds,
    bets on the felt lane, the pot flying to the winner, stacks that move.
    You cannot hear sound: check the code calls `SoundService` for each
-   table action you watched.
+   table action you watched. Prefer a `sim_record` clip here too when
+   chips/pot move.
 5. **Layout on the mini.** No overflow stripe, clip, overlap, truncated
    text, covered cards, or control under the dock or the home indicator.
    Tap targets at least 44 pt.
@@ -380,12 +429,12 @@ Judge each screen with this lens, in this order:
 8. **The Duolingo beat.** Put the matching frame next to your screenshot.
    Name what their beat does that ours does not.
 
-**File every solid finding** that has a current-issue screenshot and a
+**File every solid finding** that has current-issue proof (clip/frames or still) and a
 clear expected (design record / brief). Do not collapse several bugs into
 one ticket. Priority among findings (for which one this run **fixes**):
 one that blocks or misleads a learner beats a missing beat, which beats
 polish; a lesson-content bug or teach-by-doing gap beats spacing chrome.
-Findings that are only hunches, unreachable, or screenshot-less stay in
+Findings that are only hunches, unreachable, or proof-less stay in
 `leads` for the ledger — do not invent tickets for them. If nothing on the
 surface misses the contract for **this** agent (`ui-agent` work), move to
 the next surface rather than ending — unless every remaining surface has
@@ -485,36 +534,39 @@ After this ships, that section should say: <the sentence that will land>.
 ## Flutter UI/UX
 <the widget, layout, or motion approach>
 
-## Screenshots — current issue
-At least one PNG that shows the bug **as it is now** on this SHA. Name
-files so the issue shot is obvious, e.g. `<surface>-issue.png` (and
-`<surface>-issue-2.png` if you need a second state). Embed them here — do
-not leave this section empty or attach only unrelated chrome.
+## Proof — current issue
+At least one **current-issue** capture on this SHA. For motion /
+SoftPulse / Hint / deal bugs prefer a short MP4 (`<surface>-issue.mp4`)
+plus embedded key frames (`<surface>-issue-frame-001.png`, …). Static
+copy/layout bugs may use a single PNG. Do not leave this section empty.
 
-![issue: <what is wrong on screen>](<surface>-issue.png)
+![issue frame: <what is wrong>](<surface>-issue-frame-001.png)
+
+(Attach `<surface>-issue.mp4` via `--attach` — Jira lists non-image clips
+as filenames, not wiki thumbnails.)
 
 ## Acceptance criteria
 1. <observable on the mini>
 2. <state that must still hold on the next screen>
 3. A widget test locks it (at 375 × 812 for layout, failing on overflow).
 4. The design-record sentence above is in the same change.
-5. Closeout comment includes a **validated** screenshot on origin/main
-   after the fix (see step 9).
+5. Closeout comment includes **validated** proof on origin/main after the
+   fix (clip+frames for motion bugs, still OK for static — see step 9).
 
 ## Validate before closing
 1. <the walk that proves it, on origin/main, on the mini>
-2. Capture `<KEY>-validated.png` (same angle as the issue shot when
-   possible) proving the fix.
+2. Capture `<KEY>-validated.mp4` (and frames) or `<KEY>-validated.png`
+   proving the fix (same angle as the issue proof when possible).
 
 Device: iPhone 13 mini simulator, debug build of origin/main `<SHA>`.
 ```
 
-Pass every screenshot for that ticket to `--attach`; the images named in
-the body render. Creating or updating a ticket **requires** at least one
-**current-issue** screenshot in the description (or a comment on reopen).
-Do not file from memory or from a walk description alone. Use a distinct
-issue-shot filename per ticket (e.g. `<surface>-issue.png`,
-`<surface>-hint-issue.png`) so embeds do not collide across filings.
+Pass every proof file for that ticket to `--attach`; PNG/GIF embeds
+render, MP4s attach as downloadable clips. Creating or updating a ticket
+**requires** at least one **current-issue** image embed (frame or still)
+in the description (or a comment on reopen), plus the MP4 when the bug
+is temporal. Do not file from memory or from a walk description alone.
+Use distinct filenames per ticket so embeds do not collide.
 
 When finding A depends on open finding B, link them (`jira.py link --type
 Blocks`, blocker inward). If the KEY you would fix this run is blocked,
@@ -656,35 +708,39 @@ tools/main_matches_validated.sh "$VALIDATED_SHA"
 - **`match`** (exit 0): origin/main's `lib/`, `assets/`, `ios/` and
   pubspec equal the validated worktree build and the change did not touch
   `functions/`. Do not re-walk. Go straight to the fixed state, capture
-  `<KEY>-validated.png`, and confirm the criteria visible in that shot.
+  validated proof (`<KEY>-validated.mp4` + frames for motion bugs, or
+  `<KEY>-validated.png` for static), and confirm the criteria.
 - **`differs`** (exit 1): walk **Validate before closing** again on
   origin/main. Concurrent catalog / teachSpec merges often flip
   `assets/course/v2/catalog.json` while your lib fix is already on main —
   that is a re-walk, not a failed fix (LPT-173).
 
-Save the closeout screenshots to `$PRIMARY/.cursor/tmp/ui-agent/<KEY>-*.png`.
+Save closeout proof to `$PRIMARY/.cursor/tmp/ui-agent/<KEY>-*`
+(`.mp4` / `.png`).
 
-**Required validated proof.** Capture at least one
-`<KEY>-validated.png` on this post-merge origin/main build that shows the
-fixed behavior (same surface/angle as the issue screenshot when possible).
-Do not close without attaching it.
+**Required validated proof.** Capture at least one validated image embed
+on this post-merge origin/main build (frame from
+`<KEY>-validated.mp4` or a still) that shows the fixed behavior (same
+surface/angle as the issue proof when possible). Attach the MP4 when the
+bug was temporal. Do not close without attaching it.
 
 A failure here is another attempt in the step 7 loop, on a new branch
 `fix/$SLUG-2` from origin/main. The three-attempt limit counts both steps.
 
 Close each ticket (primary, then companions) only when every one of its
 criteria passed on origin/main — each gets its own close comment and
-`<KEY>-validated.png`:
+validated proof:
 
 1. One comment, `jira.py comment LPT-NN --body-file close.md --attach
-   <KEY>-validated.png` (plus any other `<KEY>-*.png` you need), that
-   stands alone. The body must include an embedded validated shot:
+   <KEY>-validated.mp4 <KEY>-validated-frame-001.png` (or
+   `<KEY>-validated.png` for static; plus any other `<KEY>-*` proof), that
+   stands alone. The body must include an embedded validated frame/still:
 
    ```markdown
    ## Validated on origin/main
    SHA: `<SHA>`
    PR: <url>
-   ![validated: <what is fixed>](<KEY>-validated.png)
+   ![validated: <what is fixed>](<KEY>-validated-frame-001.png)
 
    ## Criteria
    - <criterion>: how checked on the mini

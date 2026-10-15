@@ -832,6 +832,43 @@ void main() {
     expect(unrelated.nodes[1].state, CourseNodeState.locked);
     expect(unrelated.nextLessonId, 'lesson-a');
   });
+
+  test('lessonIsSoftPulseQuietReview uses live completedLessonIds (LPT-828)', () {
+    expect(
+      lessonIsSoftPulseQuietReview(
+        entryIsReview: true,
+        completedLessonIds: const <String>[],
+        lessonId: 'lesson-a',
+      ),
+      isTrue,
+    );
+    expect(
+      lessonIsSoftPulseQuietReview(
+        entryIsReview: false,
+        completedLessonIds: const <String>['lesson-a'],
+        lessonId: 'lesson-a',
+      ),
+      isTrue,
+    );
+    // fresh cleared the id — SoftPulse-quiet must not stick from a stale
+    // Home hasCompleted that is not represented in completedLessonIds.
+    expect(
+      lessonIsSoftPulseQuietReview(
+        entryIsReview: false,
+        completedLessonIds: const <String>['lesson-prereq'],
+        lessonId: 'lesson-a',
+      ),
+      isFalse,
+    );
+    expect(
+      lessonIsSoftPulseQuietReview(
+        entryIsReview: false,
+        completedLessonIds: const <String>[],
+        lessonId: 'lesson-a',
+      ),
+      isFalse,
+    );
+  });
 }
 
 CourseProfileView _profileWith(List<String> completed) {

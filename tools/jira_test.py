@@ -171,6 +171,30 @@ class OperationsTest(unittest.TestCase):
         self.assertEqual(description.count("!home-1.png|thumbnail!"), 1)
         self.assertIn("!home-2.png|thumbnail!", description)
 
+    def test_create_attaches_mp4_without_wiki_thumbnail(self) -> None:
+        fake = self._fake({("POST", "/2/issue"): {"key": "LPT-90"}})
+        with tempfile.TemporaryDirectory() as tmp:
+            clip = Path(tmp) / "softpulse-issue.mp4"
+            frame = Path(tmp) / "softpulse-issue-frame-001.png"
+            clip.write_bytes(b"fake-mp4")
+            frame.write_bytes(b"png")
+            with mock.patch.object(jira, "request", fake), mock.patch.object(
+                jira,
+                "attach",
+                return_value=["softpulse-issue.mp4", "softpulse-issue-frame-001.png"],
+            ):
+                jira.create(
+                    "Bug",
+                    "SoftPulse timing",
+                    f"## What happened\n![frame]({frame})",
+                    labels=["ui-agent"],
+                    files=[str(clip), str(frame)],
+                )
+        description = self.calls[1][2]["fields"]["description"]
+        self.assertIn("!softpulse-issue-frame-001.png|thumbnail!", description)
+        self.assertNotIn("!softpulse-issue.mp4", description)
+        self.assertIn("Attached clips: softpulse-issue.mp4", description)
+
     def test_comment_refuses_orphan_wiki_embeds(self) -> None:
         fake = self._fake({
             ("GET", "/2/issue/LPT-59"): {

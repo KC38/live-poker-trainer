@@ -952,6 +952,10 @@ LessonStartingHandFamily startingHandFamilyForHoleKind(LessonHoleKind kind) {
 /// invented Them/You felt plus text docks (that overflowed short phones).
 bool supportsHoleHandSeatDeal(CourseActivity activity) {
   switch (activity.id) {
+    // LPT-83 split successor — same seat-deal path as unguided (LPT-815 /
+    // LPT-816). Without this id the framed densify falls through to a
+    // Them/You felt + text docks and overflows the mini by ~147px.
+    case 'act-01-01-02-03-guided-suited':
     case 'act-01-01-02-unguided-suited':
     case 'act-01-01-02-checkpoint-pair':
       return true;
@@ -966,7 +970,7 @@ HoleHandSeatDeal? dealHoleHandSeatPlan(
   Random? random,
 }) {
   final roles = switch (activity.id) {
-    'act-01-01-02-unguided-suited' => const [
+    'act-01-01-02-03-guided-suited' || 'act-01-01-02-unguided-suited' => const [
       HoleHandSeatRole(
         family: LessonStartingHandFamily.suitedNonPair,
         choiceId: 'suited-ah-kh',

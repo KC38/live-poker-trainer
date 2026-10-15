@@ -86,13 +86,24 @@ class PokerActionSizingActivity extends StatelessWidget {
           generation: controller.bindGeneration,
         );
         final showPrompt = resolved.showPrompt;
-        final showCoach =
-            !locked &&
-            shouldShowLessonCoach(
-              activity: activity,
-              showGuidance: showGuidance,
-              coach: coach,
-            );
+        // Keep the coach slot under Nice!/Oops! (opacity 0) so the Column
+        // height does not collapse and remount the felt (redeal). Framed
+        // lessons already shrink Rex via LessonFrameScope.
+        final wantCoach = shouldShowLessonCoach(
+          activity: activity,
+          showGuidance: showGuidance,
+          coach: coach,
+        );
+        final showCoach = wantCoach && !locked;
+        Widget coachSlot() {
+          if (!wantCoach) return const SizedBox.shrink();
+          final line = RexCoachLine(text: coach);
+          if (!locked) return line;
+          return Opacity(
+            opacity: 0,
+            child: IgnorePointer(child: line),
+          );
+        }
 
         if (tableMode) {
           final pulseTarget = _hintPulseTargetId(
@@ -292,9 +303,7 @@ class PokerActionSizingActivity extends StatelessWidget {
                 children: [
                   // Keep a coach slot even under Oops! — dropping Rex shifts
                   // the Column and remounts the felt (redeal animation).
-                  showCoach
-                      ? RexCoachLine(text: coach)
-                      : const SizedBox.shrink(),
+                  coachSlot(),
                   if (showPrompt) ...[
                     const SizedBox(height: 12),
                     Text(
@@ -330,9 +339,7 @@ class PokerActionSizingActivity extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            showCoach
-                ? RexCoachLine(text: coach)
-                : const SizedBox.shrink(),
+            coachSlot(),
             if (showPrompt) ...[
               const SizedBox(height: 12),
               Text(

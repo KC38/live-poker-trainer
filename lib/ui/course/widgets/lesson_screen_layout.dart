@@ -365,9 +365,10 @@ String _lessonFrameLine(
   if (activity.id == 'act-01-01-03-explain-button') {
     return 'The D chip marks the dealer button. Tap the dealer button.';
   }
+  // SoftPulse-off densify (LPT-831) — situation + tap verb only; never name
+  // SB seat geometry (same stem as selectIdentifyDensifiedCoachLine).
   if (activity.id == 'act-01-01-03-checkpoint-layout') {
-    return 'The button has the D chip. Tap the small blind, '
-        'one seat to its left.';
+    return 'The button has the D chip. Tap the small blind.';
   }
   if (activity.id == 'act-01-02-01-explain-ladder') {
     return 'Pair beats high card. Flush beats straight. '

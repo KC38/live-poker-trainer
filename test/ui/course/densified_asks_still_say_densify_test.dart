@@ -18,48 +18,64 @@ const _lines = <String, String>{
       'Tap the community cards — pick the shared board in the middle.',
   'act-01-01-01-checkpoint-table':
       'Tap the cards that are only yours — pick the two at your seat.',
-  'act-01-01-02-guided-suits': 'Tap one community card of each suit — pick Hearts, diamonds, clubs, spades.',
-  'act-01-01-02-unguided-suited': 'Tap the suited hole cards — pick Suited.',
+  // LPT-814: SoftPulse-quiet densify — no suit-order spoil.
+  'act-01-01-02-guided-suits': 'Tap one community card of each suit.',
+  // LPT-815 / LPT-816: seat-deal densify — no Suited tile spoil.
+  'act-01-01-02-unguided-suited':
+      'Tap the seat whose hole cards share a suit.',
+  'act-01-01-02-03-guided-suited':
+      'Tap the seat whose hole cards share a suit.',
   // LPT-804: SoftPulse-off densify — no correct-tile spoil.
   'act-01-01-02-checkpoint-pair':
       'Same rank in one seat — tap the matching holes.',
-  'act-01-01-03-guided-button':
-      'Tap the dealer button on the table — pick The seat with the D chip.',
-  'act-01-01-03-scaffolded-blinds': 'Blinds are 1/2. Tap who posts the big blind — pick The seat two left of the button, posting 2.',
-  'act-01-01-03-unguided-when':
-      'Tap when the blinds go in — pick Before any hole cards are dealt.',
-  'act-01-02-02-guided-seven': 'Tap the five cards that make your best hand — pick Top pair with best kicker.',
+  // LPT-836: SoftPulse-quiet densify — no D-chip choice spoil.
+  'act-01-01-03-guided-button': 'Tap the dealer button on the table.',
+  // LPT-830: SoftPulse-quiet densify — no BB choice spoil.
+  'act-01-01-03-scaffolded-blinds':
+      'Blinds are 1/2. Tap who posts the big blind.',
+  // LPT-832: SoftPulse-quiet densify — no before-deal choice spoil.
+  'act-01-01-03-unguided-when': 'Tap when the blinds go in.',
+  // LPT-835: SoftPulse-quiet densify — no Top pair / best kicker spoil.
+  'act-01-02-02-guided-seven':
+      'Tap the five cards that make your best hand.',
   'act-01-02-02-checkpoint-build': 'Tap the five cards for your strongest hand — pick Full house — trips over the higher pair.',
+  // LPT-837: SoftPulse-quiet densify — no Bets matched spoil.
   'act-01-04-01-unguided-end':
-      'Flop betting is live. Tap when this street ends — pick Bets matched.',
+      'Flop betting is live. Tap when this street ends.',
   // LPT-808: SoftPulse-off densify — no correct-seat spoil.
   'act-01-04-01-checkpoint-postflop':
       'Postflop multiway — tap who acts first.',
   'act-01-05-01-guided-fold-win':
       'You bet. Everyone folds. Tap how you take the pot — pick Take pot.',
+  // LPT-839: SoftPulse-quiet densify — no Showdown spoil.
   'act-01-05-01-scaffolded-showdown':
-      'River bets are called. Tap what happens next — pick Showdown.',
+      'River bets are called. Tap what happens next.',
   // LPT-782: SoftPulse-off densify — no correct-tile spoil.
   'act-01-05-01-checkpoint-side':
       'You are all-in for less; two big stacks keep betting — tap the matching pot fact.',
   'act-02-01-01-guided-btn': 'Tap who acts last postflop — pick BTN.',
+  // LPT-833: SoftPulse-quiet densify — no SB or BB spoil.
   'act-02-01-01-scaffolded-blinds':
-      'Tap a seat that posts a forced bet every hand — pick SB or BB.',
-  'act-02-01-01-unguided-co':
-      'Tap the seat right before the button — pick Cutoff (CO).',
+      'Tap a seat that posts a forced bet every hand.',
+  // LPT-834: SoftPulse-quiet densify — no Cutoff / CO spoil.
+  'act-02-01-01-unguided-co': 'Tap the seat right before the button.',
   // LPT-783: SoftPulse-off densify — no correct-tile spoil.
   'act-02-01-01-checkpoint-edge':
       'Same hand early versus button — tap the matching edge.',
-  'act-02-01-02-unguided-wait': 'Action is on UTG. You are on the button. What do you do — pick Wait — do not act yet.',
+  // LPT-838: SoftPulse-quiet densify — no Wait spoil.
+  'act-02-01-02-unguided-wait':
+      'Action is on UTG. You are on the button. Tap what you should do.',
   // LPT-803: SoftPulse-off densify — no correct-tile spoil.
   'act-02-01-02-checkpoint-full':
       'Six-max flop, everyone in — tap who acts last.',
   'act-02-02-01-guided-pair':
       'Tap the family for your holes — pick Pocket pair.',
+  // LPT-841: SoftPulse-quiet densify — no Broadway spoil.
   'act-02-02-01-scaffolded-broadway':
-      'Tap the family for your holes — pick Broadway.',
+      'Both cards ten or higher — tap the matching family.',
+  // LPT-842: SoftPulse-quiet densify — no Suited connector spoil.
   'act-02-02-01-unguided-sc':
-      'Tap the family for your holes — pick Suited connector.',
+      'Same-suit cards next to each other in rank — tap the matching family.',
   // LPT-784: SoftPulse-off densify — no correct-tile spoil.
   'act-02-02-01-checkpoint-trash':
       'Low unconnected offsuit holes — tap the matching family.',
@@ -73,8 +89,12 @@ const _lines = <String, String>{
   'act-02-05-01-checkpoint-200':
       'Blinds 2/5. You buy in for 1000 chips — tap the matching stack in big blinds.',
   'act-02-06-01-guided-follow': 'Two seats act before you. What first — pick Watch what they do, then decide.',
-  'act-02-06-01-scaffolded-verbal': 'You want to raise. Clearest live choice — pick Say "raise" and put out the chips.',
-  'act-02-06-01-unguided-protect': 'Your cards sit near the muck. Best habit — pick Keep a chip or hand on your cards.',
+  // LPT-843: SoftPulse-quiet densify — no Say "raise" spoil.
+  'act-02-06-01-scaffolded-verbal':
+      'You want to raise. Clearest live choice — tap how you announce it and put out chips.',
+  // LPT-844: SoftPulse-quiet densify — no Keep a chip spoil.
+  'act-02-06-01-unguided-protect':
+      'Your cards sit near the muck — tap how you protect them on the table.',
   // LPT-786: SoftPulse-off densify — no correct-tile spoil.
   'act-02-06-01-checkpoint-oot':
       'Action is two seats left. You toss in a raise early — tap the matching problem.',
@@ -86,7 +106,9 @@ const _lines = <String, String>{
       'Seat right before the button — pick it on the map.',
   'act-03-01-01-guided':
       'Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now — pick 21.',
-  'act-03-01-01-scaffolded': 'Nine-handed. Dealer button is on seat 7. Who acts first preflop — pick Seat left of the big blind (UTG).',
+  // LPT-845: SoftPulse-quiet densify — no UTG / Seat left of the big blind spoil.
+  'act-03-01-01-scaffolded':
+      'Nine-handed. Dealer button is on seat 7 — tap who acts first preflop.',
   'act-03-01-01-unguided': 'You say "raise" then try to take it back to a call. Result — pick The raise stands — verbal is binding.',
   // LPT-787: SoftPulse-off densify — no correct-tile spoil.
   'act-03-01-01-checkpoint':
@@ -106,9 +128,12 @@ const _lines = <String, String>{
   'act-04-06-03-checkpoint':
       'Why bluff less versus a Calling Station — tap the matching reason.',
   'act-04-07-01-guided': 'Seat folded 20 of 22 hands. Observation — pick Narrow entry — plays few hands.',
-  'act-04-07-01-scaffolded': 'That seat finally raises and then barrels. Observation — pick Strong aggression when they enter.',
+  // LPT-827: SoftPulse-quiet densify — no Strong aggression / Strong heat spoil.
+  'act-04-07-01-scaffolded':
+      'That seat finally raises and then barrels — tap the matching note.',
+  // LPT-826: SoftPulse-quiet densify — no No — sample too small / Wait spoil.
   'act-04-07-01-unguided':
-      'They folded two hands. Label them already — pick No — sample too small.',
+      'They folded two hands — tap whether a type label is ready.',
   // LPT-763: SoftPulse-off densify — no correct-tile spoil.
   'act-04-07-01-checkpoint':
       'Evidence bundle for this seat — tap the matching note.',
@@ -131,7 +156,9 @@ const _lines = <String, String>{
   'act-04-08-03-checkpoint':
       'Why call wider versus a Maniac — tap the matching reason.',
   'act-04-09-01-guided': 'You saw one huge bluff. What do you know — pick One note — low certainty.',
-  'act-04-09-01-scaffolded': 'After 30 hands of sticky calls, confidence should — pick Rise — still revisable.',
+  // LPT-823: SoftPulse-quiet densify — no Rise / Stay zero spoil.
+  'act-04-09-01-scaffolded':
+      'After 30 hands of sticky calls — tap how confidence should move.',
   // LPT-777: SoftPulse-off densify — no correct-tile spoil.
   'act-04-09-01-checkpoint':
       'Course should show what beside a type label — tap the matching note.',
@@ -176,7 +203,9 @@ const _lines = <String, String>{
   'act-05-07-01-checkpoint':
       'Best use of live timing — tap the matching habit.',
   'act-05-08-01-guided': 'Villain lost two buy-ins, now open-raises every hand. Note — pick Stuck / tilted.',
-  'act-05-08-01-scaffolded': 'Solid selective player suddenly flats junk and donks rivers. Best read — pick Gear change.',
+  // LPT-825: SoftPulse-quiet densify — no Gear change / Old label spoil.
+  'act-05-08-01-scaffolded':
+      'Solid selective player suddenly flats junk and donks rivers — tap the matching read.',
   // LPT-746: SoftPulse-off densify — no correct-tile spoil.
   'act-05-08-01-checkpoint':
       'Dynamic reads should be — tap the matching habit.',
@@ -228,4 +257,59 @@ void main() {
       expect(speech, contains(line.split(' — ').first));
     });
   }
+
+  test(
+    'Blinds SoftPulse-quiet / SoftPulse-off densify stems do not spoil '
+    'choices (LPT-830/831/832/833/834/836)',
+    () {
+      const spoils = <String, List<String>>{
+        'act-01-01-03-guided-button': [
+          'the seat with the d chip',
+          'pick the seat',
+          'posted 2 chips',
+        ],
+        'act-01-01-03-scaffolded-blinds': [
+          'two left',
+          'posting 2',
+          'seat two left',
+        ],
+        'act-01-01-03-unguided-when': [
+          'before any hole',
+          'after the flop',
+          'showdown',
+        ],
+        'act-01-01-03-checkpoint-layout': [
+          'one seat to its left',
+          'seat 0',
+          'seat 4',
+        ],
+        'act-02-01-01-scaffolded-blinds': [
+          'sb or bb',
+          'pick sb',
+          'pick bb',
+        ],
+        'act-02-01-01-unguided-co': [
+          'cutoff',
+          'pick co',
+          '(co)',
+        ],
+      };
+      for (final MapEntry(key: id, value: phrases) in spoils.entries) {
+        final resolved = selectIdentifyDensifiedCoachLine(id);
+        expect(resolved, isNotNull, reason: id);
+        final activity = catalog.activityById(id);
+        expect(activity, isNotNull, reason: id);
+        final speech = lessonFrameSpeech(activity!);
+        final lower = speech.toLowerCase();
+        expect(speech, resolved, reason: '$id frame speech matches densify');
+        for (final spoil in phrases) {
+          expect(
+            lower,
+            isNot(contains(spoil)),
+            reason: '$id must not contain "$spoil"',
+          );
+        }
+      }
+    },
+  );
 }

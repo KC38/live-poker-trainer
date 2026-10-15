@@ -12,12 +12,21 @@ import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 const _lines = <String, String>{
   'act-04-06-02-guided':
       'Sticky second pair called three streets — pick Station.',
+  // LPT-817: SoftPulse-quiet scaffolded densify — no Working model spoil.
   'act-04-06-02-scaffolded':
-      'A player-type label is temporary evidence — pick Working model.',
-  'act-04-06-02-unguided': 'Limps, calls, never folds turns — pick Station.',
+      'A player-type label is temporary evidence — tap what it is.',
+  // LPT-818: SoftPulse-quiet unguided densify — no Station spoil.
+  'act-04-06-02-unguided':
+      'Limps, calls, never folds turns — tap which type fits.',
   // LPT-811: SoftPulse-off densify — no correct-tile spoil.
   'act-04-06-02-checkpoint':
       'Only two hands so far — tap how confident you are.',
+};
+
+const _forbidden = <String, String>{
+  'act-04-06-02-scaffolded': 'Working model',
+  'act-04-06-02-unguided': 'Station',
+  'act-04-06-02-checkpoint': 'Low conf',
 };
 
 void main() {
@@ -34,8 +43,9 @@ void main() {
       final speech = lessonFrameSpeech(activity!);
       expect(speech, isNot(contains('Tap the best answer')));
       expect(speech, contains(line.split(' — ').first));
-      if (id == 'act-04-06-02-checkpoint') {
-        expect(speech, isNot(contains('Low conf')));
+      final forbidden = _forbidden[id];
+      if (forbidden != null) {
+        expect(speech, isNot(contains(forbidden)));
       }
     });
   }

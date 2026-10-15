@@ -462,13 +462,12 @@ class OrderSequenceActivity extends StatelessWidget {
         );
         final coach = resolved.coach;
         final showPrompt = resolved.showPrompt;
-        final showCoach =
-            !locked &&
-            shouldShowLessonCoach(
-              activity: activity,
-              showGuidance: showGuidance,
-              coach: coach,
-            );
+        final wantCoach = shouldShowLessonCoach(
+          activity: activity,
+          showGuidance: showGuidance,
+          coach: coach,
+        );
+        final showCoach = wantCoach && !locked;
         final statusLine = orderSequenceStatusLine(
           activity: activity,
           submitting: controller.submitting,
@@ -485,7 +484,11 @@ class OrderSequenceActivity extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (showCoach) RexCoachLine(text: coach),
+            if (wantCoach)
+              gradeLockCoachSlot(
+                locked: locked,
+                child: RexCoachLine(text: coach),
+              ),
             if (showPrompt) ...[
               const SizedBox(height: 12),
               Text(

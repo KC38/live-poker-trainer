@@ -8,6 +8,17 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
+/// Keeps [child] laid out under Nice!/Oops! so later Column siblings (felts)
+/// do not remount and redeal (`DealtCardReveal` initState / LPT-642).
+///
+/// Prefer this over `if (!locked) RexCoachLine(...)` whenever a
+/// [LessonTableStage] / [FeltTableView] sits below the coach in the same
+/// Column. Framed lessons already shrink Rex via [LessonFrameScope].
+Widget gradeLockCoachSlot({required bool locked, required Widget child}) {
+  if (!locked) return child;
+  return Opacity(opacity: 0, child: IgnorePointer(child: child));
+}
+
 /// Resolves a single Rex instruction vs a duplicate prompt under the bubble.
 ///
 /// Teach-by-doing: prefer one spoken line. Authored dialogue/demo wins; otherwise
@@ -103,10 +114,17 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Observe sticky callers densified asks (LPT-416) — same path.
     'act-04-06-01-guided' =>
       'Seat calls 7 of 9 preflops — pick High part.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Sticky (LPT-824; SoftPulse
+    // LPT-653; same class as LPT-822 / LPT-821 / LPT-818).
     'act-04-06-01-scaffolded' =>
-      'Second pair called three streets twice — pick Sticky.',
+      'Second pair called three streets twice — tap the matching note.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Low conf / Low confidence
+    // (LPT-822; SoftPulse LPT-653; same class as LPT-821 / LPT-818 /
+    // LPT-811).
     'act-04-06-01-unguided' =>
-      'One dramatic call — pick Low conf.',
+      'One dramatic call — tap how confident a type label is.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Bundle in the idle bubble (LPT-810; SoftPulse LPT-653; same class
     // as LPT-809 / LPT-808 / LPT-807).
@@ -115,10 +133,16 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Meet the Calling Station densified asks (LPT-420) — same path.
     'act-04-06-02-guided' =>
       'Sticky second pair called three streets — pick Station.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Working model (LPT-817;
+    // SoftPulse LPT-653; same class as LPT-814 / LPT-811).
     'act-04-06-02-scaffolded' =>
-      'A player-type label is temporary evidence — pick Working model.',
+      'A player-type label is temporary evidence — tap what it is.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Station (LPT-818; SoftPulse
+    // LPT-653; same class as LPT-817 / LPT-814 / LPT-811).
     'act-04-06-02-unguided' =>
-      'Limps, calls, never folds turns — pick Station.',
+      'Limps, calls, never folds turns — tap which type fits.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Low conf in the idle bubble (LPT-811; SoftPulse LPT-653; same
     // class as LPT-810 / LPT-809 / LPT-808).
@@ -320,34 +344,54 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Tap the community cards — pick the shared board in the middle.',
     'act-01-01-01-checkpoint-table' =>
       'Tap the cards that are only yours — pick the two at your seat.',
+    // SoftPulse-quiet densify (guided same-concept until Hint) — situation +
+    // tap verb only; never name Hearts/diamonds/clubs/spades in the idle
+    // bubble (LPT-814; SoftPulse LPT-653; same class as LPT-808 / LPT-672).
     'act-01-01-02-guided-suits' =>
-      'Tap one community card of each suit — pick Hearts, diamonds, clubs, spades.',
+      'Tap one community card of each suit.',
+    // Seat-deal densify (LPT-815 / LPT-816) — situation + tap verb only;
+    // never name Suited / Offsuit / Pocket pair (same class as LPT-804).
     'act-01-01-02-unguided-suited' =>
-      'Tap the suited hole cards — pick Suited.',
+      'Tap the seat whose hole cards share a suit.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Pocket pair in the idle bubble (LPT-804; SoftPulse LPT-653;
     // same class as LPT-803 / LPT-788 / LPT-672).
     'act-01-01-02-checkpoint-pair' =>
       'Same rank in one seat — tap the matching holes.',
-    // LPT-83 split successors (LPT-628 reopen) — same asks as their source steps.
+    // LPT-83 split successors (LPT-628 reopen) — SoftPulse-off densify stems
+    // must not name Hearts/diamonds/clubs/spades (LPT-814; same as guided).
     'act-01-01-02-01-scaffolded-suits' =>
-      'Tap one community card of each suit — pick Hearts, diamonds, clubs, spades.',
+      'Tap one community card of each suit.',
     'act-01-01-02-01-checkpoint-suits' =>
-      'Tap one community card of each suit — pick Hearts, diamonds, clubs, spades.',
+      'Tap one community card of each suit.',
     'act-01-01-02-03-guided-suited' =>
-      'Tap the suited hole cards — pick Suited.',
+      'Tap the seat whose hole cards share a suit.',
+    // SoftPulse-quiet until Hint (same-concept after explain) — situation +
+    // tap verb only; never name The seat with the D chip in the idle bubble
+    // (LPT-836; SoftPulse LPT-653; same class as LPT-835 / LPT-833 / LPT-834).
     'act-01-01-03-guided-button' =>
-      'Tap the dealer button on the table — pick The seat with the D chip.',
+      'Tap the dealer button on the table.',
+    // SoftPulse-quiet until Hint (LPT-73) — situation + tap verb only; never
+    // name the BB choice in the idle bubble (LPT-830; SoftPulse LPT-653;
+    // same class as LPT-823 / LPT-808).
     'act-01-01-03-scaffolded-blinds' =>
-      'Blinds are 1/2. Tap who posts the big blind — pick The seat two left of the button, posting 2.',
+      'Blinds are 1/2. Tap who posts the big blind.',
+    // SoftPulse-quiet until Hint — situation + tap verb only; never name
+    // Before any hole cards are dealt (LPT-832; SoftPulse LPT-653).
     'act-01-01-03-unguided-when' =>
-      'Tap when the blinds go in — pick Before any hole cards are dealt.',
+      'Tap when the blinds go in.',
+    // SoftPulse-quiet until Hint (same-concept after explain) — situation +
+    // tap verb only; never name Top pair / best kicker in the idle bubble
+    // (LPT-835; SoftPulse LPT-653; same class as LPT-833 / LPT-834 / LPT-814).
     'act-01-02-02-guided-seven' =>
-      'Tap the five cards that make your best hand — pick Top pair with best kicker.',
+      'Tap the five cards that make your best hand.',
     'act-01-02-02-checkpoint-build' =>
       'Tap the five cards for your strongest hand — pick Full house — trips over the higher pair.',
+    // SoftPulse-quiet until Hint — situation + tap verb only; never name
+    // Bets matched in the idle bubble (LPT-837; SoftPulse LPT-653; same
+    // class as LPT-833 / LPT-834 / LPT-832).
     'act-01-04-01-unguided-end' =>
-      'Flop betting is live. Tap when this street ends — pick Bets matched.',
+      'Flop betting is live. Tap when this street ends.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name SB in the idle bubble (LPT-808; SoftPulse LPT-653; same class
     // as LPT-807 / LPT-803 / LPT-672).
@@ -355,8 +399,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Postflop multiway — tap who acts first.',
     'act-01-05-01-guided-fold-win' =>
       'You bet. Everyone folds. Tap how you take the pot — pick Take pot.',
+    // SoftPulse-quiet until Hint — situation + tap verb only; never name
+    // Showdown in the idle bubble (LPT-839; SoftPulse LPT-653; same class
+    // as LPT-837 / LPT-833 / LPT-838).
     'act-01-05-01-scaffolded-showdown' =>
-      'River bets are called. Tap what happens next — pick Showdown.',
+      'River bets are called. Tap what happens next.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Side pot in the idle bubble (LPT-782; SoftPulse LPT-653; same
     // class as LPT-780 / LPT-672).
@@ -364,17 +411,26 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'You are all-in for less; two big stacks keep betting — tap the matching pot fact.',
     'act-02-01-01-guided-btn' =>
       'Tap who acts last postflop — pick BTN.',
+    // SoftPulse-quiet until Hint — situation + tap verb only; never name
+    // SB or BB in the idle bubble (LPT-833; SoftPulse LPT-653; same class
+    // as LPT-830 / LPT-823 / LPT-808).
     'act-02-01-01-scaffolded-blinds' =>
-      'Tap a seat that posts a forced bet every hand — pick SB or BB.',
+      'Tap a seat that posts a forced bet every hand.',
+    // SoftPulse-quiet until Hint — situation + tap verb only; never name
+    // Cutoff / CO in the idle bubble (LPT-834; SoftPulse LPT-653; same
+    // class as LPT-833 / LPT-675 / LPT-832).
     'act-02-01-01-unguided-co' =>
-      'Tap the seat right before the button — pick Cutoff (CO).',
+      'Tap the seat right before the button.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name On the button in the idle bubble (LPT-783; SoftPulse LPT-653;
     // same class as LPT-782 / LPT-780 / LPT-672).
     'act-02-01-01-checkpoint-edge' =>
       'Same hand early versus button — tap the matching edge.',
+    // SoftPulse-quiet until Hint — situation + tap verb only; never name
+    // Wait / do not act yet in the idle bubble (LPT-838; SoftPulse LPT-653;
+    // same class as LPT-837 / LPT-833 / LPT-834).
     'act-02-01-02-unguided-wait' =>
-      'Action is on UTG. You are on the button. What do you do — pick Wait — do not act yet.',
+      'Action is on UTG. You are on the button. Tap what you should do.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name BTN in the idle bubble (LPT-803; SoftPulse LPT-653; same class
     // as LPT-788 / LPT-783 / LPT-672).
@@ -382,10 +438,16 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Six-max flop, everyone in — tap who acts last.',
     'act-02-02-01-guided-pair' =>
       'Tap the family for your holes — pick Pocket pair.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Broadway (LPT-841; SoftPulse
+    // LPT-653; same class as LPT-839 / LPT-838 / LPT-833).
     'act-02-02-01-scaffolded-broadway' =>
-      'Tap the family for your holes — pick Broadway.',
+      'Both cards ten or higher — tap the matching family.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Suited connector (LPT-842;
+    // SoftPulse LPT-653; same class as LPT-841 / LPT-839 / LPT-838).
     'act-02-02-01-unguided-sc' =>
-      'Tap the family for your holes — pick Suited connector.',
+      'Same-suit cards next to each other in rank — tap the matching family.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Offsuit trash in the idle bubble (LPT-784; SoftPulse LPT-653;
     // same class as LPT-783 / LPT-782 / LPT-672).
@@ -404,10 +466,16 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Blinds 2/5. You buy in for 1000 chips — tap the matching stack in big blinds.',
     'act-02-06-01-guided-follow' =>
       'Two seats act before you. What first — pick Watch what they do, then decide.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Say "raise" (LPT-843;
+    // SoftPulse LPT-653; same class as LPT-842 / LPT-841 / LPT-839).
     'act-02-06-01-scaffolded-verbal' =>
-      'You want to raise. Clearest live choice — pick Say "raise" and put out the chips.',
+      'You want to raise. Clearest live choice — tap how you announce it and put out chips.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Keep a chip (LPT-844;
+    // SoftPulse LPT-653; same class as LPT-843 / LPT-842 / LPT-841).
     'act-02-06-01-unguided-protect' =>
-      'Your cards sit near the muck. Best habit — pick Keep a chip or hand on your cards.',
+      'Your cards sit near the muck — tap how you protect them on the table.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name You acted out of turn in the idle bubble (LPT-786; SoftPulse
     // LPT-653; same class as LPT-785 / LPT-784 / LPT-672).
@@ -424,8 +492,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Seat right before the button — pick it on the map.',
     'act-03-01-01-guided' =>
       'Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now — pick 21.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name UTG / Seat left of the big
+    // blind (LPT-845; SoftPulse LPT-653; same class as LPT-844 / LPT-843 /
+    // LPT-842).
     'act-03-01-01-scaffolded' =>
-      'Nine-handed. Dealer button is on seat 7. Who acts first preflop — pick Seat left of the big blind (UTG).',
+      'Nine-handed. Dealer button is on seat 7 — tap who acts first preflop.',
     'act-03-01-01-unguided' =>
       'You say "raise" then try to take it back to a call. Result — pick The raise stands — verbal is binding.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
@@ -460,10 +532,16 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Why bluff less versus a Calling Station — tap the matching reason.',
     'act-04-07-01-guided' =>
       'Seat folded 20 of 22 hands. Observation — pick Narrow entry — plays few hands.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Strong aggression / Strong heat
+    // (LPT-827; SoftPulse LPT-653; same class as LPT-826 / LPT-824 / LPT-822).
     'act-04-07-01-scaffolded' =>
-      'That seat finally raises and then barrels. Observation — pick Strong aggression when they enter.',
+      'That seat finally raises and then barrels — tap the matching note.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name No — sample too small / Wait
+    // (LPT-826; SoftPulse LPT-653; same class as LPT-827 / LPT-822 / LPT-818).
     'act-04-07-01-unguided' =>
-      'They folded two hands. Label them already — pick No — sample too small.',
+      'They folded two hands — tap whether a type label is ready.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Few hands / heavy action in the idle bubble (LPT-763; same class
     // as LPT-746 / LPT-653).
@@ -502,8 +580,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Why call wider versus a Maniac — tap the matching reason.',
     'act-04-09-01-guided' =>
       'You saw one huge bluff. What do you know — pick One note — low certainty.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Rise / Stay zero (LPT-823;
+    // SoftPulse LPT-653; same class as LPT-822 / LPT-821 / LPT-818).
     'act-04-09-01-scaffolded' =>
-      'After 30 hands of sticky calls, confidence should — pick Rise — still revisable.',
+      'After 30 hands of sticky calls — tap how confidence should move.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Sample and confidence limits in the idle bubble (LPT-777; same
     // class as LPT-778 / LPT-765 / LPT-770 / LPT-771 / LPT-653).
@@ -575,8 +656,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Best use of live timing — tap the matching habit.',
     'act-05-08-01-guided' =>
       'Villain lost two buy-ins, now open-raises every hand. Note — pick Stuck / tilted.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Gear change / Old label
+    // (LPT-825; SoftPulse LPT-653; same class as LPT-823 / LPT-824 / LPT-822).
     'act-05-08-01-scaffolded' =>
-      'Solid selective player suddenly flats junk and donks rivers. Best read — pick Gear change.',
+      'Solid selective player suddenly flats junk and donks rivers — tap the matching read.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Fresh samples in the idle bubble (LPT-746; same class as LPT-745 /
     // LPT-744 / LPT-742 / LPT-736 / LPT-734 / LPT-735 / LPT-723 / LPT-717 /
@@ -630,9 +714,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Three mixed samples only. Confidence — tap the matching level.',
     'act-07-12-01-retire' =>
       'Old Calling Station now folds rivers and 3-bets light. Do — tap the matching next step.',
-    // Densified asks still say Tap the best answer (catalog) remaining densified asks (LPT-628) — same path.
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name SB seat geometry in the idle bubble (LPT-831; SoftPulse LPT-653;
+    // same class as LPT-808 / LPT-823).
     'act-01-01-03-checkpoint-layout' =>
-      'The button has the D chip. Tap the small blind, one seat to its left.',
+      'The button has the D chip. Tap the small blind.',
     'act-01-02-02-scaffolded-kicker' =>
       'Same pair on the board. Tap your cards if your kicker wins, their cards if theirs wins, or Chop if you tie.',
     'act-01-02-02-unguided-board' =>
@@ -641,14 +727,24 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'BTN opens — tap the pot before blinds act.',
     'act-04-07-02-guided' =>
       'Seat plays ~8% of hands and 3-bets rarely but large. Label — tap Nit.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Nit (LPT-819; SoftPulse
+    // LPT-653; same class as LPT-818 / LPT-817 / LPT-814).
     'act-04-07-02-unguided' =>
-      'Seat folds forever, then check-raises a triple barrel. Label — tap Nit.',
+      'Seat folds forever, then check-raises a triple barrel — tap which type fits.',
     'act-04-08-02-guided' =>
       'Seat open-raises 60% and triple-barrels light. Label — tap Maniac.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Maniac (LPT-820; SoftPulse
+    // LPT-653; same class as LPT-819 / LPT-818).
     'act-04-08-02-unguided' =>
-      'Seat 3-bets light and never gives up rivers. Label — tap Maniac.',
+      'Seat 3-bets light and never gives up rivers — tap which type fits.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Update / Calling Station model
+    // (or Freeze) (LPT-821; SoftPulse LPT-653; same class as LPT-820 /
+    // LPT-819 / LPT-818).
     'act-04-09-01-unguided' =>
-      'Former \'station\' starts folding three streets. Next step — tap Update/retire the Calling Station model.',
+      'Former \'station\' starts folding three streets — tap which next step fits.',
     // Section 4 jump densify — SoftPulse off (kind: none); stems must not
     // spoil the correct exploit/tile (LPT-673; SoftPulse LPT-653).
     'act-04-10-02-jump-station' =>

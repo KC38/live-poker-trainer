@@ -3,20 +3,43 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 const _lines = <String, String>{
+  // LPT-831: SoftPulse-off densify — no SB seat-geometry spoil.
   'act-01-01-03-checkpoint-layout':
-      'The button has the D chip. Tap the small blind, one seat to its left.',
+      'The button has the D chip. Tap the small blind.',
   'act-01-02-02-scaffolded-kicker': 'Same pair on the board. Tap your cards if your kicker wins, their cards if theirs wins, or Chop if you tie.',
   'act-01-02-02-unguided-board': 'Both checked down. Tap the board if both play it, or a player\'s cards if you think their holes win.',
   'act-01-05-01-unguided-pot': 'BTN opens — tap the pot before blinds act.',
   'act-04-07-02-guided':
       'Seat plays ~8% of hands and 3-bets rarely but large. Label — tap Nit.',
+  // LPT-819: SoftPulse-quiet unguided densify — no Nit spoil.
   'act-04-07-02-unguided':
-      'Seat folds forever, then check-raises a triple barrel. Label — tap Nit.',
+      'Seat folds forever, then check-raises a triple barrel — tap which type fits.',
   'act-04-08-02-guided':
       'Seat open-raises 60% and triple-barrels light. Label — tap Maniac.',
+  // LPT-820: SoftPulse-quiet unguided densify — no Maniac spoil.
   'act-04-08-02-unguided':
-      'Seat 3-bets light and never gives up rivers. Label — tap Maniac.',
-  'act-04-09-01-unguided': 'Former \'station\' starts folding three streets. Next step — tap Update/retire the Calling Station model.',
+      'Seat 3-bets light and never gives up rivers — tap which type fits.',
+  // LPT-821: SoftPulse-quiet unguided densify — no Update / Freeze spoil.
+  'act-04-09-01-unguided':
+      'Former \'station\' starts folding three streets — tap which next step fits.',
+  // LPT-822: SoftPulse-quiet unguided densify — no Low conf spoil.
+  'act-04-06-01-unguided':
+      'One dramatic call — tap how confident a type label is.',
+  // LPT-824: SoftPulse-quiet scaffolded densify — no Sticky spoil.
+  'act-04-06-01-scaffolded':
+      'Second pair called three streets twice — tap the matching note.',
+  // LPT-823: SoftPulse-quiet scaffolded densify — no Rise spoil.
+  'act-04-09-01-scaffolded':
+      'After 30 hands of sticky calls — tap how confidence should move.',
+  // LPT-825: SoftPulse-quiet scaffolded densify — no Gear change spoil.
+  'act-05-08-01-scaffolded':
+      'Solid selective player suddenly flats junk and donks rivers — tap the matching read.',
+  // LPT-827: SoftPulse-quiet scaffolded densify — no Strong aggression spoil.
+  'act-04-07-01-scaffolded':
+      'That seat finally raises and then barrels — tap the matching note.',
+  // LPT-826: SoftPulse-quiet unguided densify — no No — sample too small spoil.
+  'act-04-07-01-unguided':
+      'They folded two hands — tap whether a type label is ready.',
   // LPT-675: Section 2 jump densify — no Cutoff spoil.
   'act-02-07-02-jump-pos':
       'Seat right before the button — pick it on the map.',
@@ -102,6 +125,35 @@ const _sectionFiveCheckpointSpoilers = <String, List<String>>{
   'act-05-09-02-cp-stop': ['honor stop', 'pick honor'],
 };
 
+/// SoftPulse-quiet Spot Nit / Maniac / Retire / Observation-certainty,
+/// Wait-for-samples / Strong-aggression, and scaffolded Confidence / Sticky /
+/// Gear densify must not name the tile (LPT-819 / LPT-820 / LPT-821 / LPT-822 /
+/// LPT-823 / LPT-824 / LPT-825 / LPT-826 / LPT-827; same class as LPT-818).
+const _spotTypeUnguidedSpoilers = <String, List<String>>{
+  'act-04-06-01-unguided': ['low conf', 'low confidence', 'certain forever'],
+  'act-04-06-01-scaffolded': ['tap sticky', 'pick sticky', '— sticky'],
+  'act-04-07-01-scaffolded': [
+    'strong aggression',
+    'strong heat',
+    'when they enter',
+  ],
+  'act-04-07-01-unguided': [
+    'sample too small',
+    'no —',
+    'tap wait',
+    'pick wait',
+  ],
+  'act-04-07-02-unguided': ['nit', 'maniac'],
+  'act-04-08-02-unguided': ['maniac', 'station'],
+  'act-04-09-01-unguided': [
+    'update/retire',
+    'calling station model',
+    'freeze',
+  ],
+  'act-04-09-01-scaffolded': ['rise', 'stay zero', 'stay at zero'],
+  'act-05-08-01-scaffolded': ['gear change', 'old label'],
+};
+
 void main() {
   for (final MapEntry(key: id, value: line) in _lines.entries) {
     test('$id densify helper arm (LPT-628 remain)', () {
@@ -109,6 +161,27 @@ void main() {
       expect(line.toLowerCase(), isNot(contains('tap the best answer')));
     });
   }
+
+  test(
+    'Spot Nit/Maniac/Retire/Observation-certainty + Wait-samples/Strong-aggr '
+    '+ scaffolded densify stems do not spoil tiles '
+    '(LPT-819/820/821/822/823/824/825/826/827)',
+    () {
+      for (final MapEntry(key: id, value: spoils)
+          in _spotTypeUnguidedSpoilers.entries) {
+        final resolved = selectIdentifyDensifiedCoachLine(id);
+        expect(resolved, _lines[id], reason: id);
+        final lower = (resolved ?? '').toLowerCase();
+        for (final spoil in spoils) {
+          expect(
+            lower,
+            isNot(contains(spoil)),
+            reason: '$id must not contain "$spoil"',
+          );
+        }
+      }
+    },
+  );
 
   test('Final five-type densify stems do not spoil correct tiles (LPT-672)', () {
     const expected = <String, String>{

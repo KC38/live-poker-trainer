@@ -137,7 +137,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   Verify with Hint+`tree` before implementing: framed `_LessonChoiceStack`
   + `_framedDockPulseChoiceId` (e.g. Size with a message unguided) already
   SoftPulses only the first choice — close as no-repro (LPT-504); densify
-  builders still need `guideRegion`. When fixing multi SoftPulse, update
+  builders still need `guideRegion`. Prefer
+  `python3 tools/agent_tap.py tree --contains "Hint copy"` over
+  `tree | head | grep` — truncated trees false-fail VALIDATE (LPT-822).
+  When fixing multi SoftPulse, update
   tests that assert `findsNWidgets(N>1)` on `glow-highlight` for that
   surface — they may have locked the bug (LPT-55).
   Ids in `lessonFrameSameConceptQuietIds` (e.g. guided-seven) stay SoftPulse
@@ -177,7 +180,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   checkpoint, jump ranks) — SoftPulse can gold You while a wrong seat still
   appends cyan #1 when strictOrder defaults false (LPT-707). Explain tables
   already strict; interactive must match.
-- Prefer Suits explain Hint copy from Dart / pressHints (`Find a heart on the board.`) — never fall through to completion accessibility `You found all four suits…` on SoftPulse-quiet review (LPT-813). After `fresh` clears completedLessonIds, wait for Home to refresh before judging SoftPulse-off + Hint; a stale hasCompleted snapshot opens review-quiet SoftPulse.
+- Prefer Suits explain Hint copy from Dart / pressHints (`Find a heart on the board.`) — never fall through to completion accessibility `You found all four suits…` on SoftPulse-quiet review (LPT-813). After `fresh` clears completedLessonIds, SoftPulse-quiet review follows live profile ids at lesson start (LPT-828) — still wait for Home refresh before filing SoftPulse-off from a stale hasCompleted snapshot if you are on a build before that fix.
 - Prefer a second open when judging card randomization (screenshot hole/board
   A vs B) and screenshot heart counts before/after a paid miss (and after
   Practice/refill) before claiming cards or hearts work. Read ranks from the
@@ -195,7 +198,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `jira.py comment` exits non-zero, do **not** `transition … Done` — fix the
   attach/body and re-comment first (LPT-62: first closeout failed, Done raced
   ahead). After a successful closeout comment, `jira.py verify-embeds LPT-NN`
-  must pass before Done.
+  must pass before Done. Prefer `python3 tools/ui_motion_targets.py pick` on empty-queue discovery, then `tools/sim_record.py record|start/stop` + `frames` for SoftPulse/Hint/deal/transition bugs — attach MP4 + Read frame PNGs; stills alone miss timing (human-reported motion gaps). Keep `<surface>-issue.png` / `<KEY>-validated.png` for static copy/layout only.
+
 - Prefer `tools/flutter_run_fast.sh` / `flutter_hot_restart.sh` /
   `refresh-simulator.sh` over hand-rolled tmux `flutter run`. Trust
   refresh after hot-restart (it waits for Dart VM / cold-starts cached
@@ -224,7 +228,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   (and wait for Nice! after the last explain tap) before taps or validated
   shots — early taps nomatch Home (LPT-79/97). Acting order explain can take
   ~7s before `gold SoftPulse:` names UTG; do not file SoftPulse-off from a
-  1–2s tree (LPT-147).
+  1–2s tree (LPT-147). Hero hole SoftPulse under seat Semantics needs
+  `agentGlowOf` descendant walk — paint-without-tree-gold was LPT-840, not
+  SoftPulse-off.
 - Prefer adopting `sim_lock_run_id` from
   `~/.live-poker-trainer/ui-agent-handoff.json` (then
   `simulator-lock.json`) when `$SIM_LOCK_RUN_ID` is unset in a
@@ -246,8 +252,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer `fresh --lesson … --open` when the walk must start at activity 0 —
   it nulls `course/main.resume`, clears matching `currentLessonId`, and
   deletes open `courseAttempts` (LPT-76). Do not hand-patch Firestore for
-  resume. On Best five SoftPulse closeout, judge seat glow by the PNG
-  (`You [enabled gold]`); retap picker SoftPulse when the first press
+  resume. After `fresh` clears `completedLessonIds`, SoftPulse-quiet review
+  must follow live profile ids at lesson start (LPT-828) — if you still see
+  SoftPulse-off + Hint on a guided explain, wait for Home refresh then
+  re-open before filing. On Best five SoftPulse closeout, judge seat glow by
+  the PNG (`You [enabled gold]`); retap picker SoftPulse when the first press
   leaves `0/5 selected` (LPT-75).
 - Prefer omitting `--log` on `agent_tap` / `agent_seed` after
   `flutter_run_fast.sh` / `flutter_hot_restart.sh` — they point
@@ -307,7 +316,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   capped). Densified lines need a pick/tap verb so
   `withLessonTapInstruction` does not append the generic footer. A local
   `_coachText` string alone leaves framed speech on catalog. Assert densify
-  by absence of "Tap the best answer." plus the densified stem (e.g.
+  via `lessonFrameSpeech(activity)` not only the helper —
+  `lesson_screen_layout.dart` still hardcodes some activity ids (LPT-831
+  checkpoint-layout bypassed densify until both were aligned). Assert by
+  absence of "Tap the best answer." plus the densified stem (e.g.
   `Best leak note —`) — `withLessonTapInstruction` may rewrite authored
   `pick` to `tap`, so exact `pick the …` needles false-fail (LPT-662).
 - Prefer densify tile titles (`Call 10`, `Suited conn`, `Call`) over

@@ -66,3 +66,18 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
   seat numbers on a nine-handed ask (LPT-240); densify `blindsSeats`+
   `numberSeats` covers the no-frame path.
 - 2026-10-13 LPT-641: loop rewrote `ui-agent-handoff.json` / reclaimed the mini mid-implement. When heartbeat/guard print not-the-holder, stop driving until `sim_lock.py claim` succeeds again (LPT-637); do not force-release the loop holder.
+
+## Fold 2026-10-14
+
+- Prefer waiting for Nice! / counting Continues before treating SoftPulse-none + densify stem as SoftPulse-off checkpoint idle — the window after the last SoftPulse press can still show densify before Nice!, so a too-early `<KEY>-validated.png` captures Nice! instead of the ask (LPT-814).
+
+## Fold 2026-10-15
+
+- Prefer checking `supportsHoleHandSeatDeal` / sibling deal maps when a curriculum split adds a new `act-…` id (e.g. LPT-83 `act-01-01-02-03-guided-suited`) — missing the id falls through to Them/You + text docks, mini overflow (~147px), SoftPulse-off, and densify spoil (LPT-815 / LPT-816).
+- Prefer SoftPulse-quiet densify stems for scaffolded/unguided (`showTargetCue` unlocks guided only until Hint) — idle coach must not name the correct tile while SoftPulse is off (LPT-817 Working model; LPT-818 Station).
+
+## Fold 2026-10-14
+
+- Never use bare `Rise` (or other short tile stems) in case-insensitive `grep -E` spoil checks against coach speech — explain copy like "confidence rises" false-matches and can race `Done` without a validated PNG (LPT-823 closeout). Prefer an exact densify-stem needle (`tap how confidence should move`) or word-boundary spoil phrases (`— tap Rise`, `Stay zero`).
+
+- Prefer deleting stale `LPT-*` / `live-poker-trainer*` Flutter asset extract dirs under the mini app `Containers/.../tmp` when disk is near full (`du` can show ~160MB × hundreds ≈ tens of GB) before Xcode builds (LPT-826 disk preflight). Keep the newest extract; do not wipe Library/Preferences.

@@ -10,6 +10,13 @@ import 'package:live_poker_trainer/ui/widgets/action_badge.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/table_card.dart';
 
+Finder _streetBetChips() {
+  return find.byWidgetPredicate((widget) {
+    final key = widget.key;
+    return key is ValueKey<String> && key.value.startsWith('bet-');
+  });
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -56,13 +63,24 @@ void main() {
     await tester.pump();
     expect(find.byType(ActionBadge), findsNothing);
     expect(find.text('FOLD'), findsNothing);
+    // Blinds / street bets stay off until holes finish (Live Training class).
+    expect(_streetBetChips(), findsNothing);
 
     // Six seats × two hole cards; the first card already landed.
-    for (var i = 0; i < 11; i++) {
+    // Eleven more pumps finish the deal; keep bets hidden until then.
+    for (var i = 0; i < 10; i++) {
       await tester.pump(CardDealPace.dealCard);
+      expect(
+        _streetBetChips(),
+        findsNothing,
+        reason: 'street bets must wait for the deal (pump $i)',
+      );
     }
+    await tester.pump(CardDealPace.dealCard); // 12th hole card → holes done
     expect(find.byType(TableCardBack), findsNWidgets(12));
     expect(find.text('FOLD'), findsNothing);
+    // Holes done → blinds may post; folds still wait one beat.
+    expect(_streetBetChips(), findsWidgets);
 
     await tester.pump(CardDealPace.dealCard);
     expect(find.text('FOLD'), findsOneWidget);

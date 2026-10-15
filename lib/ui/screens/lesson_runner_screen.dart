@@ -138,18 +138,24 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
   /// Review of a lesson already in the completed set.
   ///
-  /// [LessonRunnerScreen.isReview] is set from Home REVIEW. Also consult
-  /// the Home snapshot so other entry points (practice, resume of a
-  /// completed node) stay cue-quiet without Hint.
-  bool _isReviewRun(String lessonId) {
+  /// [LessonRunnerScreen.isReview] is set from Home REVIEW. SoftPulse-quiet
+  /// otherwise follows **live** profile `completedLessonIds` (via
+  /// [_completedLessonIdsBefore]), not a stale Home `node.hasCompleted`
+  /// snapshot — `agent_seed.py fresh` can clear the id before Home refreshes
+  /// (LPT-828).
+  Future<bool> _isReviewRun(String lessonId, CourseCatalog catalog) async {
     if (widget.isReview) return true;
-    if (!ref.exists(courseHomeProvider)) return false;
-    final home = ref.read(courseHomeProvider).asData?.value;
-    if (home == null) return false;
-    for (final node in home.nodes) {
-      if (node.lessonId == lessonId && node.hasCompleted) return true;
+    final completed = await _completedLessonIdsBefore(catalog: catalog);
+    final review = lessonIsSoftPulseQuietReview(
+      entryIsReview: false,
+      completedLessonIds: completed,
+      lessonId: lessonId,
+    );
+    // Keep Home in sync for the path chrome after external profile seeds.
+    if (ref.exists(courseHomeProvider)) {
+      unawaited(ref.read(courseHomeProvider.notifier).refresh());
     }
-    return false;
+    return review;
   }
 
   @override
@@ -300,10 +306,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       (a) => a.id == started.resume.activityId,
       orElse: () => activities.first,
     );
+    final isReview = await _isReviewRun(lessonId, catalog);
+    if (!mounted) return;
     _bindActivityController(
       LessonActivityController(
         activity: current,
-        isReview: _isReviewRun(lessonId),
+        isReview: isReview,
       ),
     );
     _setDealSalt(started.attempt.attemptId);
