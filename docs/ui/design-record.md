@@ -827,10 +827,13 @@ word remaps use placeholders so a king→queen plus queen→jack chain cannot
 turn Made hands densify Nice! "Pair of kings" into "Pair of jacks" over
 top-pair queens (LPT-852). Your two cards densified coach lines are
 stem-only — never hardcode template Ah Kd / Qs Jh 2c
-(`selectIdentifyDensifiedCoachLine`, LPT-792). The next densify Hint that
-says "two cards" or feedback that says "Those two stay" / "Pair of …"
-copies that protect and non-chaining remap; the next hole/board densify
-ask uses a stem or aligned felt names.
+(`selectIdentifyDensifiedCoachLine`, LPT-792). SoftPulse-off densify
+checkpoint stem is situation + tap verb only — never name The two cards
+at your seat / the two at your seat while SoftPulse stays off (LPT-869;
+SoftPulse LPT-653; same class as LPT-868 / LPT-867 / LPT-812). The next
+densify Hint that says "two cards" or feedback that says "Those two stay"
+/ "Pair of …" copies that protect and non-chaining remap; the next
+hole/board densify ask uses a stem or aligned felt names.
 
 Calling Station explain STATION tile caption is **Working label**
 (`CallingStationDemo.points` in `lesson_action_table.dart`, LPT-789) — same
@@ -1988,7 +1991,7 @@ felt.
 
 | Lesson | Explain taps | Still a list |
 | --- | --- | --- |
-| Your two cards | Your hole cards on the felt; Hint keeps "two cards" under board deuce remap (LPT-791); Nice! keeps "Those two stay" (LPT-797); densify coach stem-only (LPT-792); agent `tree` / `wait-gold` report gold SoftPulse on hero hole SoftPulse under seat Semantics (LPT-840) | — |
+| Your two cards | Your hole cards on the felt; Hint keeps "two cards" under board deuce remap (LPT-791); Nice! keeps "Those two stay" (LPT-797); densify coach stem-only (LPT-792); SoftPulse-off densify stem non-spoiling (no the two at your seat) (LPT-869); agent `tree` / `wait-gold` report gold SoftPulse on hero hole SoftPulse under seat Semantics (LPT-840) | — |
 | Suits | Suit taps on board cards; explain SoftPulse hearts → diamonds → clubs → spades (LPT-353); explain Hint per-press suit tip not completion a11y (LPT-813); SoftPulse-off densify stem non-spoiling (no Hearts/diamonds/clubs/spades order) on guided idle / scaffolded / checkpoint (LPT-814); unit `unit-01-01-02-suits-and-ranks` (LPT-83 split) | — |
 | Ranks | Board ranks low to high; SoftPulse cues rank-2 → rank-T → rank-A (LPT-370); unit `unit-01-01-02-suits-and-ranks` (LPT-83) | — |
 | Pairs and suited | Suited / pair seats; scaffolded pressHints (LPT-82); checkpoint SoftPulse-off densify stem non-spoiling (LPT-804); guided densify uses seat-deal full table (no Them/You overflow; SoftPulse on suited seat; densify stem non-spoiling) (LPT-815 / LPT-816); unit `unit-01-01-02-suits-and-ranks` (LPT-83) | — |

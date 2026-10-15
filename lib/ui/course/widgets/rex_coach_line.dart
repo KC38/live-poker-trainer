@@ -355,8 +355,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Tap the cards only you can see — pick your private holes.',
     'act-01-01-01-unguided-mix' =>
       'Tap the community cards — pick the shared board in the middle.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name The two cards at your seat / the two at your seat (LPT-869;
+    // SoftPulse LPT-653; same class as LPT-868 / LPT-867 / LPT-812).
     'act-01-01-01-checkpoint-table' =>
-      'Tap the cards that are only yours — pick the two at your seat.',
+      'Private cards on this table — tap the ones only you can see.',
     // SoftPulse-quiet densify (guided same-concept until Hint) — situation +
     // tap verb only; never name Hearts/diamonds/clubs/spades in the idle
     // bubble (LPT-814; SoftPulse LPT-653; same class as LPT-808 / LPT-672).
