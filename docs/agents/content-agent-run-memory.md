@@ -5396,3 +5396,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
 - Prefer next NEVER: `lesson-04-07-01-03-wait-for-samples` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-04-07-01-*: strong-aggression Prefer NEVER structural clean on tip — SoftPulse residual closed by LPT-768.
+
+## Fold 2026-10-15ff (eec47beb Prefer NEVER wait-for-samples)
+
+- Tip-stable `eec47beb` (#2748 Best five checkpoint densify on tip; rescues pending strong-aggression #2749). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 limit); other parents Done.
+- Prefer NEVER discovery `lesson-04-07-01-03-wait-for-samples` / `act-04-07-01-03-explain-wait` + `act-04-07-01-unguided`:
+  - one objective Wait for samples before labeling; explain SoftPulse TWO FOLDS→MORE HANDS + `explainGrading` "Few hands → wait before labeling." **concept-aligned** (content-driven `authoredCues` / LPT-669 Done — do not reopen SoftPulse residual / LPT-768).
+  - unguided SoftPulse `wait` one-per-press pressHints 1/1 densify PRESENT SoftPulse-quiet after LPT-826 (`select_identify` `deal.mode` `none` observeWaitSamples — do not file handFamily; SoftPulse `guideRegion` PRESENT).
+  - short-ladder 2/5 already on catalog **LPT-829**; curriculum **LPT-195** Done — do not clone / SoftPulse residual N/A.
+- Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
+- Prefer next NEVER: `lesson-04-07-02-01-nit-model` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-04-07-01-*: Observe narrow children Prefer NEVER path complete on tip — SoftPulse residual closed by LPT-768 on first-child.
