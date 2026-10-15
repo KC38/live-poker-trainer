@@ -235,17 +235,21 @@ table in the design record, using the coverage ledger
 2. A **motion / multi-frame** surface from
    `python3 tools/ui_motion_targets.py pick` that is never walked or
    oldest — film it with `tools/sim_record.py` (see Motion check below).
-3. A densify stem with template **card codes** from
+3. SoftPulse-quiet **choice-label densify spoils** from
+   `python3 tools/ui_densify_spoil_scan.py list` (or `check`). Idle coach
+   naming a tile answer while SoftPulse is off / after Hint only is a
+   `ui-agent` KEY — do not hunt these only by eye (LPT-849 class).
+4. A densify stem with template **card codes** from
    `python3 tools/ui_densify_card_scan.py list` — **walk proof only**.
    Tokens in the stem map are expected for `alignLessonActionCopy`
    rewrite (LPT-851 Done). Run `… check` (exit 0 = align wired). File a
    remap ticket only when mini idle coach still names template cards
    while the felt shows isomorphic ranks — never because `list` is
    non-empty.
-4. A surface never walked.
-5. A surface whose code changed since its last walk
+5. A surface never walked.
+6. A surface whose code changed since its last walk
    (`git diff --name-only <last sha>..HEAD -- <code path>` is not empty).
-6. The surface walked longest ago.
+7. The surface walked longest ago.
 
 Prefer surfaces that the **Known gaps** section names, then motion
 targets (`ui_motion_targets.py list` / `classes`). When walking a
