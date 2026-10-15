@@ -12141,11 +12141,13 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       lessonFrameSpeech(activity),
-      'Pot 20, bet 10 — tap the call that equals the bet.',
+      'Pot 20, bet 10 — tap the matching call amount.',
     );
     expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(lessonFrameSpeech(activity), isNot(contains('equals the bet')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Call 10')));
     expect(
-      find.text('Pot 20, bet 10 — pick the call that equals the bet.'),
+      find.text('Pot 20, bet 10 — tap the matching call amount.'),
       findsOneWidget,
     );
     expect(
@@ -12234,11 +12236,13 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       lessonFrameSpeech(activity),
-      'Getting 3:1 with real outs — tap Call, Fold, or Raise.',
+      'Getting 3:1 with real outs — tap the matching price plan.',
     );
     expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Call, Fold, or Raise')));
+    expect(lessonFrameSpeech(activity), isNot(contains('tap Call')));
     expect(
-      find.text('Getting 3:1 with real outs — pick Call, Fold, or Raise.'),
+      find.text('Getting 3:1 with real outs — tap the matching price plan.'),
       findsOneWidget,
     );
     expect(find.text('Pot 20 · bet 10'), findsOneWidget);

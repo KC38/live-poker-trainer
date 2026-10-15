@@ -62,10 +62,18 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Count outs densified asks (LPT-279) — same path as baseline jump (LPT-221).
     'act-03-03-01-guided' =>
       'Count only the outs that make the best hand — pick every clean out.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never say equals the bet / Call 10
+    // (LPT-882; SoftPulse LPT-653; same class as LPT-881 / LPT-880 /
+    // LPT-878 / LPT-877).
     'act-03-03-01-scaffolded' =>
-      'Pot 20, bet 10 — pick the call that equals the bet.',
+      'Pot 20, bet 10 — tap the matching call amount.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Call / Fold / Raise tile verbs
+    // (LPT-881; SoftPulse LPT-653; same class as LPT-882 / LPT-880 /
+    // LPT-878 / LPT-877).
     'act-03-03-01-unguided' =>
-      'Getting 3:1 with real outs — pick Call, Fold, or Raise.',
+      'Getting 3:1 with real outs — tap the matching price plan.',
     'act-03-03-01-checkpoint' =>
       'Nut flush draw, deep and sticky — pick when future payoffs justify the price.',
     // Close the river checkpoint densified ask (LPT-343) — same path as
