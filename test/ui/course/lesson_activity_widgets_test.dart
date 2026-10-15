@@ -15556,12 +15556,14 @@ await tester.tap(find.text('NIT'));
     // LPT-403: densified ask (and frame speech) — not catalog + Tap the best answer.
     expect(
       lessonFrameSpeech(activity),
-      'BTN open, BB 3-bet, BTN calls — tap whose range is stronger.',
+      'BTN open, BB 3-bet, BTN calls — tap the matching range comparison.',
     );
     expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(lessonFrameSpeech(activity), isNot(contains('stronger')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Stronger')));
     expect(
       find.text(
-        'BTN open, BB 3-bet, BTN calls — pick whose range is stronger.',
+        'BTN open, BB 3-bet, BTN calls — tap the matching range comparison.',
       ),
       findsOneWidget,
     );
