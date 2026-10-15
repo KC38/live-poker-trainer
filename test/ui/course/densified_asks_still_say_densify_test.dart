@@ -120,7 +120,9 @@ const _lines = <String, String>{
   // LPT-847: SoftPulse-quiet densify — no Strong draw / nut flush draw spoil.
   'act-03-02-01-scaffolded':
       'Board Jh 8h 3c. You hold Ah 9h. Class — tap the matching label.',
-  'act-03-02-01-unguided': 'Board Qc 7d 2s. You hold 5h 4h multiway. Class — pick Air — little equity, no pair.',
+  // LPT-848: SoftPulse-quiet densify — no Air / little equity spoil.
+  'act-03-02-01-unguided':
+      'Board Qc 7d 2s. You hold 5h 4h multiway. Class — tap the matching label.',
   // LPT-805: SoftPulse-off densify — no correct-tile / template-card spoil.
   'act-03-02-01-checkpoint':
       'Best label for this flop class — tap the matching label.',

@@ -518,8 +518,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // LPT-844).
     'act-03-02-01-scaffolded' =>
       'Board Jh 8h 3c. You hold Ah 9h. Class — tap the matching label.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; keep template board/holes for
+    // alignLessonTableCopy; never name Air / little equity (LPT-848;
+    // SoftPulse LPT-653; same class as LPT-847 / LPT-846 / LPT-845).
     'act-03-02-01-unguided' =>
-      'Board Qc 7d 2s. You hold 5h 4h multiway. Class — pick Air — little equity, no pair.',
+      'Board Qc 7d 2s. You hold 5h 4h multiway. Class — tap the matching label.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Draw / open-ended straight draw, and never hardcode template
     // board/holes (LPT-805; SoftPulse LPT-653; remap honesty LPT-806 class;
