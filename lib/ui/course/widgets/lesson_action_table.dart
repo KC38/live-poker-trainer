@@ -14259,6 +14259,11 @@ String authoredSoftPulseExplainCaption(String target) {
     // Delayed aggression SoftPulse explain (CHECKED BACK → BET TURN; LPT-886).
     'CHECKED BACK': 'No bet flop',
     'BET TURN': 'Bet when helped',
+    // Pot odds versus equity SoftPulse explain (PRICE → POT → EQUITY; LPT-887).
+    // PRICE caption matches OutsPriceDemo; POT/EQUITY gloss the pot-odds ask.
+    'PRICE': 'Pot odds',
+    'POT': 'What it pays',
+    'EQUITY': 'Win chance',
     // Streets / table flow.
     'PREFLOP': 'Before the flop',
     'FLOP': 'Three cards',
