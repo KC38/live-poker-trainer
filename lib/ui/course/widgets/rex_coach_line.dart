@@ -498,8 +498,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // LPT-842).
     'act-03-01-01-scaffolded' =>
       'Nine-handed. Dealer button is on seat 7 — tap who acts first preflop.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Raise stands / verbal is
+    // binding (LPT-846; SoftPulse LPT-653; same class as LPT-845 / LPT-844 /
+    // LPT-843).
     'act-03-01-01-unguided' =>
-      'You say "raise" then try to take it back to a call. Result — pick The raise stands — verbal is binding.',
+      'You say "raise" then try to take it back to a call — tap the matching result.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Effective 55bb / the 18 pot in the idle bubble (LPT-787;
     // SoftPulse LPT-653; same class as LPT-785 / LPT-786 / LPT-672).

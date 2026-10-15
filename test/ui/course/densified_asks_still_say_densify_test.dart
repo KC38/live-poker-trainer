@@ -109,7 +109,9 @@ const _lines = <String, String>{
   // LPT-845: SoftPulse-quiet densify — no UTG / Seat left of the big blind spoil.
   'act-03-01-01-scaffolded':
       'Nine-handed. Dealer button is on seat 7 — tap who acts first preflop.',
-  'act-03-01-01-unguided': 'You say "raise" then try to take it back to a call. Result — pick The raise stands — verbal is binding.',
+  // LPT-846: SoftPulse-quiet densify — no Raise stands / verbal is binding spoil.
+  'act-03-01-01-unguided':
+      'You say "raise" then try to take it back to a call — tap the matching result.',
   // LPT-787: SoftPulse-off densify — no correct-tile spoil.
   'act-03-01-01-checkpoint':
       'Hero 140bb, villain 55bb, pot 18 — tap what matters most next.',
