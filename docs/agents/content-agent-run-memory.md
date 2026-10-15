@@ -5360,3 +5360,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next NEVER: `lesson-04-06-03-03-cite-sticky-call` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-04-06-03-*: structural clean on tip — SoftPulse residual closed by LPT-732 on value-wider sibling.
 
+## Fold 2026-10-15fc (4f25f06d Prefer NEVER cite-sticky-call)
+
+- Tip-stable `4f25f06d` (#2742 Prefer NEVER bluff-less learnings). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 limit); other parents Done.
+- Prefer NEVER discovery `lesson-04-06-03-03-cite-sticky-call` / `act-04-06-03-03-explain-cite` + `act-04-06-03-unguided`:
+  - one objective Cite the sticky-call tendency; explain SoftPulse EVIDENCE→UNKNOWN + `explainGrading` "Station evidence → thin value; unknown → cautious." **concept-aligned** (content-driven `authoredCues` / LPT-669 Done — do not reopen SoftPulse residual / LPT-732).
+  - unguided SoftPulse `baseline-check` one-per-press pressHints 1/1 (`poker_action_sizing` `fixed` JhTd·QcTs3h2d7c +2 suit variants match Dart; densify N/A; SoftPulse map PRESENT); `deal.mode` `none` on explain — do not file handFamily.
+  - short-ladder 2/5 already on catalog **LPT-829**; curriculum **LPT-192** Done — do not clone / SoftPulse residual N/A.
+- Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
+- Prefer next NEVER: `lesson-04-07-01-01-narrow-entry` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-04-06-03-*: structural clean on tip — SoftPulse residual closed by LPT-732 on value-wider sibling; Adjust Station children Prefer NEVER path complete.
