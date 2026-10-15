@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "882025799cbcfacdca9194738462b35434db53feb38ed7a78f00cb91ba37f182",
+  "contentChecksum": "7e97344f7ad1d5b027f2627e83a0062199c5b8edf207fa07ee04eedb588251c8",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -15594,7 +15594,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "You never know one hand. You know a range — then update it.",
+                  "accessibilityText": "You never know one hand. Describe each seat as a range.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -15602,7 +15602,7 @@
                     {
                       "id": "act-04-01-01-explain-media",
                       "kind": "dialogue",
-                      "text": "You never know one hand. You know a range — then update it."
+                      "text": "You never know one hand. Describe each seat as a range."
                     }
                   ],
                   "objectives": [
@@ -15610,7 +15610,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "One hand → Range → Update."
+                    "feedback": "One hand → Range."
                   },
                   "teachSpec": {
                     "deal": {
@@ -15625,11 +15625,6 @@
                       {
                         "press": 2,
                         "target": "RANGE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "UPDATE",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -16145,7 +16140,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "3-bets define ranges. Squeezes punish multiway limps and flatting.",
+                  "accessibilityText": "3-bet your strong hands for value. Build the pot when you are ahead.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -16153,7 +16148,7 @@
                     {
                       "id": "act-04-02-01-explain-media",
                       "kind": "dialogue",
-                      "text": "3-bets define ranges. Squeezes punish multiway limps and flatting."
+                      "text": "3-bet your strong hands for value. Build the pot when you are ahead."
                     }
                   ],
                   "objectives": [
@@ -16161,7 +16156,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "3-bet → Ranges → Squeeze."
+                    "feedback": "Strong hand → Value 3-bet."
                   },
                   "teachSpec": {
                     "deal": {
@@ -16171,16 +16166,6 @@
                       {
                         "press": 1,
                         "target": "3-BET",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "RANGES",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "SQUEEZE",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -18570,7 +18555,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Before labels: who enters pots, who calls, who folds. Count samples.",
+                  "accessibilityText": "Before labels: count who enters a lot of pots.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -18578,7 +18563,7 @@
                     {
                       "id": "act-04-06-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Before labels: who enters pots, who calls, who folds. Count samples."
+                      "text": "Before labels: count who enters a lot of pots."
                     }
                   ],
                   "objectives": [
@@ -18586,7 +18571,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Enters → Calls → Folds."
+                    "feedback": "Enters often → tag it."
                   },
                   "teachSpec": {
                     "deal": {
@@ -18596,16 +18581,6 @@
                       {
                         "press": 1,
                         "target": "ENTERS",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "CALLS",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "FOLDS",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -20010,7 +19985,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Some seats almost never enter. When they do, they mean it. Note both.",
+                  "accessibilityText": "Some seats almost never enter a pot. Note that narrow entry.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -20018,7 +19993,7 @@
                     {
                       "id": "act-04-07-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Some seats almost never enter. When they do, they mean it. Note both."
+                      "text": "Some seats almost never enter a pot. Note that narrow entry."
                     }
                   ],
                   "objectives": [
@@ -20026,7 +20001,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Rare → Enter → Mean it."
+                    "feedback": "Rarely enters → narrow."
                   },
                   "teachSpec": {
                     "deal": {
@@ -20036,16 +20011,6 @@
                       {
                         "press": 1,
                         "target": "RARE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "ENTER",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "MEAN IT",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -20728,7 +20693,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Versus nits: steal blinds more; give credit when they explode.",
+                  "accessibilityText": "Versus Nits: steal their blinds more. They fold too much.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -20736,7 +20701,7 @@
                     {
                       "id": "act-04-07-03-explain-media",
                       "kind": "dialogue",
-                      "text": "Versus nits: steal blinds more; give credit when they explode."
+                      "text": "Versus Nits: steal their blinds more. They fold too much."
                     }
                   ],
                   "objectives": [
@@ -20747,7 +20712,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Steal → Credit → Explode."
+                    "feedback": "Nit folds → Steal more."
                   },
                   "teachSpec": {
                     "deal": {
@@ -20757,16 +20722,6 @@
                       {
                         "press": 1,
                         "target": "STEAL",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "CREDIT",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "EXPLODE",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -21264,7 +21219,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Some seats raise and barrel seemingly forever. Count it calmly.",
+                  "accessibilityText": "Some seats raise almost every pot they enter. Tag that extreme entry.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -21272,7 +21227,7 @@
                     {
                       "id": "act-04-08-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Some seats raise and barrel seemingly forever. Count it calmly."
+                      "text": "Some seats raise almost every pot they enter. Tag that extreme entry."
                     }
                   ],
                   "objectives": [
@@ -21280,7 +21235,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Raise → Barrel → Count."
+                    "feedback": "Raises every pot → extreme."
                   },
                   "teachSpec": {
                     "deal": {
@@ -21290,16 +21245,6 @@
                       {
                         "press": 1,
                         "target": "RAISE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "BARREL",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "COUNT",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -22520,7 +22465,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Observation ≠ certainty. Confidence grows with samples and showdowns.",
+                  "accessibilityText": "Observation is not certainty. A note is a guess, not a fact.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -22528,7 +22473,7 @@
                     {
                       "id": "act-04-09-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Observation ≠ certainty. Confidence grows with samples and showdowns."
+                      "text": "Observation is not certainty. A note is a guess, not a fact."
                     }
                   ],
                   "objectives": [
@@ -22536,7 +22481,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Observe → Samples → Showdowns."
+                    "feedback": "Observe ≠ certain."
                   },
                   "teachSpec": {
                     "deal": {
@@ -22546,16 +22491,6 @@
                       {
                         "press": 1,
                         "target": "OBSERVE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "SAMPLES",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "SHOWDOWNS",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -34540,7 +34475,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Versus TAG: respect raises; do not invent light bluff-raises.",
+                  "accessibilityText": "Versus a TAG: give their raises credit and play tighter.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -34548,7 +34483,7 @@
                     {
                       "id": "act-06-11-03-explain-media",
                       "kind": "dialogue",
-                      "text": "Versus TAG: respect raises; do not invent light bluff-raises."
+                      "text": "Versus a TAG: give their raises credit and play tighter."
                     }
                   ],
                   "objectives": [
@@ -34559,7 +34494,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Credit → Tighter → No light."
+                    "feedback": "Credit → Tighter."
                   },
                   "teachSpec": {
                     "deal": {
@@ -34574,11 +34509,6 @@
                       {
                         "press": 2,
                         "target": "TIGHTER",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "NO LIGHT",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -35107,7 +35037,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Before labels: wide entry plus pressure that still has a plan. Count samples.",
+                  "accessibilityText": "Before labels: note who enters wide and plays many hands.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -35115,7 +35045,7 @@
                     {
                       "id": "act-06-12-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Before labels: wide entry plus pressure that still has a plan. Count samples."
+                      "text": "Before labels: note who enters wide and plays many hands."
                     }
                   ],
                   "objectives": [
@@ -35123,7 +35053,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Wide → Pressure → Sample."
+                    "feedback": "Enters wide → note it."
                   },
                   "teachSpec": {
                     "deal": {
@@ -35133,16 +35063,6 @@
                       {
                         "press": 1,
                         "target": "WIDE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "PRESSURE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "SAMPLE",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -35956,7 +35876,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Versus LAG: trap more, call wider, fancy less.",
+                  "accessibilityText": "Versus a LAG: call down wider. Their bets hold more bluffs.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -35964,7 +35884,7 @@
                     {
                       "id": "act-06-12-03-explain-media",
                       "kind": "dialogue",
-                      "text": "Versus LAG: trap more, call wider, fancy less."
+                      "text": "Versus a LAG: call down wider. Their bets hold more bluffs."
                     }
                   ],
                   "objectives": [
@@ -35975,7 +35895,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Call → Trap → Fancy less."
+                    "feedback": "LAG pressure → Call wider."
                   },
                   "teachSpec": {
                     "deal": {
@@ -35985,16 +35905,6 @@
                       {
                         "press": 1,
                         "target": "CALL",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "TRAP",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "FANCY LESS",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -47862,7 +47772,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "One hand → Range → Update."
+        "feedback": "One hand → Range."
       }
     },
     "act-04-01-01-guided": {
@@ -48003,7 +47913,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "3-bet → Ranges → Squeeze."
+        "feedback": "Strong hand → Value 3-bet."
       }
     },
     "act-04-02-01-guided": {
@@ -48567,7 +48477,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "Enters → Calls → Folds."
+        "feedback": "Enters often → tag it."
       }
     },
     "act-04-06-01-guided": {
@@ -48948,7 +48858,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "Rare → Enter → Mean it."
+        "feedback": "Rarely enters → narrow."
       }
     },
     "act-04-07-01-guided": {
@@ -49160,7 +49070,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "Steal → Credit → Explode."
+        "feedback": "Nit folds → Steal more."
       }
     },
     "act-04-07-03-guided": {
@@ -49283,7 +49193,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "Raise → Barrel → Count."
+        "feedback": "Raises every pot → extreme."
       }
     },
     "act-04-08-01-guided": {
@@ -49610,7 +49520,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "Observe → Samples → Showdowns."
+        "feedback": "Observe ≠ certain."
       }
     },
     "act-04-09-01-guided": {
@@ -52755,7 +52665,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "Credit → Tighter → No light."
+        "feedback": "Credit → Tighter."
       }
     },
     "act-06-11-03-scaffolded": {
@@ -52878,7 +52788,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "Wide → Pressure → Sample."
+        "feedback": "Enters wide → note it."
       }
     },
     "act-06-12-01-guided": {
@@ -53127,7 +53037,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "Call → Trap → Fancy less."
+        "feedback": "LAG pressure → Call wider."
       }
     },
     "act-06-12-03-guided": {

@@ -1921,7 +1921,7 @@ void main() {
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('ONE HAND'), findsOneWidget);
     expect(find.text('RANGE'), findsOneWidget);
-    expect(find.text('UPDATE'), findsOneWidget);
+    expect(find.text('UPDATE'), findsNothing); // curriculum residual
     expect(tester.takeException(), isNull);
   });
 
@@ -1965,8 +1965,8 @@ void main() {
     );
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('3-BET'), findsOneWidget);
-    expect(find.text('RANGES'), findsOneWidget);
-    expect(find.text('SQUEEZE'), findsOneWidget);
+    expect(find.text('RANGES'), findsNothing); // curriculum residual
+    expect(find.text('SQUEEZE'), findsNothing); // curriculum residual
     expect(tester.takeException(), isNull);
   });
 
@@ -2136,8 +2136,8 @@ void main() {
     expect(find.byKey(const ValueKey('player-observe-table')), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('ENTERS'), findsOneWidget);
-    expect(find.text('CALLS'), findsOneWidget);
-    expect(find.text('FOLDS'), findsOneWidget);
+    expect(find.text('CALLS'), findsNothing); // curriculum residual
+    expect(find.text('FOLDS'), findsNothing); // curriculum residual
     expect(tester.takeException(), isNull);
   });
 
@@ -2267,8 +2267,8 @@ void main() {
     expect(find.byKey(const ValueKey('tight-seats-table')), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('RARE'), findsOneWidget);
-    expect(find.text('ENTER'), findsOneWidget);
-    expect(find.text('MEAN IT'), findsOneWidget);
+    expect(find.text('ENTER'), findsNothing); // curriculum residual
+    expect(find.text('MEAN IT'), findsNothing); // curriculum residual
     expect(tester.takeException(), isNull);
   });
 
@@ -2351,8 +2351,8 @@ void main() {
       expect(find.byKey(const ValueKey('vs-nits-table')), findsOneWidget);
       expect(find.byType(FeltTableView), findsOneWidget);
       expect(find.text('STEAL'), findsOneWidget);
-      expect(find.text('CREDIT'), findsOneWidget);
-      expect(find.text('EXPLODE'), findsOneWidget);
+      expect(find.text('CREDIT'), findsNothing); // curriculum residual
+      expect(find.text('EXPLODE'), findsNothing); // curriculum residual
       expect(tester.takeException(), isNull);
     },
   );
@@ -2394,8 +2394,8 @@ void main() {
     expect(find.byKey(const ValueKey('extreme-entry-table')), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('RAISE'), findsOneWidget);
-    expect(find.text('BARREL'), findsOneWidget);
-    expect(find.text('COUNT'), findsOneWidget);
+    expect(find.text('BARREL'), findsNothing); // curriculum residual
+    expect(find.text('COUNT'), findsNothing); // curriculum residual
     expect(tester.takeException(), isNull);
   });
 
@@ -2524,8 +2524,8 @@ void main() {
       );
       expect(find.byType(FeltTableView), findsOneWidget);
       expect(find.text('OBSERVE'), findsOneWidget);
-      expect(find.text('SAMPLES'), findsOneWidget);
-      expect(find.text('SHOWDOWNS'), findsOneWidget);
+      expect(find.text('SAMPLES'), findsNothing); // curriculum residual
+      expect(find.text('SHOWDOWNS'), findsNothing); // curriculum residual
       expect(tester.takeException(), isNull);
     },
   );
@@ -3595,7 +3595,7 @@ void main() {
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('CREDIT'), findsOneWidget);
     expect(find.text('TIGHTER'), findsOneWidget);
-    expect(find.text('NO LIGHT'), findsOneWidget);
+    expect(find.text('NO LIGHT'), findsNothing); // curriculum residual
     expect(tester.takeException(), isNull);
   });
 
@@ -3636,8 +3636,8 @@ void main() {
     expect(find.byKey(const ValueKey('wide-pressure-table')), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('WIDE'), findsOneWidget);
-    expect(find.text('PRESSURE'), findsOneWidget);
-    expect(find.text('SAMPLE'), findsOneWidget);
+    expect(find.text('PRESSURE'), findsNothing); // curriculum residual
+    expect(find.text('SAMPLE'), findsNothing); // curriculum residual
     expect(tester.takeException(), isNull);
   });
 
@@ -3720,8 +3720,8 @@ void main() {
     expect(find.byKey(const ValueKey('vs-lags-table')), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('CALL'), findsOneWidget);
-    expect(find.text('TRAP'), findsOneWidget);
-    expect(find.text('FANCY LESS'), findsOneWidget);
+    expect(find.text('TRAP'), findsNothing); // curriculum residual
+    expect(find.text('FANCY LESS'), findsNothing); // curriculum residual
     expect(tester.takeException(), isNull);
   });
 

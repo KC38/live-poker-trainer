@@ -453,12 +453,11 @@ String _lessonFrameLine(
     return 'Weak top pair is not a monster. Tap Top pair.';
   }
   if (activity.id == 'act-04-01-01-explain') {
-    return 'You never know one hand. You know a range. '
-        'Tap One hand, then Range, then Update.';
+    return 'You never know one hand. You know a range. Tap One hand, then '
+        'Range.';
   }
   if (activity.id == 'act-04-02-01-explain') {
-    return '3-bets define ranges. Squeezes punish flats. '
-        'Tap 3-bet, then Ranges, then Squeeze.';
+    return 'Value 3-bet your strong hands. Tap 3-bet.';
   }
   if (activity.id == 'act-04-03-01-explain') {
     return 'Every flop choice needs a turn and a river. '
@@ -473,8 +472,7 @@ String _lessonFrameLine(
         'Tap SPR, then Low, then High.';
   }
   if (activity.id == 'act-04-06-01-explain') {
-    return 'Before labels, count who enters, who calls, and who folds. '
-        'Tap Enters, then Calls, then Folds.';
+    return 'Count who enters a lot of pots. Tap Enters.';
   }
   if (activity.id == 'act-04-06-02-explain') {
     return 'Calling Station is a working model: high participation, low folding. '
@@ -484,20 +482,17 @@ String _lessonFrameLine(
     return 'Calling Stations call too wide. Tap Value.';
   }
   if (activity.id == 'act-04-07-01-explain') {
-    return 'Some seats almost never enter. When they do, they mean it. '
-        'Tap Rare, then Enter, then Mean it.';
+    return 'Some seats almost never enter. Tap Rare.';
   }
   if (activity.id == 'act-04-07-02-explain') {
     return 'Nit means narrow entry and respect for their heavy action. '
         'Tap Nit, then Narrow, then Respect.';
   }
   if (activity.id == 'act-04-07-03-explain') {
-    return 'Steal more from nits. Respect it when they explode. '
-        'Tap Steal, then Credit, then Explode.';
+    return 'Nits fold too much. Steal more. Tap Steal.';
   }
   if (activity.id == 'act-04-08-01-explain') {
-    return 'Some seats raise and barrel seemingly forever. Count it calmly. '
-        'Tap Raise, then Barrel, then Count.';
+    return 'Some seats raise almost every pot. Tap Raise.';
   }
   if (activity.id == 'act-04-08-02-explain') {
     return 'Maniac means extreme entry and aggression — a model, not an insult. '
@@ -508,8 +503,7 @@ String _lessonFrameLine(
         'Tap Wider, then Hang, then Ego.';
   }
   if (activity.id == 'act-04-09-01-explain') {
-    return 'Observation is not certainty. Confidence grows with samples and showdowns. '
-        'Tap Observe, then Samples, then Showdowns.';
+    return 'Observation is not certainty. Tap Observe.';
   }
   if (activity.id == 'act-04-10-01-explain') {
     return 'Same cards. Different seats. Exploits change only with evidence. '
@@ -586,20 +580,17 @@ String _lessonFrameLine(
         'Tap Tight, then Aggro, then Model.';
   }
   if (activity.id == 'act-06-11-03-explain') {
-    return 'Versus TAG: respect raises; do not invent light bluff-raises. '
-        'Tap Credit, then Tighter, then No light.';
+    return 'Versus a TAG, respect their raises. Tap Credit, then Tighter.';
   }
   if (activity.id == 'act-06-12-01-explain') {
-    return 'Before labels: wide entry plus pressure that still has a plan. Count samples. '
-        'Tap Wide, then Pressure, then Sample.';
+    return 'Note who enters wide. Tap Wide.';
   }
   if (activity.id == 'act-06-12-02-explain') {
     return 'LAG: wide in, pressure on — still a working model. '
         'Tap Wide, then Pressure, then Model.';
   }
   if (activity.id == 'act-06-12-03-explain') {
-    return 'Versus LAG: trap more, call wider, fancy less. '
-        'Tap Call, then Trap, then Fancy less.';
+    return 'Versus a LAG, widen your bluff-catches. Tap Call.';
   }
   if (activity.id == 'act-06-13-01-explain') {
     return 'Five models. Same cards. Change only with evidence. '
