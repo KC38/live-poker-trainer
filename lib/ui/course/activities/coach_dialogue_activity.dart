@@ -1574,18 +1574,14 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.bbStackDepth => 'Tap Chips→BB.',
     CoachDialogueVisualKind.tableHabits => 'Tap Watch.',
     CoachDialogueVisualKind.fullRing => 'Tap Nine, Same, and Position.',
-    CoachDialogueVisualKind.tableRead =>
-      'Tap Pot, Stacks, Button, and Who Acts.',
-    CoachDialogueVisualKind.flopLabel => 'Tap Made, Draw, SDV, and Air.',
-    CoachDialogueVisualKind.outsPrice => 'Tap Clean, Dirty, and Price.',
-    CoachDialogueVisualKind.flopLines =>
-      'Tap Value, C-bet, Check, Call, Fold, and Raise.',
-    CoachDialogueVisualKind.turnStory =>
-      'Tap Brick, Change, Barrel, and Delay.',
-    CoachDialogueVisualKind.riverBinary => 'Tap Value, Bluff, Catch, and Fold.',
-    CoachDialogueVisualKind.multiwayPlan => 'Tap Stronger, Fewer, and Nuts.',
-    CoachDialogueVisualKind.commonLeaks =>
-      'Tap Top pair, Prices, Passive, and Crowds.',
+    CoachDialogueVisualKind.tableRead => 'Tap Pot and Stacks.',
+    CoachDialogueVisualKind.flopLabel => 'Tap Made.',
+    CoachDialogueVisualKind.outsPrice => 'Tap Clean and Dirty.',
+    CoachDialogueVisualKind.flopLines => 'Tap Value.',
+    CoachDialogueVisualKind.turnStory => 'Tap Brick and Change.',
+    CoachDialogueVisualKind.riverBinary => 'Tap Value.',
+    CoachDialogueVisualKind.multiwayPlan => 'Tap Stronger.',
+    CoachDialogueVisualKind.commonLeaks => 'Tap Top pair.',
     CoachDialogueVisualKind.rangeUpdate => 'Tap One Hand, Range, and Update.',
     CoachDialogueVisualKind.threeBetSqueeze =>
       'Tap 3-Bet, Ranges, and Squeeze.',

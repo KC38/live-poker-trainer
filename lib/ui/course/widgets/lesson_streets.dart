@@ -14,6 +14,7 @@ import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_authored_demo_scope.dart';
 
 /// Features for Streets explain / order on the full table.
 TableFeatures get lessonStreetsTableFeatures => const TableFeatures(
@@ -62,6 +63,14 @@ class LessonStreetsExplainTable extends StatefulWidget {
 }
 
 class _LessonStreetsExplainTableState extends State<LessonStreetsExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String title, String detail, List<String> board})> get _points => lessonAuthoredDemoPoints(
+    context,
+    StreetsTimelineDemo.streets,
+    (p) => p.title,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String title) {
@@ -73,15 +82,15 @@ class _LessonStreetsExplainTableState extends State<LessonStreetsExplainTable> {
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: StreetsTimelineDemo.streets.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= StreetsTimelineDemo.streets.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllStreetsTapped!();
     }
   }
 
   String? get _nextStreet {
-    for (final street in StreetsTimelineDemo.streets) {
+    for (final street in _points) {
       if (!_tapped.contains(street.title)) return street.title;
     }
     return null;
@@ -95,11 +104,11 @@ class _LessonStreetsExplainTableState extends State<LessonStreetsExplainTable> {
       remainingPressCount: next == null ? 0 : 1,
     );
     if (next != null) {
-      for (final street in StreetsTimelineDemo.streets) {
+      for (final street in _points) {
         if (street.title == next) return street.board;
       }
     }
-    return StreetsTimelineDemo.streets.last.board;
+    return _points.last.board;
   }
 
   @override
@@ -130,7 +139,7 @@ class _LessonStreetsExplainTableState extends State<LessonStreetsExplainTable> {
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (final street in StreetsTimelineDemo.streets)
+            for (final street in _points)
               GlowHighlight(
                 active:
                     teaching &&

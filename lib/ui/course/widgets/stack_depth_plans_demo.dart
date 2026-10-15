@@ -5,6 +5,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_authored_demo_scope.dart';
 
 /// Rewrite plans when stacks change explain: SHORT / DEEP / EFFECTIVE under the full poker table.
 class LessonStackDepthPlansExplainTable extends StatefulWidget {
@@ -27,6 +28,14 @@ class LessonStackDepthPlansExplainTable extends StatefulWidget {
 
 class _LessonStackDepthPlansExplainTableState
     extends State<LessonStackDepthPlansExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    StackDepthPlansDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -38,9 +47,9 @@ class _LessonStackDepthPlansExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: StackDepthPlansDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= StackDepthPlansDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -68,7 +77,7 @@ class _LessonStackDepthPlansExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < StackDepthPlansDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
@@ -76,24 +85,24 @@ class _LessonStackDepthPlansExplainTableState
                       teaching &&
                       widget.showGuidance &&
                       !_tapped.contains(
-                        StackDepthPlansDemo.points[i].label,
+                        _points[i].label,
                       ) &&
-                      StackDepthPlansDemo.points
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _StackDepthPlansTile(
-                    label: StackDepthPlansDemo.points[i].label,
-                    caption: StackDepthPlansDemo.points[i].caption,
-                    color: StackDepthPlansDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected: _tapped.contains(
-                      StackDepthPlansDemo.points[i].label,
+                      _points[i].label,
                     ),
                     enabled: teaching,
                     onPressed:
                         teaching
                             ? () => _onTap(
-                                  StackDepthPlansDemo.points[i].label,
+                                  _points[i].label,
                                 )
                             : null,
                   ),

@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "4690175cb5dcc26f45bee23f211d879173bb7433ed2ce0d8234c5fcc241207f0",
+  "contentChecksum": "f1d80de4097d78e3e133f5315671684bdaf4fb7c64df0cac08c316116a2d82b6",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -10424,7 +10424,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Before cards, read pot, stacks, button, and who acts. Words count live.",
+                  "accessibilityText": "Before you act, read the pot and the stacks.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -10432,7 +10432,7 @@
                     {
                       "id": "act-03-01-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Before cards, read pot, stacks, button, and who acts. Words count live."
+                      "text": "Before you act, read the pot and the stacks."
                     }
                   ],
                   "objectives": [
@@ -10440,7 +10440,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Pot → Stacks → Button → Who acts."
+                    "feedback": "Pot → Stacks."
                   },
                   "teachSpec": {
                     "deal": {
@@ -10455,16 +10455,6 @@
                       {
                         "press": 2,
                         "target": "STACKS",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "BUTTON",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 4,
-                        "target": "WHO ACTS",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -10885,7 +10875,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Flop first: made, draw, showdown value, or air. Label before you bet.",
+                  "accessibilityText": "A made hand already has a pair or better on the flop. Label it before you bet.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -10893,7 +10883,7 @@
                     {
                       "id": "act-03-02-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Flop first: made, draw, showdown value, or air. Label before you bet."
+                      "text": "A made hand already has a pair or better on the flop. Label it before you bet."
                     }
                   ],
                   "objectives": [
@@ -10901,7 +10891,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Made → Draw → SDV → Air."
+                    "feedback": "Pair or better → made hand."
                   },
                   "teachSpec": {
                     "deal": {
@@ -10911,21 +10901,6 @@
                       {
                         "press": 1,
                         "target": "MADE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "DRAW",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "SDV",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 4,
-                        "target": "AIR",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -11517,7 +11492,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Clean outs help. Dirty outs improve you into second-best. Price the call.",
+                  "accessibilityText": "Clean outs make the best hand. Dirty outs can still lose. Count only clean ones.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -11525,7 +11500,7 @@
                     {
                       "id": "act-03-03-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Clean outs help. Dirty outs improve you into second-best. Price the call."
+                      "text": "Clean outs make the best hand. Dirty outs can still lose. Count only clean ones."
                     }
                   ],
                   "objectives": [
@@ -11533,7 +11508,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Clean → Dirty → Price."
+                    "feedback": "Clean → Dirty: count clean outs."
                   },
                   "teachSpec": {
                     "deal": {
@@ -11548,11 +11523,6 @@
                       {
                         "press": 2,
                         "target": "DIRTY",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "PRICE",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -12116,7 +12086,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Flop lines: value, c-bet, check back, call, fold, raise. One plan.",
+                  "accessibilityText": "A strong made hand bets for value: worse hands call.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -12124,7 +12094,7 @@
                     {
                       "id": "act-03-04-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Flop lines: value, c-bet, check back, call, fold, raise. One plan."
+                      "text": "A strong made hand bets for value: worse hands call."
                     }
                   ],
                   "objectives": [
@@ -12132,7 +12102,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Value → C-bet → Check → Call → Fold → Raise."
+                    "feedback": "Strong hand → value bet."
                   },
                   "teachSpec": {
                     "deal": {
@@ -12142,31 +12112,6 @@
                       {
                         "press": 1,
                         "target": "VALUE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "C-BET",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "CHECK",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 4,
-                        "target": "CALL",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 5,
-                        "target": "FOLD",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 6,
-                        "target": "RAISE",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -12778,7 +12723,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Turn cards either brick or change the story. Barrel or delay with intent.",
+                  "accessibilityText": "A brick turn changes nothing. A changing turn shifts who is ahead.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -12786,7 +12731,7 @@
                     {
                       "id": "act-03-05-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Turn cards either brick or change the story. Barrel or delay with intent."
+                      "text": "A brick turn changes nothing. A changing turn shifts who is ahead."
                     }
                   ],
                   "objectives": [
@@ -12794,7 +12739,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Brick → Change → Barrel → Delay."
+                    "feedback": "Brick → Change."
                   },
                   "teachSpec": {
                     "deal": {
@@ -12809,16 +12754,6 @@
                       {
                         "press": 2,
                         "target": "CHANGE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "BARREL",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 4,
-                        "target": "DELAY",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -13429,7 +13364,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "River is binary: value, bluff, bluff-catch, or fold. No mystery floats.",
+                  "accessibilityText": "On the river, bet for value with hands that beat what calls.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -13437,7 +13372,7 @@
                     {
                       "id": "act-03-06-01-explain-media",
                       "kind": "dialogue",
-                      "text": "River is binary: value, bluff, bluff-catch, or fold. No mystery floats."
+                      "text": "On the river, bet for value with hands that beat what calls."
                     }
                   ],
                   "objectives": [
@@ -13445,7 +13380,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Value → Bluff → Catch → Fold."
+                    "feedback": "Beats calling hands → value bet."
                   },
                   "teachSpec": {
                     "deal": {
@@ -13455,21 +13390,6 @@
                       {
                         "press": 1,
                         "target": "VALUE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "BLUFF",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "CATCH",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 4,
-                        "target": "FOLD",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -14048,7 +13968,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "More players: stronger value, fewer bluffs, chase nuts not second-best.",
+                  "accessibilityText": "More players in the pot means you need a stronger hand to bet for value.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -14056,7 +13976,7 @@
                     {
                       "id": "act-03-07-01-explain-media",
                       "kind": "dialogue",
-                      "text": "More players: stronger value, fewer bluffs, chase nuts not second-best."
+                      "text": "More players in the pot means you need a stronger hand to bet for value."
                     }
                   ],
                   "objectives": [
@@ -14064,7 +13984,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Stronger → Fewer → Nuts."
+                    "feedback": "More players → stronger value."
                   },
                   "teachSpec": {
                     "deal": {
@@ -14074,16 +13994,6 @@
                       {
                         "press": 1,
                         "target": "STRONGER",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "FEWER",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "NUTS",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -14599,7 +14509,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Common leaks: worship top pair, chase bad prices, call too passive, bluff crowds.",
+                  "accessibilityText": "Weak top pair is not a monster. Stop stacking off with it.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -14607,7 +14517,7 @@
                     {
                       "id": "act-03-08-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Common leaks: worship top pair, chase bad prices, call too passive, bluff crowds."
+                      "text": "Weak top pair is not a monster. Stop stacking off with it."
                     }
                   ],
                   "objectives": [
@@ -14615,7 +14525,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Top pair → Prices → Passive → Crowds."
+                    "feedback": "Weak top pair → don't stack off."
                   },
                   "teachSpec": {
                     "deal": {
@@ -14625,21 +14535,6 @@
                       {
                         "press": 1,
                         "target": "TOP PAIR",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "PRICES",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "PASSIVE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 4,
-                        "target": "CROWDS",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -46878,7 +46773,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "Pot → Stacks → Button → Who acts."
+        "feedback": "Pot → Stacks."
       }
     },
     "act-03-01-01-guided": {
@@ -47018,7 +46913,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "Made → Draw → SDV → Air."
+        "feedback": "Pair or better → made hand."
       }
     },
     "act-03-02-01-guided": {
@@ -47157,7 +47052,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "Clean → Dirty → Price."
+        "feedback": "Clean → Dirty: count clean outs."
       }
     },
     "act-03-03-01-guided": {
@@ -47296,7 +47191,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "Value → C-bet → Check → Call → Fold → Raise."
+        "feedback": "Strong hand → value bet."
       }
     },
     "act-03-04-01-guided": {
@@ -47434,7 +47329,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "Brick → Change → Barrel → Delay."
+        "feedback": "Brick → Change."
       }
     },
     "act-03-05-01-guided": {
@@ -47572,7 +47467,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "Value → Bluff → Catch → Fold."
+        "feedback": "Beats calling hands → value bet."
       }
     },
     "act-03-06-01-guided": {
@@ -47710,7 +47605,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "Stronger → Fewer → Nuts."
+        "feedback": "More players → stronger value."
       }
     },
     "act-03-07-01-guided": {
@@ -47850,7 +47745,7 @@
       ],
       "explainGrading": {
         "grade": "recommended",
-        "feedback": "Top pair → Prices → Passive → Crowds."
+        "feedback": "Weak top pair → don't stack off."
       }
     },
     "act-03-08-01-guided": {

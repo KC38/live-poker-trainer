@@ -30,6 +30,17 @@ const _residuals = <String, (List<String>, List<String>)>{
   'act-02-04-01-explain-vs': (['FOLD'], ['CALL', '3-BET']),
   'act-02-05-01-explain-bb': (['CHIPS→BB'], ['SHORTER', 'DEPTH']),
   'act-02-06-01-explain-habits': (['WATCH'], ['SAY', 'COVER', 'WAIT']),
+  'act-03-01-01-explain': (['POT', 'STACKS'], ['BUTTON', 'WHO ACTS']),
+  'act-03-02-01-explain': (['MADE'], ['DRAW', 'SDV', 'AIR']),
+  'act-03-03-01-explain': (['CLEAN', 'DIRTY'], ['PRICE']),
+  'act-03-04-01-explain': (
+    ['VALUE'],
+    ['C-BET', 'CHECK', 'CALL', 'FOLD', 'RAISE'],
+  ),
+  'act-03-05-01-explain': (['BRICK', 'CHANGE'], ['BARREL', 'DELAY']),
+  'act-03-06-01-explain': (['VALUE'], ['BLUFF', 'CATCH', 'FOLD']),
+  'act-03-07-01-explain': (['STRONGER'], ['FEWER', 'NUTS']),
+  'act-03-08-01-explain': (['TOP PAIR'], ['PRICES', 'PASSIVE', 'CROWDS']),
 };
 
 Widget _frame(String lessonId, Widget child) {

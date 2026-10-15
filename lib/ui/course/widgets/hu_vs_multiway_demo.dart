@@ -5,6 +5,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_authored_demo_scope.dart';
 
 /// Switch gears between HU and multiway explain: FEWER / THICKER / WIDEN under the full poker table.
 class LessonHuVsMultiwayExplainTable extends StatefulWidget {
@@ -27,6 +28,14 @@ class LessonHuVsMultiwayExplainTable extends StatefulWidget {
 
 class _LessonHuVsMultiwayExplainTableState
     extends State<LessonHuVsMultiwayExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    HuVsMultiwayDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -38,9 +47,9 @@ class _LessonHuVsMultiwayExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: HuVsMultiwayDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= HuVsMultiwayDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -68,7 +77,7 @@ class _LessonHuVsMultiwayExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < HuVsMultiwayDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
@@ -76,24 +85,24 @@ class _LessonHuVsMultiwayExplainTableState
                       teaching &&
                       widget.showGuidance &&
                       !_tapped.contains(
-                        HuVsMultiwayDemo.points[i].label,
+                        _points[i].label,
                       ) &&
-                      HuVsMultiwayDemo.points
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _HuVsMultiwayTile(
-                    label: HuVsMultiwayDemo.points[i].label,
-                    caption: HuVsMultiwayDemo.points[i].caption,
-                    color: HuVsMultiwayDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected: _tapped.contains(
-                      HuVsMultiwayDemo.points[i].label,
+                      _points[i].label,
                     ),
                     enabled: teaching,
                     onPressed:
                         teaching
                             ? () => _onTap(
-                                  HuVsMultiwayDemo.points[i].label,
+                                  _points[i].label,
                                 )
                             : null,
                   ),
