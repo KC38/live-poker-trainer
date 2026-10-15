@@ -3958,7 +3958,7 @@ void main() {
           act('act-06-13-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['CARDS', 'SEATS', 'EVIDENCE'],
+        ['CARDS'],
       );
     });
 
@@ -4122,7 +4122,7 @@ void main() {
           act('act-07-01-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['REASON', 'CONFIRM', 'CANCEL'],
+        ['REASON'],
       );
     });
 
@@ -4176,7 +4176,7 @@ void main() {
           act('act-07-04-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['LIMPED', 'SRP', '3-4BET'],
+        ['LIMPED'],
       );
     });
 
@@ -4230,7 +4230,7 @@ void main() {
           act('act-07-05-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['FEWER', 'THICKER', 'WIDEN'],
+        ['FEWER'],
       );
     });
 
@@ -4281,7 +4281,7 @@ void main() {
           act('act-07-06-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['SHORT', 'DEEP', 'EFFECTIVE'],
+        ['SHORT'],
       );
     });
 
@@ -4335,7 +4335,7 @@ void main() {
           act('act-07-07-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['CARDS', 'MODELS', 'CITE'],
+        ['CARDS'],
       );
     });
 
@@ -4406,7 +4406,7 @@ void main() {
           act('act-07-08-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['TYPE', 'BOARD', 'LINE', 'SIZE'],
+        ['TYPE', 'BOARD'],
       );
     });
 
@@ -5289,7 +5289,7 @@ void main() {
           act('act-07-02-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['BARREL', 'GIVE-UP', 'MAP'],
+        ['BARREL'],
       );
     });
 
@@ -5340,7 +5340,7 @@ void main() {
           act('act-07-03-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['VALUE', 'BLUFF', 'HOLD'],
+        ['VALUE'],
       );
     });
 
@@ -5398,7 +5398,7 @@ void main() {
           act('act-07-09-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['LEAK', 'BOOK', 'REVIEW'],
+        ['LEAK'],
       );
     });
 
