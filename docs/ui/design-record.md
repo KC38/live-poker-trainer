@@ -1733,10 +1733,10 @@ use short teaching captions under each cue label (for example DRAW → Need
 a card, BETS MATCHED → All caught up, FOLD EQUITY → Bluff needs folds —
 LPT-884, BRICK → Blank runout / BARREL → Fire again — LPT-885, CHECKED
 BACK → No bet flop / BET TURN → Bet when helped — LPT-886, PRICE → Pot
-odds / POT → What it pays / EQUITY → Win chance — LPT-887). They never
-show Tap N of M press-order meta chrome — SoftPulse
-alone owns the next press. Unknown targets omit the caption rather than
-inventing a numbered checklist.
+odds / POT → What it pays / EQUITY → Win chance — LPT-887, WHO ACTS →
+Whose turn — LPT-888). They never show Tap N of M press-order meta chrome
+— SoftPulse alone owns the next press. Unknown targets omit the caption
+rather than inventing a numbered checklist.
 
 Best five kicker showdown SoftPulse (LPT-75) is the framed
 `LessonTableStage` for `act-01-02-02-scaffolded-kicker`: `cueSeatIndex: 0`
@@ -2073,7 +2073,7 @@ felt.
 | Keep live habits while deciding | explain SoftPulse cues COVER → WAIT; checkpoint SoftPulse-off densify stem non-spoiling (LPT-788); unit `unit-02-07-baseline-checkpoint` (LPT-668 split) | — |
 | Baseline jump check | Family / stack densified felt asks in the frame bubble (LPT-221); jump-family SoftPulse one gold via `guideRegion` (LPT-634); jump-stack SoftPulse-off densify stem non-spoiling (no 55bb / 120bb / 175bb) (LPT-877) | — |
 | Pot and stacks | Pot, Stacks on the felt; explain SoftPulse cue POT → STACKS only — BUTTON/WHO ACTS presses belong to Button and action seat (curriculum residual LPT-750); checkpoint SoftPulse-off densify stem non-spoiling (LPT-787); unit `unit-03-01-reading-table` (LPT-140 split) | — |
-| Button and action seat | explain SoftPulse cues BUTTON → WHO ACTS; scaffolded SoftPulse-quiet densify stem non-spoiling (no UTG / Seat left of the big blind) (LPT-845); unit `unit-03-01-reading-table` (LPT-140 split) | — |
+| Button and action seat | explain SoftPulse cues BUTTON → WHO ACTS with teaching captions (Acts last / Whose turn — never an empty WHO ACTS gloss; LPT-888); scaffolded SoftPulse-quiet densify stem non-spoiling (no UTG / Seat left of the big blind) (LPT-845); unit `unit-03-01-reading-table` (LPT-140 split) | — |
 | Words are binding | explain SoftPulse cues SAY → BINDING; unguided SoftPulse-quiet densify stem non-spoiling (no Raise stands / verbal is binding) (LPT-846); unit `unit-03-01-reading-table` (LPT-140 split) | — |
 | Made hands | Made on the felt; explain SoftPulse cue MADE only — DRAW/SDV/AIR presses belong to Draws versus showdown value and Recognize air (curriculum residual LPT-751); fixed steps author suit-rotated `deal.variants` (LPT-384); densify Nice!/Oops `Pair of …` rewrites via non-chaining `alignLessonTableCopy` rank words (LPT-852); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
 | Draws versus showdown value | explain SoftPulse cues DRAW → SHOWDOWN VALUE with teaching captions (Need a card / Weak made — never Tap N of M; LPT-883); scaffolded SoftPulse-quiet densify stem non-spoiling (no Strong draw / nut flush draw); idle densify coach rewrites board/hole tokens via `alignLessonTableCopy` (LPT-851 shared path; SoftPulse-quiet LPT-847); checkpoint SoftPulse-off densify stem non-spoiling (no Draw tile / template cards) (LPT-805); unit `unit-03-02-flop-classes` (LPT-143 split) | — |

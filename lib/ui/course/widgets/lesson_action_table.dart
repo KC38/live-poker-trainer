@@ -14276,6 +14276,9 @@ String authoredSoftPulseExplainCaption(String target) {
     'BIG BLIND': 'Acts first postflop',
     'CLOCKWISE': 'Left of the blind',
     'BUTTON': 'Acts last',
+    // Button and action seat SoftPulse explain (BUTTON → WHO ACTS; LPT-888).
+    // Gloss matches TableReadDemo.points for WHO ACTS.
+    'WHO ACTS': 'Whose turn',
     'NO BET': 'Free to check',
     'CHECK': 'Pass the street',
     'BET': 'Put chips in',
