@@ -4786,3 +4786,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-708/702/829; leave ui-agent alone.
 - Prefer next: NEVER Meet-TAG **LPT-708** / Mix-five SoftPulse **LPT-721** / open catalog **LPT-829**.
 - act-06-08-01-*: Mix SoftPulse residual cleared (MIX→STRONG); PURPOSE owned by no-pure-random; scaffolded/unguided/checkpoint outcome-tile `deal.mode` `none` — do not file handFamily.
+
+## Fold 2026-10-15db tip 7b92bfd4 (#2662 S7 SoftPulse Done-acks → Meet-TAG LPT-708 Prefer)
+
+- Tip-stable `7b92bfd4` (#2662). Catalog short-ladder **224**; other JSON **0**.
+- Done-acked S7 SoftPulse residuals LPT-721/725/726/727/790/794/795/798/800/802.
+- Prefer NEVER Meet-TAG **LPT-708** still To Do; tip-commented LPT-708/829.
+- Prefer next: NEVER Meet-TAG **LPT-708** / open catalog **LPT-829**.
