@@ -5038,3 +5038,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER oldest unfresh after pilot (`lesson-05-09-02-section-five-checkpoint` / `lesson-01-06-02-section-one-jump` / `lesson-01-06-01-guided-complete-hand`) / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-07-11-01-* / act-01-01-01-*: interactive structural clean on tip; warm-up multi-concept stays on LPT-351; pilot hole literacy stays unsplit; densify PRESENT — do not reopen LPT-628; primary-family `random_in_class` without distractor variants on some pilot steps matches LPT-627 closed pattern — do not reopen LPT-366.
 
+## Fold 2026-10-15du tip 29543ac6 (Prefer-next S5 checkpoint / S1 jump / complete-hand)
+
+- Tip-stable `29543ac6` (#2693). Catalog short-ladder **224** (other JSON **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224** (tip-comment only — no body rebuild). SoftPulse Prefer queue empty except needs-human. Only open content: LPT-829 + LPT-351.
+- Prefer NEVER discovery after pilot:
+  - `lesson-05-09-02-section-five-checkpoint` / `act-05-09-02-*`: five scaffolded+checkpoint; SI densify PRESENT; value/catch `Jh`/`9d`·`Kc`/`9s`/`4h`/`2d`/`7c` match Dart; structural clean (assessment skips curriculum-split).
+  - `lesson-01-06-02-section-one-jump` / `act-01-06-02-*`: four jump_test (on LPT-829 short-ladder); cue kind `none` hintless; structural clean.
+  - `lesson-01-06-01-guided-complete-hand` / `act-01-06-01-*`: synthesis structural clean; SoftPulse explain + one-per-press OK; densify N/A — no curriculum-split.
+- Tip-commented LPT-829/351; leave open LPT-351 + LPT-829; leave ui-agent alone.
+- Prefer next: NEVER oldest unfresh `lesson-02-07-02-section-two-jump` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-05-09-02-* / act-01-06-02-* / act-01-06-01-*: interactive structural clean on tip; jump/section assessment containers skip curriculum-split clones; densify PRESENT on SI S5 arms — do not reopen LPT-628; S1 jump remains short-ladder row on LPT-829.
