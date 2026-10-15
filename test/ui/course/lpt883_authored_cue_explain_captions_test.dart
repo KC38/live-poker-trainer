@@ -1,7 +1,7 @@
 /// LPT-883 / LPT-884 / LPT-885 / LPT-886 / LPT-887 / LPT-888 / LPT-889 /
 /// LPT-890 / LPT-891 / LPT-892 / LPT-893 / LPT-894 / LPT-895 / LPT-896 /
 /// LPT-897 / LPT-898 / LPT-899 / LPT-900 / LPT-901 / LPT-902 / LPT-903 /
-/// LPT-904 / LPT-905 / LPT-906:
+/// LPT-904 / LPT-905 / LPT-906 / LPT-907 / LPT-908 / LPT-909:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -90,6 +90,10 @@ void main() {
     expect(authoredSoftPulseExplainCaption('C-BET'), 'Continue story');
     expect(authoredSoftPulseExplainCaption('STORY'), 'Believable line');
     expect(authoredSoftPulseExplainCaption('BLUFF'), 'Make them fold');
+    expect(authoredSoftPulseExplainCaption('BLUFF-CATCH'), 'Call to catch');
+    expect(authoredSoftPulseExplainCaption('NUTS'), 'Chase the top');
+    expect(authoredSoftPulseExplainCaption('POSITION'), 'Seat edge');
+    expect(authoredSoftPulseExplainCaption('BAD PRICE'), 'Poor pot odds');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -1185,6 +1189,141 @@ void main() {
       expect(find.text('BLUFF'), findsWidgets);
       expect(find.text('Believable line'), findsOneWidget);
       expect(find.text('Make them fold'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Bluff-catch SoftPulse explain captions BLUFF-CATCH + FOLD (LPT-907)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-03-06-01-03-explain-catch',
+        targets: const ['BLUFF-CATCH', 'FOLD'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('BLUFF-CATCH'), findsWidgets);
+      expect(find.text('FOLD'), findsWidgets);
+      expect(find.text('Call to catch'), findsOneWidget);
+      expect(find.text('Give up'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Nut potential SoftPulse explain captions NUTS + POSITION (LPT-908)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-03-07-01-03-explain-nuts',
+        targets: const ['NUTS', 'POSITION'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('NUTS'), findsWidgets);
+      expect(find.text('POSITION'), findsWidgets);
+      expect(find.text('Chase the top'), findsOneWidget);
+      expect(find.text('Seat edge'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Fold bad prices SoftPulse explain captions BAD PRICE + FOLD (LPT-909)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-03-08-01-02-explain-price',
+        targets: const ['BAD PRICE', 'FOLD'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('BAD PRICE'), findsWidgets);
+      expect(find.text('FOLD'), findsWidgets);
+      expect(find.text('Poor pot odds'), findsOneWidget);
+      expect(find.text('Give up'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );

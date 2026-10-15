@@ -14388,6 +14388,19 @@ String authoredSoftPulseExplainCaption(String target) {
     // them fold — never leave AuthoredCue tiles label-only.
     'STORY': 'Believable line',
     'BLUFF': 'Make them fold',
+    // Bluff-catch or fold SoftPulse explain (BLUFF-CATCH → FOLD; LPT-907).
+    // FOLD already Give up; BLUFF-CATCH glosses calling to catch a bluff —
+    // never leave the first SoftPulse tile label-only.
+    'BLUFF-CATCH': 'Call to catch',
+    // Nut potential SoftPulse explain (NUTS → POSITION; LPT-908).
+    // NUTS matches MultiwayPlanDemo Chase the top; POSITION matches
+    // FullRingDemo Seat edge — never leave AuthoredCue tiles label-only.
+    'NUTS': 'Chase the top',
+    'POSITION': 'Seat edge',
+    // Fold bad prices SoftPulse explain (BAD PRICE → FOLD; LPT-909).
+    // FOLD already Give up; BAD PRICE glosses poor pot odds — never leave
+    // the first SoftPulse tile label-only.
+    'BAD PRICE': 'Poor pot odds',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
