@@ -1,5 +1,5 @@
-/// LPT-883 / LPT-884 / LPT-885: Authored SoftPulse explain teaching captions
-/// (not Tap N of M).
+/// LPT-883 / LPT-884 / LPT-885 / LPT-886: Authored SoftPulse explain teaching
+/// captions (not Tap N of M).
 library;
 
 import 'package:flutter/material.dart';
@@ -42,6 +42,8 @@ void main() {
     expect(authoredSoftPulseExplainCaption('FOLD EQUITY'), 'Bluff needs folds');
     expect(authoredSoftPulseExplainCaption('BRICK'), 'Blank runout');
     expect(authoredSoftPulseExplainCaption('BARREL'), 'Fire again');
+    expect(authoredSoftPulseExplainCaption('CHECKED BACK'), 'No bet flop');
+    expect(authoredSoftPulseExplainCaption('BET TURN'), 'Bet when helped');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
     expect(authoredSoftPulseExplainCaption('UNKNOWN-TARGET-XYZ'), isEmpty);
@@ -184,6 +186,50 @@ void main() {
       expect(find.text('BARREL'), findsWidgets);
       expect(find.text('Blank runout'), findsOneWidget);
       expect(find.text('Fire again'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Delayed aggression AuthoredCueExplain captions CHECKED BACK + BET TURN (LPT-886)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-03-05-01-03-explain-delay',
+        targets: const ['CHECKED BACK', 'BET TURN'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('CHECKED BACK'), findsWidgets);
+      expect(find.text('BET TURN'), findsWidgets);
+      expect(find.text('No bet flop'), findsOneWidget);
+      expect(find.text('Bet when helped'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );

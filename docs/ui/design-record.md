@@ -1731,7 +1731,8 @@ catalog rule so later `lessonSplitMap` batches cannot reintroduce the gap.
 Authored SoftPulse explain tiles (`LessonAuthoredCueExplainTable`, LPT-883)
 use short teaching captions under each cue label (for example DRAW → Need
 a card, BETS MATCHED → All caught up, FOLD EQUITY → Bluff needs folds —
-LPT-884, BRICK → Blank runout / BARREL → Fire again — LPT-885). They never
+LPT-884, BRICK → Blank runout / BARREL → Fire again — LPT-885, CHECKED
+BACK → No bet flop / BET TURN → Bet when helped — LPT-886). They never
 show Tap N of M press-order meta chrome — SoftPulse
 alone owns the next press. Unknown targets omit the caption rather than
 inventing a numbered checklist.
@@ -2084,7 +2085,7 @@ felt.
 | Raise, call, or fold with a plan | explain SoftPulse cues RAISE → CALL → FOLD; unit `unit-03-04-flop-decisions` (LPT-151 split) | — |
 | Brick or changing turn | Brick, Change on the felt; explain SoftPulse cue BRICK → CHANGE only — BARREL/DELAY presses belong to Second barrel and Delayed aggression (curriculum residual LPT-754); unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
 | Second barrel | explain SoftPulse cues BRICK → BARREL with teaching captions (Blank runout / Fire again — never an empty gloss; LPT-885); unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
-| Delayed aggression | explain SoftPulse cues CHECKED BACK → BET TURN; checkpoint SoftPulse-off densify stem non-spoiling (no Often give up / template cards) (LPT-807); unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
+| Delayed aggression | explain SoftPulse cues CHECKED BACK → BET TURN with teaching captions (No bet flop / Bet when helped — never an empty gloss; LPT-886); checkpoint SoftPulse-off densify stem non-spoiling (no Often give up / template cards) (LPT-807); unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
 | River value | Value on the felt; explain SoftPulse cue VALUE only — BLUFF/CATCH/FOLD presses belong to Credible bluffs and Bluff-catch or fold (curriculum residual LPT-755); densified frame ask (LPT-343); unit `unit-03-06-river-decisions` (LPT-157 split) | — |
 | Credible bluffs | explain SoftPulse cues STORY → BLUFF; unit `unit-03-06-river-decisions` (LPT-157 split) | — |
 | Bluff-catch or fold | explain SoftPulse cues BLUFF-CATCH → FOLD; unit `unit-03-06-river-decisions` (LPT-157 split) | — |

@@ -14256,6 +14256,9 @@ String authoredSoftPulseExplainCaption(String target) {
     'BARREL': 'Fire again',
     'CHANGE': 'Board shifts',
     'DELAY': 'Hold fire',
+    // Delayed aggression SoftPulse explain (CHECKED BACK → BET TURN; LPT-886).
+    'CHECKED BACK': 'No bet flop',
+    'BET TURN': 'Bet when helped',
     // Streets / table flow.
     'PREFLOP': 'Before the flop',
     'FLOP': 'Three cards',
