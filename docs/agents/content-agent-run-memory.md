@@ -5421,3 +5421,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next NEVER: `lesson-04-07-02-02-spot-nit` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-04-07-02-*: first-child Prefer NEVER structural clean on tip — SoftPulse residual / working-model residual closed by LPT-769.
 
+
+## Fold 2026-10-15fh (5bf44573 Prefer NEVER spot-nit)
+
+- Tip-stable `5bf44573` (#2751 Prefer NEVER nit-model learnings on tip). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 limit); other parents Done.
+- Prefer NEVER discovery `lesson-04-07-02-02-spot-nit` / `act-04-07-02-02-explain-spot` + `act-04-07-02-guided` + `act-04-07-02-unguided`:
+  - one objective Identify from evidence; explain SoftPulse FEW HANDS→BIG RAISES + `explainGrading` "Few hands + big raises → Nit." **concept-aligned** (content-driven `authoredCues` / LPT-669 Done — do not reopen SoftPulse residual / LPT-769).
+  - guided SoftPulse `pt-nit` PRESENT densify PRESENT (`player_read_classify` `deal.mode` `none` meetNitVsStationOutcomes — do not file handFamily).
+  - unguided SoftPulse `nit2` one-per-press pressHints 1/1 densify PRESENT SoftPulse-quiet after LPT-819 (`deal.mode` `none` meetNitVsManiacOutcomes — do not file handFamily).
+  - short-ladder 3/5 already on catalog **LPT-829**; curriculum **LPT-198** Done — do not clone / SoftPulse residual N/A.
+- Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
+- Prefer next NEVER: `lesson-04-07-03-01-steal-more` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-04-07-02-*: Spot Prefer NEVER structural clean on tip — SoftPulse residual / working-model residual closed by LPT-769 on first-child; Meet Nit children Prefer NEVER path complete.
