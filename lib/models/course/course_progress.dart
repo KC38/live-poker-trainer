@@ -2,6 +2,7 @@
 library;
 
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/models/course/lesson_split_map.dart';
 
 /// Server course aggregates. Never includes coaching spots or net result.
 class CourseProgress {
@@ -61,10 +62,7 @@ class CourseProgress {
         masteryValues.isEmpty
             ? 0.0
             : masteryValues.reduce((a, b) => a + b) / masteryValues.length;
-    final lessonId =
-        _string(profile['currentLessonId']) ??
-        _resumeLessonId(profile['resume']) ??
-        _string(profile['recommendedLessonId']);
+    final lessonId = _placeLessonId(profile, catalog);
     final section =
         lessonId == null ? null : catalog.sectionForLesson(lessonId);
     final unit = lessonId == null ? null : catalog.unitForLesson(lessonId);
@@ -137,5 +135,73 @@ class CourseProgress {
   static String? _resumeLessonId(Object? resume) {
     if (resume is! Map) return null;
     return _string(resume['lessonId']);
+  }
+
+  /// Lesson id that names Profile place — same path frontier as Home.
+  ///
+  /// Prefer an in-progress first-run attempt, then the first catalog lesson
+  /// whose prerequisites are met and not yet completed. Stale
+  /// `currentLessonId` / `recommendedLessonId` on early units must not keep
+  /// Profile on SECTION 1 after the learner advances (LPT-875).
+  static String? _placeLessonId(
+    Map<String, dynamic> profile,
+    CourseCatalog catalog,
+  ) {
+    final completedRaw = profile['completedLessonIds'];
+    final completedList = <String>[];
+    if (completedRaw is List) {
+      for (final value in completedRaw) {
+        if (value is String && value.isNotEmpty) completedList.add(value);
+      }
+    }
+    final completed = expandCompletedLessonIds(
+      completedList,
+      lessonSplitMap: catalog.lessonSplitMap,
+    );
+
+    final currentId = _string(profile['currentLessonId']);
+    if (currentId != null &&
+        catalog.sectionForLesson(currentId) != null &&
+        !completed.contains(currentId)) {
+      return currentId;
+    }
+
+    final resumeId = _resumeLessonId(profile['resume']);
+    if (resumeId != null &&
+        catalog.sectionForLesson(resumeId) != null &&
+        !completed.contains(resumeId)) {
+      return resumeId;
+    }
+
+    final frontier = _firstAvailableLessonId(catalog, completed);
+    if (frontier != null) return frontier;
+
+    final recommended = _string(profile['recommendedLessonId']);
+    if (recommended != null && catalog.sectionForLesson(recommended) != null) {
+      return recommended;
+    }
+    if (currentId != null && catalog.sectionForLesson(currentId) != null) {
+      return currentId;
+    }
+    return resumeId;
+  }
+
+  /// First catalog lesson with met prerequisites that is not completed.
+  static String? _firstAvailableLessonId(
+    CourseCatalog catalog,
+    Set<String> completed,
+  ) {
+    for (final section in catalog.sections) {
+      for (final unit in section.units) {
+        for (final lesson in unit.lessons) {
+          if (completed.contains(lesson.id)) continue;
+          final missing = lesson.prerequisites
+              .where((id) => !completed.contains(id))
+              .isNotEmpty;
+          if (!missing) return lesson.id;
+        }
+      }
+    }
+    return null;
   }
 }

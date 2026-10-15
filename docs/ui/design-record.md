@@ -1849,9 +1849,11 @@ and never claims a signed-in account exists.
 
 The Course card shows lifetime XP, streak, accepted accuracy, mastery, and
 the learner’s place as `SECTION N, UNIT M` plus the current unit title from
-the catalog — the same place language as the Home unit banner. It does not
-show an experience-band section title alone as the place line (for example
-bare `Never Played` next to earned XP).
+the catalog — the same place language as the Home sticky unit banner for the
+path frontier (next unfinished lesson), not a stale `currentLessonId` or
+recommended first-unit pointer (LPT-875). It does not show an experience-band
+section title alone as the place line (for example bare `Never Played` next
+to earned XP).
 
 Live Training on the same screen stays about full-hand play: style, coaching
 record, and the empty state that asks for more hands. Lesson mastery never
@@ -1861,8 +1863,10 @@ appears as live-hand style in the header.
 
 `CourseProgress.coursePlaceEyebrow` / `coursePlaceTitle`
 (`lib/models/course/course_progress.dart`) feed `_CourseProgressCard` on
-`ProfileScreen`. The next surface that names the learner’s course place
-copies that SECTION / UNIT + unit title pair.
+`ProfileScreen`. Place resolves from an in-progress attempt, else the first
+catalog lesson with met prerequisites that is not completed (same frontier
+Home pulses). The next surface that names the learner’s course place copies
+that SECTION / UNIT + unit title pair.
 
 ## Gamified learning
 
