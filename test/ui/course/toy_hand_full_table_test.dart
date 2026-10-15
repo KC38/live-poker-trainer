@@ -75,9 +75,13 @@ void main() {
     expect(find.byType(LessonToyHandExplainTable), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.byType(ToyHandRunDemo), findsNothing);
+    // LPT-890: SoftPulse chips carry teaching captions, not label-only.
+    expect(find.text('Forced bets first'), findsOneWidget);
+    expect(find.text('Open, call, or fold'), findsOneWidget);
+    expect(find.text('Folds win or continue'), findsOneWidget);
 
     for (final title in const ['BLINDS', 'YOU ACT', 'ENDING']) {
-      await tester.tap(find.text(title));
+      await tester.tap(find.text(title).first);
       await tester.pump();
     }
     expect(ack, 1);

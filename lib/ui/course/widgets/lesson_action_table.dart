@@ -14270,6 +14270,10 @@ String authoredSoftPulseExplainCaption(String target) {
     'TURN': 'Fourth card',
     'RIVER': 'Fifth card',
     'BLINDS': 'Forced bets first',
+    // Play a full toy hand SoftPulse explain (BLINDS → YOU ACT → ENDING; LPT-890).
+    // Aligned with ToyHandRunDemo lane details (short glosses, not Tap N of M).
+    'YOU ACT': 'Open, call, or fold',
+    'ENDING': 'Folds win or continue',
     'DEAL': 'Cards come next',
     'BETS MATCHED': 'All caught up',
     'NEXT STREET': 'Deal continues',
