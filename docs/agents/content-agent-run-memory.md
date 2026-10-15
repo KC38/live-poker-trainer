@@ -5461,3 +5461,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
 - Prefer next NEVER: `lesson-04-07-03-03-cite-narrow-entry` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-04-07-03-*: Respect Prefer NEVER structural clean on tip — SoftPulse residual closed by LPT-772 on first-child; cite checkpoint placement closed with LPT-772 Done.
+
+
+## Fold 2026-10-15fk (3c03a10a Prefer NEVER cite-narrow-entry)
+
+- Tip-stable `3c03a10a` (#2754 Prefer NEVER respect-heavy-action learnings on tip). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 limit); other parents Done.
+- Prefer NEVER discovery `lesson-04-07-03-03-cite-narrow-entry` / `act-04-07-03-03-explain-cite` + `act-04-07-03-unguided`:
+  - one objective Cite narrow-entry tendency; explain SoftPulse EVIDENCE→UNKNOWN + `explainGrading` "Nit evidence → wider steal; unknown → thinner." **concept-aligned** (content-driven `authoredCues` / LPT-669 Done — do not reopen SoftPulse residual / LPT-772).
+  - unguided SoftPulse `tighter` one-per-press pressHints 1/1 (`poker_action_sizing` `fixed` Kh9d +2 suit variants; densify N/A; SoftPulse map PRESENT).
+  - `deal.mode` `none` on explain — do not file handFamily; short-ladder 2/5 already on catalog **LPT-829**; curriculum **LPT-202** Done — do not clone / SoftPulse residual N/A.
+- Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
+- Prefer next NEVER: `lesson-04-08-01-01-extreme-entry` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-04-07-03-*: Cite Prefer NEVER structural clean on tip — SoftPulse residual closed by LPT-772 on first-child; Adjust Nit children Prefer NEVER path complete.
