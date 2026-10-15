@@ -14414,6 +14414,15 @@ String authoredSoftPulseExplainCaption(String target) {
     // LPT-912). RAISE/CALL already captioned; NARROWER glosses the
     // range-tightens beat — never leave the middle SoftPulse tile label-only.
     'NARROWER': 'Fewer hands',
+    // Facing a 3-bet SoftPulse explain (3-BET → FOLD → CONTINUE; LPT-913).
+    // 3-BET/FOLD already captioned; CONTINUE glosses keeping strong hands —
+    // never leave the third SoftPulse tile label-only.
+    'CONTINUE': 'Keep strong',
+    // Squeeze spots SoftPulse explain (OPEN → CALLERS → SQUEEZE; LPT-914).
+    // OPEN already Someone raised; CALLERS/SQUEEZE gloss the call-the-open
+    // and re-raise-big beats — never leave those SoftPulse tiles label-only.
+    'CALLERS': 'Called the open',
+    'SQUEEZE': 'Re-raise big',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.

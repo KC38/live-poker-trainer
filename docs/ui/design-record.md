@@ -1750,7 +1750,9 @@ BLUFF → Make them fold — LPT-906, BLUFF-CATCH → Call to catch —
 LPT-907, NUTS → Chase the top / POSITION → Seat edge — LPT-908,
 BAD PRICE → Poor pot odds — LPT-909, PASSIVE → Never raise /
 CROWD → Spew multiway — LPT-910, FEWER BLUFFS → Cut air —
-LPT-911, NARROWER → Fewer hands — LPT-912). Play a full
+LPT-911, NARROWER → Fewer hands — LPT-912, CONTINUE → Keep
+strong — LPT-913, CALLERS → Called the open / SQUEEZE →
+Re-raise big — LPT-914). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2122,8 +2124,8 @@ felt.
 | Action moves ranges | explain SoftPulse cues RAISE → NARROWER → CALL with teaching captions (Make it more / Fewer hands / Match the bet — never empty NARROWER gloss; LPT-912); scaffolded SoftPulse-quiet densify stem non-spoiling (no Stronger / BB stronger) (LPT-880); unit `unit-04-01-ranges` (LPT-169 split) | — |
 | No exact hand too early | explain SoftPulse cues ONE HAND → RANGE; unguided SoftPulse-quiet densify stem non-spoiling (no Too exact / Exactly AK) (LPT-867); unit `unit-04-01-ranges` (LPT-169 split) | — |
 | Value 3-bet | 3-bet, Ranges, Squeeze; unit `unit-04-02-threebet` (LPT-172 split) | — |
-| Facing a 3-bet | explain SoftPulse cues 3-BET → FOLD → CONTINUE; unit `unit-04-02-threebet` (LPT-172 split) | — |
-| Squeeze spots | explain SoftPulse cues OPEN → CALLERS → SQUEEZE; unit `unit-04-02-threebet` (LPT-172 split) | — |
+| Facing a 3-bet | explain SoftPulse cues 3-BET → FOLD → CONTINUE with teaching captions (Re-raise open / Give up / Keep strong — never empty CONTINUE gloss; LPT-913); unit `unit-04-02-threebet` (LPT-172 split) | — |
+| Squeeze spots | explain SoftPulse cues OPEN → CALLERS → SQUEEZE with teaching captions (Someone raised / Called the open / Re-raise big — never empty CALLERS or SQUEEZE glosses; LPT-914); unit `unit-04-02-threebet` (LPT-172 split) | — |
 | Build a multi-street plan | Flop, Turn, River; densified frame ask (LPT-407); checkpoint SoftPulse one gold via `guideRegion` (LPT-634); SoftPulse-off densify stem non-spoiling (no Brick → barrel / flush → abort) (LPT-868); unit `unit-04-03-continuation` (LPT-176 split) | — |
 | Abort when the board changes | explain SoftPulse cues BOARD CHANGES → STOP; unit `unit-04-03-continuation` (LPT-176 split) | — |
 | Match pot size to strength | explain SoftPulse cues MEDIUM → SMALL POT; unit `unit-04-03-continuation` (LPT-176 split) | — |
