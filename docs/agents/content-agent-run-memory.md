@@ -4998,3 +4998,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-714/715/829/297/713; leave open LPT-702/708/710/714/715/716/719/683/691 + LPT-351 + LPT-829; leave ui-agent alone.
 - Prefer next: NEVER Meet-LAG sample-limits **LPT-716** / Adjust-LAG cite **LPT-719** / open catalog **LPT-829**.
 - act-06-12-01-*: interactive structural clean on tip except LPT-714 Keep-sampling + LPT-715 evidence-bundle residuals; SoftPulse explain WIDE-only concept-aligned; SoftPulse explain successors content-driven; all interactive acts are `deal.mode` `none` observation tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
+
+## Fold 2026-10-15dr tip 141949d8 (#2665 curriculum residual batch p1 + Meet-LAG Prefer LPT-716)
+
+- Tip-stable `141949d8` (#2665). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224** (tip-comment only — no body rebuild).
+- Mid-run #2665: Done-ack tip-satisfied residuals **LPT-702/708/710/693/680/683/691/767/769/774/779** (objective rewrite / checkpoint move matches SoftPulse grades).
+- Prefer NEVER Meet-LAG `lesson-06-12-02-01/02/03`: SoftPulse WIDE→PRESSURE→MODEL concept-aligned under Introduce LAG; checkpoint SoftPulse `limits` densify PRESENT still under Introduce LAG-only → **LPT-716** still To Do (needs-human; Relates LPT-300; not in #2665). Successors content-driven; guided/scaffolded/unguided densify PRESENT. Curriculum **LPT-300** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-716/829/300; leave open LPT-714/715/716/719 + LPT-351 + LPT-829; leave ui-agent alone.
+- Prefer next: NEVER Adjust-LAG cite residual **LPT-719** / open catalog **LPT-829**.
+- act-06-12-02-*: interactive structural clean on tip except LPT-716 sample-limits residual; SoftPulse explain concept-aligned + successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` player-type tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
