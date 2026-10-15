@@ -1,5 +1,5 @@
-/// LPT-883 / LPT-884 / LPT-885 / LPT-886 / LPT-887 / LPT-888: Authored SoftPulse
-/// explain teaching captions (not Tap N of M).
+/// LPT-883 / LPT-884 / LPT-885 / LPT-886 / LPT-887 / LPT-888 / LPT-889: Authored
+/// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
 import 'package:flutter/material.dart';
@@ -49,6 +49,8 @@ void main() {
     expect(authoredSoftPulseExplainCaption('EQUITY'), 'Win chance');
     expect(authoredSoftPulseExplainCaption('BUTTON'), 'Acts last');
     expect(authoredSoftPulseExplainCaption('WHO ACTS'), 'Whose turn');
+    expect(authoredSoftPulseExplainCaption('SAY'), 'Announce clearly');
+    expect(authoredSoftPulseExplainCaption('BINDING'), 'Must follow through');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
     expect(authoredSoftPulseExplainCaption('UNKNOWN-TARGET-XYZ'), isEmpty);
@@ -279,6 +281,50 @@ void main() {
       expect(find.text('WHO ACTS'), findsWidgets);
       expect(find.text('Acts last'), findsOneWidget);
       expect(find.text('Whose turn'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Words are binding AuthoredCueExplain captions SAY + BINDING (LPT-889)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-03-01-01-03-explain-binds',
+        targets: const ['SAY', 'BINDING'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('SAY'), findsWidgets);
+      expect(find.text('BINDING'), findsWidgets);
+      expect(find.text('Announce clearly'), findsOneWidget);
+      expect(find.text('Must follow through'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );

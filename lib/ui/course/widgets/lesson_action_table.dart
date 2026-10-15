@@ -14279,6 +14279,10 @@ String authoredSoftPulseExplainCaption(String target) {
     // Button and action seat SoftPulse explain (BUTTON → WHO ACTS; LPT-888).
     // Gloss matches TableReadDemo.points for WHO ACTS.
     'WHO ACTS': 'Whose turn',
+    // Words are binding SoftPulse explain (SAY → BINDING; LPT-889).
+    // SAY caption matches TableHabitsDemo; BINDING glosses the verbal-stands rule.
+    'SAY': 'Announce clearly',
+    'BINDING': 'Must follow through',
     'NO BET': 'Free to check',
     'CHECK': 'Pass the street',
     'BET': 'Put chips in',
