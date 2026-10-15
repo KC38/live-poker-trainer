@@ -345,7 +345,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   as intentional (LPT-653). Hunt SoftPulse-quiet densify spoils with live
   SoftPulse:none + Hint enabled + coach naming a choice tile — not only
   `kind: none` (unguided SoftPulse-after-Hint stems are invisible to
-  kind:none-only scans; LPT-853 / LPT-854). On scaffolded `poker_action_sizing` after Hint,
+  kind:none-only scans; LPT-853 / LPT-854). SoftPulse-off `kind: none`
+  stems that embed an exact choice label (e.g. **55bb** among 55bb /
+  120bb / 175bb) are still spoils — LPT-787-style situation numbers are
+  OK only when they are not the tile text itself (LPT-877 jump-stack).
+  On scaffolded `poker_action_sizing` after Hint,
   wait for SoftPulse with `wait-gold` (hero holes can take a few seconds)
   before filing SoftPulse-dead — Hint disabled mid-deal was the LPT-678
   deadlock; SoftPulse unlocks when hero holes land, not every villain back.

@@ -54,8 +54,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
   return switch (activityId) {
     'act-02-07-02-jump-family' =>
       'Look at your holes — pick the family they belong to.',
+    // SoftPulse-off densify (kind: none) — situation + pick/tap verb only;
+    // never name 55bb / 120bb / 175bb in the idle bubble (LPT-877;
+    // SoftPulse LPT-653; same class as LPT-675 / LPT-674 / LPT-673).
     'act-02-07-02-jump-stack' =>
-      'You 120bb · villain 55bb — pick the effective stack.',
+      'Two stacks face each other — pick the effective stack.',
     // Count outs densified asks (LPT-279) — same path as baseline jump (LPT-221).
     'act-03-03-01-guided' =>
       'Count only the outs that make the best hand — pick every clean out.',

@@ -11165,11 +11165,15 @@ await tester.tap(find.text('NIT'));
       ],
     );
     // LPT-221: frame bubble uses densified ask, not catalog + Tap the best answer.
+    // LPT-877: SoftPulse-off densify must not name 55bb / 120bb / 175bb.
     expect(
       lessonFrameSpeech(activity),
-      'You 120bb · villain 55bb — tap the effective stack.',
+      'Two stacks face each other — tap the effective stack.',
     );
     expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(lessonFrameSpeech(activity), isNot(contains('55bb')));
+    expect(lessonFrameSpeech(activity), isNot(contains('120bb')));
+    expect(lessonFrameSpeech(activity), isNot(contains('175bb')));
     expect(
       lessonFrameSpeech(activity),
       isNot(contains('You 120bb, villain 55bb. Effective stack?')),
@@ -11203,8 +11207,16 @@ await tester.tap(find.text('NIT'));
     await tester.pump();
     expect(tester.takeException(), isNull);
     expect(
-      find.text('You 120bb · villain 55bb — pick the effective stack.'),
+      find.text('Two stacks face each other — pick the effective stack.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('You 120bb · villain 55bb — pick the effective stack.'),
+      findsNothing,
+    );
+    expect(
+      find.text('You 120bb · villain 55bb — tap the effective stack.'),
+      findsNothing,
     );
     expect(
       find.text('You 120bb · villain 55bb — tap effective.'),
