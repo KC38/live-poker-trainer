@@ -303,7 +303,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   not enough if grade lines still say “Pair of kings” (LPT-261). Spoken
   rank/suit word remaps must use placeholders (no chain): king→queen plus
   queen→jack must not turn “Pair of kings” into “Pair of jacks” over
-  top-pair queens (LPT-852 Made hands densify Nice!).
+  top-pair queens (LPT-852). Never re-run `alignLessonActionCopy` on
+  `lastResult.feedback` in `_frameSpeech` — submit already aligned it;
+  a second pass remaps the felt pair through the kicker (dock can say
+  queens while the bubble says jacks).
 - Prefer waiting until Continue is enabled in `tree` after multi-press
   explain grades (Clean→Dirty→Price, Raise→Barrel→Count, and other ladder
   Nice!) before tapping Continue or SoftPulse validated shots — an early

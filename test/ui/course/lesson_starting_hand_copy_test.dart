@@ -497,6 +497,18 @@ void main() {
       ),
       'Pair of queens is already showdown-ready.',
     );
+    // Live mini deal from LPT-852 validate: board 9 + kicker 8 must stay
+    // "nines", never the board second-card "sixes".
+    expect(
+      alignLessonTableCopy(
+        text: feedback,
+        templateHero: const ['Kh', 'Qh'],
+        dealtHero: const ['9s', '8s'],
+        templateBoard: const ['Ks', '9d', '2c'],
+        dealtBoard: const ['9c', '6d', '4h'],
+      ),
+      'Pair of nines is already showdown-ready.',
+    );
     expect(
       alignLessonTableCopy(
         text: oops,
