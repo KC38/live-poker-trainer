@@ -4793,3 +4793,18 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Done-acked S7 SoftPulse residuals LPT-721/725/726/727/790/794/795/798/800/802.
 - Prefer NEVER Meet-TAG **LPT-708** still To Do; tip-commented LPT-708/829.
 - Prefer next: NEVER Meet-TAG **LPT-708** / open catalog **LPT-829**.
+
+## Fold 2026-10-15dc tip 741585fd (#2668 Prefer NEVER Adjust-TAG cite LPT-710 + rescue Meet-TAG 1c28d15b)
+
+- Tip-stable `741585fd` (#2668). Catalog short-ladder **224**; other JSON **0**; softpulseMapArms **92** / densifyHelperArms **233** flat.
+- Open catalog **LPT-829** tip-synced flat **224** (tip-comment only — do not claim body rebuilt).
+- Prefer NEVER Adjust-TAG cite residual re-check `lesson-06-11-03-01/02/03` / `act-06-11-03-*`:
+  - first-child SoftPulse CREDIT→TIGHTER + `explainGrading` "Credit → Tighter." + coachMedia respect-only — SoftPulse residual **LPT-709** Done (#2661; tip test drops NO LIGHT) — leave Done.
+  - checkpoint SoftPulse `cite` kind `none` densify PRESENT (`rex_coach_line` "Versus TAG — pick the cite."; prompt "Versus TAG, cite which tendency?"; Selective + disciplined vs Vibes) still under Respect-TAG-aggression-only → residual **LPT-710** still To Do (needs-human; Relates LPT-294 — do not re-add needs-human).
+  - successors SoftPulse CHECK-RAISE→FOLD / RARELY CALLS→CHECK content-driven (do not reopen LPT-669).
+  - guided SoftPulse `fold` PRESENT (`Jh`/`9d`·`Qc`/`9s`/`3h` +2 suit variants); scaffolded SoftPulse `fold-k9` one-per-press PRESENT (`Kh`/`9d` +2 suit variants); unguided SoftPulse `check` one-per-press PRESENT (`Jh`/`Td`·`Qc`/`Ts`/`3h`/`2d`/`7c` +2 suit variants); densify N/A (`poker_action_sizing`).
+  - curriculum **LPT-294** Done — do not clone.
+- Rescued prior Meet-TAG tip `1c28d15b` coverage fold (learnings were `pending` only): SoftPulse TIGHT→AGGRO→MODEL concept-aligned; checkpoint SoftPulse `model` under Introduce TAG → **LPT-708** still To Do; curriculum LPT-291 Done; LPT-829 tip-commented on that SHA already.
+- Tip-commented LPT-710/829/709/294/708 on `741585fd`.
+- Prefer next: NEVER Observe-wide companions **LPT-714/715** / Meet-LAG **LPT-716** / Adjust-LAG cite **LPT-719** / open catalog **LPT-829**.
+- act-06-11-03-*: interactive structural clean on tip except LPT-710 cite residual; SoftPulse explain successors content-driven (do not reopen LPT-669); interactive sizing acts are `fixed`+variants — do not reopen LPT-627; checkpoint `deal.mode` `none` cite tiles — do not file handFamily.
