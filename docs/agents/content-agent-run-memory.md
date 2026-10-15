@@ -4747,3 +4747,30 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-699/267/829/700/696/694/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Blockers SoftPulse residual **LPT-700** re-check / Low residuals LPT-676…802 / open catalog LPT-829.
 - act-06-05-01-*: interactive structural clean on tip except LPT-699 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded is fixed+variants poker_action_sizing; densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-15cy tip 276cf765 (#2657 densify → Defend SoftPulse LPT-701 Prefer + #2655 Done-acks)
+
+- Tip-stable `276cf765` (#2657 SoftPulse-quiet densify after #2655 S4–S5 SoftPulse residual shrinks + #2656 Blockers SoftPulse Prefer LPT-700). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Mid-run tip `5356721d`/#2655 Done-acked SoftPulse residuals on tip (re-verified cues/placement):
+  - **LPT-732** `act-04-06-03-explain` SoftPulse VALUE-only under value-wider — Done
+  - **LPT-681** `act-05-03-01-explain` SoftPulse IMPLIED-only under estimate-implied — Done
+  - **LPT-682** `act-05-04-01-explain` SoftPulse THIN-only under thin-value — Done
+  - **LPT-684** `act-05-05-01-explain` SoftPulse X/R-only under read-check-raises — Done
+  - **LPT-685** `act-05-07-01-explain` SoftPulse TIMING→CLUES under timing-soft — Done
+  - **LPT-686** `act-05-08-01-explain` SoftPulse STUCK→TILTED under tilted-opponents — Done
+  - **LPT-690** `act-05-09-01-explain` SoftPulse QUIT-only under stop-loss — Done
+  - **LPT-676** `act-04-04-01-scaffolded` under value-vs-pressure polar-pressure objective — Done
+  - **LPT-677** `act-04-05-01-checkpoint` under commit-low-spr — Done
+  - **LPT-687** `act-05-08-01-checkpoint` under gear-changes re-sample — Done
+- Prefer NEVER Defend SoftPulse residual re-check `lesson-06-07-01-01/02/03` / `act-06-07-01-*`:
+  - first-child SoftPulse DEFEND→BLUFF→ENOUGH + `explainGrading` "Defend → Bluff → Enough." + Dart `DefendEnoughDemo.points` DEFEND/BLUFF/ENOUGH (captions Continue enough / Over-bluffs fail / No fake %) / layout "Tap Defend, then Bluff, then Enough." + coachMedia "Defend enough that over-bluffing fails. No fake percentages." still pre-split under continue-catchers-only (`lesson-06-07-01-01-continue-catchers` objective "Continue with stronger catchers") → residual **LPT-701** still To Do (needs-human; Relates LPT-273 — do not re-add needs-human on curriculum).
+  - companion checkpoint SoftPulse `punish` kind `none` densify PRESENT (prompt "Minimum defense goal?" / Punish over-bluffs) under Continue with stronger catchers → **LPT-702** still To Do.
+  - successors SoftPulse THIRD PAIR→SCARY→FOLD / MDF→INTUITION content-driven (do not reopen LPT-669); guided SoftPulse `strong` densify PRESENT; scaffolded SoftPulse `fold` one-per-press PRESENT (`9h`/`7d`·`Kc`/`Qh`/`9d`/`4c`/`8s` +2 suit variants match Dart); unguided SoftPulse `int` densify PRESENT.
+- Curriculum **LPT-273** Done — do not clone / do not re-add needs-human.
+- Companions **LPT-683** (thin meta-read checkpoint) + **LPT-691** (edge under end-sessions) still To Do — #2655 did not clear them.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-701/702/273/829/703/198/216/351/683/691 + Done-ack LPT-732/681/682/684/685/686/690/676/677/687; leave open LPT-701/702/683/691/692…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Mix SoftPulse residual **LPT-703** re-check / Low residuals still open / open catalog LPT-829.
+- act-06-07-01-*: interactive structural clean on tip except LPT-701 SoftPulse + LPT-702 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants third-pair honesty.
+
