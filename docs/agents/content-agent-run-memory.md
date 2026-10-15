@@ -5553,3 +5553,17 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next NEVER: `lesson-04-08-03-02-cite-aggression` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-04-08-03-*: Widen Prefer NEVER structural clean on tip — SoftPulse packing expected under dual-objective first child; Adjust Maniac path continues with Cite sibling.
 
+
+
+## Fold 2026-10-15fr (842c3aba Prefer NEVER cite-aggression)
+
+- Tip-stable `842c3aba` (#2762 Prefer NEVER widen-value-catch learnings on tip). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 limit); other parents Done.
+- Prefer NEVER discovery `lesson-04-08-03-02-cite-aggression` / `act-04-08-03-02-explain-cite` + `act-04-08-03-unguided` + `act-04-08-03-checkpoint`:
+  - one objective Cite extreme aggression tendency; explain SoftPulse EVIDENCE→UNKNOWN + `explainGrading` "Maniac evidence → call wider; unknown → fold more." **concept-aligned** (content-driven `authoredCues` / LPT-669 Done — do not reopen SoftPulse residual / LPT-212).
+  - unguided SoftPulse `baseline-fold` one-per-press pressHints 1/1 SoftPulse map PRESENT (`poker_action_sizing` `deal.mode` `fixed` Ah9d·As7c2dTh3c +2 suit variants — do not file handFamily).
+  - checkpoint SoftPulse `cite-wide` cue kind `none` hintless densify PRESENT SoftPulse-off (`select_identify` `deal.mode` `none` — do not file handFamily).
+  - short-ladder 3/5 already on catalog **LPT-829**; curriculum **LPT-212** Done — do not clone / SoftPulse residual N/A.
+- Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
+- Prefer next NEVER: `lesson-04-09-01-01-observation-not-certainty` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-04-08-03-*: Cite Prefer NEVER structural clean on tip — SoftPulse residual N/A (LPT-212 Done packing expected on first-child); Adjust Maniac Prefer NEVER path complete.
