@@ -5079,3 +5079,19 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER oldest unfresh `lesson-04-10-02-section-four-jump-test` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-03-08-02-*: interactive structural clean on tip; jump assessment container skips curriculum-split clones; densify PRESENT on SI arms — do not reopen LPT-628.
 
+## Fold 2026-10-15dx tip d44e32b2 (Prefer-next S4 jump discovery)
+
+- Tip-stable `d44e32b2` (#2697). Catalog short-ladder **224** (other JSON **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224** (tip-comment only — no body rebuild). SoftPulse Prefer queue empty except needs-human. Only open content: LPT-829 + LPT-351.
+- Prefer NEVER discovery: `lesson-04-10-02-section-four-jump-test` / `act-04-10-02-*`:
+  - All seven scaffolded+`assessmentRole` `jump_test` (hintless; cue kind `none`).
+  - jump-range SoftPulse `j4-range` densify PRESENT (`deal.mode` `none` — do not file handFamily).
+  - jump-3bet fixed `Kh`/`Kd` + suit variants SoftPulse `j4-3bet` map PRESENT.
+  - jump-spr SoftPulse `spr-4` densify PRESENT (`deal.mode` `none`).
+  - jump-size fixed `Ah`/`Kd`·`As`/`7c`/`2d` + suit variants SoftPulse `j4-10` map PRESENT.
+  - jump-station/nit/maniac SoftPulse `j4-cs`/`j4-nit`/`j4-man` densify PRESENT (`deal.mode` `none`).
+  - jump_test assessment — no curriculum-split. LPT-219/481/534/587 Done — do not clone.
+- Tip-commented LPT-829/351; leave open LPT-351 + LPT-829; leave ui-agent alone.
+- Prefer next: NEVER oldest unfresh `lesson-01-01-02-01-suits` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-04-10-02-*: interactive structural clean on tip; jump assessment container skips curriculum-split clones; densify PRESENT on SI arms — do not reopen LPT-628; fixed docks with suit variants — do not reopen LPT-627.
+
