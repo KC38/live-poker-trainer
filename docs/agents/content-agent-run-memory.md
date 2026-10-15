@@ -5348,3 +5348,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next NEVER: `lesson-04-06-03-02-bluff-less` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-04-06-03-*: structural clean on tip — SoftPulse residual closed by LPT-732.
 
+## Fold 2026-10-15fb (7318d907 Prefer NEVER bluff-less)
+
+- Tip-stable `7318d907` (#2741 Prefer NEVER value-wider learnings). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 limit); other parents Done.
+- Prefer NEVER discovery `lesson-04-06-03-02-bluff-less` / `act-04-06-03-*`:
+  - one objective Bluff less without equity; explain SoftPulse RARELY FOLDS→GIVE UP + `explainGrading` "Station + air → give up." **concept-aligned** (content-driven `authoredCues` / LPT-669 Done — do not reopen SoftPulse residual / LPT-732).
+  - scaffolded SoftPulse `give-up` one-per-press pressHints 1/1 (`poker_action_sizing` `fixed` 8h7h·Kh9h2c3d5s +2 suit variants; densify N/A; SoftPulse map PRESENT); `deal.mode` `none` on explain/checkpoint — do not file handFamily.
+  - checkpoint SoftPulse `cite-fold` cue kind `none` hintless densify PRESENT; short-ladder 3/5 already on catalog **LPT-829**; curriculum **LPT-192** Done — do not clone / SoftPulse residual N/A.
+- Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
+- Prefer next NEVER: `lesson-04-06-03-03-cite-sticky-call` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-04-06-03-*: structural clean on tip — SoftPulse residual closed by LPT-732 on value-wider sibling.
+
