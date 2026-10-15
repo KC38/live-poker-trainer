@@ -47,8 +47,9 @@ const _lines = <String, String>{
       'Postflop multiway — tap who acts first.',
   'act-01-05-01-guided-fold-win':
       'You bet. Everyone folds. Tap how you take the pot — pick Take pot.',
+  // LPT-839: SoftPulse-quiet densify — no Showdown spoil.
   'act-01-05-01-scaffolded-showdown':
-      'River bets are called. Tap what happens next — pick Showdown.',
+      'River bets are called. Tap what happens next.',
   // LPT-782: SoftPulse-off densify — no correct-tile spoil.
   'act-01-05-01-checkpoint-side':
       'You are all-in for less; two big stacks keep betting — tap the matching pot fact.',

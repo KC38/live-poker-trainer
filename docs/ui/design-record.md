@@ -1896,7 +1896,7 @@ felt.
 | Action order | explain SoftPulse cues BIG BLIND → CLOCKWISE → BUTTON; checkpoint SoftPulse-off densify stem non-spoiling (no SB) (LPT-808); unit `unit-01-04-streets` (LPT-103 split); objective "Know who acts first before and after the flop" so the checkpoint grades this lesson's concept (curriculum residual LPT-737) | — |
 | When a street ends | explain SoftPulse cues BETS MATCHED → NEXT STREET; densify SoftPulse-quiet stem non-spoiling (no Bets matched) (LPT-837); unit `unit-01-04-streets` (LPT-103 split) | — |
 | Win when everyone folds | Fold win on the felt; explain SoftPulse cue FOLD WIN only — SHOWDOWN/SIDE POT presses belong to Win at showdown and Main and side pots (curriculum residual LPT-738); densified SoftPulse one gold via `guideRegion` (LPT-525); unit `unit-01-05-winning-pots` (LPT-106 split) | — |
-| Win at showdown | explain SoftPulse cues RIVER CALL → SHOWDOWN → BEST FIVE; unit `unit-01-05-winning-pots` (LPT-106 split) | — |
+| Win at showdown | explain SoftPulse cues RIVER CALL → SHOWDOWN → BEST FIVE; densify SoftPulse-quiet stem non-spoiling (no Showdown) (LPT-839); unit `unit-01-05-winning-pots` (LPT-106 split) | — |
 | Main and side pots | explain SoftPulse cues MAIN POT → SIDE POT; checkpoint SoftPulse-off densify stem non-spoiling (LPT-782); unit `unit-01-05-winning-pots` (LPT-106 split) | — |
 | Play a full toy hand | Blinds, You act, Ending; explain SoftPulse cues BLINDS → YOU ACT → ENDING (LPT-635) | scaffolded pressHints one-per-press (LPT-667) |
 | Section 1 jump check | Ranks: showdown seats Flush → Straight → Two pair; seats UTG → BTN | — |
