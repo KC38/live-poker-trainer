@@ -694,8 +694,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Dynamic reads should be — tap the matching habit.',
     'act-05-09-01-guided' =>
       'You hit a planned stop-loss. Next step — pick Stop / move down.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Decline (LPT-857; SoftPulse
+    // LPT-653; same class as LPT-856 / LPT-855 / LPT-854 / LPT-853 / LPT-850).
     'act-05-09-01-scaffolded' =>
-      'Bankroll 40 buy-ins for 1/2. Spot opens at 2/5. Action — pick Decline.',
+      'Bankroll 40 buy-ins for 1/2. Spot opens at 2/5. Action — tap the matching plan.',
     // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
     // situation + tap verb only; never name Cash out (LPT-854; SoftPulse
     // LPT-653; same class as LPT-853 / LPT-850 / LPT-849 / LPT-846).

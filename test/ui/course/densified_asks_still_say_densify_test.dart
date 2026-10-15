@@ -220,8 +220,9 @@ const _lines = <String, String>{
       'Dynamic reads should be — tap the matching habit.',
   'act-05-09-01-guided':
       'You hit a planned stop-loss. Next step — pick Stop / move down.',
+  // LPT-857: SoftPulse-quiet densify — no Decline spoil.
   'act-05-09-01-scaffolded':
-      'Bankroll 40 buy-ins for 1/2. Spot opens at 2/5. Action — pick Decline.',
+      'Bankroll 40 buy-ins for 1/2. Spot opens at 2/5. Action — tap the matching plan.',
   // LPT-854: SoftPulse-quiet densify — no Cash out spoil.
   'act-05-09-01-unguided':
       'Tired, winning small, table getting wild — tap the matching plan.',
