@@ -671,8 +671,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Delayed c-bet is best when — tap the matching timing.',
     'act-05-06-01-guided' =>
       'Villain bets flop, checks turn. Range now — pick Capped — fewer nuts.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Rebuild after every action
+    // (LPT-862; SoftPulse LPT-653; same class as LPT-861 / LPT-860 /
+    // LPT-859 / LPT-858 / LPT-857 / LPT-853).
     'act-05-06-01-unguided' =>
-      'Best line-reading habit — pick Rebuild after every action.',
+      'After each street action — tap the matching line-reading habit.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Uncapped / respect unless type in the idle bubble (LPT-745; same
     // class as LPT-744 / LPT-742 / LPT-736 / LPT-734 / LPT-735 / LPT-723 /

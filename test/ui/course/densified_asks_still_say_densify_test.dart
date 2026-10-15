@@ -205,8 +205,9 @@ const _lines = <String, String>{
       'Delayed c-bet is best when — tap the matching timing.',
   'act-05-06-01-guided':
       'Villain bets flop, checks turn. Range now — pick Capped — fewer nuts.',
+  // LPT-862: SoftPulse-quiet densify — no Rebuild after every action spoil.
   'act-05-06-01-unguided':
-      'Best line-reading habit — pick Rebuild after every action.',
+      'After each street action — tap the matching line-reading habit.',
   // LPT-745: SoftPulse-off densify — no correct-tile spoil.
   'act-05-06-01-checkpoint':
       'Check-raise flop, bet turn, shove river usually means — tap the matching range.',
