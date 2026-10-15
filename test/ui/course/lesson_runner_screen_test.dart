@@ -4806,6 +4806,9 @@ void main() {
     expect(layout.livesRemaining, 0);
     expect(layout.onRestoreHearts, isNotNull);
     expect(layout.emptyHeartsNudgeTick, 0);
+    // SoftPulse must stay off under the hearts gate (LPT-874).
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
 
     await tester.tap(
       find.byKey(const ValueKey<String>('lesson-empty-hearts-block')),

@@ -170,6 +170,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   fall back to the seat ring. Never judge Hint SoftPulse at zero hearts —
   `_heartsGateActive` disables Hint unless Practice
   (`allowZeroHeartsPractice`); earn a heart or use Practice first.
+  SoftPulse must also stay off under that gate (gold SoftPulse: none) —
+  AbsorbPointer alone left SoftPulse golding the next target (LPT-874).
   Densified classify Hint (Hand families unguided/checkpoint) must name the
   remapped hero holes — `alignLessonActionCopy` falls through to
   `dealtLessonTableScene` when there is no action spot, or Hint keeps
