@@ -657,8 +657,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Same hand, different types — tap the matching change.',
     'act-05-05-01-guided' =>
       'Nit check-raises flop. Default read — pick Value-heavy — respect.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Often polarized — strong or
+    // bluff (LPT-861; SoftPulse LPT-653; same class as LPT-860 / LPT-859 /
+    // LPT-858 / LPT-857 / LPT-853).
     'act-05-05-01-unguided' =>
-      'BB donks large on A-high dry flop into PFR. Meaning — pick Often polarized — strong or bluff.',
+      'BB donks large on A-high dry flop into PFR. Meaning — tap the matching read.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name After flop check / range strength / After weakness in the idle
     // bubble (LPT-742; same class as LPT-736 / LPT-734 / LPT-735 / LPT-723 /

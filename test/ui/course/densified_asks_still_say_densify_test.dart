@@ -197,7 +197,9 @@ const _lines = <String, String>{
       'Same hand, different types — tap the matching change.',
   'act-05-05-01-guided':
       'Nit check-raises flop. Default read — pick Value-heavy — respect.',
-  'act-05-05-01-unguided': 'BB donks large on A-high dry flop into PFR. Meaning — pick Often polarized — strong or bluff.',
+  // LPT-861: SoftPulse-quiet densify — no Often polarized spoil.
+  'act-05-05-01-unguided':
+      'BB donks large on A-high dry flop into PFR. Meaning — tap the matching read.',
   // LPT-742: SoftPulse-off densify — no correct-tile spoil.
   'act-05-05-01-checkpoint':
       'Delayed c-bet is best when — tap the matching timing.',
