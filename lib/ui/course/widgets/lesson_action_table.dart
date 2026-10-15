@@ -14234,12 +14234,91 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
 }
 
 
+/// Short teaching caption under an authored SoftPulse explain tile (LPT-883).
+///
+/// SoftPulse already owns next-press order. Never return Tap N of M meta chrome
+/// — that spoils the sequence and teaches nothing. Unknown targets return an
+/// empty string so the tile shows the cue label alone.
+String authoredSoftPulseExplainCaption(String target) {
+  const captions = <String, String>{
+    // Flop / hand-class glosses (aligned with FlopLabelDemo).
+    'MADE': 'Already strong',
+    'DRAW': 'Need a card',
+    'SDV': 'Weak made',
+    'SHOWDOWN VALUE': 'Weak made',
+    'SHOWDOWN': 'Weak made',
+    'AIR': 'Nothing yet',
+    // Streets / table flow.
+    'PREFLOP': 'Before the flop',
+    'FLOP': 'Three cards',
+    'TURN': 'Fourth card',
+    'RIVER': 'Fifth card',
+    'BLINDS': 'Forced bets first',
+    'DEAL': 'Cards come next',
+    'BETS MATCHED': 'All caught up',
+    'NEXT STREET': 'Deal continues',
+    'BIG BLIND': 'Acts first postflop',
+    'CLOCKWISE': 'Left of the blind',
+    'BUTTON': 'Acts last',
+    'NO BET': 'Free to check',
+    'CHECK': 'Pass the street',
+    'BET': 'Put chips in',
+    'CALL': 'Match the bet',
+    'FACING BET': 'Someone bet',
+    'RAISE': 'Make it more',
+    'STACK': 'Commit the rest',
+    'ALL-IN': 'Everything in',
+    'FOLD': 'Give up',
+    'FOLD WIN': 'Take the pot',
+    'RIVER CALL': 'Call to see',
+    'BEST FIVE': 'Strongest five',
+    'MAIN POT': 'Everyone eligible',
+    'SIDE POT': 'All-in leftover',
+    'BOARD': 'Shared cards',
+    'CHOP': 'Split the pot',
+    'SAME PAIR': 'Tied pairs',
+    'KICKER': 'Next card decides',
+    'PAIR': 'Two of a kind',
+    'STRAIGHT': 'Five in a row',
+    'FLUSH': 'Five same suit',
+    'FULL HOUSE': 'Trips over pair',
+    'TRIPS': 'Three of a kind',
+    'TWO PAIR': 'Two pairs',
+    'DEUCE': 'Lowest rank',
+    'MIDDLE': 'Mid ranks',
+    'ACE': 'Highest rank',
+    'SUITED': 'Same suit holes',
+    'SB': 'Small blind',
+    'BB': 'Big blind',
+    'D': 'Dealer button',
+    'UTG': 'First to act',
+    'HJ': 'Hijack seat',
+    'CO': 'Cutoff seat',
+    'BTN': 'Button seat',
+    'EARLY': 'Strong only',
+    'STEAL': 'Widen opens',
+    'NIT': 'Working label',
+    'NARROW': 'Seldom in pots',
+    'RESPECT': 'Credit big bets',
+    'STATION': 'Working label',
+    'HIGH': 'Often in pots',
+    'LOW': 'Sticks to heat',
+    'MANIAC': 'Working label',
+    'ENTRY': 'Opens wide',
+    'AGGRO': 'Bets often',
+  };
+  return captions[target] ?? '';
+}
+
 /// SoftPulse explain tiles driven by authored `teachSpec.cues` targets (LPT-669).
 ///
 /// Curriculum-split successors mint new SoftPulse cue labels that do not match
 /// the parent demo's hardcoded chips. This table SoftPulses the authored
 /// targets in press order so every `lessonSplitMap` SoftPulse explain stays a
 /// table-tap walk instead of Continue-only.
+///
+/// Captions are short teaching glosses ([authoredSoftPulseExplainCaption]) —
+/// never Tap N of M press-order meta chrome (LPT-883).
 class LessonAuthoredCueExplainTable extends StatefulWidget {
   /// Creates the cue-tile SoftPulse explain stage.
   const LessonAuthoredCueExplainTable({
@@ -14326,7 +14405,7 @@ class _LessonAuthoredCueExplainTableState
                       targets.take(i).every(_tapped.contains),
                   child: _DemoActionCard(
                     label: targets[i],
-                    caption: 'Tap ${i + 1} of ${targets.length}',
+                    caption: authoredSoftPulseExplainCaption(targets[i]),
                     color: _palette[i % _palette.length],
                     densify: false,
                     selected: _tapped.contains(targets[i]),
@@ -14402,20 +14481,22 @@ class _DemoActionCard extends StatelessWidget {
                       fontWeight: FontWeight.w900,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    caption,
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.manrope(
-                      // SoftPulse densify tints are light — slate on cream/gold
-                      // reads as muddy grey; cream keeps captions legible.
-                      color: AppColors.cream.withValues(alpha: 0.82),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
+                  if (caption.isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    Text(
+                      caption,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.manrope(
+                        // SoftPulse densify tints are light — slate on cream/gold
+                        // reads as muddy grey; cream keeps captions legible.
+                        color: AppColors.cream.withValues(alpha: 0.82),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
+                  ],
                 ],
               ),
             )
@@ -14431,18 +14512,20 @@ class _DemoActionCard extends StatelessWidget {
                     fontWeight: FontWeight.w900,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  caption,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.slate,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
+                if (caption.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    caption,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.manrope(
+                      color: AppColors.slate,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
     );
