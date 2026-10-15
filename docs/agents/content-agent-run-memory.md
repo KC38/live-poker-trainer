@@ -4708,3 +4708,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER HU SoftPulse residual **LPT-800** (+ cite **LPT-801**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-04-01-*: interactive structural clean on tip except LPT-798 SoftPulse + LPT-799 Ranges-SPR residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15cv tip cebbc179 (#2651 Spot-caps Prefer → Polar SoftPulse LPT-696 Prefer)
+
+- Tip-stable `cebbc179` (#2651 Spot-caps SoftPulse Prefer LPT-694 on tip after #2650). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER Polar SoftPulse residual re-check `lesson-06-04-01-01/02/03` / `act-06-04-01-*`:
+  - first-child SoftPulse POLAR→MERGED→SIZE + `explainGrading` "Polar → Merged → Size." + Dart `PolarMergedDemo.points` POLAR/MERGED/SIZE (captions Nuts or air / Medium-strong / Size accordingly) / `LessonPolarMergedExplainTable` / `CoachDialogueVisualKind.polarMerged` / layout "Tap Polar, then Merged, then Size." + coachMedia "Polar: nuts or air. Merged: many medium-strong hands. Size accordingly." still pre-split under polarized-sizing-only (`lesson-06-04-01-01-polarized-sizing` objective "Recognize polarized sizing") → residual **LPT-696** still To Do (needs-human; Relates LPT-264 — do not re-add needs-human on curriculum).
+  - successors SoftPulse MERGED→MEDIUM→VALUE / SIZE→SHAPE→MATCH content-driven (do not reopen LPT-669); guided SoftPulse `polar` densify PRESENT; scaffolded SoftPulse `mid` one-per-press SoftPulse map PRESENT (`Jh`/`Td`·`Qc`/`Ts`/`3h`/`2d`/`7c` +2 suit variants match Dart LPT-395); unguided SoftPulse `mismatch` densify PRESENT; checkpoint SoftPulse `thin` kind `none` densify PRESENT under merged-thin-value — no companion residual.
+- Curriculum **LPT-264** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-696/264/829/699/694/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Overbet SoftPulse residual **LPT-699** re-check / Low residuals LPT-676…802 / open catalog LPT-829.
+- act-06-04-01-*: interactive structural clean on tip except LPT-696 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded is fixed+variants poker_action_sizing (LPT-395); densify PRESENT — do not reopen LPT-628.
+
