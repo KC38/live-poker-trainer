@@ -5009,3 +5009,18 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-716/829/300; leave open LPT-714/715/716/719 + LPT-351 + LPT-829; leave ui-agent alone.
 - Prefer next: NEVER Adjust-LAG cite residual **LPT-719** / open catalog **LPT-829**.
 - act-06-12-02-*: interactive structural clean on tip except LPT-716 sample-limits residual; SoftPulse explain concept-aligned + successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` player-type tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-15ds tip ca45d558 (Adjust-LAG cite Prefer LPT-719 → #2689 Done-ack)
+
+- Tip started `d2724185` (#2688); mid-run tip-advanced to `ca45d558` (#2689 curriculum residual batch p2). Catalog short-ladder **224** (other JSON **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224** (tip-comment only — no body rebuild).
+- Prefer NEVER Adjust-LAG cite residual re-check `lesson-06-12-03-01/02/03` / `act-06-12-03-*`:
+  - Pre-batch (`d2724185`): SoftPulse CALL-only **LPT-718** Done; checkpoint SoftPulse `cite` densify PRESENT under Call-wider-only objective "Widen bluff-catches versus LAG" → residual confirmed while In Progress (GrokBot p2).
+  - Post-batch (`ca45d558` #2689): Call-wider objective rewritten to "Widen bluff-catches versus LAG and cite the tendency" → graded SoftPulse `cite` matches → **Done-ack LPT-719**. Batch companions **LPT-714/715/716/796/799/801** also Done.
+  - Successors SoftPulse STRONG HAND→LET THEM BET / NO BIG BLUFF→LET THEM content-driven (do not reopen LPT-669).
+  - Guided SoftPulse `call` PRESENT; scaffolded SoftPulse `trap` one-per-press PRESENT; unguided SoftPulse `avoid` one-per-press densify PRESENT.
+- Curriculum **LPT-303** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-719/829/303/718 + Done-ack on tip `ca45d558`; leave open LPT-351 + LPT-829; leave ui-agent alone.
+- Prefer next: NEVER Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-06-12-03-*: interactive structural clean on tip after #2689 objective rewrite; SoftPulse explain CALL-only concept-aligned; SoftPulse explain successors content-driven; guided/scaffolded sizing `fixed`+variants — do not reopen LPT-627; unguided/checkpoint `deal.mode` `none` — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
