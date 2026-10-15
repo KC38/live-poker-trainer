@@ -155,7 +155,9 @@ const _lines = <String, String>{
   // LPT-858: SoftPulse-quiet densify — no Continues pressure too wide spoil.
   'act-04-08-01-scaffolded':
       'They bet flop, turn, and river with weak showdowns twice. Note — tap the matching observation.',
-  'act-04-08-01-unguided': 'Best note style versus wild aggression — pick Frequencies and shows — no ego story.',
+  // LPT-860: SoftPulse-quiet densify — no Frequencies and shows spoil.
+  'act-04-08-01-unguided':
+      'Best note style versus wild aggression — tap the matching note.',
   // LPT-770: SoftPulse-off densify — no correct-tile spoil.
   'act-04-08-01-checkpoint':
       'Evidence bundle for this seat — tap the matching note.',
