@@ -5501,3 +5501,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
 - Prefer next NEVER: `lesson-04-08-01-03-no-ego-notes` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-04-08-01-*: Constant-aggression Prefer NEVER structural clean on tip — SoftPulse residual closed by LPT-773 on first-child; Observe wild children Prefer NEVER path continues with no-ego-notes.
+
+
+## Fold 2026-10-15fn (5bf09746 Prefer NEVER no-ego-notes)
+
+- Tip-stable `5bf09746` (#2758 Prefer NEVER constant-aggression learnings on tip). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 limit); other parents Done.
+- Prefer NEVER discovery `lesson-04-08-01-03-no-ego-notes` / `act-04-08-01-03-explain-ego` + `act-04-08-01-unguided`:
+  - one objective Avoid ego battles in notes; explain SoftPulse FREQUENCIES→NO EGO + `explainGrading` "Frequencies → good notes; ego → leak." **concept-aligned** (content-driven `authoredCues` / LPT-669 Done — do not reopen SoftPulse residual / LPT-773).
+  - unguided SoftPulse `calm` one-per-press pressHints 1/1 densify PRESENT SoftPulse map PRESENT (`select_identify` `deal.mode` `none` observeWildNotesOutcomes — do not file handFamily).
+  - short-ladder 2/5 already on catalog **LPT-829**; curriculum **LPT-205** Done — do not clone / SoftPulse residual N/A.
+- Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
+- Prefer next NEVER: `lesson-04-08-02-01-maniac-model` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-04-08-01-*: Notes Prefer NEVER structural clean on tip — SoftPulse residual closed by LPT-773 on first-child; Observe wild children Prefer NEVER path complete.
