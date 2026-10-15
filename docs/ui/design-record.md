@@ -1737,7 +1737,9 @@ odds / POT → What it pays / EQUITY → Win chance — LPT-887, WHO ACTS →
 Whose turn — LPT-888, SAY → Announce clearly / BINDING → Must follow
 through — LPT-889, EARLIER SEATS → Act before you / YOUR TURN → Then you
 decide — LPT-891, BROADWAY → Ten or higher / SUITED ACE → Ace same suit —
-LPT-892, CHIPS → Then move chips — LPT-893, EP → Early seat — LPT-896). Play a full toy hand framed SoftPulse chips
+LPT-892, CHIPS → Then move chips — LPT-893, EP → Early seat — LPT-896,
+COVER → Protect hole cards / WAIT → Act in turn — LPT-897). Play a full
+toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
 YOU ACT → Open, call, or fold, ENDING → Folds win or continue (aligned
@@ -2074,7 +2076,7 @@ felt.
 | Stack depth | explain SoftPulse cues 50BB → 100BB → 200BB; unguided SoftPulse-quiet densify stem non-spoiling (no 50bb) (LPT-850); unit `unit-02-05-stacks` (LPT-130 split) | — |
 | Follow the action | Watch on the felt; explain SoftPulse cue WATCH only — SAY/COVER/WAIT presses belong to Say your action and Protect cards, wait your turn (curriculum residual LPT-749); unit `unit-02-06-table-habits` (LPT-133 split) | — |
 | Say your action | explain SoftPulse cues SAY → CHIPS with teaching captions (Announce clearly / Then move chips — LPT-893); scaffolded SoftPulse-quiet densify stem non-spoiling (no Say "raise") (LPT-843); unit `unit-02-06-table-habits` (LPT-133 split) | — |
-| Protect cards, wait your turn | explain SoftPulse cues COVER → WAIT; unguided SoftPulse-quiet densify stem non-spoiling (no Keep a chip) (LPT-844); checkpoint SoftPulse-off densify stem non-spoiling (LPT-786); unit `unit-02-06-table-habits` (LPT-133 split) | — |
+| Protect cards, wait your turn | explain SoftPulse cues COVER → WAIT with teaching captions Protect hole cards / Act in turn (LPT-897); unguided SoftPulse-quiet densify stem non-spoiling (no Keep a chip) (LPT-844); checkpoint SoftPulse-off densify stem non-spoiling (LPT-786); unit `unit-02-06-table-habits` (LPT-133 split) | — |
 | Open on a full ring | Nine, Same, Position; explain SoftPulse cues NINE → SAME → POSITION (LPT-635); unit `unit-02-07-baseline-checkpoint` (LPT-668 split) | — |
 | Face a raise with a plan | explain SoftPulse cues OPEN → PLAN; unit `unit-02-07-baseline-checkpoint` (LPT-668 split) | — |
 | Keep live habits while deciding | explain SoftPulse cues COVER → WAIT; checkpoint SoftPulse-off densify stem non-spoiling (LPT-788); unit `unit-02-07-baseline-checkpoint` (LPT-668 split) | — |
