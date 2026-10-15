@@ -4474,3 +4474,18 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-721/306/829/790/718/351/198/216/716; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Carry SoftPulse residual **LPT-790** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-06-13-01-*: interactive structural clean on tip except LPT-721 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; checkpoint `deal.mode` `none` cite tiles — do not file handFamily; densify PRESENT on checkpoint — do not reopen LPT-628.
+
+## Fold 2026-10-15ce tip 8f158c1c (#2626 Mix-five Prefer → Carry SoftPulse LPT-790 Prefer)
+
+- Tip-stable `8f158c1c` (#2626 Mix-five SoftPulse Prefer LPT-721 on tip after #2625). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- SoftPulse Prefer path catch-up: Selective SoftPulse residual **LPT-706** still To Do + Meet-TAG working-model residual **LPT-708** still To Do + Adjust-TAG SoftPulse residual **LPT-709** (+ **LPT-710**) still To Do + Observe-wide SoftPulse residual **LPT-713** (+ **LPT-714** / **LPT-715**) still To Do + Meet-LAG sample-limits residual **LPT-716** still To Do + Adjust-LAG SoftPulse residual **LPT-718** (+ **LPT-719**) still To Do + Mix-five SoftPulse residual **LPT-721** still To Do advanced through Prefer SoftPulse path this fold.
+- Prefer NEVER Carry SoftPulse residual re-check `lesson-07-01-01-01/02/03` / `act-07-01-01-*`:
+  - first-child SoftPulse REASON→CONFIRM→CANCEL + `explainGrading` "Reason → Confirm → Cancel." + Dart `PreflopFlopPlanDemo.points` REASON/CONFIRM/CANCEL (captions Enter with why / Flop agrees / Flop kills it) / `LessonPreflopFlopPlanExplainTable` / layout "Tap Reason, then Confirm, then Cancel." + coachMedia "Enter with a reason. Flop confirms or cancels." still pre-split under State-a-preflop-thesis-only (`lesson-07-01-01-01-preflop-thesis` objective "State a preflop thesis") → residual **LPT-790** still To Do (needs-human; Relates LPT-310 — do not re-add needs-human on curriculum).
+  - successors SoftPulse TEXTURE→CONFIRM OR CANCEL / DEAD PLAN→LET GO content-driven (do not reopen LPT-669); guided SoftPulse `dead` densify PRESENT; scaffolded SoftPulse `value` one-per-press densify PRESENT; unguided SoftPulse `thesis` one-per-press densify PRESENT; checkpoint SoftPulse `abandon` kind `none` densify PRESENT under Abandon dead plans — matches (no companion residual).
+- Curriculum **LPT-310** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-790/310/829/794/721/351/198/216/718; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Map SoftPulse residual **LPT-794** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-07-01-01-*: interactive structural clean on tip except LPT-790 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` plan tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
