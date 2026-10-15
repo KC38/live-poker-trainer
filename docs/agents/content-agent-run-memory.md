@@ -4838,3 +4838,32 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: NEVER Adjust-LAG cite companion **LPT-719** / open catalog **LPT-829**.
 - act-06-12-02-*: interactive structural clean on tip except LPT-716 sample-limits residual; SoftPulse explain successors content-driven (do not reopen LPT-669); interactive is `deal.mode` `none` player-type tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+
+## Fold 2026-10-15dg tip 32dd336f (Adjust-LAG cite Prefer LPT-719)
+
+- Tip-stable `32dd336f` (#2673). Catalog short-ladder **224** (other JSON **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32k description limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER Adjust-LAG cite residual re-check `lesson-06-12-03-01/02/03` / `act-06-12-03-*`:
+  - SoftPulse explain `act-06-12-03-explain` is CALL-only + `explainGrading` "LAG pressure → Call wider." — SoftPulse residual **LPT-718** Done (#2661); do not reopen.
+  - Checkpoint SoftPulse `cite` kind `none` densify PRESENT (prompt "LAG exploit cites?" / Wide + pressure vs Vibes) still under Call-wider-only → residual **LPT-719** still To Do (needs-human; Relates LPT-303 — do not re-add needs-human on curriculum).
+  - Successors SoftPulse STRONG HAND→LET THEM BET / NO BIG BLUFF→LET THEM content-driven (do not reopen LPT-669).
+  - Guided SoftPulse `call` PRESENT (fixed+variants); scaffolded SoftPulse `trap` one-per-press PRESENT; unguided SoftPulse `avoid` one-per-press densify PRESENT.
+- Curriculum **LPT-303** Done — do not clone.
+- Tip-commented LPT-719/829/303/718; leave open LPT-702/708/710/714/715/716/719/683/691 + LPT-351 + LPT-829; leave ui-agent alone.
+- Prefer next: NEVER Meet-TAG working-model **LPT-708** / Adjust-TAG cite **LPT-710** / min-defense punish **LPT-702** / open catalog **LPT-829**.
+- act-06-12-03-*: interactive structural clean on tip except LPT-719 cite residual; SoftPulse explain CALL-only concept-aligned; SoftPulse explain successors content-driven; guided/scaffolded sizing `fixed`+variants — do not reopen LPT-627; unguided/checkpoint `deal.mode` `none` — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-15dh tip 32dd336f (min-defense punish Prefer LPT-702)
+
+- Tip-stable `32dd336f` (#2673; Adjust-LAG cite Prefer fold #2675 still open upstream of this chore). Catalog short-ladder **224** (other JSON **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32k description limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER min-defense punish residual re-check `lesson-06-07-01-01/02/03` / `act-06-07-01-*`:
+  - SoftPulse explain `act-06-07-01-explain` is DEFEND-only + `explainGrading` "Stronger catchers → Defend." — SoftPulse residual **LPT-701** Done (#2659); do not reopen.
+  - Checkpoint SoftPulse `punish` kind `none` densify PRESENT (prompt "Minimum defense goal?" / Punish over-bluffs vs Never fold) still under Continue-catchers-only → residual **LPT-702** still To Do (needs-human; Relates LPT-273 — do not re-add needs-human on curriculum).
+  - Successors SoftPulse THIRD PAIR→SCARY→FOLD / MDF→INTUITION content-driven (do not reopen LPT-669).
+  - Guided SoftPulse `strong` densify PRESENT; scaffolded SoftPulse `fold` one-per-press PRESENT (`9h`/`7d`·`Kc`/`Qh`/`9d`/`4c`/`8s` +2 suit variants); unguided SoftPulse `int` one-per-press densify PRESENT.
+- Curriculum **LPT-273** Done — do not clone.
+- Tip-commented LPT-702/829/701/273; leave open LPT-702/708/710/714/715/716/719/683/691 + LPT-351 + LPT-829; leave ui-agent alone.
+- Prefer next: NEVER Meet-TAG working-model **LPT-708** / Adjust-TAG cite **LPT-710** / Observe-wide **LPT-714/715** / open catalog **LPT-829**.
+- act-06-07-01-*: interactive structural clean on tip except LPT-702 punish residual; SoftPulse explain DEFEND-only concept-aligned; SoftPulse explain successors content-driven; scaffolded sizing `fixed`+variants — do not reopen LPT-627; guided/unguided/checkpoint `deal.mode` `none` — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
