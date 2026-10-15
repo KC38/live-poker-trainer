@@ -593,44 +593,34 @@ String _lessonFrameLine(
     return 'Versus a LAG, widen your bluff-catches. Tap Call.';
   }
   if (activity.id == 'act-06-13-01-explain') {
-    return 'Five models. Same cards. Change only with evidence. '
-        'Tap Cards, then Seats, then Evidence.';
+    return 'Same cards, versus a Calling Station: value thin. Tap Cards.';
   }
   if (activity.id == 'act-07-01-01-explain') {
-    return 'Enter with a reason. Flop confirms or cancels. '
-        'Tap Reason, then Confirm, then Cancel.';
+    return 'Enter with a reason. Tap Reason.';
   }
   if (activity.id == 'act-07-02-01-explain') {
-    return 'Flop bet needs a turn map. Continue or kill. '
-        'Tap Barrel, then Give-up, then Map.';
+    return 'List the turns you keep betting. Tap Barrel.';
   }
   if (activity.id == 'act-07-03-01-explain') {
-    return 'River: value if they call worse; bluff if they fold better. '
-        'Tap Value, then Bluff, then Hold.';
+    return 'Bet the river when worse hands call. Tap Value.';
   }
   if (activity.id == 'act-07-04-01-explain') {
-    return 'Pot type sets ranges and SPR. Plan accordingly. '
-        'Tap Limped, then SRP, then 3-4bet.';
+    return 'Limped pots: wide ranges, deep stacks. Tap Limped.';
   }
   if (activity.id == 'act-07-05-01-explain') {
-    return 'More players: fewer bluffs, thicker value. '
-        'Tap Fewer, then Thicker, then Widen.';
+    return 'More players: bluff less. Tap Fewer.';
   }
   if (activity.id == 'act-07-06-01-explain') {
-    return 'Effective stack rewrites the plan every hand. '
-        'Tap Short, then Deep, then Effective.';
+    return 'When short, commit earlier. Tap Short.';
   }
   if (activity.id == 'act-07-07-01-explain') {
-    return 'Same cards. Five models. Cite the tendency. '
-        'Tap Cards, then Models, then Cite.';
+    return 'Same cards, versus a Calling Station: bet value. Tap Cards.';
   }
   if (activity.id == 'act-07-08-01-explain') {
-    return 'Type, board, line, and size. One answer. '
-        'Tap Type, then Board, then Line, then Size.';
+    return 'Read the type, then the board. Tap Type, then Board.';
   }
   if (activity.id == 'act-07-09-01-explain') {
-    return 'Defaults beat vibes. Write the book; review leaks. '
-        'Tap Leak, then Book, then Review.';
+    return 'Name your own leaks. Tap Leak.';
   }
   if (activity.id == 'act-07-10-01-explain') {
     return 'Capstone single-raised pot. No hints. Trust your map. '
