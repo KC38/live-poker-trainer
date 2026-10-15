@@ -5,6 +5,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_authored_demo_scope.dart';
 
 /// Equity-realize explain: EQUITY / CASH / POS under the full poker table.
 class LessonEquityRealizeExplainTable extends StatefulWidget {
@@ -27,6 +28,14 @@ class LessonEquityRealizeExplainTable extends StatefulWidget {
 
 class _LessonEquityRealizeExplainTableState
     extends State<LessonEquityRealizeExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    EquityRealizeDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -38,9 +47,9 @@ class _LessonEquityRealizeExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: EquityRealizeDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= EquityRealizeDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -68,7 +77,7 @@ class _LessonEquityRealizeExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < EquityRealizeDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
@@ -76,24 +85,24 @@ class _LessonEquityRealizeExplainTableState
                       teaching &&
                       widget.showGuidance &&
                       !_tapped.contains(
-                        EquityRealizeDemo.points[i].label,
+                        _points[i].label,
                       ) &&
-                      EquityRealizeDemo.points
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _EquityRealizeTile(
-                    label: EquityRealizeDemo.points[i].label,
-                    caption: EquityRealizeDemo.points[i].caption,
-                    color: EquityRealizeDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected: _tapped.contains(
-                      EquityRealizeDemo.points[i].label,
+                      _points[i].label,
                     ),
                     enabled: teaching,
                     onPressed:
                         teaching
                             ? () => _onTap(
-                                  EquityRealizeDemo.points[i].label,
+                                  _points[i].label,
                                 )
                             : null,
                   ),

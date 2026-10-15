@@ -1481,7 +1481,7 @@ void main() {
           act('act-03-01-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['POT', 'STACKS', 'BUTTON', 'WHO ACTS'],
+        ['POT', 'STACKS'],
       );
     });
 
@@ -1513,7 +1513,7 @@ void main() {
           act('act-03-02-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['MADE', 'DRAW', 'SDV', 'AIR'],
+        ['MADE'],
       );
     });
 
@@ -1546,7 +1546,7 @@ void main() {
           act('act-03-03-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['CLEAN', 'DIRTY', 'PRICE'],
+        ['CLEAN', 'DIRTY'],
       );
     });
 
@@ -1577,7 +1577,7 @@ void main() {
           act('act-03-04-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['VALUE', 'C-BET', 'CHECK', 'CALL', 'FOLD', 'RAISE'],
+        ['VALUE'],
       );
     });
 
@@ -1609,7 +1609,7 @@ void main() {
           act('act-03-05-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['BRICK', 'CHANGE', 'BARREL', 'DELAY'],
+        ['BRICK', 'CHANGE'],
       );
     });
 
@@ -1641,7 +1641,7 @@ void main() {
           act('act-03-06-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['VALUE', 'BLUFF', 'CATCH', 'FOLD'],
+        ['VALUE'],
       );
     });
 
@@ -1674,7 +1674,7 @@ void main() {
           act('act-03-07-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['STRONGER', 'FEWER', 'NUTS'],
+        ['STRONGER'],
       );
     });
 
@@ -1712,7 +1712,7 @@ void main() {
           act('act-03-08-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['TOP PAIR', 'PRICES', 'PASSIVE', 'CROWDS'],
+        ['TOP PAIR'],
       );
     });
 

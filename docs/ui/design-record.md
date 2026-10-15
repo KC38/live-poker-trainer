@@ -858,6 +858,16 @@ Curriculum residuals LPT-724, LPT-731, LPT-733, LPT-737, LPT-738, LPT-739, LPT-7
 - `act-02-01-01-guided-btn`: `lesson-02-01-01-01-seat-labels` → `lesson-02-01-01-03-later-seats`; postflop last-actor guided practice moved from Seat labels to Later seats (LPT-739)
 - `lesson-01-04-01-02-action-order`: objective "Know preflop order starts left of the big blind" → "Know who acts first before and after the flop"; lesson objective now matches its summary, so the postflop first-actor checkpoint grades the lesson's own concept (LPT-737)
 
+Curriculum residuals LPT-750, LPT-751, LPT-752, LPT-753, LPT-754, LPT-755, LPT-756, LPT-757 (Kushal-approved rule, 2026-10-14): leftover SoftPulse presses and checkpoints from a split move to the split sibling whose concept they teach. A reused first-child explain keeps only its own concept's presses; the dedicated felt demo shows only the tiles its authored cues name (`LessonAuthoredDemoScope` / `lessonAuthoredDemoPoints`, full ladder when no teachSpec).
+- `act-03-01-01-explain`: SoftPulse was POT → STACKS → BUTTON → WHO ACTS, now POT → STACKS; BUTTON/WHO ACTS presses belong to Button and action seat (LPT-750)
+- `act-03-02-01-explain`: SoftPulse was MADE → DRAW → SDV → AIR, now MADE; DRAW/SDV/AIR presses belong to Draws versus showdown value and Recognize air (LPT-751)
+- `act-03-03-01-explain`: SoftPulse was CLEAN → DIRTY → PRICE, now CLEAN → DIRTY; PRICE press belongs to Pot odds versus equity (LPT-752)
+- `act-03-04-01-explain`: SoftPulse was VALUE → C-BET → CHECK → CALL → FOLD → RAISE, now VALUE; C-BET/CHECK/CALL/FOLD/RAISE presses belong to C-bet selectively and Raise, call, or fold with a plan (LPT-753)
+- `act-03-05-01-explain`: SoftPulse was BRICK → CHANGE → BARREL → DELAY, now BRICK → CHANGE; BARREL/DELAY presses belong to Second barrel and Delayed aggression (LPT-754)
+- `act-03-06-01-explain`: SoftPulse was VALUE → BLUFF → CATCH → FOLD, now VALUE; BLUFF/CATCH/FOLD presses belong to Credible bluffs and Bluff-catch or fold (LPT-755)
+- `act-03-07-01-explain`: SoftPulse was STRONGER → FEWER → NUTS, now STRONGER; FEWER/NUTS presses belong to Bluff less multiway and Nut potential and position (LPT-756)
+- `act-03-08-01-explain`: SoftPulse was TOP PAIR → PRICES → PASSIVE → CROWDS, now TOP PAIR; PRICES/PASSIVE/CROWDS presses belong to Fold bad prices and Passive calls and crowd bluffs (LPT-757)
+
 Curriculum split LPT-83: old `lesson-01-01-02-suits-and-ranks` becomes unit
 `unit-01-01-02-suits-and-ranks` with one lesson per concept (`…-01-suits`,
 `…-02-ranks`, `…-03-pairs-and-suited`). Catalog `lessonSplitMap` expands
@@ -1938,28 +1948,28 @@ felt.
 | Face a raise with a plan | explain SoftPulse cues OPEN → PLAN; unit `unit-02-07-baseline-checkpoint` (LPT-668 split) | — |
 | Keep live habits while deciding | explain SoftPulse cues COVER → WAIT; checkpoint SoftPulse-off densify stem non-spoiling (LPT-788); unit `unit-02-07-baseline-checkpoint` (LPT-668 split) | — |
 | Baseline jump check | Family / stack densified felt asks in the frame bubble (LPT-221); jump-family SoftPulse one gold via `guideRegion` (LPT-634) | — |
-| Pot and stacks | Pot, Stacks, Button, Who Acts; checkpoint SoftPulse-off densify stem non-spoiling (LPT-787); unit `unit-03-01-reading-table` (LPT-140 split) | — |
+| Pot and stacks | Pot, Stacks on the felt; explain SoftPulse cue POT → STACKS only — BUTTON/WHO ACTS presses belong to Button and action seat (curriculum residual LPT-750); checkpoint SoftPulse-off densify stem non-spoiling (LPT-787); unit `unit-03-01-reading-table` (LPT-140 split) | — |
 | Button and action seat | explain SoftPulse cues BUTTON → WHO ACTS; scaffolded SoftPulse-quiet densify stem non-spoiling (no UTG / Seat left of the big blind) (LPT-845); unit `unit-03-01-reading-table` (LPT-140 split) | — |
 | Words are binding | explain SoftPulse cues SAY → BINDING; unguided SoftPulse-quiet densify stem non-spoiling (no Raise stands / verbal is binding) (LPT-846); unit `unit-03-01-reading-table` (LPT-140 split) | — |
-| Made hands | Made, Draw, SDV, Air; fixed steps author suit-rotated `deal.variants` (LPT-384); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
+| Made hands | Made on the felt; explain SoftPulse cue MADE only — DRAW/SDV/AIR presses belong to Draws versus showdown value and Recognize air (curriculum residual LPT-751); fixed steps author suit-rotated `deal.variants` (LPT-384); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
 | Draws versus showdown value | explain SoftPulse cues DRAW → SHOWDOWN VALUE; checkpoint SoftPulse-off densify stem non-spoiling (no Draw tile / template cards) (LPT-805); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
 | Recognize air | explain SoftPulse cues AIR → FOLD EQUITY; unit `unit-03-02-flop-classes` (LPT-143 split) | — |
-| Clean versus dirty outs | Clean, Dirty, Price; densified frame asks (LPT-279); unguided SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-03-03-outs-price` (LPT-146 split) | — |
+| Clean versus dirty outs | Clean, Dirty on the felt; explain SoftPulse cue CLEAN → DIRTY only — PRICE press belongs to Pot odds versus equity (curriculum residual LPT-752); densified frame asks (LPT-279); unguided SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-03-03-outs-price` (LPT-146 split) | — |
 | Pot odds versus equity | explain SoftPulse cues PRICE → POT → EQUITY; unit `unit-03-03-outs-price` (LPT-146 split) | — |
 | Implied odds when deep | explain SoftPulse cues DEEP → IMPLIED ODDS; unit `unit-03-03-outs-price` (LPT-146 split) | — |
-| Value bet the flop | Value, C-bet, Check, Call, Fold, Raise; postflop TPTK/broadway remap fingerprint (LPT-311); unit `unit-03-04-flop-decisions` (LPT-151 split) | — |
+| Value bet the flop | Value on the felt; explain SoftPulse cue VALUE only — C-BET/CHECK/CALL/FOLD/RAISE presses belong to C-bet selectively and Raise, call, or fold with a plan (curriculum residual LPT-753); postflop TPTK/broadway remap fingerprint (LPT-311); unit `unit-03-04-flop-decisions` (LPT-151 split) | — |
 | C-bet selectively | explain SoftPulse cues PREFLOP RAISER → C-BET; unit `unit-03-04-flop-decisions` (LPT-151 split) | — |
 | Raise, call, or fold with a plan | explain SoftPulse cues RAISE → CALL → FOLD; unit `unit-03-04-flop-decisions` (LPT-151 split) | — |
-| Brick or changing turn | Brick, Change, Barrel, Delay; unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
+| Brick or changing turn | Brick, Change on the felt; explain SoftPulse cue BRICK → CHANGE only — BARREL/DELAY presses belong to Second barrel and Delayed aggression (curriculum residual LPT-754); unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
 | Second barrel | explain SoftPulse cues BRICK → BARREL; unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
 | Delayed aggression | explain SoftPulse cues CHECKED BACK → BET TURN; checkpoint SoftPulse-off densify stem non-spoiling (no Often give up / template cards) (LPT-807); unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
-| River value | Value, Bluff, Catch, Fold; densified frame ask (LPT-343); unit `unit-03-06-river-decisions` (LPT-157 split) | — |
+| River value | Value on the felt; explain SoftPulse cue VALUE only — BLUFF/CATCH/FOLD presses belong to Credible bluffs and Bluff-catch or fold (curriculum residual LPT-755); densified frame ask (LPT-343); unit `unit-03-06-river-decisions` (LPT-157 split) | — |
 | Credible bluffs | explain SoftPulse cues STORY → BLUFF; unit `unit-03-06-river-decisions` (LPT-157 split) | — |
 | Bluff-catch or fold | explain SoftPulse cues BLUFF-CATCH → FOLD; unit `unit-03-06-river-decisions` (LPT-157 split) | — |
-| Stronger hands multiway | Stronger, Fewer, Nuts; unit `unit-03-07-multiway` (LPT-160 split) | — |
+| Stronger hands multiway | Stronger on the felt; explain SoftPulse cue STRONGER only — FEWER/NUTS presses belong to Bluff less multiway and Nut potential and position (curriculum residual LPT-756); unit `unit-03-07-multiway` (LPT-160 split) | — |
 | Bluff less multiway | explain SoftPulse cues CROWD → FEWER BLUFFS; unit `unit-03-07-multiway` (LPT-160 split) | — |
 | Nut potential and position | explain SoftPulse cues NUTS → POSITION; unit `unit-03-07-multiway` (LPT-160 split) | — |
-| Weak top pair | Top pair, Prices, Passive, Crowds; unit `unit-03-08-leak-repair` (LPT-163 split) | — |
+| Weak top pair | Top pair on the felt; explain SoftPulse cue TOP PAIR only — PRICES/PASSIVE/CROWDS presses belong to Fold bad prices and Passive calls and crowd bluffs (curriculum residual LPT-757); unit `unit-03-08-leak-repair` (LPT-163 split) | — |
 | Fold bad prices | explain SoftPulse cues BAD PRICE → FOLD; unit `unit-03-08-leak-repair` (LPT-163 split) | — |
 | Passive calls and crowd bluffs | explain SoftPulse cues PASSIVE → CROWD; unit `unit-03-08-leak-repair` (LPT-163 split) | — |
 | Section 3 jump check | densified frame asks (LPT-390) | — |
