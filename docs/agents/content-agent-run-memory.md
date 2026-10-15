@@ -4867,3 +4867,17 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Meet-TAG working-model **LPT-708** / Adjust-TAG cite **LPT-710** / Observe-wide **LPT-714/715** / open catalog **LPT-829**.
 - act-06-07-01-*: interactive structural clean on tip except LPT-702 punish residual; SoftPulse explain DEFEND-only concept-aligned; SoftPulse explain successors content-driven; scaffolded sizing `fixed`+variants — do not reopen LPT-627; guided/unguided/checkpoint `deal.mode` `none` — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15di tip fe57b258 (Meet-TAG working-model Prefer LPT-708)
+
+- Tip-stable `fe57b258` (#2676). Catalog short-ladder **224** (other JSON **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32k description limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER Meet-TAG working-model residual re-check `lesson-06-11-02-01/02/03` / `act-06-11-02-*`:
+  - SoftPulse explain `act-06-11-02-explain` TIGHT→AGGRO→MODEL + `explainGrading` "Tight → Aggro → Model." **concept-aligned** under Introduce TAG / The TAG model (not a SoftPulse residual).
+  - Checkpoint SoftPulse `model` kind `none` densify PRESENT (prompt "TAG is?" / Working model vs Insult) still under Introduce TAG-only → residual **LPT-708** still To Do (needs-human; Relates LPT-291 — do not re-add needs-human on curriculum).
+  - Successors SoftPulse FOLDS MOST→PLANNED BARRELS / ENTRY WIDTH→DISCIPLINE content-driven (do not reopen LPT-669).
+  - Guided SoftPulse `tag` densify PRESENT; scaffolded SoftPulse `diff` one-per-press densify PRESENT; unguided SoftPulse `tag2` one-per-press densify PRESENT.
+- Curriculum **LPT-291** Done — do not clone.
+- Tip-commented LPT-708/829/291; leave open LPT-702/708/710/714/715/716/719/683/691 + LPT-351 + LPT-829; leave ui-agent alone.
+- Prefer next: NEVER Adjust-TAG cite **LPT-710** / Observe-wide **LPT-714/715** / open catalog **LPT-829**.
+- act-06-11-02-*: interactive structural clean on tip except LPT-708 working-model residual; SoftPulse explain successors content-driven; all interactive acts `deal.mode` `none` player-type tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
