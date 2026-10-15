@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "7e97344f7ad1d5b027f2627e83a0062199c5b8edf207fa07ee04eedb588251c8",
+  "contentChecksum": "c5c20d0ed1b697b1282fe832a31d52a78e9d2b63fa8ee100bd14e928990e8be5",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -16421,7 +16421,7 @@
               "title": "The Calling Station model",
               "summary": "Calling Station is a working model for sticky callers.",
               "objectives": [
-                "Introduce Calling Station"
+                "Introduce Calling Station as a working model"
               ],
               "prerequisites": [
                 "lesson-04-06-01-03-observation-vs-certainty"
@@ -16456,7 +16456,7 @@
                     }
                   ],
                   "objectives": [
-                    "Introduce Calling Station"
+                    "Introduce Calling Station as a working model"
                   ],
                   "playerTypeRefs": [
                     "calling_station"
@@ -16497,7 +16497,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Introduce Calling Station"
+                    "Introduce Calling Station as a working model"
                   ],
                   "prompt": "A label is…",
                   "choices": [
@@ -17684,7 +17684,7 @@
               "title": "The Nit model",
               "summary": "Nit is a working model for narrow, value-heavy seats.",
               "objectives": [
-                "Introduce Nit"
+                "Introduce Nit as a working model with sample limits"
               ],
               "prerequisites": [
                 "lesson-04-07-01-03-wait-for-samples"
@@ -17719,7 +17719,7 @@
                     }
                   ],
                   "objectives": [
-                    "Introduce Nit"
+                    "Introduce Nit as a working model with sample limits"
                   ],
                   "playerTypeRefs": [
                     "nit"
@@ -17760,7 +17760,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Introduce Nit"
+                    "Introduce Nit as a working model with sample limits"
                   ],
                   "prompt": "Nit is best treated as?",
                   "choices": [
@@ -18782,7 +18782,7 @@
               "title": "The Maniac model",
               "summary": "Maniac is a working model for extreme aggression.",
               "objectives": [
-                "Introduce Maniac"
+                "Introduce Maniac and unlock mixing all three types"
               ],
               "prerequisites": [
                 "lesson-04-08-01-03-no-ego-notes"
@@ -18817,7 +18817,7 @@
                     }
                   ],
                   "objectives": [
-                    "Introduce Maniac"
+                    "Introduce Maniac and unlock mixing all three types"
                   ],
                   "playerTypeRefs": [
                     "maniac"
@@ -18858,7 +18858,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Introduce Maniac"
+                    "Introduce Maniac and unlock mixing all three types"
                   ],
                   "prompt": "Which types are legal to mix now?",
                   "choices": [
@@ -19914,8 +19914,7 @@
               "title": "Same hand, different types",
               "summary": "Change the line only when the read justifies it.",
               "objectives": [
-                "Change lines by type with justification",
-                "Keep baseline when evidence is missing"
+                "Change lines by type with justification"
               ],
               "prerequisites": [
                 "lesson-04-09-01-03-retire-labels"
@@ -20289,7 +20288,7 @@
               "title": "Combine type, position, and stack",
               "summary": "Type, seat, and stack depth decide the line together.",
               "objectives": [
-                "Combine type × position × stack × board"
+                "Combine type × position × stack"
               ],
               "prerequisites": [
                 "lesson-04-10-01-01-same-hand-types"
@@ -20312,7 +20311,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "objectives": [
-                    "Combine type × position × stack × board"
+                    "Combine type × position × stack"
                   ],
                   "accessibilityText": "Type is one input. Position and stack depth change the best line too. Combine them before you act.",
                   "coachMedia": [
@@ -20363,7 +20362,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Combine type × position × stack × board"
+                    "Combine type × position × stack"
                   ],
                   "prompt": "Full ring. Type × position × stack decide the line.",
                   "choices": [
@@ -21639,7 +21638,7 @@
               "title": "Plan streets at high SPR",
               "summary": "When SPR is high, plan turn and river before committing.",
               "objectives": [
-                "Plan future streets when SPR is high"
+                "Plan high-SPR streets with position, implied odds, and folds"
               ],
               "prerequisites": [
                 "lesson-05-02-01-02-fold-light-deep"
@@ -21658,7 +21657,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "objectives": [
-                    "Plan future streets when SPR is high"
+                    "Plan high-SPR streets with position, implied odds, and folds"
                   ],
                   "accessibilityText": "High SPR leaves three streets of betting. Plan the turn and river before you put the stack in.",
                   "coachMedia": [
@@ -21709,7 +21708,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Plan future streets when SPR is high"
+                    "Plan high-SPR streets with position, implied odds, and folds"
                   ],
                   "prompt": "SPR ~12 on the flop. Your first job?",
                   "choices": [
@@ -21756,7 +21755,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Plan future streets when SPR is high"
+                    "Plan high-SPR streets with position, implied odds, and folds"
                   ],
                   "prompt": "150–300bb cash play rewards?",
                   "choices": [
@@ -22320,7 +22319,7 @@
               "title": "Thin value versus sticky callers",
               "summary": "Bet medium hands for value when callers stick.",
               "objectives": [
-                "Choose thin value versus sticky callers"
+                "Choose thin value only when the read justifies it"
               ],
               "prerequisites": [
                 "lesson-05-03-01-03-skip-dominated-draws"
@@ -22355,7 +22354,7 @@
                     }
                   ],
                   "objectives": [
-                    "Choose thin value versus sticky callers"
+                    "Choose thin value only when the read justifies it"
                   ],
                   "teachSpec": {
                     "deal": {
@@ -22383,7 +22382,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Choose thin value versus sticky callers"
+                    "Choose thin value only when the read justifies it"
                   ],
                   "prompt": "River second pair. Calling Station checked twice. Action?",
                   "choices": [
@@ -22486,7 +22485,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Choose thin value versus sticky callers"
+                    "Choose thin value only when the read justifies it"
                   ],
                   "prompt": "Same hand, different types — what must change?",
                   "choices": [
@@ -24749,7 +24748,7 @@
               "title": "End sessions early",
               "summary": "Quit before fatigue or a wild table turns into leaks.",
               "objectives": [
-                "End sessions before leaks spiral"
+                "End sessions early because discipline is edge"
               ],
               "prerequisites": [
                 "lesson-05-09-01-02-bankroll-stakes"
@@ -24768,7 +24767,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "objectives": [
-                    "End sessions before leaks spiral"
+                    "End sessions early because discipline is edge"
                   ],
                   "accessibilityText": "Tired at a wild table is a leak waiting to happen. Cash out before it spirals.",
                   "coachMedia": [
@@ -24819,7 +24818,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "End sessions before leaks spiral"
+                    "End sessions early because discipline is edge"
                   ],
                   "prompt": "Tired, winning small, table getting wild. Best?",
                   "choices": [
@@ -24866,7 +24865,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "End sessions before leaks spiral"
+                    "End sessions early because discipline is edge"
                   ],
                   "prompt": "Session discipline is part of?",
                   "choices": [
@@ -25790,48 +25789,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-06-02-01-checkpoint",
-                  "order": 3,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Position and initiative.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Prefer IP for marginal equity"
-                  ],
-                  "prompt": "Equity realization rises with?",
-                  "choices": [
-                    {
-                      "id": "pos",
-                      "label": "Position + initiative",
-                      "accessibilityText": "Position + initiative"
-                    },
-                    {
-                      "id": "hope",
-                      "label": "Hope alone",
-                      "accessibilityText": "Hope alone"
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "pos",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             },
@@ -26053,6 +26010,48 @@
                         "press": 1,
                         "target": "realize",
                         "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "act-06-02-01-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Position and initiative.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Use aggression to realize when appropriate"
+                  ],
+                  "prompt": "Equity realization rises with?",
+                  "choices": [
+                    {
+                      "id": "pos",
+                      "label": "Position + initiative",
+                      "accessibilityText": "Position + initiative"
+                    },
+                    {
+                      "id": "hope",
+                      "label": "Hope alone",
+                      "accessibilityText": "Hope alone"
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "pos",
+                        "kind": "none"
                       }
                     ]
                   }
@@ -27731,7 +27730,7 @@
               "title": "Continue with stronger catchers",
               "summary": "Defend with your best bluff-catchers so over-bluffing fails.",
               "objectives": [
-                "Continue with stronger catchers"
+                "Continue with stronger catchers to punish over-bluffs"
               ],
               "prerequisites": [
                 "lesson-06-06-01-03-no-fake-ev"
@@ -27762,7 +27761,7 @@
                     }
                   ],
                   "objectives": [
-                    "Continue with stronger catchers"
+                    "Continue with stronger catchers to punish over-bluffs"
                   ],
                   "teachSpec": {
                     "deal": {
@@ -27790,7 +27789,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Continue with stronger catchers"
+                    "Continue with stronger catchers to punish over-bluffs"
                   ],
                   "prompt": "Facing a river bet. Best continue?",
                   "choices": [
@@ -27831,7 +27830,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Continue with stronger catchers"
+                    "Continue with stronger catchers to punish over-bluffs"
                   ],
                   "prompt": "Minimum defense goal?",
                   "choices": [
@@ -29772,7 +29771,7 @@
               "title": "The TAG model",
               "summary": "TAG is a working model for tight entry with disciplined aggression.",
               "objectives": [
-                "Introduce TAG"
+                "Introduce TAG as a working model"
               ],
               "prerequisites": [
                 "lesson-06-11-01-03-wait-for-samples"
@@ -29807,7 +29806,7 @@
                     }
                   ],
                   "objectives": [
-                    "Introduce TAG"
+                    "Introduce TAG as a working model"
                   ],
                   "playerTypeRefs": [
                     "tag"
@@ -29848,7 +29847,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Introduce TAG"
+                    "Introduce TAG as a working model"
                   ],
                   "prompt": "TAG is?",
                   "choices": [
@@ -30150,7 +30149,7 @@
               "title": "Respect TAG aggression",
               "summary": "Give TAG raises credit and steal tighter than versus a Nit.",
               "objectives": [
-                "Respect TAG aggression"
+                "Respect TAG aggression and cite the tendency"
               ],
               "prerequisites": [
                 "lesson-06-11-02-03-tag-vs-maniac"
@@ -30183,7 +30182,7 @@
                     }
                   ],
                   "objectives": [
-                    "Respect TAG aggression"
+                    "Respect TAG aggression and cite the tendency"
                   ],
                   "playerTypeRefs": [
                     "tag"
@@ -30219,7 +30218,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Respect TAG aggression"
+                    "Respect TAG aggression and cite the tendency"
                   ],
                   "prompt": "Steal BTN vs TAG BB with K9o. Action?",
                   "choices": [
@@ -30300,7 +30299,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Respect TAG aggression"
+                    "Respect TAG aggression and cite the tendency"
                   ],
                   "prompt": "Versus TAG, cite which tendency?",
                   "choices": [
