@@ -4502,6 +4502,19 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Compose SoftPulse residual **LPT-795** (+ cite **LPT-796**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-02-01-*: interactive structural clean on tip except LPT-794 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` plan tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15cn tip 375c9275 (#2638 weigh-SPR Prefer → Estimate SoftPulse LPT-681 Prefer)
+
+- Tip-stable `375c9275` (#2638 weigh-SPR SoftPulse Prefer LPT-677 on tip after #2637). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER Estimate SoftPulse residual re-check `lesson-05-03-01-01/02/03` / `act-05-03-01-*`:
+  - first-child SoftPulse IMPLIED→REVERSE→SECOND + `explainGrading` "Implied → Reverse → Second." + Dart `ImpliedOddsDemo.points` IMPLIED/REVERSE/SECOND (captions They pay later / You pay later / Trap improves) / `CoachDialogueVisualKind.impliedOdds` / layout "Tap Implied, then Reverse, then Second." + coachMedia "Implied odds: future money. Reverse implied: future losses when second-best." still pre-split under estimate-only (`lesson-05-03-01-01-estimate-implied` objective "Estimate implied odds from depth and tendencies") → residual **LPT-681** still To Do (needs-human; Relates LPT-230 — do not re-add needs-human on curriculum).
+  - successors SoftPulse REVERSE→DOMINATED→FOLD / NON-NUT→MULTIWAY→SKIP content-driven (do not reopen LPT-669); guided SoftPulse `call-io` SoftPulse map PRESENT (`Jh`/`9d`·`8s`/`7c`/`2d` +2 suit variants; poker_action_sizing densify N/A); scaffolded SoftPulse `rio` one-per-press SoftPulse map PRESENT; unguided SoftPulse `nonut` one-per-press SoftPulse map PRESENT; checkpoint SoftPulse `depth-pay` kind `none` densify PRESENT under Estimate — no companion residual.
+- Curriculum **LPT-230** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-681/230/829/682/677/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Thin SoftPulse residual **LPT-682** (+ cite **LPT-683**) re-check / Low residuals LPT-676…802 / open catalog LPT-829.
+- act-05-03-01-*: interactive structural clean on tip except LPT-681 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/unguided SoftPulse maps PRESENT — do not reopen LPT-625; checkpoint densify PRESENT — do not reopen LPT-628.
+
 ## Fold 2026-10-15cm tip 21638b19 (#2637 Capstone Prefer → weigh-SPR SoftPulse LPT-677 Prefer)
 
 - Tip-stable `21638b19` (#2637 SoftPulse-quiet Connectors densify after #2636 Capstone SoftPulse Prefer LPT-676). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
