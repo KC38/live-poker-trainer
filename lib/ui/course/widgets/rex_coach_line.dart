@@ -455,8 +455,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Low unconnected offsuit holes — tap the matching family.',
     'act-02-05-01-guided-convert' =>
       'Blinds 1/2. You have 200 chips. How many big blinds — pick 100bb.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name the 60bb tile (LPT-849;
+    // SoftPulse LPT-653; same class as LPT-845 / LPT-844 / LPT-843).
     'act-02-05-01-scaffolded-eff' =>
-      'You have 150bb. Villain has 60bb. Effective stack — pick 60bb.',
+      'You have 150bb. Villain has 60bb — tap the effective stack.',
     'act-02-05-01-unguided-depth' =>
       'Which depth plays closest to a short-stack shove game — pick 50bb.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never

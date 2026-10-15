@@ -81,8 +81,9 @@ const _lines = <String, String>{
       'Low unconnected offsuit holes — tap the matching family.',
   'act-02-05-01-guided-convert':
       'Blinds 1/2. You have 200 chips. How many big blinds — pick 100bb.',
+  // LPT-849: SoftPulse-quiet densify — no 60bb tile spoil.
   'act-02-05-01-scaffolded-eff':
-      'You have 150bb. Villain has 60bb. Effective stack — pick 60bb.',
+      'You have 150bb. Villain has 60bb — tap the effective stack.',
   'act-02-05-01-unguided-depth':
       'Which depth plays closest to a short-stack shove game — pick 50bb.',
   // LPT-785: SoftPulse-off densify — no correct-tile spoil.
