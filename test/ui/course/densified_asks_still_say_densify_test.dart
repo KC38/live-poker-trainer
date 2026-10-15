@@ -17,8 +17,9 @@ const _lines = <String, String>{
       'Tap the cards only you can see — pick your private holes.',
   'act-01-01-01-unguided-mix':
       'Tap the community cards — pick the shared board in the middle.',
+  // LPT-869: SoftPulse-off densify — no "the two at your seat" spoil.
   'act-01-01-01-checkpoint-table':
-      'Tap the cards that are only yours — pick the two at your seat.',
+      'Private cards on this table — tap the ones only you can see.',
   // LPT-814: SoftPulse-quiet densify — no suit-order spoil.
   'act-01-01-02-guided-suits': 'Tap one community card of each suit.',
   // LPT-815 / LPT-816: seat-deal densify — no Suited tile spoil.
