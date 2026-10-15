@@ -14353,6 +14353,12 @@ String authoredSoftPulseExplainCaption(String target) {
     // SHORTER matches BbStackDepthDemo; EFFECTIVE glosses the playable stack.
     'SHORTER': 'Min of the two',
     'EFFECTIVE': 'Playable stack',
+    // Call in position SoftPulse explain (PLAYABLE → IN POSITION → CALL;
+    // LPT-900). CALL already Match the bet; gloss the playable-hand and
+    // act-after-raiser beats so the first two SoftPulse tiles are not
+    // label-only.
+    'PLAYABLE': 'Can call open',
+    'IN POSITION': 'Act after raiser',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.

@@ -850,6 +850,53 @@ void main() {
   );
 
   testWidgets(
+    'Call in position SoftPulse explain captions PLAYABLE + IN POSITION (LPT-900)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-02-04-01-02-explain-call',
+        targets: const ['PLAYABLE', 'IN POSITION', 'CALL'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('PLAYABLE'), findsWidgets);
+      expect(find.text('IN POSITION'), findsWidgets);
+      expect(find.text('CALL'), findsWidgets);
+      expect(find.text('Can call open'), findsOneWidget);
+      expect(find.text('Act after raiser'), findsOneWidget);
+      expect(find.text('Match the bet'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
     'toy-hand SoftPulse explain chips show teaching captions (LPT-890)',
     (tester) async {
       final binding = TestWidgetsFlutterBinding.ensureInitialized();
