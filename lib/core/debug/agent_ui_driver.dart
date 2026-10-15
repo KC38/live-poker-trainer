@@ -176,7 +176,7 @@ final class AgentUiDriver {
 
         binding.rootElement?.visitChildren(visitKey);
         final hit = keyed;
-        if (hit != null) {
+        if (hit != null && !agentElementIsOffstage(hit)) {
           final ro = hit.renderObject;
           if (ro is RenderBox && ro.hasSize && ro.attached) {
             await _pointerTap(
@@ -196,6 +196,7 @@ final class AgentUiDriver {
     }) {
       final lower = text.toLowerCase().trim();
       if (!agentTapLabelMatches(needleLower, lower)) return;
+      if (agentElementIsOffstage(element)) return;
       final ro = element.renderObject;
       if (ro is! RenderBox || !ro.hasSize || !ro.attached) return;
 
@@ -326,6 +327,38 @@ final class AgentUiDriver {
     // Allow the framework to settle selection / auto-submit.
     await Future<void>.delayed(const Duration(milliseconds: 50));
   }
+}
+
+/// Whether [element] sits under an inactive [IndexedStack] tab / [Offstage].
+///
+/// `AppShell`'s [IndexedStack] keeps non-selected tabs in the element tree.
+/// Recent Flutter wraps them in private `_VisibilityScope(isVisible: false)`
+/// (not [Offstage]); older trees used [Offstage]. Agent tree/taps walk
+/// elements (not the semantics tree) and must skip those so Live Training /
+/// Profile walks do not see or invoke buried Home controls (LPT-876).
+bool agentElementIsOffstage(Element element) {
+  var hidden = false;
+  element.visitAncestorElements((ancestor) {
+    final widget = ancestor.widget;
+    if (widget is Offstage && widget.offstage) {
+      hidden = true;
+      return false;
+    }
+    if (widget is ExcludeSemantics && widget.excluding) {
+      hidden = true;
+      return false;
+    }
+    // IndexedStack → `_VisibilityScope` (private InheritedWidget).
+    if (widget.runtimeType.toString() == '_VisibilityScope') {
+      final Object? visible = (widget as dynamic).isVisible;
+      if (visible is bool && !visible) {
+        hidden = true;
+        return false;
+      }
+    }
+    return true;
+  });
+  return hidden;
 }
 
 /// The route [element] belongs to, without registering a dependency.

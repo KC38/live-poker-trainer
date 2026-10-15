@@ -78,6 +78,7 @@ Map<String, Object?> describeAgentScreen() {
   void add(String raw, Element element, {required bool semantics}) {
     final label = raw.replaceAll(RegExp(r'\s+'), ' ').trim();
     if (label.isEmpty) return;
+    if (agentElementIsOffstage(element)) return;
     final route = agentRouteOf(element);
     if (route != null && !route.isCurrent) return;
     final ro = element.renderObject;
@@ -119,7 +120,10 @@ Map<String, Object?> describeAgentScreen() {
   void visit(Element element) {
     final widget = element.widget;
     final route = agentRouteOf(element);
+    // Prefer the painted tab screen — IndexedStack keeps HomeScreen in the
+    // tree while Live Training / Profile is selected (LPT-876).
     if (screenName == null &&
+        !agentElementIsOffstage(element) &&
         (route?.isCurrent ?? false) &&
         widget.runtimeType.toString().endsWith('Screen')) {
       screenName = widget.runtimeType.toString();

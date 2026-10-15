@@ -145,4 +145,61 @@ void main() {
     expect(labels, contains('On top'));
     expect(labels, isNot(contains('Buried home')));
   });
+
+  testWidgets(
+    'IndexedStack Offstage tabs are hidden from tree (LPT-876)',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: IndexedStack(
+              index: 1,
+              children: const [
+                _NamedHomeScreen(label: 'Your two cards'),
+                _NamedLiveTrainingScreen(label: 'Create an account before Live Training.'),
+                _NamedProfileScreen(label: 'GUEST'),
+              ],
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      final tree = describeAgentScreen();
+      final labels = [
+        for (final e in (tree['entries']! as List)) e['label'],
+      ];
+      expect(tree['screen'], '_NamedLiveTrainingScreen');
+      expect(labels, contains('Create an account before Live Training.'));
+      expect(labels, isNot(contains('Your two cards')));
+      expect(labels, isNot(contains('GUEST')));
+    },
+  );
+}
+
+class _NamedHomeScreen extends StatelessWidget {
+  const _NamedHomeScreen({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => Center(child: Text(label));
+}
+
+class _NamedLiveTrainingScreen extends StatelessWidget {
+  const _NamedLiveTrainingScreen({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => Center(child: Text(label));
+}
+
+class _NamedProfileScreen extends StatelessWidget {
+  const _NamedProfileScreen({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => Center(child: Text(label));
 }

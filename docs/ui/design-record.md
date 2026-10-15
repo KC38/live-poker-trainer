@@ -119,7 +119,7 @@ preconditions are in [agent-paths.md](../agent-paths.md).
 | Home path | `lib/ui/screens/home_screen.dart`, `lib/ui/home/course_path_view.dart` | Home tab |
 | Status strip | `lib/ui/home/course_status_bar.dart` | Top of Home |
 | Section picker | `lib/ui/home/course_section_picker.dart` | Tap the unit banner |
-| Bottom navigation | `ShellBottomNav` in `lib/ui/widgets/shell_bottom_nav.dart` | Every tab |
+| Bottom navigation | `ShellBottomNav` in `lib/ui/widgets/shell_bottom_nav.dart`; `AppShell` IndexedStack inactive tabs stay hidden to agent `tree` / taps (LPT-876) | Every tab |
 | Live Training hub and lock | `lib/ui/screens/live_training_screen.dart` | Live Training tab |
 | Live table | `lib/ui/screens/poker_table_screen.dart` | Unlocked hub → start |
 | Profile | `lib/ui/screens/profile_screen.dart` | Profile tab |
@@ -1940,6 +1940,13 @@ Warm-up hub copy is `liveTrainingWarmUpHubMessage`, naming **Section 4
 jump check** via `kLiveUnrestrictedUnlockLessonTitle`
 (`lesson-04-10-02-section-four-jump-test`).
 `liveTrainingWarmUpUnrestrictedSnack` uses the same title.
+
+`AppShell` (`lib/ui/screens/app_shell.dart`) keeps Home / Live Training /
+Profile in an `IndexedStack`. Inactive tabs are not painted or hit-tested;
+agent `tree` / taps also skip those inactive-tab ancestors (`_VisibilityScope`
+/ `Offstage` / `ExcludeSemantics`) so a Live Training walk does not list or
+invoke buried Home path controls, and `screen` names the visible tab
+(LPT-876).
 
 ## Asset inventory
 
