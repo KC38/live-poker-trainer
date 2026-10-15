@@ -4501,3 +4501,18 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-794/314/829/795/790/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Compose SoftPulse residual **LPT-795** (+ cite **LPT-796**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-02-01-*: interactive structural clean on tip except LPT-794 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` plan tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-15cg tip ff346c93 (#2628 Map Prefer → Compose SoftPulse LPT-795 Prefer)
+
+- Tip-stable `ff346c93` (#2628 Map SoftPulse Prefer LPT-794 on tip after #2627). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER Compose SoftPulse residual re-check `lesson-07-03-01-01/02/03` / `act-07-03-01-*`:
+  - first-child SoftPulse VALUE→BLUFF→HOLD + `explainGrading` "Value → Bluff → Hold." + Dart `RiverCompositionDemo.points` VALUE/BLUFF/HOLD (captions Needs calls / Needs folds / Check trash) / `LessonRiverCompositionExplainTable` / layout "Tap Value, then Bluff, then Hold." + coachMedia "River: value if they call worse; bluff if they fold better." still pre-split under Choose-river-value-candidates-only (`lesson-07-03-01-01-river-value` objective "Choose river value candidates") → residual **LPT-795** still To Do (needs-human; Relates LPT-317 — do not re-add needs-human on curriculum).
+  - companion checkpoint SoftPulse `rule` kind `none` densify PRESENT (prompt "River composition rule?"; helper "River rule — pick the composition check.") under value-only → **LPT-796** still To Do.
+  - successors SoftPulse BLOCKER→FEWER CALLS / NO STORY→CHECK content-driven (do not reopen LPT-669); guided SoftPulse `val` PRESENT (`As`/`Ad`·`Ac`/`9s`/`4h`/`2d`/`7c` +2 suit variants; poker_action_sizing densify N/A); scaffolded SoftPulse `block` one-per-press densify PRESENT; unguided SoftPulse `check` one-per-press densify PRESENT.
+- Curriculum **LPT-317** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-795/796/317/829/794/790/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Pot SoftPulse residual **LPT-798** (+ cite **LPT-799**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-07-03-01-*: interactive structural clean on tip except LPT-795 SoftPulse + LPT-796 rule residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided sizing `fixed`+variants — do not reopen LPT-627; scaffolded/unguided/checkpoint `deal.mode` `none` — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
