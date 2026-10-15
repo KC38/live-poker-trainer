@@ -84,11 +84,14 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Section 3 jump select_identify densified asks (LPT-390) — same path.
     // jump-class stays felt-first (no hard-coded template ranks/suits).
     // SoftPulse off (kind: none); stems must not spoil the correct tile
-    // (LPT-674; SoftPulse LPT-653; same class as LPT-673).
+    // (LPT-674 / LPT-878; SoftPulse LPT-653; same class as LPT-673).
     'act-03-08-02-jump-table' =>
       'Pot 16, shorter 40bb — tap what you track first.',
+    // SoftPulse-off densify — situation + pick/tap verb only; never name
+    // Draw / straight and flush in the idle bubble (LPT-878; SoftPulse
+    // LPT-653; same class as LPT-674 / LPT-877).
     'act-03-08-02-jump-class' =>
-      'Straight and flush both need runout — pick the hand class.',
+      'Your holes on this flop — pick the hand class.',
     'act-03-08-02-jump-leak' =>
       'Gutshot vs a 2x pot bet — tap the matching price plan.',
     // Think in ranges densified asks (LPT-403) — same path as LPT-390.

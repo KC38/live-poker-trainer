@@ -43,9 +43,11 @@ const _lines = <String, String>{
   // LPT-675: Section 2 jump densify — no Cutoff spoil.
   'act-02-07-02-jump-pos':
       'Seat right before the button — pick it on the map.',
-  // LPT-674: Section 3 jump densify — no correct tile spoil.
+  // LPT-674 / LPT-878: Section 3 jump densify — no correct tile spoil.
   'act-03-08-02-jump-table':
       'Pot 16, shorter 40bb — tap what you track first.',
+  'act-03-08-02-jump-class':
+      'Your holes on this flop — pick the hand class.',
   'act-03-08-02-jump-leak':
       'Gutshot vs a 2x pot bet — tap the matching price plan.',
   // LPT-673: Section 4 jump densify — no correct tile/value/exploit spoil.
@@ -95,12 +97,18 @@ const _sectionTwoJumpSpoilers = <String, List<String>>{
   'act-02-07-02-jump-pos': ['cutoff', 'cut-off', 'pick co', 'tap co'],
 };
 
-/// Phrases that would spoil Section 3 jump densify answers (LPT-674).
+/// Phrases that would spoil Section 3 jump densify answers (LPT-674 / LPT-878).
 const _sectionThreeJumpSpoilers = <String, List<String>>{
   'act-03-08-02-jump-table': [
     'pot and effective',
     'pot · effective',
     'price frame',
+  ],
+  'act-03-08-02-jump-class': [
+    'straight and flush',
+    'draw —',
+    'tap draw',
+    'pick draw',
   ],
   'act-03-08-02-jump-leak': ['fold', 'price is wrong'],
 };
@@ -229,10 +237,14 @@ void main() {
     }
   });
 
-  test('Section 3 jump densify stems do not spoil correct tiles (LPT-674)', () {
+  test(
+    'Section 3 jump densify stems do not spoil correct tiles (LPT-674 / LPT-878)',
+    () {
     const expected = <String, String>{
       'act-03-08-02-jump-table':
           'Pot 16, shorter 40bb — tap what you track first.',
+      'act-03-08-02-jump-class':
+          'Your holes on this flop — pick the hand class.',
       'act-03-08-02-jump-leak':
           'Gutshot vs a 2x pot bet — tap the matching price plan.',
     };
