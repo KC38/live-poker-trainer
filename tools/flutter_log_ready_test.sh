@@ -49,4 +49,23 @@ Running Xcode build...
 EOF
 python3 "$READY" "$tmp/stuck.log" && fail "stuck Launching after hot-restart must not be ready"
 
+cat >"$tmp/xcode-stuck.log" <<'EOF'
+Launching lib/main.dart on iPhone 13 mini in debug mode...
+Running Xcode build...
+Xcode build done.                                           24.9s
+EOF
+python3 "$READY" --stuck-post-xcode "$tmp/xcode-stuck.log" \
+  || fail "Xcode done without VM must report stuck-post-xcode"
+python3 "$READY" "$tmp/xcode-stuck.log" && fail "Xcode-stuck log must not be ready"
+
+cat >"$tmp/xcode-ok.log" <<'EOF'
+Launching lib/main.dart on iPhone 13 mini in debug mode...
+Running Xcode build...
+Xcode build done.                                           24.9s
+A Dart VM Service is available at: http://127.0.0.1:61234/abc_Def-9=/
+EOF
+python3 "$READY" --stuck-post-xcode "$tmp/xcode-ok.log" \
+  && fail "Xcode done with VM must not report stuck"
+python3 "$READY" "$tmp/xcode-ok.log" || fail "Xcode+VM log should be ready"
+
 echo "flutter_log_ready ok"

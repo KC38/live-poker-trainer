@@ -91,15 +91,30 @@ flutter_alive() {
   [[ -z "$FLUTTER_PID" ]] || kill -0 "$FLUTTER_PID" 2>/dev/null
 }
 
+# After Xcode build done with no Dart VM, fail early (default 90s) instead of
+# burning the full --timeout (ui-agent SIM_NOT_READY class, 2026-10-16).
+XCODE_STUCK_SECS="${UI_AGENT_XCODE_STUCK_SECS:-90}"
+
 # wait_until <seconds> <check-fn>; 0 ready, 1 timeout, 2 flutter exited.
 wait_until() {
-  local seconds="$1" check="$2" deadline
+  local seconds="$1" check="$2" deadline xcode_stuck_since=0
   deadline=$(( $(date +%s) + seconds ))
   while (( $(date +%s) < deadline )); do
     if "$check"; then return 0; fi
     if ! flutter_alive; then
       "$check" && return 0
       return 2
+    fi
+    if python3 "$READY_PY" --stuck-post-xcode "$LOG" >/dev/null 2>&1; then
+      now=$(date +%s)
+      if (( xcode_stuck_since == 0 )); then
+        xcode_stuck_since=$now
+      elif (( now - xcode_stuck_since >= XCODE_STUCK_SECS )); then
+        echo "stuck: Xcode build done but no Dart VM after ${XCODE_STUCK_SECS}s (log $LOG)" >&2
+        return 1
+      fi
+    else
+      xcode_stuck_since=0
     fi
     heartbeat
     sleep 2
