@@ -73,8 +73,9 @@ const _lines = <String, String>{
   // LPT-841: SoftPulse-quiet densify — no Broadway spoil.
   'act-02-02-01-scaffolded-broadway':
       'Both cards ten or higher — tap the matching family.',
+  // LPT-842: SoftPulse-quiet densify — no Suited connector spoil.
   'act-02-02-01-unguided-sc':
-      'Tap the family for your holes — pick Suited connector.',
+      'Same-suit cards next to each other in rank — tap the matching family.',
   // LPT-784: SoftPulse-off densify — no correct-tile spoil.
   'act-02-02-01-checkpoint-trash':
       'Low unconnected offsuit holes — tap the matching family.',

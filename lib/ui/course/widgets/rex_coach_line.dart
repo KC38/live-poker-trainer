@@ -443,8 +443,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // LPT-653; same class as LPT-839 / LPT-838 / LPT-833).
     'act-02-02-01-scaffolded-broadway' =>
       'Both cards ten or higher — tap the matching family.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Suited connector (LPT-842;
+    // SoftPulse LPT-653; same class as LPT-841 / LPT-839 / LPT-838).
     'act-02-02-01-unguided-sc' =>
-      'Tap the family for your holes — pick Suited connector.',
+      'Same-suit cards next to each other in rank — tap the matching family.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Offsuit trash in the idle bubble (LPT-784; SoftPulse LPT-653;
     // same class as LPT-783 / LPT-782 / LPT-672).
