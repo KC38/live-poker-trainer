@@ -14401,6 +14401,19 @@ String authoredSoftPulseExplainCaption(String target) {
     // FOLD already Give up; BAD PRICE glosses poor pot odds — never leave
     // the first SoftPulse tile label-only.
     'BAD PRICE': 'Poor pot odds',
+    // Passive calls SoftPulse explain (PASSIVE → CROWD; LPT-910).
+    // Gloss matches CommonLeaksDemo PASSIVE / CROWDS — never leave
+    // AuthoredCue tiles label-only.
+    'PASSIVE': 'Never raise',
+    'CROWD': 'Spew multiway',
+    // Bluff less SoftPulse explain (CROWD → FEWER BLUFFS; LPT-911).
+    // CROWD already Spew multiway; FEWER BLUFFS matches MultiwayPlanDemo
+    // FEWER Cut air — never leave the second SoftPulse tile label-only.
+    'FEWER BLUFFS': 'Cut air',
+    // Action moves ranges SoftPulse explain (RAISE → NARROWER → CALL;
+    // LPT-912). RAISE/CALL already captioned; NARROWER glosses the
+    // range-tightens beat — never leave the middle SoftPulse tile label-only.
+    'NARROWER': 'Fewer hands',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
