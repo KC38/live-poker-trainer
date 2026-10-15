@@ -1744,7 +1744,8 @@ stack — LPT-899, PLAYABLE → Can call open / IN POSITION → Act after
 raiser — LPT-900, 3-BET → Re-raise open — LPT-901, 50BB → Short /
 simple / 100BB → Standard / 200BB → Deep / room — LPT-902, OPEN →
 Someone raised / PLAN → Fold, call, or 3-bet — LPT-903, DEEP → Wider
-trees / IMPLIED ODDS → They pay later — LPT-904). Play a full
+trees / IMPLIED ODDS → They pay later — LPT-904, PREFLOP RAISER → You
+opened / C-BET → Continue story — LPT-905). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2097,7 +2098,7 @@ felt.
 | Pot odds versus equity | explain SoftPulse cues PRICE → POT → EQUITY with teaching captions (Pot odds / What it pays / Win chance — never an empty gloss; LPT-887); unit `unit-03-03-outs-price` (LPT-146 split); scaffolded SoftPulse-quiet densify stem non-spoiling (no equals-the-bet → Call 10) (LPT-882); unguided SoftPulse-quiet densify stem non-spoiling (no Call / Fold / Raise tile verbs) (LPT-881) | — |
 | Implied odds when deep | explain SoftPulse cues DEEP → IMPLIED ODDS with teaching captions (Wider trees / They pay later — never empty glosses; LPT-904); unit `unit-03-03-outs-price` (LPT-146 split) | — |
 | Value bet the flop | Value on the felt; explain SoftPulse cue VALUE only — C-BET/CHECK/CALL/FOLD/RAISE presses belong to C-bet selectively and Raise, call, or fold with a plan (curriculum residual LPT-753); postflop TPTK/broadway remap fingerprint (LPT-311); unit `unit-03-04-flop-decisions` (LPT-151 split) | — |
-| C-bet selectively | explain SoftPulse cues PREFLOP RAISER → C-BET; unit `unit-03-04-flop-decisions` (LPT-151 split) | — |
+| C-bet selectively | explain SoftPulse cues PREFLOP RAISER → C-BET with teaching captions (You opened / Continue story — never empty glosses; LPT-905); unit `unit-03-04-flop-decisions` (LPT-151 split) | — |
 | Raise, call, or fold with a plan | explain SoftPulse cues RAISE → CALL → FOLD; unit `unit-03-04-flop-decisions` (LPT-151 split) | — |
 | Brick or changing turn | Brick, Change on the felt; explain SoftPulse cue BRICK → CHANGE only — BARREL/DELAY presses belong to Second barrel and Delayed aggression (curriculum residual LPT-754); unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
 | Second barrel | explain SoftPulse cues BRICK → BARREL with teaching captions (Blank runout / Fire again — never an empty gloss; LPT-885); unit `unit-03-05-turn-decisions` (LPT-154 split) | — |

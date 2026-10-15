@@ -14378,6 +14378,11 @@ String authoredSoftPulseExplainCaption(String target) {
     // ImpliedOddsDemo They pay later — never leave AuthoredCue tiles label-only.
     'DEEP': 'Wider trees',
     'IMPLIED ODDS': 'They pay later',
+    // C-bet selectively SoftPulse explain (PREFLOP RAISER → C-BET; LPT-905).
+    // PREFLOP RAISER glosses the open; C-BET matches FlopLinesDemo Continue
+    // story — never leave AuthoredCue tiles label-only.
+    'PREFLOP RAISER': 'You opened',
+    'C-BET': 'Continue story',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
