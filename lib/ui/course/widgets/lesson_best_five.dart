@@ -707,14 +707,10 @@ class _LessonBestFivePickerTableState extends State<LessonBestFivePickerTable> {
         _selected.add(code);
       }
     });
-    if (wasNext) {
-      consumeLessonSequentialSoftPulse(context);
-    }
-    reportLessonSequentialPressProgress(
-      context,
-      remainingPressCount:
-          _guideOrder.where((c) => !_selected.contains(c)).length,
-    );
+    // Commit draft before SoftPulse consume. consumeSequentialSoftPulse
+    // notifies listeners; `_syncFromController` clears local cyan when
+    // orderedIds is still empty — SoftPulse-quiet Hint gold taps then left
+    // 0/5 selected (LPT-870).
     final mapped = mapBestFiveSelectionToChoiceId(
       selected: _selected,
       spot: widget.spot,
@@ -726,6 +722,14 @@ class _LessonBestFivePickerTableState extends State<LessonBestFivePickerTable> {
       // Keep Undo live for partial / invalid fives (LPT-62).
       widget.controller.setOrderedIds(_selected.toList());
     }
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount:
+          _guideOrder.where((c) => !_selected.contains(c)).length,
+    );
   }
 
   void _tapHero(int index) {
