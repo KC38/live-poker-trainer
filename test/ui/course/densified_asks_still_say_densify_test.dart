@@ -61,7 +61,9 @@ const _lines = <String, String>{
   // LPT-783: SoftPulse-off densify — no correct-tile spoil.
   'act-02-01-01-checkpoint-edge':
       'Same hand early versus button — tap the matching edge.',
-  'act-02-01-02-unguided-wait': 'Action is on UTG. You are on the button. What do you do — pick Wait — do not act yet.',
+  // LPT-838: SoftPulse-quiet densify — no Wait spoil.
+  'act-02-01-02-unguided-wait':
+      'Action is on UTG. You are on the button. Tap what you should do.',
   // LPT-803: SoftPulse-off densify — no correct-tile spoil.
   'act-02-01-02-checkpoint-full':
       'Six-max flop, everyone in — tap who acts last.',

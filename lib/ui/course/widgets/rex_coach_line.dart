@@ -423,8 +423,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // same class as LPT-782 / LPT-780 / LPT-672).
     'act-02-01-01-checkpoint-edge' =>
       'Same hand early versus button — tap the matching edge.',
+    // SoftPulse-quiet until Hint — situation + tap verb only; never name
+    // Wait / do not act yet in the idle bubble (LPT-838; SoftPulse LPT-653;
+    // same class as LPT-837 / LPT-833 / LPT-834).
     'act-02-01-02-unguided-wait' =>
-      'Action is on UTG. You are on the button. What do you do — pick Wait — do not act yet.',
+      'Action is on UTG. You are on the button. Tap what you should do.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name BTN in the idle bubble (LPT-803; SoftPulse LPT-653; same class
     // as LPT-788 / LPT-783 / LPT-672).

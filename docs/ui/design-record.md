@@ -1905,7 +1905,7 @@ felt.
 | Later seats play better | explain SoftPulse cues D; checkpoint SoftPulse-off densify stem non-spoiling (LPT-783); unit `unit-02-01-position-power` (LPT-114 split); `act-02-01-01-guided-btn` moved here from Seat labels (curriculum residual LPT-739) | — |
 | Preflop order | UTG, HJ, CO, BTN on the table; explain SoftPulse cues UTG → HJ → CO → BTN (LPT-635); unit `unit-02-01-position-power` (LPT-117 split) | scaffolded pressHints one-per-press (LPT-667) |
 | Postflop order | explain SoftPulse cues SB → BTN; checkpoint SoftPulse-off densify stem non-spoiling (LPT-803); unit `unit-02-01-position-power` (LPT-117 split) | — |
-| Wait your turn | explain SoftPulse cues EARLIER SEATS → YOUR TURN; unit `unit-02-01-position-power` (LPT-117 split) | — |
+| Wait your turn | explain SoftPulse cues EARLIER SEATS → YOUR TURN; densify SoftPulse-quiet stem non-spoiling (no Wait) (LPT-838); unit `unit-02-01-position-power` (LPT-117 split) | — |
 | Pocket pairs | Pairs on the felt; explain SoftPulse cue Pairs only — Broadways/Suited aces/Connectors presses belong to Broadways and suited aces and Connectors versus trash (curriculum residual LPT-740); densified SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-02-02-starting-hands` (LPT-121 split) | — |
 | Broadways and suited aces | explain SoftPulse cues BROADWAY → SUITED ACE; unit `unit-02-02-starting-hands` (LPT-121 split) | — |
 | Connectors versus trash | explain SoftPulse cues CONNECTORS → TRASH; checkpoint SoftPulse-off densify stem non-spoiling (LPT-784); unit `unit-02-02-starting-hands` (LPT-121 split) | — |
