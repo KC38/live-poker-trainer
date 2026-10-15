@@ -14300,6 +14300,15 @@ String authoredSoftPulseExplainCaption(String target) {
     // label-only.
     'BROADWAY': 'Ten or higher',
     'SUITED ACE': 'Ace same suit',
+    // Connectors versus trash SoftPulse explain (CONNECTORS → TRASH; LPT-894).
+    // Gloss the starting-hand ask — never leave AuthoredCue tiles label-only.
+    'CONNECTORS': 'Suited, adjacent',
+    'TRASH': 'Low unconnected',
+    // Open strong hands SoftPulse explain (STRONG → LIVE SIZE; LPT-895).
+    // STRONG is reused across value/mix explains as a premium-hands gloss;
+    // LIVE SIZE is the live open-size beat.
+    'STRONG': 'Premium hands',
+    'LIVE SIZE': 'Bigger than min',
     'NO BET': 'Free to check',
     'CHECK': 'Pass the street',
     'BET': 'Put chips in',
