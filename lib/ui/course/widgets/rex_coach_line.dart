@@ -471,8 +471,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // SoftPulse LPT-653; same class as LPT-842 / LPT-841 / LPT-839).
     'act-02-06-01-scaffolded-verbal' =>
       'You want to raise. Clearest live choice — tap how you announce it and put out chips.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Keep a chip (LPT-844;
+    // SoftPulse LPT-653; same class as LPT-843 / LPT-842 / LPT-841).
     'act-02-06-01-unguided-protect' =>
-      'Your cards sit near the muck. Best habit — pick Keep a chip or hand on your cards.',
+      'Your cards sit near the muck — tap how you protect them on the table.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name You acted out of turn in the idle bubble (LPT-786; SoftPulse
     // LPT-653; same class as LPT-785 / LPT-784 / LPT-672).

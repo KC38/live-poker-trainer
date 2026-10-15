@@ -92,7 +92,9 @@ const _lines = <String, String>{
   // LPT-843: SoftPulse-quiet densify — no Say "raise" spoil.
   'act-02-06-01-scaffolded-verbal':
       'You want to raise. Clearest live choice — tap how you announce it and put out chips.',
-  'act-02-06-01-unguided-protect': 'Your cards sit near the muck. Best habit — pick Keep a chip or hand on your cards.',
+  // LPT-844: SoftPulse-quiet densify — no Keep a chip spoil.
+  'act-02-06-01-unguided-protect':
+      'Your cards sit near the muck — tap how you protect them on the table.',
   // LPT-786: SoftPulse-off densify — no correct-tile spoil.
   'act-02-06-01-checkpoint-oot':
       'Action is two seats left. You toss in a raise early — tap the matching problem.',
