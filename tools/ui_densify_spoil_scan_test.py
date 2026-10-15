@@ -38,6 +38,9 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'They bet twice — tap the matching range idea.',
     'act-01-01-03-guided-button' =>
       'Tap the dealer button — pick D chip.',
+    // No SoftPulse-quiet comment — still quiet by -unguided id (LPT-880).
+    'act-04-01-01-02-unguided-ranges' =>
+      'Action moves ranges — tap Stronger.',
     _ => null,
   };
 }
@@ -69,6 +72,13 @@ _SAMPLE_CATALOG = {
                                     "id": "act-01-01-03-guided-button",
                                     "choices": [{"label": "D chip"}],
                                 },
+                                {
+                                    "id": "act-04-01-01-02-unguided-ranges",
+                                    "choices": [
+                                        {"label": "Stronger"},
+                                        {"label": "Weaker"},
+                                    ],
+                                },
                             ]
                         }
                     ]
@@ -95,8 +105,30 @@ class UiDensifySpoilScanTest(unittest.TestCase):
             )
             ids = [r[0] for r in rows]
             self.assertIn("act-03-03-01-unguided", ids)
+            self.assertIn("act-04-01-01-02-unguided-ranges", ids)
             self.assertNotIn("act-04-01-01-unguided", ids)
             self.assertNotIn("act-01-01-03-guided-button", ids)
+
+    def test_activity_id_implies_quiet(self) -> None:
+        self.assertTrue(mod.activity_id_implies_quiet("act-04-01-01-unguided"))
+        self.assertTrue(mod.activity_id_implies_quiet("act-02-07-02-jump-stack"))
+        self.assertFalse(mod.activity_id_implies_quiet("act-01-01-03-guided-button"))
+
+    def test_ignores_prose_overlap_and_weak_fragments(self) -> None:
+        self.assertEqual(
+            mod.spoil_labels(
+                "Tap the cards only you can see — pick your private holes.",
+                ["Only you", "Everyone at the table"],
+            ),
+            [],
+        )
+        self.assertEqual(
+            mod.spoil_labels(
+                "Tap the community cards — pick the shared board in the middle.",
+                ["Qs Jh 2c in the middle", "Your Ah Kd"],
+            ),
+            [],
+        )
 
     def test_check_exits_one_on_spoil(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

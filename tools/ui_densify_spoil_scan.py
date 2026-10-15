@@ -13,10 +13,16 @@ Commands:
   list [--quiet-only]   Print densify ids whose stem embeds a choice label.
   check [--quiet-only]  Exit 1 when any spoil remains (CI / discovery gate).
 
-SoftPulse-quiet / SoftPulse-off are inferred from the comment immediately
-above each stem (``SoftPulse-quiet``, ``SoftPulse-off``, ``kind: none``).
-Guided SoftPulse-on stems that name the answer on purpose are omitted unless
-``--include-guided``.
+SoftPulse-quiet / SoftPulse-off are inferred from:
+
+1. The comment immediately above each stem (``SoftPulse-quiet``,
+   ``SoftPulse-off``, ``kind: none``), and/or
+2. The activity id (``-unguided``, ``-scaffolded``, ``-checkpoint``,
+   ``-jump``) — SoftPulse-after-Hint / SoftPulse-off densify often ships
+   without a quiet comment (LPT-880 / LPT-881 empty ``list`` misses).
+
+Guided SoftPulse-on stems (``-guided`` without a quiet comment) that name
+the answer on purpose are omitted unless ``--include-guided``.
 """
 
 from __future__ import annotations
@@ -56,15 +62,69 @@ _STOP_LABELS = frozenset(
     }
 )
 
+# Function words + weak scene nouns — fragment "in the middle" must not spoil
+# a stem that only says "board in the middle" (Your two cards unguided).
+_FRAG_STOP = frozenset(
+    {
+        "a",
+        "an",
+        "and",
+        "at",
+        "for",
+        "in",
+        "of",
+        "on",
+        "or",
+        "the",
+        "to",
+        "vs",
+        "board",
+        "cards",
+        "hole",
+        "holes",
+        "label",
+        "matching",
+        "middle",
+        "plan",
+        "pot",
+        "seat",
+        "stack",
+        "table",
+    }
+)
+_CARDISH = re.compile(r"^(?:[2-9tjqka]{1,2}[cdhs]?|\d+bb)$", re.IGNORECASE)
+
 _ENTRY = re.compile(
     r"(?P<prefix>(?://[^\n]*\n|\s)*)"
     r"""['\"](?P<id>act-[^'\"]+)['\"]\s*=>\s*['\"](?P<stem>(?:\\.|[^'\\])*)['\"]""",
     re.DOTALL,
 )
 
+# Densify SoftPulse-after-Hint / SoftPulse-off assessment ids (even when the
+# map entry lacks a SoftPulse-quiet comment — LPT-880 / LPT-881).
+_QUIET_ID_MARKERS = (
+    "-unguided",
+    "-scaffolded",
+    "-checkpoint",
+    "-jump",
+)
+
+
+def activity_id_implies_quiet(activity_id: str) -> bool:
+    """True when [activity_id] is SoftPulse-quiet densify by naming convention."""
+    # Guided SoftPulse-on teaching may spoil on purpose — only treat as quiet
+    # when the id is not a plain -guided stem (same-concept quiet guided is
+    # rare and should keep an explicit SoftPulse-quiet comment).
+    if re.search(r"-guided(?:-|$)", activity_id) and not any(
+        marker in activity_id
+        for marker in ("-unguided", "-scaffolded", "-checkpoint", "-jump")
+    ):
+        return False
+    return any(marker in activity_id for marker in _QUIET_ID_MARKERS)
+
 
 def parse_densify_entries(source: Path) -> list[dict[str, str | bool]]:
-    """Parse densify map entries with SoftPulse-quiet/off flags from comments."""
+    """Parse densify map entries with SoftPulse-quiet/off flags."""
     text = source.read_text(encoding="utf-8")
     start = text.find("String? selectIdentifyDensifiedCoachLine")
     if start < 0:
@@ -78,17 +138,19 @@ def parse_densify_entries(source: Path) -> list[dict[str, str | bool]]:
     rows: list[dict[str, str | bool]] = []
     for match in _ENTRY.finditer(body):
         prefix = match.group("prefix") or ""
+        activity_id = match.group("id")
         stem = match.group("stem").replace(r"\'", "'").replace(r"\n", "\n")
-        quiet = bool(
+        quiet_comment = bool(
             re.search(
                 r"SoftPulse-quiet|SoftPulse-off|kind:\s*none",
                 prefix,
                 re.IGNORECASE,
             )
         )
+        quiet = quiet_comment or activity_id_implies_quiet(activity_id)
         rows.append(
             {
-                "id": match.group("id"),
+                "id": activity_id,
                 "stem": stem,
                 "quiet": quiet,
             }
@@ -154,6 +216,19 @@ def _label_significant(norm: str) -> bool:
     return False
 
 
+def _fragment_contentful(phrase: str) -> bool:
+    """True when [phrase] has poker-meaningful words (not only 'in the middle')."""
+    words = phrase.split()
+    content = [w for w in words if w not in _FRAG_STOP]
+    if len(content) >= 2:
+        return True
+    if len(content) == 1 and (
+        _CARDISH.match(content[0]) or len(content[0]) >= 5
+    ):
+        return True
+    return False
+
+
 def _distinctive_fragments(label: str) -> list[str]:
     """Subphrases of [label] that SoftPulse-off stems must not echo (LPT-878).
 
@@ -169,10 +244,24 @@ def _distinctive_fragments(label: str) -> list[str]:
         for start in range(len(words)):
             for end in range(start + 2, len(words) + 1):
                 phrase = " ".join(words[start:end])
-                if len(phrase) >= 12 and phrase not in seen:
+                if (
+                    len(phrase) >= 12
+                    and _fragment_contentful(phrase)
+                    and phrase not in seen
+                ):
                     seen.add(phrase)
                     frags.append(phrase)
     return frags
+
+
+def _answer_cue(hay: str, needle: str) -> bool:
+    """True when [needle] is cued as the answer (tap/pick), not prose overlap."""
+    return bool(
+        re.search(
+            rf"\b(?:tap|pick|choose|select)\s+{re.escape(needle)}\b",
+            hay,
+        )
+    )
 
 
 def _numeric_answer_cue(hay: str, tile: str) -> bool:
@@ -182,12 +271,7 @@ def _numeric_answer_cue(hay: str, tile: str) -> bool:
     tiles are those sizes (LPT-849 / LPT-787 accepted). Spoil when the stem
     tells the learner to tap/pick that tile (LPT-877 jump-stack).
     """
-    return bool(
-        re.search(
-            rf"\b(?:tap|pick|choose|select)\s+{re.escape(tile)}\b",
-            hay,
-        )
-    )
+    return _answer_cue(hay, tile)
 
 
 def spoil_labels(stem: str, choices: list[str]) -> list[str]:
@@ -203,7 +287,11 @@ def spoil_labels(stem: str, choices: list[str]) -> list[str]:
         if _NUMERIC_TILE.match(norm):
             matched = _numeric_answer_cue(hay, norm)
         elif norm in hay:
-            matched = True
+            # Short labels like "Only you" often appear mid-instruction
+            # ("only you can see") — require tap/pick cue (LPT-880 class still
+            # catches "tap Stronger" / "tap Call 10").
+            if _answer_cue(hay, norm) or len(norm) >= 18 or norm.count(" ") >= 3:
+                matched = True
         else:
             for frag in _distinctive_fragments(label):
                 if frag in hay:
