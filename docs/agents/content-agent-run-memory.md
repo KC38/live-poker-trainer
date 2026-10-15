@@ -4502,6 +4502,20 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Compose SoftPulse residual **LPT-795** (+ cite **LPT-796**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-02-01-*: interactive structural clean on tip except LPT-794 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` plan tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15ci tip c4dccacd (#2630 Pot Prefer → HU SoftPulse LPT-800 Prefer)
+
+- Tip-stable `c4dccacd` (#2630 Pot SoftPulse Prefer LPT-798 on tip after #2629). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER HU SoftPulse residual re-check `lesson-07-05-01-01/02/03` / `act-07-05-01-*`:
+  - first-child SoftPulse FEWER→THICKER→WIDEN + `explainGrading` "Fewer → Thicker → Widen." + Dart `HuVsMultiwayDemo.points` FEWER/THICKER/WIDEN (captions Bluff less MW / Value up MW / HU selected bluffs) / `LessonHuVsMultiwayExplainTable` / layout "Tap Fewer, then Thicker, then Widen." + coachMedia "More players: fewer bluffs, thicker value." still pre-split under Bluff-less-multiway-only (`lesson-07-05-01-01-bluff-less-multiway` objective "Bluff less multiway") → residual **LPT-800** still To Do (needs-human; Relates LPT-323 — do not re-add needs-human on curriculum).
+  - companion checkpoint SoftPulse `input` kind `none` densify PRESENT (prompt "Player count is?"; helper "Player count — pick how it ranks."; tile "A first-class planning input") under Bluff-less-multiway → **LPT-801** still To Do.
+  - successors SoftPulse MULTIWAY→THICK VALUE / HEADS-UP→STEAL MORE content-driven (do not reopen LPT-669); guided SoftPulse `no` densify PRESENT; unguided SoftPulse `thick` one-per-press densify PRESENT; scaffolded SoftPulse `higher` one-per-press densify PRESENT.
+- Curriculum **LPT-323** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-800/801/323/829/802/798/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Stack SoftPulse residual **LPT-802** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-07-05-01-*: interactive structural clean on tip except LPT-800 SoftPulse + LPT-801 player-count residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/scaffolded/checkpoint densify PRESENT; checkpoint `deal.mode` `none` — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
 ## Fold 2026-10-15cg tip ff346c93 (#2628 Map Prefer → Compose SoftPulse LPT-795 Prefer)
 
 - Tip-stable `ff346c93` (#2628 Map SoftPulse Prefer LPT-794 on tip after #2627). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
