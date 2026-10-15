@@ -460,6 +460,30 @@ void main() {
     },
   );
 
+  test(
+    'alignLessonTableCopy protects count phrases and still remaps pairs',
+    () {
+      // Board ranks 3/6/5/4/7 move, but count phrases stay. An unprotected
+      // "a three" and "Pair of sixes" must still follow the dealt board.
+      const text =
+          'Board shows a three. Your three cards and the six seats. '
+          'Those five remain. These four keep. Tap the seven presses. '
+          'Pair of sixes.';
+      expect(
+        alignLessonTableCopy(
+          text: text,
+          templateHero: const ['Ah', 'Kd'],
+          dealtHero: const ['Js', 'Td'],
+          templateBoard: const ['3c', '6d', '5h', '4s', '7c'],
+          dealtBoard: const ['4c', '7d', '9h', '8s', '2c'],
+        ),
+        'Board shows a four. Your three cards and the six seats. '
+        'Those five remain. These four keep. Tap the seven presses. '
+        'Pair of sevens.',
+      );
+    },
+  );
+
   test('alignLessonTableCopy rewrites board codes and spoken ranks/suits', () {
     const prompt = 'Board Ks 9d 2c. You hold Kh Qh. Class?';
     const feedback = 'Pair of kings is already showdown-ready.';
