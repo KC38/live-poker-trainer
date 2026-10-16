@@ -362,7 +362,7 @@ One row, height 36.
 | --- | --- |
 | Close | `X` on the left. Leaves the lesson. It is not a back chevron. |
 | Progress | The lesson bar fills the space between close and the hearts. It advances by activity. |
-| Hearts | One heart per life, filled while that life remains. A miss that costs a life empties one heart. At zero, the empty hearts breathe slowly, SoftPulse stays off, the refill sheet opens, a blocked stage tap nudges, and the Oops CTA becomes Restore hearts (not Continue) (LPT-874). When start fails with out of hearts, chrome shows zero lives (not a stale full bar) and Rex names Restore hearts — Open previous stays for prerequisite locks only (LPT-872). |
+| Hearts | One heart per life, filled while that life remains. A miss that costs a life empties one heart. At zero, the empty hearts breathe slowly, SoftPulse stays off, the refill sheet opens, a blocked stage tap nudges, and the Oops CTA becomes Restore hearts (not Continue) (LPT-874). When start fails with out of hearts, chrome shows zero lives (not a stale full bar) and Rex names Restore hearts — Open previous stays for prerequisite locks only (LPT-872). That Restore hearts CTA opens the refill sheet with the same zero lives as chrome, never Hearts are full from a stale Home cache (LPT-1008). |
 
 ### 2. Coach band
 
@@ -1897,7 +1897,9 @@ the next-heart countdown; it does not use Nunito.
 When `startCourseLesson` fails with out of hearts, the start-error stage
 shows empty chrome hearts and Rex says Tap Restore hearts. It does not keep
 a stale full heart bar from Home, and it does not offer Open previous (that
-CTA is for prerequisite locks only — LPT-872).
+CTA is for prerequisite locks only — LPT-872). Tapping Restore hearts opens
+the refill sheet with the same zero lives as chrome — never a stale full
+Home cache that titles the sheet Hearts are full (LPT-1008).
 
 ## Profile
 

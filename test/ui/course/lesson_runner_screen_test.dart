@@ -26,6 +26,7 @@ import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/auth_service.dart';
 import 'package:live_poker_trainer/services/firestore/course_service.dart';
+import 'package:live_poker_trainer/ui/course/widgets/heart_refill_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
@@ -640,6 +641,21 @@ void main() {
       expect(layout.livesMax, 5);
       expect(layout.speech, kLessonStartOutOfHeartsSpeech);
       expect(layout.showToolRow, isFalse);
+      expect(tester.takeException(), isNull);
+
+      // LPT-1008: sheet must use pending-frame lives (0), not stale Home (5).
+      // HeartRefillSheet ticks a 1s Timer — do not pumpAndSettle.
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Restore hearts'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(find.text('Hearts are full'), findsNothing);
+      expect(find.text('Practice'), findsOneWidget);
+      expect(find.byType(HeartRefillSheet), findsOneWidget);
+      final sheet = tester.widget<HeartRefillSheet>(
+        find.byType(HeartRefillSheet),
+      );
+      expect(sheet.livesRemaining, 0);
+      expect(sheet.livesMax, 5);
       expect(tester.takeException(), isNull);
     },
   );

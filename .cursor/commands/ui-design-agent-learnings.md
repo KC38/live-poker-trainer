@@ -103,6 +103,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 
 ## Prefer
 
+- Prefer `tester.pump` (not `pumpAndSettle`) after opening `HeartRefillSheet` — its 1s `Timer.periodic` never settles and false-fails VALIDATE (LPT-1008).
 - Prefer exact `agent_tap` labels from the screen (card Semantics `A♣`, not
   ASCII `Ac`). Broad needles like `Continue` can hit Home chrome; short
   codes can miss the card or open Hearts. Prefer

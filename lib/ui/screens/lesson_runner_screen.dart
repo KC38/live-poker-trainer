@@ -1541,10 +1541,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               ElevatedButton(
                 onPressed: () async {
                   final home = ref.read(courseHomeProvider).asData?.value;
+                  // Same lives as chrome (LPT-872) — never a stale full Home
+                  // cache that makes the sheet say Hearts are full (LPT-1008).
+                  final (livesRemaining, livesMax) = _frameLivesWhilePending();
                   final action = await showHeartRefillSheet(
                     context: context,
-                    livesRemaining: home?.hearts ?? 0,
-                    livesMax: home?.livesMax ?? 5,
+                    livesRemaining: livesRemaining,
+                    livesMax: livesMax,
                     gems: home?.gems ?? 0,
                     livesNextRefillAtMs: home?.livesNextRefillAtMs,
                     adClaimsRemainingToday: home?.adClaimsRemainingToday ?? 5,
