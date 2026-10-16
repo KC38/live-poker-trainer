@@ -14536,6 +14536,19 @@ String authoredSoftPulseExplainCaption(String target) {
     // label-only.
     'ONE HAND': 'Exact combo',
     'RANGE': 'Keep a range',
+    // Tighten speculative hands multiway SoftPulse explain (MULTIWAY → OOP →
+    // FOLD; LPT-938). FOLD already Give up; MULTIWAY/OOP gloss many-players /
+    // out-of-position — never leave those SoftPulse tiles label-only.
+    'MULTIWAY': 'Many players',
+    'OOP': 'Out of position',
+    // Value thicker when callers stick SoftPulse explain (CALLERS → SET → BET;
+    // LPT-939). CALLERS/BET already captioned; SET matches TRIPS Three of a
+    // kind — never leave the middle SoftPulse tile label-only.
+    'SET': 'Three of a kind',
+    // Don't stack off light deep SoftPulse explain (DEEP → ONE PAIR → FOLD;
+    // LPT-940). DEEP/FOLD already captioned; ONE PAIR matches SDV Weak made —
+    // never leave the middle SoftPulse tile label-only.
+    'ONE PAIR': 'Weak made',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
