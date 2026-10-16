@@ -12,7 +12,8 @@
 /// LPT-969 / LPT-970 / LPT-971 / LPT-972 / LPT-973 / LPT-974 / LPT-975 /
 /// LPT-976 / LPT-977 / LPT-978 / LPT-979 / LPT-980 / LPT-981 /
 /// LPT-982 / LPT-983 / LPT-984 / LPT-985 / LPT-986 / LPT-987 /
-/// LPT-988 / LPT-989 / LPT-990 / LPT-991 / LPT-992:
+/// LPT-988 / LPT-989 / LPT-990 / LPT-991 / LPT-992 /
+/// LPT-993 / LPT-995 / LPT-996:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -313,6 +314,18 @@ void main() {
     expect(
       authoredSoftPulseExplainCaption('HEADS-UP'),
       'Two players',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('THICK VALUE'),
+      'Bet thicker',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('STEAL MORE'),
+      'Bluff more often',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('SHORTER STACK'),
+      'Min of the two',
     );
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
@@ -5329,6 +5342,138 @@ void main() {
       expect(find.text('C-BET'), findsWidgets);
       expect(find.text('Two players'), findsOneWidget);
       expect(find.text('Continue story'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Value thicker multiway SoftPulse explain captions (LPT-993)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-07-05-01-02-explain-value',
+        targets: const ['MULTIWAY', 'THICK VALUE'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('MULTIWAY'), findsWidgets);
+      expect(find.text('THICK VALUE'), findsWidgets);
+      expect(find.text('Many players'), findsOneWidget);
+      expect(find.text('Bet thicker'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Widen HU bluffs SoftPulse explain captions (LPT-995)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-07-05-01-03-explain-hu',
+        targets: const ['HEADS-UP', 'STEAL MORE'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('HEADS-UP'), findsWidgets);
+      expect(find.text('STEAL MORE'), findsWidgets);
+      expect(find.text('Two players'), findsOneWidget);
+      expect(find.text('Bluff more often'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Recalculate effective SoftPulse explain captions (LPT-996)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-07-06-01-03-explain-effective',
+        targets: const ['SHORTER STACK', 'PLAN'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('SHORTER STACK'), findsWidgets);
+      expect(find.text('PLAN'), findsWidgets);
+      expect(find.text('Min of the two'), findsOneWidget);
+      expect(find.text('Fold, call, or 3-bet'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
