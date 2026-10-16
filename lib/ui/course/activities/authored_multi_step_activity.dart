@@ -250,17 +250,21 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                     ),
                     selectedId: selected,
                     // Match SoftPulse deal gate — dock inert mid-deal (LPT-1014).
+                    // Hearts gate disables dock chrome too (LPT-1017).
                     enabled: !locked &&
                         !(controller.feltDealTracked &&
-                            !controller.feltDealReady),
+                            !controller.feltDealReady) &&
+                        !LessonFrameScope.playIsBlocked(context),
                     facingBet: spot.facingBet,
                     heroStackAmount: spot.heroStackAmount,
                     // Capstone transfer (and other identifyUnavailable spots)
                     // keep Jam/Raise live — do not grey RAISE (off) (LPT-670).
                     identifyUnavailable: spot.identifyUnavailable,
                     pulseChoiceId: pulseChoiceId,
-                    onSelect:
-                        (id) => controller.selectChoice(id, autoSubmit: true),
+                    onSelect: (id) {
+                      if (LessonFrameScope.playIsBlocked(context)) return;
+                      controller.selectChoice(id, autoSubmit: true);
+                    },
                   ),
                   Builder(
                     builder: (context) {

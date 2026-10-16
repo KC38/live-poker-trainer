@@ -11,6 +11,7 @@ class LessonFrameScope extends InheritedWidget {
     super.key,
     required this.onLocalMiss,
     this.activityController,
+    this.playBlocked = false,
     required super.child,
   });
 
@@ -20,14 +21,27 @@ class LessonFrameScope extends InheritedWidget {
   /// Shared activity controller for SoftPulse / Hint coordination.
   final LessonActivityController? activityController;
 
+  /// True while the hearts gate (or another runner block) freezes play.
+  ///
+  /// Densify [LessonActionDock] must stay disabled when this is set — not only
+  /// SoftPulse / Hint (LPT-1017). AbsorbPointer alone still left dock chrome
+  /// looking live while coach invited a tap.
+  final bool playBlocked;
+
   /// The surrounding frame, if this step is inside one.
   static LessonFrameScope? maybeOf(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<LessonFrameScope>();
   }
 
+  /// Whether densify docks / auto-submit must stay inert.
+  static bool playIsBlocked(BuildContext context) {
+    return maybeOf(context)?.playBlocked ?? false;
+  }
+
   @override
   bool updateShouldNotify(LessonFrameScope oldWidget) =>
-      activityController != oldWidget.activityController;
+      activityController != oldWidget.activityController ||
+      playBlocked != oldWidget.playBlocked;
 }
 
 /// Tells the frame how many multi-press taps remain.

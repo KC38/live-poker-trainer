@@ -132,3 +132,7 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 ## Fold 2026-10-16
 
 - Prefer reading SoftPulse-quiet densify **dock Material fills** (Raise/Open gold vs Limp muted) when SoftPulse is none — coach stem can be clean while OPEN TO 6 gold-fills the answer (LPT-1013; LPT-879 was identify-only).
+
+## Fold 2026-10-16
+
+- Prefer running `tools/fold_agent_learnings.sh ui` from the ticket worktree (or copy its diff into `$WT` and `git checkout --` on primary) — folding from primary dirties `docs/agents/ui-agent-run-memory.md` on main (LPT-1016).

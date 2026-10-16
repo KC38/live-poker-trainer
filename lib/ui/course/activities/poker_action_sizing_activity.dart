@@ -130,17 +130,23 @@ class PokerActionSizingActivity extends StatelessWidget {
           final coachOwnsCue = showGuidance && pulseTarget != null;
           // SoftPulse / Hint wait for feltDealReady — keep the dock inert
           // mid-deal too so learners cannot grade before holes land (LPT-1014).
+          // Hearts gate also disables dock chrome (LPT-1017) — AbsorbPointer
+          // alone left Fold/Call looking live while coach invited a tap.
           final dealBlocksDock =
               controller.feltDealTracked && !controller.feltDealReady;
+          final heartsBlocksDock = LessonFrameScope.playIsBlocked(context);
           final dock = LessonActionDock(
             choices: dockChoices,
             selectedId: selected,
-            enabled: !locked && !dealBlocksDock,
+            enabled: !locked && !dealBlocksDock && !heartsBlocksDock,
             identifyUnavailable: spot.identifyUnavailable,
             facingBet: spot.facingBet,
             heroStackAmount: spot.heroStackAmount,
             pulseChoiceId: pulseChoiceId,
-            onSelect: (id) => controller.selectChoice(id, autoSubmit: true),
+            onSelect: (id) {
+              if (LessonFrameScope.playIsBlocked(context)) return;
+              controller.selectChoice(id, autoSubmit: true);
+            },
           );
           final status = Builder(
             builder: (context) {
