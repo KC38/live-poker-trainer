@@ -128,3 +128,7 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 
 - Prefer `facingBet: true` when pumping `LessonActionDock` for Call teaching labels — default open-pot chrome paints `CALL (off)` and hides compact teaching text (LPT-1011).
 - `sim_record.py frames` falls back to a t=0 still when `fps=` yields no PNGs on sub-second clips — do not abandon video review on "ffmpeg wrote no frames" alone.
+
+## Fold 2026-10-16
+
+- Prefer reading SoftPulse-quiet densify **dock Material fills** (Raise/Open gold vs Limp muted) when SoftPulse is none — coach stem can be clean while OPEN TO 6 gold-fills the answer (LPT-1013; LPT-879 was identify-only).

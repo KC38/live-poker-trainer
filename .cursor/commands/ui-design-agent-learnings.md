@@ -354,7 +354,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   stems that embed an exact choice label (e.g. **55bb** among 55bb /
   120bb / 175bb) are still spoils — LPT-787-style situation numbers are
   OK only when they are not the tile text itself (LPT-877 jump-stack).
-  On SoftPulse-off identify docks (`identifyUnavailable`), also Read the
+  - Prefer reading SoftPulse-quiet densify **dock Material fills** (Raise/Open gold vs Limp muted) when SoftPulse is none — coach stem can be clean while OPEN TO 6 gold-fills the answer (LPT-1013; LPT-879 was identify-only).
+On SoftPulse-off identify docks (`identifyUnavailable`), also Read the
   dock chrome — Raise/Bet gold fill with muted Check/Call spoils even when
   SoftPulse is none and `(off)` labels are gone (LPT-879 jump-legal).
   On scaffolded `poker_action_sizing` after Hint,

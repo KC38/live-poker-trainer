@@ -10,6 +10,7 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 
 /// Resolved pot + per-seat street bets for a teaching spot.
 class LessonActionFeltMoney {
@@ -115,12 +116,21 @@ double? callAmountFromChoices(List<CourseChoice> choices) {
 ///
 /// [villainSeatIndex] is the facing bettor / opener seat (default 1). On a
 /// six-max ring that is often not the seat immediately after the hero.
+///
+/// Pass [sbIndex] / [bbIndex] from [resolveLessonActionFeltLayout] on preflop
+/// facing-bet densify so posted blinds stay on-seat when street money paints
+/// an open — otherwise `_applyLessonStageStreetMoney` zeroes every other
+/// seat's `currentBet` and sweeps SB/BB into the center pot (LPT-1016).
 LessonActionFeltMoney resolveLessonActionFeltMoney({
   required LessonActionSpot spot,
   required List<CourseChoice> choices,
   CourseChoice? selected,
   int seatCount = 2,
   int villainSeatIndex = 1,
+  int? sbIndex,
+  int? bbIndex,
+  double smallBlind = lessonSmallBlind,
+  double bigBlind = lessonBigBlind,
 }) {
   final seats = seatCount < 1 ? 1 : seatCount;
   final villainSeat =
@@ -149,6 +159,19 @@ LessonActionFeltMoney resolveLessonActionFeltMoney({
     bets[villainSeat] = facing;
   }
   bets[0] = heroBet;
+
+  // Preflop facing opens: keep SB/BB posts visible on their seats. Applying
+  // only the opener's raise-to would replace posted blinds with 0 and leave
+  // coach copy naming "small blind" with no SB puck/chips (LPT-1016).
+  if (spot.facingBet && spot.boardCodes.isEmpty) {
+    void keepBlind(int? seat, double amount) {
+      if (seat == null || seat < 0 || seat >= seats) return;
+      if (bets[seat] < amount) bets[seat] = amount;
+    }
+
+    keepBlind(sbIndex, smallBlind);
+    keepBlind(bbIndex, bigBlind);
+  }
 
   String? villainLabel;
   String? heroLabel;
