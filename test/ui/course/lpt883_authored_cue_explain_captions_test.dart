@@ -6,7 +6,8 @@
 /// LPT-918 / LPT-919 / LPT-925 / LPT-926 / LPT-927 / LPT-931 / LPT-932 /
 /// LPT-933 / LPT-934 / LPT-935 / LPT-936 / LPT-937 / LPT-938 / LPT-939 /
 /// LPT-940 / LPT-941 / LPT-942 / LPT-943 / LPT-944 / LPT-945 / LPT-946 /
-/// LPT-950 / LPT-951 / LPT-952 / LPT-953 / LPT-954 / LPT-955:
+/// LPT-950 / LPT-951 / LPT-952 / LPT-953 / LPT-954 / LPT-955 /
+/// LPT-956 / LPT-957 / LPT-958:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -180,6 +181,11 @@ void main() {
     expect(authoredSoftPulseExplainCaption('CASH OUT'), 'Leave now');
     expect(authoredSoftPulseExplainCaption('PAIRED'), 'Board pairs');
     expect(authoredSoftPulseExplainCaption('CALLER'), 'Wider range');
+    expect(authoredSoftPulseExplainCaption('BARRELS'), 'Fire multi-street');
+    expect(authoredSoftPulseExplainCaption('DISCOUNT'), 'Cut weak equity');
+    expect(authoredSoftPulseExplainCaption('SEMI-BLUFF'), 'Bet with outs');
+    expect(authoredSoftPulseExplainCaption('OUTS'), 'Cards that help');
+    expect(authoredSoftPulseExplainCaption('THIN'), 'Extract light');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -3528,6 +3534,147 @@ void main() {
       expect(find.text('Chase the top'), findsOneWidget);
       expect(find.text('Board pairs'), findsOneWidget);
       expect(find.text('Wider range'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Discount OOP SoftPulse explain captions BARRELS + DISCOUNT (LPT-956)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-02-01-02-explain-oop',
+        targets: const ['OOP', 'BARRELS', 'DISCOUNT'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('OOP'), findsWidgets);
+      expect(find.text('BARRELS'), findsWidgets);
+      expect(find.text('DISCOUNT'), findsWidgets);
+      expect(find.text('Out of position'), findsOneWidget);
+      expect(find.text('Fire multi-street'), findsOneWidget);
+      expect(find.text('Cut weak equity'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Aggression SoftPulse explain captions SEMI-BLUFF + OUTS (LPT-957)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-02-01-03-explain-aggro',
+        targets: const ['SEMI-BLUFF', 'FOLDS', 'OUTS'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('SEMI-BLUFF'), findsWidgets);
+      expect(find.text('FOLDS'), findsWidgets);
+      expect(find.text('OUTS'), findsWidgets);
+      expect(find.text('Bet with outs'), findsOneWidget);
+      expect(find.text('Folds too much'), findsOneWidget);
+      expect(find.text('Cards that help'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Attack caps SoftPulse explain captions THIN (LPT-958)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-03-01-03-explain-attack',
+        targets: const ['CAPPED', 'THIN', 'BLUFF'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('CAPPED'), findsWidgets);
+      expect(find.text('THIN'), findsWidgets);
+      expect(find.text('BLUFF'), findsWidgets);
+      expect(find.text('Nuts unlikely'), findsOneWidget);
+      expect(find.text('Extract light'), findsOneWidget);
+      expect(find.text('Make them fold'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
