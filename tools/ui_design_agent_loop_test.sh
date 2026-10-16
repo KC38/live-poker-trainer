@@ -378,6 +378,11 @@ grep -F -q "bootstrap gui/$(id -u) $plist" "$LAUNCH_LOG" \
   || fail "install should bootstrap the agent: $(cat "$LAUNCH_LOG")"
 grep -q 'login item: installed (com.livepokertrainer.ui-design-agent)' \
   <<<"$(bash "$LOOP" status)" || fail "status should see the login item"
+sched_out="$(bash "$LOOP" status)"
+grep -q 'schedule: tick twice daily' <<<"$sched_out" \
+  || fail "status should print next CT tick: $sched_out"
+grep -q 'ensure will restart' <<<"$sched_out" \
+  && fail "tick schedule must not tell ensure to restart a continuous loop: $sched_out"
 
 bash "$LOOP" uninstall >/dev/null
 [[ ! -f "$plist" ]] || fail "uninstall should remove the plist"
