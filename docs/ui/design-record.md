@@ -469,6 +469,10 @@ SoftPulse rules:
   `GlowHighlight` backs, so `agentGlowOf` walks descendants as well as
   ancestors (LPT-840). Board SoftPulse still reports via Text labels inside
   the ring.
+- AuthoredCue SoftPulse explain captions (`_DemoActionCard` gloss under the
+  SoftPulse label) use cream gloss — same legibility contract as densify
+  SoftPulse captions — not slate muddy grey on gold SoftPulse tiles
+  (LPT-1009).
 
 ### 4. Tools
 
@@ -533,7 +537,9 @@ gold SoftPulse is on (LPT-643). Pairs and suited guided densify
 plus text docks (LPT-815 / LPT-816). Lesson start SoftPulse-quiet review
 uses live `getCourseState` `completedLessonIds` (`lessonIsSoftPulseQuietReview`)
 so `agent_seed.py fresh --open` cannot SoftPulse-quiet a guided teach from
-a stale Home node (LPT-828).
+a stale Home node (LPT-828). AuthoredCue SoftPulse explain
+`_DemoActionCard` captions use cream gloss on gold SoftPulse tiles
+(LPT-1009).
 
 ## Lesson tables
 

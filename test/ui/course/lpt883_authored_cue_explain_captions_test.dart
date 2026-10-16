@@ -14,12 +14,13 @@
 /// LPT-982 / LPT-983 / LPT-984 / LPT-985 / LPT-986 / LPT-987 /
 /// LPT-988 / LPT-989 / LPT-990 / LPT-991 / LPT-992 /
 /// LPT-993 / LPT-994 / LPT-995 / LPT-996 / LPT-997 /
-/// LPT-998 / LPT-999 / LPT-1000 / LPT-1001:
+/// LPT-998 / LPT-999 / LPT-1000 / LPT-1001 / LPT-1009:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
@@ -5852,4 +5853,61 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+  testWidgets(
+    'AuthoredCue SoftPulse explain captions use cream gloss not slate (LPT-1009)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-01-01-03-02-explain-sb-bb',
+        targets: const ['SB', 'BB'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme(),
+          home: Scaffold(
+            body: LessonFrameScope(
+              onLocalMiss: (_) {},
+              child: SizedBox(
+                width: 375,
+                height: 500,
+                child: LessonAuthoredCueExplainTable(
+                  activity: activity,
+                  onAllPointsTapped: () {},
+                  enabled: true,
+                  showGuidance: true,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('Small blind'), findsOneWidget);
+      expect(find.text('Big blind'), findsOneWidget);
+
+      final creamCaption = AppColors.cream.withValues(alpha: 0.82);
+      for (final gloss in ['Small blind', 'Big blind']) {
+        final textWidget = tester.widget<Text>(find.text(gloss));
+        expect(
+          textWidget.style?.color,
+          creamCaption,
+          reason: '$gloss SoftPulse explain caption must stay cream (LPT-1009)',
+        );
+        expect(
+          textWidget.style?.color,
+          isNot(AppColors.slate),
+          reason: '$gloss must not use muddy slate on gold SoftPulse tiles',
+        );
+      }
+    },
+  );
 }
+
