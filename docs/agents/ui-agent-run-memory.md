@@ -141,3 +141,7 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 
 - Prefer Oops → Continue remount (or a second densify generation) when validating high-card class rewrite: isomorphic remap often keeps the template high (Kxs → Kys), so Nice! still saying "suited king" is not a failed fix — miss once for a non-king high before closeout proof (LPT-1018).
 - `ui_densify_card_scan.py check` also gates `alignStartingHandCopy` high-card class rewrite (`suited king` → remapped high; LPT-1018).
+
+## Fold 2026-10-16
+
+- Prefer named densify callers (`BB + MP call`) via `parseLessonNamedCallerPositions` — `N callers` / between-opener-and-hero only covers squeeze-style lines; BTN-open + BB/MP with hero in SB has empty `between` (LPT-1024).

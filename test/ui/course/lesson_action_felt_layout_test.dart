@@ -117,6 +117,28 @@ void main() {
       expect(layout.foldedSeatIndexes.toSet(), {2, 4});
     });
 
+    test('LPT-1025: postflop Three callers keeps three villains live', () {
+      const spot = LessonActionSpot(
+        heroCodes: ['9h', '9d'],
+        boardCodes: ['9s', '8c', '7h'],
+        potLabel: 'Pot 24',
+        villainLine: 'Three callers · wet board',
+        streetLabel: 'Flop · top set',
+        facingBet: false,
+        openPot: true,
+      );
+
+      final layout = resolveLessonActionFeltLayout(spot);
+
+      expect(parseLessonCallerCount('Three callers · wet board'), 3);
+      expect(parseLessonCallerCount('Checked to you · 4-way'), 3);
+      // Hero BTN (default) → dealer 0; SB=1, BB=2, next=3.
+      expect(layout.dealerIndex, 0);
+      expect(layout.callerSeatIndexes.toSet(), {1, 2, 3});
+      expect(layout.foldedSeatIndexes.toSet(), {4, 5});
+      expect(layout.seatActionLabels, isEmpty);
+    });
+
     test('explicit heads-up spots stay two-seat', () {
       const spot = LessonActionSpot(
         heroCodes: ['Ah', 'Kd'],
