@@ -103,14 +103,13 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 
 ## Prefer
 
-- Prefer `tester.pump` (not `pumpAndSettle`) after opening `HeartRefillSheet` — its 1s `Timer.periodic` never settles and false-fails VALIDATE (LPT-1008).
 - Prefer exact `agent_tap` labels from the screen (card Semantics `A♣`, not
   ASCII `Ac`). Broad needles like `Continue` can hit Home chrome; short
   codes can miss the card or open Hearts. Prefer
   `python3 tools/agent_tap.py back` (no `--text`) to dismiss modal bottom
   sheets (Hearts refill, legends) — a `tap --text Back` needle is often
   missing. Prefer `tester.element(finder)` / `tester.state<State>` over
-  `tester.state<DealtCardReveal>` (needs a `State` subtype; LPT-97).
+  `tester.state<DealtCardReveal>` (needs a `State` subtype; LPT-97). Prefer `tester.pump` (not `pumpAndSettle`) after opening `HeartRefillSheet` — its 1s `Timer.periodic` never settles (LPT-1008).
 - Prefer `openlesson` with the catalog id from `course_catalog` / `rg`
   (`lesson-01-02-02-best-five-kickers`), not the Home title and not a
   guessed `01-01-0N` from ledger order — both yield "Unknown lesson".
