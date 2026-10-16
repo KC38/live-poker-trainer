@@ -247,7 +247,10 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                       generation: controller.bindGeneration,
                     ),
                     selectedId: selected,
-                    enabled: !locked,
+                    // Match SoftPulse deal gate — dock inert mid-deal (LPT-1014).
+                    enabled: !locked &&
+                        !(controller.feltDealTracked &&
+                            !controller.feltDealReady),
                     facingBet: spot.facingBet,
                     heroStackAmount: spot.heroStackAmount,
                     // Capstone transfer (and other identifyUnavailable spots)

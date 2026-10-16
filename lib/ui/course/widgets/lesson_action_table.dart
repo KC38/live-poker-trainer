@@ -15584,6 +15584,12 @@ class LessonActionDock extends StatelessWidget {
                         _callExceedsStack(choice, heroStackAmount) ||
                         (_isBet(choice) && facingBet) ||
                         (_isRaise(choice) && !facingBet && hasBetChoice));
+                // SoftPulse-quiet densify / SoftPulse-off quizzes: equal muted
+                // chrome until SoftPulse paints or the learner selects — Raise
+                // gold fill must not spoil OPEN TO 6 while SoftPulse is none
+                // (LPT-1013; same spirit as identify LPT-879).
+                final equalLiveChrome = identifyUnavailable ||
+                    (pulseChoiceId == null && selectedId == null);
                 return GlowHighlight(
                   active:
                       enabled &&
@@ -15595,7 +15601,7 @@ class LessonActionDock extends StatelessWidget {
                     selected: selectedId == choice.id,
                     enabled: enabled,
                     unavailableLook: unavailableLook,
-                    identifyUnavailable: identifyUnavailable,
+                    equalLiveChrome: equalLiveChrome,
                     onPressed: () => onSelect(choice.id),
                   ),
                 );
@@ -15615,7 +15621,7 @@ class _DockButton extends StatelessWidget {
     required this.enabled,
     required this.onPressed,
     this.unavailableLook = false,
-    this.identifyUnavailable = false,
+    this.equalLiveChrome = false,
   });
 
   final CourseChoice choice;
@@ -15624,17 +15630,18 @@ class _DockButton extends StatelessWidget {
   final VoidCallback onPressed;
   final bool unavailableLook;
 
-  /// Identify quizzes keep equal live chrome — no Raise/Bet gold or Fold
-  /// danger tint that outranks Check/Call before the learner taps (LPT-879).
-  final bool identifyUnavailable;
+  /// Identify quizzes and SoftPulse-quiet densify keep equal live chrome —
+  /// no Raise/Bet gold or Fold danger tint that outranks other actions
+  /// before SoftPulse or a tap (LPT-879 / LPT-1013).
+  final bool equalLiveChrome;
 
   Color get _fill {
     final action = (choice.action ?? choice.label).toUpperCase();
     if (unavailableLook) {
       return AppColors.slateDark.withValues(alpha: 0.55);
     }
-    // Equal muted live fill for every action on identify docks.
-    if (identifyUnavailable) {
+    // Equal muted live fill for every action on identify / SoftPulse-quiet.
+    if (equalLiveChrome) {
       return AppColors.surfaceMuted.withValues(alpha: 0.55);
     }
     if (action.startsWith('FOLD'))
@@ -15651,7 +15658,7 @@ class _DockButton extends StatelessWidget {
   Color get _border {
     if (selected) return AppColors.selectionGlow;
     if (unavailableLook) return AppColors.slate;
-    if (identifyUnavailable) return AppColors.feltBorder;
+    if (equalLiveChrome) return AppColors.feltBorder;
     final action = (choice.action ?? choice.label).toUpperCase();
     if (action.startsWith('FOLD') || action.startsWith('ALL')) {
       return AppColors.danger;

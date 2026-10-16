@@ -9831,6 +9831,109 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
+  testWidgets(
+    'SoftPulse-quiet open densify dock equal chrome until SoftPulse (LPT-1013)',
+    (tester) async {
+      await tester.binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final activity = CourseActivity(
+        id: 'act-02-03-01-guided-utg',
+        order: 2,
+        stage: ActivityStage.guided,
+        renderer: ActivityRenderer.pokerActionSizing,
+        estimatedSeconds: 40,
+        accessibilityText: 'open strong densify',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'UTG with a premium pair at 1/2. Action?',
+        choices: const [
+          CourseChoice(id: 'limp', label: 'Limp', action: 'CALL'),
+          CourseChoice(id: 'open-six', label: 'Open to 6', action: 'RAISE'),
+          CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      // SoftPulse-quiet densify: no SoftPulse until Hint — pulseChoiceId null.
+      await tester.pumpWidget(
+        _wrap(
+          PokerActionSizingActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: false,
+          ),
+        ),
+      );
+      await tester.pump();
+      Color materialOf(String label) {
+        final material = tester.widget<Material>(
+          find
+              .ancestor(
+                of: find.text(label),
+                matching: find.byType(Material),
+              )
+              .first,
+        );
+        return material.color!;
+      }
+
+      final limpFill = materialOf('LIMP');
+      final openFill = materialOf('OPEN TO 6');
+      final foldFill = materialOf('FOLD');
+      expect(openFill, limpFill);
+      expect(foldFill, limpFill);
+      expect(tester.takeException(), isNull);
+      controller.dispose();
+    },
+  );
+
+  testWidgets(
+    'poker_action densify dock disabled while felt deal settles (LPT-1014)',
+    (tester) async {
+      await tester.binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final activity = CourseActivity(
+        id: 'act-02-03-01-guided-utg',
+        order: 2,
+        stage: ActivityStage.guided,
+        renderer: ActivityRenderer.pokerActionSizing,
+        estimatedSeconds: 40,
+        accessibilityText: 'open strong densify',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'UTG with a premium pair at 1/2. Action?',
+        choices: const [
+          CourseChoice(id: 'limp', label: 'Limp', action: 'CALL'),
+          CourseChoice(id: 'open-six', label: 'Open to 6', action: 'RAISE'),
+          CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        _wrap(
+          PokerActionSizingActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: false,
+          ),
+        ),
+      );
+      await tester.pump();
+      // Track a deal in flight — dock must stay disabled until ready.
+      controller.notifyFeltDealReady(false);
+      await tester.pump();
+      final midDeal = tester.widget<LessonActionDock>(
+        find.byType(LessonActionDock),
+      );
+      expect(midDeal.enabled, isFalse);
+      controller.notifyFeltDealReady(true);
+      await tester.pump();
+      final settled = tester.widget<LessonActionDock>(
+        find.byType(LessonActionDock),
+      );
+      expect(settled.enabled, isTrue);
+      expect(tester.takeException(), isNull);
+      controller.dispose();
+    },
+  );
+
   testWidgets('jump check hand opens steal on action dock', (tester) async {
     final activity = CourseActivity(
       id: 'act-01-06-02-jump-hand',

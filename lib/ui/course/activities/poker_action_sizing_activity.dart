@@ -128,10 +128,14 @@ class PokerActionSizingActivity extends StatelessWidget {
           // SoftPulse + Rex own the cue — keep felt gold status hidden under
           // Nice! too (locked drops showCoach / SoftPulse, not ownership).
           final coachOwnsCue = showGuidance && pulseTarget != null;
+          // SoftPulse / Hint wait for feltDealReady — keep the dock inert
+          // mid-deal too so learners cannot grade before holes land (LPT-1014).
+          final dealBlocksDock =
+              controller.feltDealTracked && !controller.feltDealReady;
           final dock = LessonActionDock(
             choices: dockChoices,
             selectedId: selected,
-            enabled: !locked,
+            enabled: !locked && !dealBlocksDock,
             identifyUnavailable: spot.identifyUnavailable,
             facingBet: spot.facingBet,
             heroStackAmount: spot.heroStackAmount,
