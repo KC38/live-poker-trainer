@@ -80,6 +80,44 @@ void main() {
     );
   });
 
+  test('alignStartingHandCopy rewrites suited/offsuit high-card class shorthand',
+      () {
+    // Widen on the button densify Nice! (LPT-1018).
+    expect(
+      alignStartingHandCopy(
+        text: 'Button can open this suited king.',
+        templateHero: const ['Kh', '9h'],
+        dealtHero: const ['Qc', '5c'],
+      ),
+      'Button can open this suited queen.',
+    );
+    expect(
+      alignStartingHandCopy(
+        text: 'Button can open this suited king.',
+        templateHero: const ['Kh', '9h'],
+        dealtHero: const ['Kd', '5d'],
+      ),
+      'Button can open this suited king.',
+    );
+    expect(
+      alignStartingHandCopy(
+        text: 'Fold this offsuit ace early.',
+        templateHero: const ['Ah', '4d'],
+        dealtHero: const ['Jc', '3h'],
+      ),
+      'Fold this offsuit jack early.',
+    );
+    // Family plural "suited aces" must not become "suited queens".
+    expect(
+      alignStartingHandCopy(
+        text: 'Pairs, broadways, suited aces, connectors.',
+        templateHero: const ['Ah', '5h'],
+        dealtHero: const ['Qc', '5c'],
+      ),
+      'Pairs, broadways, suited aces, connectors.',
+    );
+  });
+
   test('alignStartingHandCopy rewrites sixes, case, and bare rank tokens', () {
     expect(
       alignStartingHandCopy(
