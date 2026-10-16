@@ -202,6 +202,22 @@ int? parseLessonCallerCount(String? villainLine) {
     final players = int.tryParse(way.group(1)!);
     if (players != null && players >= 2) return players - 1;
   }
+  // "Four-way · bet into you" (word form) — same as digit 4-way (LPT-1025 class).
+  const wayWords = <String, int>{
+    'two': 2,
+    'three': 3,
+    'four': 4,
+    'five': 5,
+    'six': 6,
+    'seven': 7,
+    'eight': 8,
+    'nine': 9,
+  };
+  for (final entry in wayWords.entries) {
+    if (RegExp('${entry.key}-?way\\b').hasMatch(lower)) {
+      return entry.value - 1;
+    }
+  }
   final named = parseLessonNamedCallerPositions(villainLine);
   if (named.isNotEmpty) return named.length;
   return null;

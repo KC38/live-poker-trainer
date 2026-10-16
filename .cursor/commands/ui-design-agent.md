@@ -249,17 +249,22 @@ table in the design record, using the coverage ledger
    Coach copy that names top/second/third pair while the explain felt shows
    ace-high (default AhKd / Q72) is a `ui-agent` KEY — LPT-994 class; do not
    eye-hunt after the Nit/LAG override.
-6. A densify stem with template **card codes** from
+6. Densify **multiway caller** felt gaps from
+   `python3 tools/ui_densify_caller_scan.py list` (or `check`). Villain lines
+   like `Four-way` / `Three callers` / `BB + MP call` that
+   `parseLessonCallerCount` cannot read leave the ring HU while the coach
+   names multiway (LPT-1024 / LPT-1025 class).
+7. A densify stem with template **card codes** from
    `python3 tools/ui_densify_card_scan.py list` — **walk proof only**.
    Tokens in the stem map are expected for `alignLessonActionCopy`
    rewrite (LPT-851 Done). Run `… check` (exit 0 = align wired). File a
    remap ticket only when mini idle coach still names template cards
    while the felt shows isomorphic ranks — never because `list` is
    non-empty.
-7. A surface never walked.
-8. A surface whose code changed since its last walk
+8. A surface never walked.
+9. A surface whose code changed since its last walk
    (`git diff --name-only <last sha>..HEAD -- <code path>` is not empty).
-9. The surface walked longest ago.
+10. The surface walked longest ago.
 
 Prefer surfaces that the **Known gaps** section names, then motion
 targets (`ui_motion_targets.py list` / `classes`). When walking a
