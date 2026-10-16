@@ -112,6 +112,10 @@ void main() {
     expect(authoredSoftPulseExplainCaption('VALUE'), 'Get paid');
     expect(authoredSoftPulseExplainCaption('LOW SPR'), 'Pot vs stacks');
     expect(authoredSoftPulseExplainCaption('COMMIT'), 'Get it in');
+    expect(authoredSoftPulseExplainCaption('HIGH SPR'), 'Room to play');
+    expect(authoredSoftPulseExplainCaption('FLEXIBLE'), 'Keep pots small');
+    expect(authoredSoftPulseExplainCaption('FOLDS TO BETS'), 'Fold frequency');
+    expect(authoredSoftPulseExplainCaption('STICKY'), 'Calls often');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -1798,6 +1802,96 @@ void main() {
       expect(find.text('COMMIT'), findsWidgets);
       expect(find.text('Pot vs stacks'), findsOneWidget);
       expect(find.text('Get it in'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Stay flexible high SPR SoftPulse explain captions HIGH SPR + FLEXIBLE (LPT-921)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-04-05-01-03-explain-high',
+        targets: const ['HIGH SPR', 'FLEXIBLE'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('HIGH SPR'), findsWidgets);
+      expect(find.text('FLEXIBLE'), findsWidgets);
+      expect(find.text('Room to play'), findsOneWidget);
+      expect(find.text('Keep pots small'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Tag low folding SoftPulse explain captions FOLDS TO BETS + STICKY (LPT-920)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-04-06-01-02-explain-folding',
+        targets: const ['FOLDS TO BETS', 'STICKY'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('FOLDS TO BETS'), findsWidgets);
+      expect(find.text('STICKY'), findsWidgets);
+      expect(find.text('Fold frequency'), findsOneWidget);
+      expect(find.text('Calls often'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
