@@ -14722,6 +14722,18 @@ String authoredSoftPulseExplainCaption(String target) {
     // SoftPulse tiles label-only.
     'ENTRY WIDTH': 'Narrow vs wide',
     'DISCIPLINE': 'Gives up when called',
+    // No light bluffs SoftPulse explain (CHECK-RAISE → FOLD; LPT-976).
+    // FOLD already Give up; CHECK-RAISE glosses believe the TAG raise —
+    // never leave the first SoftPulse tile label-only.
+    'CHECK-RAISE': 'Believe it',
+    // Bet thin SoftPulse explain (RARELY CALLS → CHECK; LPT-977).
+    // CHECK already Pass the street; RARELY CALLS glosses no light calls —
+    // never leave the first SoftPulse tile label-only.
+    'RARELY CALLS': 'No light calls',
+    // Note sustained pressure SoftPulse explain (BARRELS → MANY HANDS;
+    // LPT-978). BARRELS already Fire multi-street; MANY HANDS glosses
+    // sample across spots — never leave that SoftPulse tile label-only.
+    'MANY HANDS': 'Across many spots',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
