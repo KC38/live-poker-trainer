@@ -83,13 +83,19 @@ class PokerActionSizingActivity extends StatelessWidget {
                 );
         // Framed runners use [lessonFrameDealSettlingSpeech]; unframed Rex
         // still must not name holes mid-deal (LPT-1012).
-        final coach = controller.feltDealTracked && !controller.feltDealReady
-            ? lessonFrameDealSettlingSpeech(activity)
-            : alignLessonActionCopy(
-              activity,
-              resolved.coach,
-              generation: controller.bindGeneration,
-            );
+        final promptNamesHoles = RegExp(
+          r'You have\b',
+          caseSensitive: false,
+        ).hasMatch(activity.prompt ?? '');
+        final coach =
+            !controller.feltDealReady &&
+                    (controller.feltDealTracked || promptNamesHoles)
+                ? lessonFrameDealSettlingSpeech(activity)
+                : alignLessonActionCopy(
+                  activity,
+                  resolved.coach,
+                  generation: controller.bindGeneration,
+                );
         final showPrompt = resolved.showPrompt;
         // Keep the coach slot under Nice!/Oops! (opacity 0) so the Column
         // height does not collapse and remount the felt (redeal). Framed

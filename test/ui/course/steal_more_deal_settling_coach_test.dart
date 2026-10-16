@@ -32,7 +32,7 @@ void main() {
     expect(settling.toLowerCase(), contains('tap'));
   });
 
-  test('$_id idle speech names holes only after feltDealReady', () {
+  test('$_id idle speech names holes only after feltDealReady', () async {
     final activity = catalog.activityById(_id);
     expect(activity, isNotNull, reason: _id);
     final controller = LessonActivityController(
@@ -42,9 +42,14 @@ void main() {
     expect(controller.feltDealReady, isFalse);
     expect(controller.feltDealTracked, isFalse);
 
+    var notified = 0;
+    controller.addListener(() => notified += 1);
     controller.notifyFeltDealReady(false);
     expect(controller.feltDealTracked, isTrue);
     expect(controller.feltDealReady, isFalse);
+    // notifyFeltDealReady schedules the listener; flush microtasks.
+    await Future<void>.delayed(Duration.zero);
+    expect(notified, greaterThan(0));
 
     final settling = lessonFrameDealSettlingSpeech(activity);
     expect(settling.toLowerCase(), contains('watch the deal'));

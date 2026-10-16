@@ -1073,8 +1073,11 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       }
     }
     // SoftPulse already waits on feltDealReady; coach that names hero holes
-    // must wait too — only while a felt is actively dealing (LPT-1012).
-    if (controller.feltDealTracked && !controller.feltDealReady) {
+    // must wait too. Gate before the felt's first notify as well when the
+    // catalog prompt already says "You have …" (LPT-1012).
+    if (!controller.feltDealReady &&
+        (controller.feltDealTracked ||
+            _promptNamesUnrevealedHeroHoles(controller.activity))) {
       return lessonFrameDealSettlingSpeech(
         controller.activity,
         handStepIndex: controller.draft.handStepIndex,
@@ -1095,6 +1098,17 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       isReview: isReview,
       bindGeneration: generation,
     );
+  }
+
+  /// Catalog prompts that name hole cards before SoftPulse can paint.
+  static final RegExp _youHaveHolePrompt = RegExp(
+    r'You have\b',
+    caseSensitive: false,
+  );
+
+  bool _promptNamesUnrevealedHeroHoles(CourseActivity activity) {
+    final prompt = activity.prompt?.trim() ?? '';
+    return prompt.isNotEmpty && _youHaveHolePrompt.hasMatch(prompt);
   }
 
   void _closeLesson() {

@@ -243,8 +243,12 @@ class LessonActivityController extends ChangeNotifier {
 
   /// Felt deal progress — SoftPulse stays off until [ready] is true.
   void notifyFeltDealReady(bool ready) {
+    final wasTracked = _feltDealTracked;
     _feltDealTracked = true;
-    if (_feltDealReady == ready) return;
+    // First track with ready==false must still notify — otherwise idle coach
+    // that names hero holes never rebuilds into deal-settling speech while
+    // SoftPulse waits (Steal more densify LPT-1012).
+    if (_feltDealReady == ready && wasTracked) return;
     _feltDealReady = ready;
     scheduleMicrotask(() {
       if (hasListeners) notifyListeners();
