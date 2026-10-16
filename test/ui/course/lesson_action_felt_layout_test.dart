@@ -132,11 +132,29 @@ void main() {
 
       expect(parseLessonCallerCount('Three callers · wet board'), 3);
       expect(parseLessonCallerCount('Checked to you · 4-way'), 3);
+      expect(parseLessonCallerCount('Four-way · bet into you'), 3);
+      expect(parseLessonCallerCount('Four-way limp · checked to you'), 3);
       // Hero BTN (default) → dealer 0; SB=1, BB=2, next=3.
       expect(layout.dealerIndex, 0);
       expect(layout.callerSeatIndexes.toSet(), {1, 2, 3});
       expect(layout.foldedSeatIndexes.toSet(), {4, 5});
       expect(layout.seatActionLabels, isEmpty);
+    });
+
+    test('LPT-1025 class: word Four-way keeps three villains live', () {
+      const spot = LessonActionSpot(
+        heroCodes: ['7h', '6h'],
+        boardCodes: ['Kh', '9h', '2c'],
+        potLabel: 'Pot 44',
+        villainLine: 'Four-way · bet into you',
+        streetLabel: 'Flop · non-nut FD multiway',
+        facingBet: true,
+      );
+
+      final layout = resolveLessonActionFeltLayout(spot);
+
+      expect(layout.callerSeatIndexes.toSet(), {1, 2, 3});
+      expect(layout.foldedSeatIndexes.toSet(), {4, 5});
     });
 
     test('explicit heads-up spots stay two-seat', () {
