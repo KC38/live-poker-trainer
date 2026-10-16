@@ -14840,6 +14840,28 @@ String authoredSoftPulseExplainCaption(String target) {
   return captions[target] ?? '';
 }
 
+/// Hero/board for [LessonAuthoredCueExplainTable].
+///
+/// Default SoftPulse explains keep the shared AhKd / Qs7c2d demo. Same-cards
+/// second-pair SoftPulse explains (Nit fold / LAG call) must match the
+/// `act-06-13-01-*` interactive spots — JhTd on QcTs3h2d7c — so coach copy
+/// that says "second pair" never sits over ace-high AK (LPT-994).
+({List<String> heroCodes, List<String> boardCodes})
+authoredCueExplainFeltCodes(CourseActivity activity) {
+  final id = activity.id;
+  if (id == 'act-06-13-01-02-explain-nit' ||
+      id == 'act-06-13-01-03-explain-lag') {
+    return (
+      heroCodes: const ['Jh', 'Td'],
+      boardCodes: const ['Qc', 'Ts', '3h', '2d', '7c'],
+    );
+  }
+  return (
+    heroCodes: const ['Ah', 'Kd'],
+    boardCodes: const ['Qs', '7c', '2d'],
+  );
+}
+
 /// SoftPulse explain tiles driven by authored `teachSpec.cues` targets (LPT-669).
 ///
 /// Curriculum-split successors mint new SoftPulse cue labels that do not match
@@ -14904,14 +14926,15 @@ class _LessonAuthoredCueExplainTableState
   Widget build(BuildContext context) {
     final targets = _targets;
     final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    final felt = authoredCueExplainFeltCodes(widget.activity);
     return Column(
       key: ValueKey<String>('authored-cue-explain-${widget.activity.id}'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
           child: LessonTableStage(
-            heroCodes: const ['Ah', 'Kd'],
-            boardCodes: const ['Qs', '7c', '2d'],
+            heroCodes: felt.heroCodes,
+            boardCodes: felt.boardCodes,
             villainCount: 1,
             heroFaceUp: true,
             enabled: false,
