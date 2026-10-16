@@ -4,7 +4,8 @@
 /// LPT-904 / LPT-905 / LPT-906 / LPT-907 / LPT-908 / LPT-909 / LPT-910 /
 /// LPT-911 / LPT-912 / LPT-913 / LPT-914 / LPT-915 / LPT-916 / LPT-917 /
 /// LPT-918 / LPT-919 / LPT-925 / LPT-926 / LPT-927 / LPT-931 / LPT-932 /
-/// LPT-933 / LPT-934:
+/// LPT-933 / LPT-934 / LPT-935 / LPT-936 / LPT-937 / LPT-938 / LPT-939 /
+/// LPT-940:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -147,6 +148,10 @@ void main() {
     );
     expect(authoredSoftPulseExplainCaption('ONE HAND'), 'Exact combo');
     expect(authoredSoftPulseExplainCaption('RANGE'), 'Keep a range');
+    expect(authoredSoftPulseExplainCaption('MULTIWAY'), 'Many players');
+    expect(authoredSoftPulseExplainCaption('OOP'), 'Out of position');
+    expect(authoredSoftPulseExplainCaption('SET'), 'Three of a kind');
+    expect(authoredSoftPulseExplainCaption('ONE PAIR'), 'Weak made');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -2645,6 +2650,148 @@ void main() {
       expect(find.text('Player model'), findsOneWidget);
       expect(find.text('Seat edge'), findsOneWidget);
       expect(find.text('Commit the rest'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+
+  testWidgets(
+    'Tighten speculative SoftPulse explain captions MULTIWAY + OOP + FOLD (LPT-938)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-05-01-01-02-explain-speculative',
+        targets: const ['MULTIWAY', 'OOP', 'FOLD'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('MULTIWAY'), findsWidgets);
+      expect(find.text('OOP'), findsWidgets);
+      expect(find.text('FOLD'), findsWidgets);
+      expect(find.text('Many players'), findsOneWidget);
+      expect(find.text('Out of position'), findsOneWidget);
+      expect(find.text('Give up'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Thick value SoftPulse explain captions CALLERS + SET + BET (LPT-939)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-05-01-01-03-explain-value',
+        targets: const ['CALLERS', 'SET', 'BET'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('CALLERS'), findsWidgets);
+      expect(find.text('SET'), findsWidgets);
+      expect(find.text('BET'), findsWidgets);
+      expect(find.text('Called the open'), findsOneWidget);
+      expect(find.text('Three of a kind'), findsOneWidget);
+      expect(find.text('Put chips in'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Fold light deep SoftPulse explain captions DEEP + ONE PAIR + FOLD (LPT-940)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-05-02-01-02-explain-stack-off',
+        targets: const ['DEEP', 'ONE PAIR', 'FOLD'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('DEEP'), findsWidgets);
+      expect(find.text('ONE PAIR'), findsWidgets);
+      expect(find.text('FOLD'), findsWidgets);
+      expect(find.text('Wider trees'), findsOneWidget);
+      expect(find.text('Weak made'), findsOneWidget);
+      expect(find.text('Give up'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );

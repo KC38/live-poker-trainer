@@ -1769,7 +1769,7 @@ NO EGO → No feelings — LPT-932, CONSTANT RAISES → Raises often /
 NEVER GIVES UP → Never folds rivers — LPT-933, ONE HAND → Exact
 combo / RANGE → Keep a range — LPT-934, SHOWDOWNS → Cards speak —
 LPT-935, NEW EVIDENCE → Seat changed / RETIRE → Drop old label —
-LPT-936, TYPE → Player model — LPT-937). Play a full
+LPT-936, TYPE → Player model — LPT-937, MULTIWAY → Many players / OOP → Out of position — LPT-938, SET → Three of a kind — LPT-939, ONE PAIR → Weak made — LPT-940). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2183,10 +2183,10 @@ felt.
 | Combine type, position, and stack | explain SoftPulse cues TYPE → POSITION → STACK with teaching captions (Player model / Seat edge / Commit the rest — never empty TYPE gloss; LPT-937); unit `unit-04-10-exploits` (LPT-218 split); objective "Combine type × position × stack" so the checkpoint grades this lesson's concept (curriculum residual LPT-779) | — |
 | Section 4 jump check | jump-range SoftPulse one gold via `guideRegion` (LPT-634) | — |
 | Prefer nut potential multiway | Nutted, Air, Domination; densify continue/priority panels omit decoy Them (LPT-722); checkpoint SoftPulse-off densify stem non-spoiling (LPT-723); unit `unit-05-01-multiway-ranges` (LPT-224 split) | — |
-| Tighten speculative hands multiway | explain SoftPulse cues MULTIWAY → OOP → FOLD; unit `unit-05-01-multiway-ranges` (LPT-224 split) | — |
-| Value thicker when callers stick | explain SoftPulse cues CALLERS → SET → BET; unit `unit-05-01-multiway-ranges` (LPT-224 split) | — |
+| Tighten speculative hands multiway | explain SoftPulse cues MULTIWAY → OOP → FOLD with teaching captions (Many players / Out of position / Give up — never empty MULTIWAY/OOP glosses; LPT-938); unit `unit-05-01-multiway-ranges` (LPT-224 split) | — |
+| Value thicker when callers stick | explain SoftPulse cues CALLERS → SET → BET with teaching captions (Called the open / Three of a kind / Put chips in — never empty SET gloss; LPT-939); unit `unit-05-01-multiway-ranges` (LPT-224 split) | — |
 | Depth pays speculative hands | Deep, Realize, Stack; unit `unit-05-02-deep-stacks` (LPT-227 split) | — |
-| Don't stack off light deep | explain SoftPulse cues DEEP → ONE PAIR → FOLD; unit `unit-05-02-deep-stacks` (LPT-227 split) | — |
+| Don't stack off light deep | explain SoftPulse cues DEEP → ONE PAIR → FOLD with teaching captions (Wider trees / Weak made / Give up — never empty ONE PAIR gloss; LPT-940); unit `unit-05-02-deep-stacks` (LPT-227 split) | — |
 | Plan streets at high SPR | explain SoftPulse cues SPR → TURN → RIVER; unguided SoftPulse-quiet densify stem non-spoiling (no Map turn/river plans) (LPT-859); unit `unit-05-02-deep-stacks` (LPT-227 split); objective "Plan high-SPR streets with position, implied odds, and folds" so the checkpoint grades this lesson's concept (curriculum residual LPT-680) | — |
 | Estimate implied odds | Implied on the felt; explain SoftPulse cue IMPLIED only — REVERSE/SECOND presses belong to Spot reverse implied odds and Skip dominated draws multiway (curriculum residual LPT-681); densified SoftPulse one gold (LPT-515); checkpoint SoftPulse-off densify stem non-spoiling (LPT-734); unit `unit-05-03-implied-odds` (LPT-230 split) | — |
 | Spot reverse implied odds | explain SoftPulse cues REVERSE → DOMINATED → FOLD; unit `unit-05-03-implied-odds` (LPT-230 split) | — |
