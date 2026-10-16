@@ -121,6 +121,10 @@ void main() {
     expect(authoredSoftPulseExplainCaption('RARE FOLDS'), 'Seldom folds');
     expect(authoredSoftPulseExplainCaption('OBSERVATION'), 'Not a verdict');
     expect(authoredSoftPulseExplainCaption('SAMPLES'), 'Build the count');
+    expect(authoredSoftPulseExplainCaption('SHOWDOWNS'), 'Cards speak');
+    expect(authoredSoftPulseExplainCaption('NEW EVIDENCE'), 'Seat changed');
+    expect(authoredSoftPulseExplainCaption('RETIRE'), 'Drop old label');
+    expect(authoredSoftPulseExplainCaption('TYPE'), 'Player model');
     expect(authoredSoftPulseExplainCaption('SAMPLE'), 'Tiny sample');
     expect(authoredSoftPulseExplainCaption('CONFIDENCE'), 'Keep it low');
     expect(authoredSoftPulseExplainCaption('RARELY FOLDS'), 'Station sticks');
@@ -2504,6 +2508,143 @@ void main() {
       expect(find.text('RANGE'), findsWidgets);
       expect(find.text('Exact combo'), findsOneWidget);
       expect(find.text('Keep a range'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Confidence samples SoftPulse explain captions SAMPLES + SHOWDOWNS (LPT-935)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-04-09-01-02-explain-samples',
+        targets: const ['SAMPLES', 'SHOWDOWNS'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('SAMPLES'), findsWidgets);
+      expect(find.text('SHOWDOWNS'), findsWidgets);
+      expect(find.text('Build the count'), findsOneWidget);
+      expect(find.text('Cards speak'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Retire labels SoftPulse explain captions NEW EVIDENCE + RETIRE (LPT-936)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-04-09-01-03-explain-retire',
+        targets: const ['NEW EVIDENCE', 'RETIRE'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('NEW EVIDENCE'), findsWidgets);
+      expect(find.text('RETIRE'), findsWidgets);
+      expect(find.text('Seat changed'), findsOneWidget);
+      expect(find.text('Drop old label'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Combine factors SoftPulse explain captions TYPE + POSITION + STACK (LPT-937)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-04-10-01-02-explain-combine',
+        targets: const ['TYPE', 'POSITION', 'STACK'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('TYPE'), findsWidgets);
+      expect(find.text('POSITION'), findsWidgets);
+      expect(find.text('STACK'), findsWidgets);
+      expect(find.text('Player model'), findsOneWidget);
+      expect(find.text('Seat edge'), findsOneWidget);
+      expect(find.text('Commit the rest'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );

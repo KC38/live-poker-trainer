@@ -1767,7 +1767,9 @@ LPT-924, EVERY STREET → Bets all streets / WEAK SHOWDOWNS →
 Weak at showdown — LPT-931, FREQUENCIES → Count how often /
 NO EGO → No feelings — LPT-932, CONSTANT RAISES → Raises often /
 NEVER GIVES UP → Never folds rivers — LPT-933, ONE HAND → Exact
-combo / RANGE → Keep a range — LPT-934). Play a full
+combo / RANGE → Keep a range — LPT-934, SHOWDOWNS → Cards speak —
+LPT-935, NEW EVIDENCE → Seat changed / RETIRE → Drop old label —
+LPT-936, TYPE → Player model — LPT-937). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2175,10 +2177,10 @@ felt.
 | Widen value and bluff-catches | Wider, Hang, Ego; checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-08-maniac` (LPT-212 split) | call-wider reason |
 | Cite the aggression read | explain SoftPulse cues EVIDENCE → UNKNOWN; checkpoint SoftPulse-off densify stem non-spoiling (LPT-781); unit `unit-04-08-maniac` (LPT-212 split) | — |
 | Observation is not certainty | Observe on the felt; explain SoftPulse cue OBSERVE only — SAMPLES/SHOWDOWNS presses belong to Confidence grows with samples (curriculum residual LPT-775); densified SoftPulse one gold (LPT-495); unit `unit-04-09-type-id` (LPT-215 split) | confidence quizzes |
-| Confidence grows with samples | explain SoftPulse cues SAMPLES → SHOWDOWNS; scaffolded SoftPulse-quiet densify stem non-spoiling (no Rise) (LPT-823); checkpoint SoftPulse-off densify stem non-spoiling (LPT-777); unit `unit-04-09-type-id` (LPT-215 split) | — |
-| Retire labels when evidence flips | explain SoftPulse cues NEW EVIDENCE → RETIRE; unguided SoftPulse-quiet densify stem non-spoiling (no Update / Calling Station model) (LPT-821); unit `unit-04-09-type-id` (LPT-215 split) | — |
+| Confidence grows with samples | explain SoftPulse cues SAMPLES → SHOWDOWNS with teaching captions (Build the count / Cards speak — never empty SHOWDOWNS gloss; LPT-935); scaffolded SoftPulse-quiet densify stem non-spoiling (no Rise) (LPT-823); checkpoint SoftPulse-off densify stem non-spoiling (LPT-777); unit `unit-04-09-type-id` (LPT-215 split) | — |
+| Retire labels when evidence flips | explain SoftPulse cues NEW EVIDENCE → RETIRE with teaching captions (Seat changed / Drop old label — never empty glosses; LPT-936); unguided SoftPulse-quiet densify stem non-spoiling (no Update / Calling Station model) (LPT-821); unit `unit-04-09-type-id` (LPT-215 split) | — |
 | Same hand, different types | Cards, Seats, Evidence; unit `unit-04-10-exploits` (LPT-218 split); objective "Change lines by type with justification" so the checkpoint grades this lesson's concept (curriculum residual LPT-779) | — |
-| Combine type, position, and stack | explain SoftPulse cues TYPE → POSITION → STACK; unit `unit-04-10-exploits` (LPT-218 split); objective "Combine type × position × stack" so the checkpoint grades this lesson's concept (curriculum residual LPT-779) | — |
+| Combine type, position, and stack | explain SoftPulse cues TYPE → POSITION → STACK with teaching captions (Player model / Seat edge / Commit the rest — never empty TYPE gloss; LPT-937); unit `unit-04-10-exploits` (LPT-218 split); objective "Combine type × position × stack" so the checkpoint grades this lesson's concept (curriculum residual LPT-779) | — |
 | Section 4 jump check | jump-range SoftPulse one gold via `guideRegion` (LPT-634) | — |
 | Prefer nut potential multiway | Nutted, Air, Domination; densify continue/priority panels omit decoy Them (LPT-722); checkpoint SoftPulse-off densify stem non-spoiling (LPT-723); unit `unit-05-01-multiway-ranges` (LPT-224 split) | — |
 | Tighten speculative hands multiway | explain SoftPulse cues MULTIWAY → OOP → FOLD; unit `unit-05-01-multiway-ranges` (LPT-224 split) | — |
