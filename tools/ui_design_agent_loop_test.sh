@@ -352,7 +352,7 @@ grep -q 'replacing idle tmux session' <<<"$ensure_out$start_out$(cat "$TMUX_LOG"
 grep -q 'new-session' "$TMUX_LOG" \
   || fail "ensure must start a fresh session after idle: $(cat "$TMUX_LOG")"
 
-install_out="$(bash "$LOOP" install)"
+install_out="$(TZ=Asia/Kolkata bash "$LOOP" install)"
 plist="$HOME/Library/LaunchAgents/com.livepokertrainer.ui-design-agent.plist"
 [[ -f "$plist" ]] || fail "install should write $plist ($install_out)"
 grep -q '<string>com.livepokertrainer.ui-design-agent</string>' "$plist" \
@@ -361,6 +361,16 @@ grep -q '<string>tick</string>' "$plist" || fail "plist must launch one tick run
 grep -q '<key>StartCalendarInterval</key>' "$plist" || fail "plist must use a twice-daily calendar"
 grep -q '<key>Hour</key><integer>7</integer><key>Minute</key><integer>30</integer>' "$plist" || fail "default 07:30 slot"
 grep -q '<key>Hour</key><integer>19</integer><key>Minute</key><integer>30</integer>' "$plist" || fail "default 19:30 slot"
+grep -q '<key>Hour</key><integer>8</integer><key>Minute</key><integer>30</integer>' "$plist" || fail "CST 08:30 IST candidate"
+grep -q '<key>Hour</key><integer>20</integer><key>Minute</key><integer>30</integer>' "$plist" || fail "CST 20:30 IST candidate"
+! grep -q '<key>KeepAlive</key><true/>' "$plist" || fail "no KeepAlive"
+# tick is a no-op outside a CT slot (10:00 CDT) and due inside one (09:02 CDT / 21:05 CST).
+off_out="$(CT_SLOT_NOW_EPOCH=1792162800 bash "$LOOP" tick)"
+grep -q 'not-due' <<<"$off_out" || fail "tick at 10:00 CT must skip: $off_out"
+on_out="$(CT_SLOT_NOW_EPOCH=1792159320 UI_AGENT_TICK_DRY=1 bash "$LOOP" tick)"
+grep -q 'due for slot 2026-10-16T09:00' <<<"$on_out" || fail "tick at 09:02 CDT must be due: $on_out"
+cst_out="$(CT_SLOT_NOW_EPOCH=1793761500 UI_AGENT_TICK_DRY=1 bash "$LOOP" tick)"
+grep -q 'due for slot 2026-11-03T21:00' <<<"$cst_out" || fail "tick at 21:05 CST must be due: $cst_out"
 ! grep -q '<key>StartInterval</key>' "$plist" || fail "plist must not respawn every few minutes"
 grep -A0 '<key>RunAtLoad</key><false/>' "$plist" >/dev/null || fail "no RunAtLoad"
 grep -q 'ui_design_agent_loop.sh' "$plist" || fail "plist must name the loop script"

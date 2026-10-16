@@ -5,9 +5,12 @@
 #   tools/ui_design_agent_loop.sh verify   check both work, including Jira from inside the CLI
 #   tools/ui_design_agent_loop.sh start    start the loop (its own tmux server, socket ui-agent)
 #   tools/ui_design_agent_loop.sh install  schedule ONE run (tick) twice a day via launchd
-#                                          StartCalendarInterval (UI_AGENT_SCHEDULE, default
-#                                          "07:30 19:30" local = 09:00/21:00 CDT on an IST mini).
-#                                          No RunAtLoad, no KeepAlive, no continuous loop.
+#                                          StartCalendarInterval at 09:00 and 21:00 America/Chicago
+#                                          (UI_AGENT_CT_TARGETS). The IST mini registers both the
+#                                          CDT and CST local candidates; tick runs only inside
+#                                          +/-10 min of a CT target, once per slot (tools/agent_ct_slot.sh),
+#                                          so the schedule survives DST (Nov 1) with no edits.
+#                                          No RunAtLoad, no KeepAlive, no StartInterval, no loop.
 #   tools/ui_design_agent_loop.sh install-continuous  legacy: ensure every 5 minutes (back-to-back loop)
 #   tools/ui_design_agent_loop.sh tick     one scheduled run; skips if held, stopped, or a run/loop is live
 #   tools/ui_design_agent_loop.sh ensure   start the loop only when run-loop is alive
@@ -88,6 +91,9 @@ FUNCTIONS_DEPLOYED_SHA_FILE="${FUNCTIONS_DEPLOYED_SHA_FILE:-$STATE_DIR/functions
 # When present, ensure no-ops so a health timer can file/ship without the
 # loop waking onto the same ticket (LPT-656 race 2026-10-13).
 HOLD_FILE="$STATE_DIR/ui-agent.hold"
+# Scheduled tick targets in America/Chicago (see tools/agent_ct_slot.sh).
+UI_CT_TARGETS="${UI_AGENT_CT_TARGETS:-09:00 21:00}"
+UI_TICK_STAMP="$STATE_DIR/ui-agent-tick-slots"
 STOP_FILE="$STATE_DIR/ui-agent.stop"
 PID_FILE="$STATE_DIR/ui-agent.pid"
 # Pid of the run-loop bash (not the agent). ensure/status use this so an
@@ -3070,13 +3076,12 @@ case "${1:-}" in
   install)
     # Twice-daily one-shot runs (Kushal 2026-10-16: one run every 12h).
     mkdir -p "$(dirname "$PLIST")"
-    _sched="${UI_AGENT_SCHEDULE:-07:30 19:30}"
-    _cal=""
-    for _t in $_sched; do
-      _h="${_t%%:*}"; _m="${_t##*:}"
-      _cal+="    <dict><key>Hour</key><integer>$((10#$_h))</integer><key>Minute</key><integer>$((10#$_m))</integer></dict>
+    # CT targets -> both IST candidates (CDT and CST); tick gates on CT.
+    # shellcheck source=agent_ct_slot.sh
+    source "$TOOLS/agent_ct_slot.sh"
+    _sched="$UI_CT_TARGETS CT"
+    _cal="$(ct_slot_plist_entries "$UI_CT_TARGETS")
 "
-    done
     cat >"$PLIST" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -3098,15 +3103,23 @@ $_cal  </array>
 EOF
     launchctl bootout "gui/$(id -u)/$LAUNCH_LABEL" 2>/dev/null || true
     launchctl bootstrap "gui/$(id -u)" "$PLIST"
-    echo "installed $PLIST: one run (tick) at $_sched local; no continuous loop"
+    echo "installed $PLIST: one run (tick) at $_sched; next $(ct_slot_next "$UI_CT_TARGETS"); no continuous loop"
     unset _sched _cal _t _h _m
     ;;
   tick)
     if [[ -f "$HOLD_FILE" ]]; then echo "tick: held ($HOLD_FILE); skipping"; exit 0; fi
     if [[ -f "$STOP_FILE" ]]; then echo "tick: stop file present; skipping"; exit 0; fi
     if loop_is_alive || run_pid_is_alive; then echo "tick: a loop or run is already live; skipping"; exit 0; fi
+    # shellcheck source=agent_ct_slot.sh
+    source "$TOOLS/agent_ct_slot.sh"
+    _slot="manual-$(date +%s)"
+    if [[ "${UI_AGENT_TICK_FORCE:-}" != "1" ]]; then
+      _slot="$(ct_slot_due "$UI_CT_TARGETS" "$UI_TICK_STAMP")" || { echo "tick: $_slot; skipping"; exit 0; }
+    fi
+    if [[ "${UI_AGENT_TICK_DRY:-}" == "1" ]]; then echo "tick: due for slot $_slot (dry run; not starting)"; exit 0; fi
+    ct_slot_mark "$UI_TICK_STAMP" "$_slot"
     if ! prepare_launcher; then echo "tick: launcher prep failed (SDK deps)" >&2; exit 1; fi
-    echo "$(date "+%Y-%m-%dT%H:%M:%S%z") tick: starting one run"
+    echo "$(date "+%Y-%m-%dT%H:%M:%S%z") tick: starting one run (CT slot $_slot)"
     one_run || echo "tick: one_run exited $?"
     ;;
   install-continuous)
