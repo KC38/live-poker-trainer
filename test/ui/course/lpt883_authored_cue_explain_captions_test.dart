@@ -13,7 +13,8 @@
 /// LPT-976 / LPT-977 / LPT-978 / LPT-979 / LPT-980 / LPT-981 /
 /// LPT-982 / LPT-983 / LPT-984 / LPT-985 / LPT-986 / LPT-987 /
 /// LPT-988 / LPT-989 / LPT-990 / LPT-991 / LPT-992 /
-/// LPT-993 / LPT-994 / LPT-995 / LPT-996 / LPT-997:
+/// LPT-993 / LPT-994 / LPT-995 / LPT-996 / LPT-997 /
+/// LPT-998 / LPT-999 / LPT-1000:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -330,6 +331,30 @@ void main() {
     expect(
       authoredSoftPulseExplainCaption('TAG CHECK-RAISE'),
       'Strong TAG raise',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('NO EVIDENCE'),
+      'No type note yet',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('BASELINE'),
+      'Play your default',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('FOUR INPUTS'),
+      'Type, board, line, size',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('ONE ACTION'),
+      'One clear decision',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('COMMON SPOT'),
+      'Recurring situation',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('DEFAULT'),
+      'Pre-written line',
     );
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
@@ -5555,6 +5580,138 @@ void main() {
       expect(find.text('CAREFUL'), findsWidgets);
       expect(find.text('Strong TAG raise'), findsOneWidget);
       expect(find.text('Near-committed'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'No evidence baseline SoftPulse explain captions (LPT-998)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-07-07-01-04-explain-baseline',
+        targets: const ['NO EVIDENCE', 'BASELINE'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('NO EVIDENCE'), findsWidgets);
+      expect(find.text('BASELINE'), findsWidgets);
+      expect(find.text('No type note yet'), findsOneWidget);
+      expect(find.text('Play your default'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'One coherent action SoftPulse explain captions (LPT-999)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-07-08-01-03-explain-one',
+        targets: const ['FOUR INPUTS', 'ONE ACTION'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('FOUR INPUTS'), findsWidgets);
+      expect(find.text('ONE ACTION'), findsWidgets);
+      expect(find.text('Type, board, line, size'), findsOneWidget);
+      expect(find.text('One clear decision'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Default lines SoftPulse explain captions (LPT-1000)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-07-09-01-02-explain-defaults',
+        targets: const ['COMMON SPOT', 'DEFAULT'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('COMMON SPOT'), findsWidgets);
+      expect(find.text('DEFAULT'), findsWidgets);
+      expect(find.text('Recurring situation'), findsOneWidget);
+      expect(find.text('Pre-written line'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
