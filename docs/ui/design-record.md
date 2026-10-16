@@ -1777,7 +1777,7 @@ accordingly / SHAPE → Range shape / MATCH → Size fits shape — LPT-960,
 HUGE → Too big / AVOID → Skip random — LPT-961, CATCH → Bluff-catch hand /
 UNBLOCK → Keep their draws / BLUFFS → Missed draws live — LPT-962, TWEAK →
 Close choice only / NO EV → No fake decimals — LPT-963, THIRD PAIR → Weak
-pair / SCARY → Tough river — LPT-964). Play a full
+pair / SCARY → Tough river — LPT-964, MDF → Exact percents / INTUITION → Decision-linked — LPT-965). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2238,7 +2238,7 @@ felt.
 | Blockers without fake EV | explain SoftPulse cues TWEAK → NO EV with teaching captions (Close choice only / No fake decimals — never empty glosses; LPT-963); unit `unit-06-06-blockers` (LPT-270 split) | — |
 | Continue with stronger catchers | Defend on the felt; explain SoftPulse cue DEFEND only — BLUFF/ENOUGH presses belong to Fold dominated trash and No fake MDF math (curriculum residual LPT-701); densified frame asks (LPT-640); unguided SoftPulse one gold (LPT-499); unit `unit-06-07-min-defense` (LPT-273 split); objective "Continue with stronger catchers to punish over-bluffs" so the checkpoint grades this lesson's concept (curriculum residual LPT-702) | — |
 | Fold dominated trash | explain SoftPulse cues THIRD PAIR → SCARY → FOLD with teaching captions (Weak pair / Tough river / Give up — never empty THIRD PAIR or SCARY glosses; LPT-964); unit `unit-06-07-min-defense` (LPT-273 split) | — |
-| No fake MDF math | explain SoftPulse cues MDF → INTUITION; unit `unit-06-07-min-defense` (LPT-273 split) | — |
+| No fake MDF math | explain SoftPulse cues MDF → INTUITION with teaching captions (Exact percents / Decision-linked — never empty glosses; LPT-965); unit `unit-06-07-min-defense` (LPT-273 split) | — |
 | Mix strong hands sometimes | Mix, Strong on the felt; explain SoftPulse cue MIX → STRONG only — PURPOSE press belongs to No mixing for its own sake (curriculum residual LPT-703); unguided SoftPulse one gold Need a reason (LPT-500); densified frame asks (LPT-644); unit `unit-06-08-mixed` (LPT-277 split) | — |
 | Types reduce mixing | explain SoftPulse cues TYPE → STATION → LESS; unit `unit-06-08-mixed` (LPT-277 split) | — |
 | No mixing for its own sake | explain SoftPulse cues RANDOM → PURPOSE; unit `unit-06-08-mixed` (LPT-277 split) | — |

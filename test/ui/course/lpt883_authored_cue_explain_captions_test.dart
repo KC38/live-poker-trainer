@@ -8,7 +8,7 @@
 /// LPT-940 / LPT-941 / LPT-942 / LPT-943 / LPT-944 / LPT-945 / LPT-946 /
 /// LPT-950 / LPT-951 / LPT-952 / LPT-953 / LPT-954 / LPT-955 /
 /// LPT-956 / LPT-957 / LPT-958 / LPT-959 / LPT-960 / LPT-961 /
-/// LPT-962 / LPT-963 / LPT-964:
+/// LPT-962 / LPT-963 / LPT-964 / LPT-965:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -200,6 +200,8 @@ void main() {
     expect(authoredSoftPulseExplainCaption('NO EV'), 'No fake decimals');
     expect(authoredSoftPulseExplainCaption('THIRD PAIR'), 'Weak pair');
     expect(authoredSoftPulseExplainCaption('SCARY'), 'Tough river');
+    expect(authoredSoftPulseExplainCaption('MDF'), 'Exact percents');
+    expect(authoredSoftPulseExplainCaption('INTUITION'), 'Decision-linked');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -3969,6 +3971,52 @@ void main() {
       expect(find.text('Weak pair'), findsOneWidget);
       expect(find.text('Tough river'), findsOneWidget);
       expect(find.text('Give up'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+
+  testWidgets(
+    'No fake MDF math SoftPulse explain captions (LPT-965)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-07-01-03-explain-mdf',
+        targets: const ['MDF', 'INTUITION'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('MDF'), findsWidgets);
+      expect(find.text('INTUITION'), findsWidgets);
+      expect(find.text('Exact percents'), findsOneWidget);
+      expect(find.text('Decision-linked'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );

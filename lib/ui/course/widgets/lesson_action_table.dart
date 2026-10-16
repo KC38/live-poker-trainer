@@ -14670,6 +14670,11 @@ String authoredSoftPulseExplainCaption(String target) {
     // tough river — never leave those SoftPulse tiles label-only.
     'THIRD PAIR': 'Weak pair',
     'SCARY': 'Tough river',
+    // No fake MDF math SoftPulse explain (MDF → INTUITION; LPT-965).
+    // Gloss matches DefendIntuitionOutcomes Exact percents / Decision-linked
+    // — never leave AuthoredCue tiles label-only.
+    'MDF': 'Exact percents',
+    'INTUITION': 'Decision-linked',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
