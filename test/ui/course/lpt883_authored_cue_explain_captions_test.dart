@@ -7,7 +7,7 @@
 /// LPT-933 / LPT-934 / LPT-935 / LPT-936 / LPT-937 / LPT-938 / LPT-939 /
 /// LPT-940 / LPT-941 / LPT-942 / LPT-943 / LPT-944 / LPT-945 / LPT-946 /
 /// LPT-950 / LPT-951 / LPT-952 / LPT-953 / LPT-954 / LPT-955 /
-/// LPT-956 / LPT-957 / LPT-958:
+/// LPT-956 / LPT-957 / LPT-958 / LPT-959 / LPT-960 / LPT-961:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -186,6 +186,12 @@ void main() {
     expect(authoredSoftPulseExplainCaption('SEMI-BLUFF'), 'Bet with outs');
     expect(authoredSoftPulseExplainCaption('OUTS'), 'Cards that help');
     expect(authoredSoftPulseExplainCaption('THIN'), 'Extract light');
+    expect(authoredSoftPulseExplainCaption('MERGED'), 'Medium-strong');
+    expect(authoredSoftPulseExplainCaption('SIZE'), 'Size accordingly');
+    expect(authoredSoftPulseExplainCaption('SHAPE'), 'Range shape');
+    expect(authoredSoftPulseExplainCaption('MATCH'), 'Size fits shape');
+    expect(authoredSoftPulseExplainCaption('HUGE'), 'Too big');
+    expect(authoredSoftPulseExplainCaption('AVOID'), 'Skip random');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -3675,6 +3681,147 @@ void main() {
       expect(find.text('Nuts unlikely'), findsOneWidget);
       expect(find.text('Extract light'), findsOneWidget);
       expect(find.text('Make them fold'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Merged thin SoftPulse explain captions MERGED (LPT-959)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-04-01-02-explain-merged',
+        targets: const ['MERGED', 'MEDIUM', 'VALUE'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('MERGED'), findsWidgets);
+      expect(find.text('MEDIUM'), findsWidgets);
+      expect(find.text('VALUE'), findsWidgets);
+      expect(find.text('Medium-strong'), findsOneWidget);
+      expect(find.text('Medium strength'), findsOneWidget);
+      expect(find.text('Get paid'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Matched shapes SoftPulse explain captions SIZE/SHAPE/MATCH (LPT-960)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-04-01-03-explain-mismatch',
+        targets: const ['SIZE', 'SHAPE', 'MATCH'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('SIZE'), findsWidgets);
+      expect(find.text('SHAPE'), findsWidgets);
+      expect(find.text('MATCH'), findsWidgets);
+      expect(find.text('Size accordingly'), findsOneWidget);
+      expect(find.text('Range shape'), findsOneWidget);
+      expect(find.text('Size fits shape'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'No random huge SoftPulse explain captions HUGE + AVOID (LPT-961)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-05-01-03-explain-random',
+        targets: const ['HUGE', 'MEDIUM', 'AVOID'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('HUGE'), findsWidgets);
+      expect(find.text('MEDIUM'), findsWidgets);
+      expect(find.text('AVOID'), findsWidgets);
+      expect(find.text('Too big'), findsOneWidget);
+      expect(find.text('Medium strength'), findsOneWidget);
+      expect(find.text('Skip random'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );

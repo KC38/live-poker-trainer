@@ -14638,6 +14638,22 @@ String authoredSoftPulseExplainCaption(String target) {
     // CAPPED/BLUFF already captioned; THIN matches ThinValueDemo Extract light
     // — never leave the middle SoftPulse tile label-only.
     'THIN': 'Extract light',
+    // Merged sizes for thin value SoftPulse explain (MERGED → MEDIUM → VALUE;
+    // LPT-959). MEDIUM/VALUE already captioned; MERGED matches
+    // PolarMergedDemo Medium-strong — never leave the first SoftPulse tile
+    // label-only.
+    'MERGED': 'Medium-strong',
+    // Match size to shape SoftPulse explain (SIZE → SHAPE → MATCH; LPT-960).
+    // SIZE matches PolarMergedDemo Size accordingly; SHAPE/MATCH gloss range
+    // shape / size-fits-shape — never leave AuthoredCue tiles label-only.
+    'SIZE': 'Size accordingly',
+    'SHAPE': 'Range shape',
+    'MATCH': 'Size fits shape',
+    // No random huge bets SoftPulse explain (HUGE → MEDIUM → AVOID; LPT-961).
+    // MEDIUM already Medium strength; HUGE/AVOID gloss too-big / skip-random
+    // — never leave those SoftPulse tiles label-only.
+    'HUGE': 'Too big',
+    'AVOID': 'Skip random',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
