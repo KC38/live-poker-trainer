@@ -14,7 +14,7 @@
 /// LPT-982 / LPT-983 / LPT-984 / LPT-985 / LPT-986 / LPT-987 /
 /// LPT-988 / LPT-989 / LPT-990 / LPT-991 / LPT-992 /
 /// LPT-993 / LPT-994 / LPT-995 / LPT-996 / LPT-997 /
-/// LPT-998 / LPT-999 / LPT-1000:
+/// LPT-998 / LPT-999 / LPT-1000 / LPT-1001:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -355,6 +355,10 @@ void main() {
     expect(
       authoredSoftPulseExplainCaption('DEFAULT'),
       'Pre-written line',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('AFTER SESSION'),
+      'Right after play',
     );
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
@@ -5712,6 +5716,50 @@ void main() {
       expect(find.text('DEFAULT'), findsWidgets);
       expect(find.text('Recurring situation'), findsOneWidget);
       expect(find.text('Pre-written line'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Review habits SoftPulse explain captions (LPT-1001)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-07-09-01-03-explain-review',
+        targets: const ['AFTER SESSION', 'REVIEW'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('AFTER SESSION'), findsWidgets);
+      expect(find.text('REVIEW'), findsWidgets);
+      expect(find.text('Right after play'), findsOneWidget);
+      expect(find.text('Judge the hand'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );

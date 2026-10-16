@@ -14838,6 +14838,11 @@ String authoredSoftPulseExplainCaption(String target) {
     // lines — never leave AuthoredCue tiles label-only.
     'COMMON SPOT': 'Recurring situation',
     'DEFAULT': 'Pre-written line',
+    // Schedule your review SoftPulse explain
+    // (AFTER SESSION → REVIEW; LPT-1001). REVIEW already Judge the hand;
+    // AFTER SESSION glosses post-play review — never leave the first
+    // SoftPulse tile label-only.
+    'AFTER SESSION': 'Right after play',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
