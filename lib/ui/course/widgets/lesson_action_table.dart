@@ -14804,6 +14804,20 @@ String authoredSoftPulseExplainCaption(String target) {
     // MULTIWAY Many players — never leave the first SoftPulse tile
     // label-only. Also covers Widen HU bluffs SoftPulse HEADS-UP press.
     'HEADS-UP': 'Two players',
+    // Value thicker multiway SoftPulse explain (MULTIWAY → THICK VALUE;
+    // LPT-993). MULTIWAY already Many players; THICK VALUE glosses bet
+    // thicker — never leave the second SoftPulse tile label-only.
+    'THICK VALUE': 'Bet thicker',
+    // Widen selected heads-up bluffs SoftPulse explain
+    // (HEADS-UP → STEAL MORE; LPT-995). HEADS-UP already Two players;
+    // STEAL MORE glosses bluff more often — never leave the second
+    // SoftPulse tile label-only.
+    'STEAL MORE': 'Bluff more often',
+    // Recalculate effective stacks SoftPulse explain
+    // (SHORTER STACK → PLAN; LPT-996). PLAN already Fold, call, or 3-bet;
+    // SHORTER STACK mirrors SHORTER Min of the two — never leave the
+    // first SoftPulse tile label-only.
+    'SHORTER STACK': 'Min of the two',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
