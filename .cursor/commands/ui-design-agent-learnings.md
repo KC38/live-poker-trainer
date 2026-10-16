@@ -228,7 +228,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   a full process restart — hot-restart keeps cached SharedPreferences so
   `dailyGoalMinutes` stays null and Lesson Complete still shows AMAZING
   (LPT-39). After the last Nice!, poll for Lesson Complete before CONTINUE.
-- Prefer waiting until the target beat is settled before
+- Prefer filming Continue → densify deal until POT/\$9 + RAISE before filing
+  facing-open coach honesty — SoftPulse/holes can unlock while
+  `FeltActionRevealController` still hides the open (blinds-only POT \$3);
+  settling speech must drop `opens to` leads (LPT-1019), not only `You have`
+  (LPT-1012). Prefer waiting until the target beat is settled before
   `<KEY>-validated.png` (not bootstrap spinner). On hole-card peeks, wait
   until the hero cards are face-up (not empty outlines) before `tap You`,
   and do not show empty board slots when no board is in play for that beat.

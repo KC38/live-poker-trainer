@@ -82,7 +82,8 @@ class PokerActionSizingActivity extends StatelessWidget {
                   fallback: fallback,
                 );
         // Framed runners use [lessonFrameDealSettlingSpeech]; unframed Rex
-        // still must not name holes mid-deal (LPT-1012).
+        // still must not name holes mid-deal (LPT-1012) or open amounts before
+        // street money paints (LPT-1019). feltDealReady waits on that paint.
         final promptNamesHoles = RegExp(
           r'You have\b',
           caseSensitive: false,

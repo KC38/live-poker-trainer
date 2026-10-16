@@ -268,11 +268,16 @@ String lessonFrameSpeech(
   );
 }
 
-/// Frame speech while the felt deal has not settled (LPT-1012).
+/// Frame speech while the felt deal has not settled (LPT-1012 / LPT-1019).
 ///
 /// Catalog prompts like `Nit in BB. You have K9o on BTN. Action?` must not
 /// name hero holes until both cards are face-up — SoftPulse already waits on
 /// [LessonActivityController.feltDealReady]; the bubble must match.
+///
+/// Facing opens / sized bets still sequence after holes land. Keep a villain
+/// or spot lead that does **not** name chip amounts (`UTG opens to 6`), or the
+/// bubble spoils street money while the felt still shows POT $0 / blinds-only
+/// (Fold weak hands densify LPT-1019).
 String lessonFrameDealSettlingSpeech(
   CourseActivity activity, {
   int handStepIndex = 0,
@@ -285,9 +290,26 @@ String lessonFrameDealSettlingSpeech(
     lead = prompt.substring(0, youHave.start).trim();
     lead = lead.replaceAll(RegExp(r'[.?!]+$'), '').trim();
   }
+  if (dealSettlingLeadNamesStreetMoney(lead)) {
+    lead = '';
+  }
   final core =
       lead.isEmpty ? 'Watch the deal.' : '$lead — watch the deal.';
   return withLessonTapInstruction(core, tap);
+}
+
+/// Whether a deal-settling lead names an open / raise / bet (street money).
+///
+/// Those chips paint after the hole deal via [FeltActionRevealController];
+/// naming them mid-settle disagrees with the felt (LPT-1019). Spot leads like
+/// `Nit in BB` stay (LPT-1012).
+@visibleForTesting
+bool dealSettlingLeadNamesStreetMoney(String lead) {
+  if (lead.isEmpty) return false;
+  final lower = lead.toLowerCase();
+  return RegExp(
+    r'\b(open(?:s|ed)?|raise(?:s|d)?|3-?bets?|re-?raise(?:s|d)?|bets?)\b',
+  ).hasMatch(lower);
 }
 
 /// What to tap on a step whose copy does not already say it.

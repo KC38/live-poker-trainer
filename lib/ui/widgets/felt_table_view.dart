@@ -406,8 +406,18 @@ class _FeltTableViewState extends State<FeltTableView> {
     return _deal.boardVisible >= widget.game.community.length;
   }
 
-  /// SoftPulse / hint rings — only after the last card's reveal settles.
-  bool get _cuesReady => _cuesSettled;
+  /// SoftPulse / hint rings — after teaching cards settle **and** post-deal
+  /// opens / folds have painted (LPT-1019). Hero holes alone still unlock
+  /// SoftPulse when there is no opening action batch (LPT-678).
+  bool get _cuesReady => _cuesSettled && _streetActionsReady;
+
+  /// Facing RAISE / early FOLDs wait on [FeltActionRevealController].
+  bool get _streetActionsReady =>
+      !_actions.isSequencing || _actions.openingBatchComplete;
+
+  void _emitDealReady() {
+    widget.onDealReady?.call(_cuesReady);
+  }
 
   void _onDealProgress() {
     if (!_softPulseCardsReady) {
@@ -421,15 +431,17 @@ class _FeltTableViewState extends State<FeltTableView> {
           });
         }
       }
-      widget.onDealReady?.call(false);
+      _emitDealReady();
       return;
     }
     if (_cuesSettled) {
-      widget.onDealReady?.call(true);
+      // Cards settled; re-emit when the opening RAISE/FOLD batch completes
+      // so SoftPulse / coach wait for street money on the felt (LPT-1019).
+      _emitDealReady();
       return;
     }
     // Keep SoftPulse off while the last card finishes its fade/scale-in.
-    widget.onDealReady?.call(false);
+    _emitDealReady();
     if (CardDealPace.instant) {
       _markCuesSettled();
       return;
@@ -458,7 +470,7 @@ class _FeltTableViewState extends State<FeltTableView> {
         }
       }
     }
-    widget.onDealReady?.call(true);
+    _emitDealReady();
   }
 
   /// Hole indexes to SoftPulse. Wait until the deal has finished so the
