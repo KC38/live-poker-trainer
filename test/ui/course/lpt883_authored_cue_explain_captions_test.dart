@@ -11,7 +11,8 @@
 /// LPT-962 / LPT-963 / LPT-964 / LPT-965 / LPT-966 / LPT-967 / LPT-968 /
 /// LPT-969 / LPT-970 / LPT-971 / LPT-972 / LPT-973 / LPT-974 / LPT-975 /
 /// LPT-976 / LPT-977 / LPT-978 / LPT-979 / LPT-980 / LPT-981 /
-/// LPT-982 / LPT-983 / LPT-984 / LPT-985 / LPT-986 / LPT-987:
+/// LPT-982 / LPT-983 / LPT-984 / LPT-985 / LPT-986 / LPT-987 /
+/// LPT-988 / LPT-989 / LPT-990 / LPT-991 / LPT-992:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -308,6 +309,10 @@ void main() {
     expect(
       authoredSoftPulseExplainCaption('NO STORY'),
       'Nothing to bet',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('HEADS-UP'),
+      'Two players',
     );
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
@@ -5280,6 +5285,50 @@ void main() {
       expect(find.text('CHECK'), findsWidgets);
       expect(find.text('Nothing to bet'), findsOneWidget);
       expect(find.text('Pass the street'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Plan single-raised pots SoftPulse explain captions (LPT-992)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-07-04-01-02-explain-srp',
+        targets: const ['HEADS-UP', 'C-BET'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('HEADS-UP'), findsWidgets);
+      expect(find.text('C-BET'), findsWidgets);
+      expect(find.text('Two players'), findsOneWidget);
+      expect(find.text('Continue story'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );

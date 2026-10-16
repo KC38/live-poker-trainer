@@ -14799,6 +14799,11 @@ String authoredSoftPulseExplainCaption(String target) {
     // glosses nothing to bet — never leave the first SoftPulse tile
     // label-only.
     'NO STORY': 'Nothing to bet',
+    // Plan single-raised pots SoftPulse explain (HEADS-UP → C-BET; LPT-992).
+    // C-BET already Continue story; HEADS-UP glosses two players — mirrors
+    // MULTIWAY Many players — never leave the first SoftPulse tile
+    // label-only. Also covers Widen HU bluffs SoftPulse HEADS-UP press.
+    'HEADS-UP': 'Two players',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
