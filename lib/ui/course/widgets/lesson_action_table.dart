@@ -14437,6 +14437,11 @@ String authoredSoftPulseExplainCaption(String target) {
     // STORY already Believable line; NEARBY glosses several sizes OK —
     // never leave the first SoftPulse tile label-only.
     'NEARBY': 'Several sizes OK',
+    // Avoid tiny sizes SoftPulse explain (TINY → VALUE; LPT-918).
+    // TINY glosses too-small bets; VALUE matches FlopLinesDemo / RiverBinary
+    // Get paid — never leave AuthoredCue tiles label-only.
+    'TINY': 'Too small',
+    'VALUE': 'Get paid',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.

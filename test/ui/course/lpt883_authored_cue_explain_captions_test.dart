@@ -2,7 +2,8 @@
 /// LPT-890 / LPT-891 / LPT-892 / LPT-893 / LPT-894 / LPT-895 / LPT-896 /
 /// LPT-897 / LPT-898 / LPT-899 / LPT-900 / LPT-901 / LPT-902 / LPT-903 /
 /// LPT-904 / LPT-905 / LPT-906 / LPT-907 / LPT-908 / LPT-909 / LPT-910 /
-/// LPT-911 / LPT-912 / LPT-913 / LPT-914 / LPT-915 / LPT-916 / LPT-917:
+/// LPT-911 / LPT-912 / LPT-913 / LPT-914 / LPT-915 / LPT-916 / LPT-917 /
+/// LPT-918:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -107,6 +108,8 @@ void main() {
     expect(authoredSoftPulseExplainCaption('MEDIUM'), 'Medium strength');
     expect(authoredSoftPulseExplainCaption('SMALL POT'), 'Keep it small');
     expect(authoredSoftPulseExplainCaption('NEARBY'), 'Several sizes OK');
+    expect(authoredSoftPulseExplainCaption('TINY'), 'Too small');
+    expect(authoredSoftPulseExplainCaption('VALUE'), 'Get paid');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -1703,6 +1706,51 @@ void main() {
       expect(find.text('STORY'), findsWidgets);
       expect(find.text('Several sizes OK'), findsOneWidget);
       expect(find.text('Believable line'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Avoid tiny sizes SoftPulse explain captions TINY + VALUE (LPT-918)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-04-04-01-03-explain-tiny',
+        targets: const ['TINY', 'VALUE'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('TINY'), findsWidgets);
+      expect(find.text('VALUE'), findsWidgets);
+      expect(find.text('Too small'), findsOneWidget);
+      expect(find.text('Get paid'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
