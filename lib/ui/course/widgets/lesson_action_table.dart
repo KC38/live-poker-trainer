@@ -14776,6 +14776,11 @@ String authoredSoftPulseExplainCaption(String target) {
     // tiles label-only.
     'DEAD PLAN': 'Thesis is dead',
     'LET GO': 'Abandon the line',
+    // Update on the flop SoftPulse explain (TEXTURE → CONFIRM OR CANCEL;
+    // LPT-988). Gloss board shape / keep-or-drop the plan — never leave
+    // those SoftPulse tiles label-only.
+    'TEXTURE': 'Board shape',
+    'CONFIRM OR CANCEL': 'Keep or drop plan',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
