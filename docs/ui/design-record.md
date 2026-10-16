@@ -1764,7 +1764,8 @@ street / RARE FOLDS → Seldom folds — LPT-922, OBSERVATION →
 Not a verdict / SAMPLES → Build the count — LPT-923,
 SAMPLE → Tiny sample / CONFIDENCE → Keep it low —
 LPT-924, EVERY STREET → Bets all streets / WEAK SHOWDOWNS →
-Weak at showdown — LPT-931). Play a full
+Weak at showdown — LPT-931, FREQUENCIES → Count how often /
+NO EGO → No feelings — LPT-932). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2166,7 +2167,7 @@ felt.
 | Cite the narrow-entry read | explain SoftPulse cues EVIDENCE → UNKNOWN; unit `unit-04-07-nit` (LPT-202 split) | — |
 | Tag extreme entry | Raise on the felt; explain SoftPulse cue RAISE only — BARREL/COUNT presses belong to Tag constant aggression and Notes without ego (curriculum residual LPT-773); densified SoftPulse one gold (LPT-462); unit `unit-04-08-maniac` (LPT-205 split) | entry quizzes |
 | Tag constant aggression | explain SoftPulse cues EVERY STREET → WEAK SHOWDOWNS with teaching captions (Bets all streets / Weak at showdown — never empty glosses; LPT-931); scaffolded SoftPulse-quiet densify stem non-spoiling (LPT-858); checkpoint SoftPulse-off densify stem non-spoiling (LPT-770); unit `unit-04-08-maniac` (LPT-205 split) | — |
-| Notes without ego | explain SoftPulse cues FREQUENCIES → NO EGO; unguided SoftPulse-quiet densify stem non-spoiling (no Frequencies and shows) (LPT-860); unit `unit-04-08-maniac` (LPT-205 split) | — |
+| Notes without ego | explain SoftPulse cues FREQUENCIES → NO EGO with teaching captions (Count how often / No feelings — never empty glosses; LPT-932); unguided SoftPulse-quiet densify stem non-spoiling (no Frequencies and shows) (LPT-860); unit `unit-04-08-maniac` (LPT-205 split) | — |
 | The Maniac model | Maniac, Entry, Aggro; densified SoftPulse one gold (LPT-489); explain Nice! short ladder (LPT-490); checkpoint SoftPulse-off densify stem non-spoiling (LPT-771); unit `unit-04-08-maniac` (LPT-208 split); objective "Introduce Maniac and unlock mixing all three types" so the checkpoint grades this lesson's concept (curriculum residual LPT-774) | label quizzes |
 | Spot a Maniac | explain SoftPulse cues CONSTANT RAISES → NEVER GIVES UP; unguided SoftPulse-quiet densify stem non-spoiling (no Maniac) (LPT-820); unit `unit-04-08-maniac` (LPT-208 split) | — |
 | Widen value and bluff-catches | Wider, Hang, Ego; checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-08-maniac` (LPT-212 split) | call-wider reason |

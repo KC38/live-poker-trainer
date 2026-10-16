@@ -14506,6 +14506,11 @@ String authoredSoftPulseExplainCaption(String target) {
     // never leave AuthoredCue tiles label-only.
     'EVERY STREET': 'Bets all streets',
     'WEAK SHOWDOWNS': 'Weak at showdown',
+    // Notes without ego SoftPulse explain (FREQUENCIES → NO EGO; LPT-932).
+    // Gloss count-how-often / no-feelings — never leave AuthoredCue tiles
+    // label-only.
+    'FREQUENCIES': 'Count how often',
+    'NO EGO': 'No feelings',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
