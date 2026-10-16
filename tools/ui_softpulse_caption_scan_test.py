@@ -205,6 +205,8 @@ class SoftPulseCaptionScanTest(unittest.TestCase):
             )
             draft = mod.draft_ticket(gaps[0])
             self.assertIn("CONTINUE", draft["title"])
+            self.assertIn("passive and crowds", draft["title"])
+            self.assertNotIn("03 08", draft["title"])
             self.assertIn("authoredSoftPulseExplainCaption", draft["summary"])
             code = mod.main(
                 [
