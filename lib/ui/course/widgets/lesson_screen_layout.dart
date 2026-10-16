@@ -286,7 +286,7 @@ String lessonFrameDealSettlingSpeech(
     lead = lead.replaceAll(RegExp(r'[.?!]+$'), '').trim();
   }
   final core =
-      lead.isEmpty ? 'Watch the deal' : '$lead — watch the deal';
+      lead.isEmpty ? 'Watch the deal.' : '$lead — watch the deal.';
   return withLessonTapInstruction(core, tap);
 }
 
