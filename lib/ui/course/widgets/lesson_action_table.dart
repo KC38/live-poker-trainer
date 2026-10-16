@@ -14818,6 +14818,11 @@ String authoredSoftPulseExplainCaption(String target) {
     // SHORTER STACK mirrors SHORTER Min of the two — never leave the
     // first SoftPulse tile label-only.
     'SHORTER STACK': 'Min of the two',
+    // Same hand TAG check-raise SoftPulse explain
+    // (TAG CHECK-RAISE → CAREFUL; LPT-997). CAREFUL already Near-committed;
+    // TAG CHECK-RAISE glosses a strong TAG raise — never leave the first
+    // SoftPulse tile label-only.
+    'TAG CHECK-RAISE': 'Strong TAG raise',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
