@@ -4,7 +4,12 @@
 #   tools/ui_design_agent_loop.sh setup    one-time: save the Cursor API key and Atlassian token
 #   tools/ui_design_agent_loop.sh verify   check both work, including Jira from inside the CLI
 #   tools/ui_design_agent_loop.sh start    start the loop (its own tmux server, socket ui-agent)
-#   tools/ui_design_agent_loop.sh install  start it at login, and again every 5 minutes if it died
+#   tools/ui_design_agent_loop.sh install  schedule ONE run (tick) twice a day via launchd
+#                                          StartCalendarInterval (UI_AGENT_SCHEDULE, default
+#                                          "07:30 19:30" local = 09:00/21:00 CDT on an IST mini).
+#                                          No RunAtLoad, no KeepAlive, no continuous loop.
+#   tools/ui_design_agent_loop.sh install-continuous  legacy: ensure every 5 minutes (back-to-back loop)
+#   tools/ui_design_agent_loop.sh tick     one scheduled run; skips if held, stopped, or a run/loop is live
 #   tools/ui_design_agent_loop.sh ensure   start the loop only when run-loop is alive
 #   tools/ui_design_agent_loop.sh status   loop, simulator lock, and latest run log
 #   tools/ui_design_agent_loop.sh attach   watch the loop
@@ -3063,6 +3068,48 @@ case "${1:-}" in
     echo "started the loop (launcher=$LAUNCHER runtime=$SDK_RUNTIME model=$(resolved_agent_model); watch: $SCRIPT attach)"
     ;;
   install)
+    # Twice-daily one-shot runs (Kushal 2026-10-16: one run every 12h).
+    mkdir -p "$(dirname "$PLIST")"
+    _sched="${UI_AGENT_SCHEDULE:-07:30 19:30}"
+    _cal=""
+    for _t in $_sched; do
+      _h="${_t%%:*}"; _m="${_t##*:}"
+      _cal+="    <dict><key>Hour</key><integer>$((10#$_h))</integer><key>Minute</key><integer>$((10#$_m))</integer></dict>
+"
+    done
+    cat >"$PLIST" <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>$LAUNCH_LABEL</string>
+  <key>ProgramArguments</key>
+  <array><string>/bin/bash</string><string>$(primary)/tools/ui_design_agent_loop.sh</string><string>tick</string></array>
+  <key>StartCalendarInterval</key>
+  <array>
+$_cal  </array>
+  <key>RunAtLoad</key><false/>
+  <key>KeepAlive</key><false/>
+  <key>AbandonProcessGroup</key><true/>
+  <key>StandardOutPath</key><string>$LOG_DIR/launchd.log</string>
+  <key>StandardErrorPath</key><string>$LOG_DIR/launchd.log</string>
+</dict>
+</plist>
+EOF
+    launchctl bootout "gui/$(id -u)/$LAUNCH_LABEL" 2>/dev/null || true
+    launchctl bootstrap "gui/$(id -u)" "$PLIST"
+    echo "installed $PLIST: one run (tick) at $_sched local; no continuous loop"
+    unset _sched _cal _t _h _m
+    ;;
+  tick)
+    if [[ -f "$HOLD_FILE" ]]; then echo "tick: held ($HOLD_FILE); skipping"; exit 0; fi
+    if [[ -f "$STOP_FILE" ]]; then echo "tick: stop file present; skipping"; exit 0; fi
+    if loop_is_alive || run_pid_is_alive; then echo "tick: a loop or run is already live; skipping"; exit 0; fi
+    if ! prepare_launcher; then echo "tick: launcher prep failed (SDK deps)" >&2; exit 1; fi
+    echo "$(date "+%Y-%m-%dT%H:%M:%S%z") tick: starting one run"
+    one_run || echo "tick: one_run exited $?"
+    ;;
+  install-continuous)
     mkdir -p "$(dirname "$PLIST")"
     cat >"$PLIST" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
