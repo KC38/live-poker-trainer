@@ -246,7 +246,11 @@ as SoftPulse — so the pot is truthful before SoftPulse asks the learner to
 read it (Pot and stacks LPT-1010). Facing-bet densify that paints an open
 still keeps SB/BB posts on-seat (pucks + chips + stack deductions) — street
 money must not sweep blinds into the center pot only while coach copy names
-the small or big blind (Value 3-bet LPT-1016). SoftPulse still unlocks on
+the small or big blind (Value 3-bet LPT-1016). Facing a 3-bet densify that
+paints the BB raise-to also keeps the hero's prior open on-seat (chips +
+stack deduction + RAISE badge) when the dock Call choice has no chip amount
+— recover the open from the pot progression (`Pot 3 → 9 → 29`) so coach
+"open … to 6" matches the felt (LPT-1020). SoftPulse still unlocks on
 hero holes without waiting for every villain back (Open strong LPT-678).
 Each raise/call/fold then lands in act order after the deal — never while
 cards are still dealing (Live Training + lesson felts). Framed open-pot math
@@ -2168,7 +2172,7 @@ felt.
 | Action moves ranges | explain SoftPulse cues RAISE → NARROWER → CALL with teaching captions (Make it more / Fewer hands / Match the bet — never empty NARROWER gloss; LPT-912); scaffolded SoftPulse-quiet densify stem non-spoiling (no Stronger / BB stronger) (LPT-880); unit `unit-04-01-ranges` (LPT-169 split) | — |
 | No exact hand too early | explain SoftPulse cues ONE HAND → RANGE with teaching captions (Exact combo / Keep a range — never empty glosses; LPT-934); unguided SoftPulse-quiet densify stem non-spoiling (no Too exact / Exactly AK) (LPT-867); unit `unit-04-01-ranges` (LPT-169 split) | — |
 | Value 3-bet | 3-bet, Ranges, Squeeze; unit `unit-04-02-threebet` (LPT-172 split) | — |
-| Facing a 3-bet | explain SoftPulse cues 3-BET → FOLD → CONTINUE with teaching captions (Re-raise open / Give up / Keep strong — never empty CONTINUE gloss; LPT-913); unit `unit-04-02-threebet` (LPT-172 split) | — |
+| Facing a 3-bet | explain SoftPulse cues 3-BET → FOLD → CONTINUE with teaching captions (Re-raise open / Give up / Keep strong — never empty CONTINUE gloss; LPT-913); densify facing BB 3-bet keeps hero prior BTN open on-seat (LPT-1020); unit `unit-04-02-threebet` (LPT-172 split) | — |
 | Squeeze spots | explain SoftPulse cues OPEN → CALLERS → SQUEEZE with teaching captions (Someone raised / Called the open / Re-raise big — never empty CALLERS or SQUEEZE glosses; LPT-914); unit `unit-04-02-threebet` (LPT-172 split) | — |
 | Build a multi-street plan | Flop, Turn, River; densified frame ask (LPT-407); checkpoint SoftPulse one gold via `guideRegion` (LPT-634); SoftPulse-off densify stem non-spoiling (no Brick → barrel / flush → abort) (LPT-868); unit `unit-04-03-continuation` (LPT-176 split) | — |
 | Abort when the board changes | explain SoftPulse cues BOARD CHANGES → STOP with teaching captions (Turn shifts / Give up bluff — never empty glosses; LPT-915); unit `unit-04-03-continuation` (LPT-176 split) | — |
