@@ -1774,7 +1774,10 @@ TELL → Single cue / MYTH → Fake rule / REJECT → Ignore it — LPT-950,
 GEAR → Shifting play — LPT-951, COOLER → Not a leak / CHASE → Don't chase /
 RESET → Step away — LPT-952, MERGED → Medium-strong — LPT-959, SIZE → Size
 accordingly / SHAPE → Range shape / MATCH → Size fits shape — LPT-960,
-HUGE → Too big / AVOID → Skip random — LPT-961). Play a full
+HUGE → Too big / AVOID → Skip random — LPT-961, CATCH → Bluff-catch hand /
+UNBLOCK → Keep their draws / BLUFFS → Missed draws live — LPT-962, TWEAK →
+Close choice only / NO EV → No fake decimals — LPT-963, THIRD PAIR → Weak
+pair / SCARY → Tough river — LPT-964). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2231,10 +2234,10 @@ felt.
 | Plan geometric sizes | explain SoftPulse cues FLOP → TURN → RIVER; unit `unit-06-05-overbets` (LPT-267 split) | — |
 | No random huge bets | explain SoftPulse cues HUGE → MEDIUM → AVOID with teaching captions (Too big / Medium strength / Skip random — never empty HUGE/AVOID glosses; LPT-961); unit `unit-06-05-overbets` (LPT-267 split) | — |
 | Bluff with the right blockers | Block on the felt; explain SoftPulse cue BLOCK only — USE/NO EV presses belong to Catch with unblockers and Blockers without fake EV (curriculum residual LPT-700); densified frame asks (LPT-639); unguided SoftPulse one gold (LPT-498); unit `unit-06-06-blockers` (LPT-270 split) | — |
-| Catch with unblockers | explain SoftPulse cues CATCH → UNBLOCK → BLUFFS; unit `unit-06-06-blockers` (LPT-270 split) | — |
-| Blockers without fake EV | explain SoftPulse cues TWEAK → NO EV; unit `unit-06-06-blockers` (LPT-270 split) | — |
+| Catch with unblockers | explain SoftPulse cues CATCH → UNBLOCK → BLUFFS with teaching captions (Bluff-catch hand / Keep their draws / Missed draws live — never empty glosses; LPT-962); unit `unit-06-06-blockers` (LPT-270 split) | — |
+| Blockers without fake EV | explain SoftPulse cues TWEAK → NO EV with teaching captions (Close choice only / No fake decimals — never empty glosses; LPT-963); unit `unit-06-06-blockers` (LPT-270 split) | — |
 | Continue with stronger catchers | Defend on the felt; explain SoftPulse cue DEFEND only — BLUFF/ENOUGH presses belong to Fold dominated trash and No fake MDF math (curriculum residual LPT-701); densified frame asks (LPT-640); unguided SoftPulse one gold (LPT-499); unit `unit-06-07-min-defense` (LPT-273 split); objective "Continue with stronger catchers to punish over-bluffs" so the checkpoint grades this lesson's concept (curriculum residual LPT-702) | — |
-| Fold dominated trash | explain SoftPulse cues THIRD PAIR → SCARY → FOLD; unit `unit-06-07-min-defense` (LPT-273 split) | — |
+| Fold dominated trash | explain SoftPulse cues THIRD PAIR → SCARY → FOLD with teaching captions (Weak pair / Tough river / Give up — never empty THIRD PAIR or SCARY glosses; LPT-964); unit `unit-06-07-min-defense` (LPT-273 split) | — |
 | No fake MDF math | explain SoftPulse cues MDF → INTUITION; unit `unit-06-07-min-defense` (LPT-273 split) | — |
 | Mix strong hands sometimes | Mix, Strong on the felt; explain SoftPulse cue MIX → STRONG only — PURPOSE press belongs to No mixing for its own sake (curriculum residual LPT-703); unguided SoftPulse one gold Need a reason (LPT-500); densified frame asks (LPT-644); unit `unit-06-08-mixed` (LPT-277 split) | — |
 | Types reduce mixing | explain SoftPulse cues TYPE → STATION → LESS; unit `unit-06-08-mixed` (LPT-277 split) | — |

@@ -14654,6 +14654,22 @@ String authoredSoftPulseExplainCaption(String target) {
     // — never leave those SoftPulse tiles label-only.
     'HUGE': 'Too big',
     'AVOID': 'Skip random',
+    // Catch with unblockers SoftPulse explain (CATCH → UNBLOCK → BLUFFS;
+    // LPT-962). Gloss bluff-catch hand / keep their draws / missed draws live
+    // — never leave AuthoredCue tiles label-only.
+    'CATCH': 'Bluff-catch hand',
+    'UNBLOCK': 'Keep their draws',
+    'BLUFFS': 'Missed draws live',
+    // Blockers without fake EV SoftPulse explain (TWEAK → NO EV; LPT-963).
+    // Gloss close-choice-only / no fake decimals — never leave AuthoredCue
+    // tiles label-only.
+    'TWEAK': 'Close choice only',
+    'NO EV': 'No fake decimals',
+    // Fold dominated trash SoftPulse explain (THIRD PAIR → SCARY → FOLD;
+    // LPT-964). FOLD already Give up; THIRD PAIR/SCARY gloss weak pair /
+    // tough river — never leave those SoftPulse tiles label-only.
+    'THIRD PAIR': 'Weak pair',
+    'SCARY': 'Tough river',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
