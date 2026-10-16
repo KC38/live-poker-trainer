@@ -51,6 +51,7 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 
 ## Fold 2026-10-14
 
+- SoftPulse AuthoredCue caption gaps: run `python3 tools/ui_softpulse_caption_scan.py list` before filing another LPT-883-class ticket — diffs catalog soft_pulse targets on authoredCues explains against `authoredSoftPulseExplainCaption`.
 - Prefer checking SoftPulse explain widget fixtures for `teachSpec` soft_pulse
 
 ## Fold 2026-10-14
