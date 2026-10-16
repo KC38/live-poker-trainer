@@ -14442,6 +14442,10 @@ String authoredSoftPulseExplainCaption(String target) {
     // Get paid — never leave AuthoredCue tiles label-only.
     'TINY': 'Too small',
     'VALUE': 'Get paid',
+    // Commit at low SPR SoftPulse explain (LOW SPR → COMMIT; LPT-919).
+    // Gloss pot-vs-stacks / get-it-in — never leave AuthoredCue tiles label-only.
+    'LOW SPR': 'Pot vs stacks',
+    'COMMIT': 'Get it in',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
