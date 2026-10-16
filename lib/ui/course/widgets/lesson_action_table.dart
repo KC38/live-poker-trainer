@@ -14623,6 +14623,21 @@ String authoredSoftPulseExplainCaption(String target) {
     // range — never leave those SoftPulse tiles label-only.
     'PAIRED': 'Board pairs',
     'CALLER': 'Wider range',
+    // Discount equity OOP SoftPulse explain (OOP → BARRELS → DISCOUNT;
+    // LPT-956). OOP already Out of position; BARRELS matches ThinValueDemo
+    // Fire multi-street; DISCOUNT glosses cut weak equity — never leave those
+    // SoftPulse tiles label-only.
+    'BARRELS': 'Fire multi-street',
+    'DISCOUNT': 'Cut weak equity',
+    // Aggression realizes equity SoftPulse explain (SEMI-BLUFF → FOLDS → OUTS;
+    // LPT-957). FOLDS already Folds too much; SEMI-BLUFF/OUTS gloss bet-with-
+    // outs / cards-that-help — never leave those SoftPulse tiles label-only.
+    'SEMI-BLUFF': 'Bet with outs',
+    'OUTS': 'Cards that help',
+    // Attack capped ranges SoftPulse explain (CAPPED → THIN → BLUFF; LPT-958).
+    // CAPPED/BLUFF already captioned; THIN matches ThinValueDemo Extract light
+    // — never leave the middle SoftPulse tile label-only.
+    'THIN': 'Extract light',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
