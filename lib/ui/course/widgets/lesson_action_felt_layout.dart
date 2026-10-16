@@ -171,11 +171,14 @@ String? parseLessonActionHeroPosition(String? streetLabel) {
 }
 
 /// Count of callers named in [villainLine] (`2 callers`, `two callers`,
-/// `BB + MP call`).
+/// `BB + MP call`, `4-way`).
 ///
 /// Used so squeeze-style densify keeps those seats live with CALL badges
 /// instead of folding everyone between the opener and the hero (LPT-1021).
-/// Named callers (`BB + MP call`) are counted too (LPT-1024).
+/// Named callers (`BB + MP call`) are counted too (LPT-1024). Postflop
+/// densify that only says `Three callers` / `4-way` uses the same count so
+/// the ring keeps that many villains live instead of folding to one seat
+/// (LPT-1025).
 int? parseLessonCallerCount(String? villainLine) {
   if (villainLine == null || villainLine.isEmpty) return null;
   final lower = villainLine.toLowerCase();
@@ -193,9 +196,35 @@ int? parseLessonCallerCount(String? villainLine) {
       return entry.value;
     }
   }
+  // "Checked to you · 4-way" → three other live seats (players − hero).
+  final way = RegExp(r'(\d+)\s*-?\s*way\b').firstMatch(lower);
+  if (way != null) {
+    final players = int.tryParse(way.group(1)!);
+    if (players != null && players >= 2) return players - 1;
+  }
   final named = parseLessonNamedCallerPositions(villainLine);
   if (named.isNotEmpty) return named.length;
   return null;
+}
+
+/// Villain seats kept live for a postflop multiway densify ask.
+///
+/// Prefers SB then BB (common multiway callers), then remaining seats in
+/// index order — never hero seat 0.
+List<int> lessonPostflopMultiwayCallerSeats({
+  required int callerCount,
+  required int seatCount,
+  required int sbIndex,
+  required int bbIndex,
+}) {
+  if (callerCount <= 0) return const <int>[];
+  final preferred = <int>[
+    if (sbIndex != 0) sbIndex,
+    if (bbIndex != 0 && bbIndex != sbIndex) bbIndex,
+    for (var i = 1; i < seatCount; i++)
+      if (i != sbIndex && i != bbIndex) i,
+  ];
+  return preferred.take(callerCount).toList(growable: false);
 }
 
 /// Position tokens named as callers in [villainLine] (`BB + MP call`).
@@ -526,6 +555,35 @@ LessonActionFeltLayout _resolveRingLayout({
       bbIndex: bb,
       activeSeatIndex: 0,
       villainSeatIndex: bb == 0 ? sb : bb,
+    );
+  }
+
+  // Postflop multiway: "Three callers · wet board" / "Checked to you · 4-way"
+  // must keep that many villains live — the default one-villain ring folds
+  // everyone else and contradicts the coach (LPT-1025).
+  final postflopCallers = parseLessonCallerCount(spot.villainLine) ?? 0;
+  if (postflopCallers > 0) {
+    final callers = lessonPostflopMultiwayCallerSeats(
+      callerCount: postflopCallers,
+      seatCount: seatCount,
+      sbIndex: sb,
+      bbIndex: bb,
+    );
+    final live = <int>{0, ...callers};
+    final folded = [
+      for (var i = 1; i < seatCount; i++)
+        if (!live.contains(i)) i,
+    ];
+    return LessonActionFeltLayout(
+      villainCount: villainCount,
+      seatCount: seatCount,
+      dealerIndex: dealer,
+      sbIndex: sb,
+      bbIndex: bb,
+      activeSeatIndex: 0,
+      foldedSeatIndexes: folded,
+      villainSeatIndex: callers.isNotEmpty ? callers.first : bb,
+      callerSeatIndexes: callers,
     );
   }
 
