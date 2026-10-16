@@ -3,7 +3,8 @@
 /// LPT-897 / LPT-898 / LPT-899 / LPT-900 / LPT-901 / LPT-902 / LPT-903 /
 /// LPT-904 / LPT-905 / LPT-906 / LPT-907 / LPT-908 / LPT-909 / LPT-910 /
 /// LPT-911 / LPT-912 / LPT-913 / LPT-914 / LPT-915 / LPT-916 / LPT-917 /
-/// LPT-918 / LPT-919 / LPT-925 / LPT-926 / LPT-927 / LPT-931 / LPT-932:
+/// LPT-918 / LPT-919 / LPT-925 / LPT-926 / LPT-927 / LPT-931 / LPT-932 /
+/// LPT-933 / LPT-934:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -135,6 +136,13 @@ void main() {
     );
     expect(authoredSoftPulseExplainCaption('FREQUENCIES'), 'Count how often');
     expect(authoredSoftPulseExplainCaption('NO EGO'), 'No feelings');
+    expect(authoredSoftPulseExplainCaption('CONSTANT RAISES'), 'Raises often');
+    expect(
+      authoredSoftPulseExplainCaption('NEVER GIVES UP'),
+      'Never folds rivers',
+    );
+    expect(authoredSoftPulseExplainCaption('ONE HAND'), 'Exact combo');
+    expect(authoredSoftPulseExplainCaption('RANGE'), 'Keep a range');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -2406,6 +2414,96 @@ void main() {
       expect(find.text('NO EGO'), findsWidgets);
       expect(find.text('Count how often'), findsOneWidget);
       expect(find.text('No feelings'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Spot a Maniac SoftPulse explain captions CONSTANT RAISES + NEVER GIVES UP (LPT-933)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-04-08-02-02-explain-spot',
+        targets: const ['CONSTANT RAISES', 'NEVER GIVES UP'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('CONSTANT RAISES'), findsWidgets);
+      expect(find.text('NEVER GIVES UP'), findsWidgets);
+      expect(find.text('Raises often'), findsOneWidget);
+      expect(find.text('Never folds rivers'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'No exact hand SoftPulse explain captions ONE HAND + RANGE (LPT-934)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-04-01-01-03-explain-exact',
+        targets: const ['ONE HAND', 'RANGE'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('ONE HAND'), findsWidgets);
+      expect(find.text('RANGE'), findsWidgets);
+      expect(find.text('Exact combo'), findsOneWidget);
+      expect(find.text('Keep a range'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
