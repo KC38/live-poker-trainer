@@ -1769,7 +1769,7 @@ NO EGO → No feelings — LPT-932, CONSTANT RAISES → Raises often /
 NEVER GIVES UP → Never folds rivers — LPT-933, ONE HAND → Exact
 combo / RANGE → Keep a range — LPT-934, SHOWDOWNS → Cards speak —
 LPT-935, NEW EVIDENCE → Seat changed / RETIRE → Drop old label —
-LPT-936, TYPE → Player model — LPT-937, MULTIWAY → Many players / OOP → Out of position — LPT-938, SET → Three of a kind — LPT-939, ONE PAIR → Weak made — LPT-940, SPR → Stack vs pot — LPT-941, REVERSE → Lose more later / DOMINATED → Second best — LPT-942, NON-NUT → Not the nuts / SKIP → Pass the draw — LPT-943). Play a full
+LPT-936, TYPE → Player model — LPT-937, MULTIWAY → Many players / OOP → Out of position — LPT-938, SET → Three of a kind — LPT-939, ONE PAIR → Weak made — LPT-940, SPR → Stack vs pot — LPT-941, REVERSE → Lose more later / DOMINATED → Second best — LPT-942, NON-NUT → Not the nuts / SKIP → Pass the draw — LPT-943, FOLDS → Folds too much — LPT-944, PROBE → Bet after check — LPT-945, DONK → Lead into raiser — LPT-946). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2193,10 +2193,10 @@ felt.
 | Skip dominated draws multiway | explain SoftPulse cues NON-NUT → MULTIWAY → SKIP with teaching captions (Not the nuts / Many players / Pass the draw — never empty NON-NUT/SKIP glosses; LPT-943); unit `unit-05-03-implied-odds` (LPT-230 split) | — |
 | Thin value versus sticky callers | Thin on the felt; explain SoftPulse cue THIN only — CATCH/BARRELS presses belong to Catch wider versus aggression (curriculum residual LPT-682); densified SoftPulse one gold (LPT-516); checkpoint SoftPulse-off densify stem non-spoiling (LPT-736); unit `unit-05-04-thin-value` (LPT-233 split); objective "Choose thin value only when the read justifies it" so the checkpoint grades this lesson's concept (curriculum residual LPT-683) | — |
 | Catch wider versus aggression | explain SoftPulse cues MANIAC → BARREL → CALL; unit `unit-05-04-thin-value` (LPT-233 split) | — |
-| Skip thin value versus overfolders | explain SoftPulse cues NIT → FOLDS → CHECK; unit `unit-05-04-thin-value` (LPT-233 split) | — |
+| Skip thin value versus overfolders | explain SoftPulse cues NIT → FOLDS → CHECK with teaching captions (Working label / Folds too much / Pass the street — never empty FOLDS gloss; LPT-944); unit `unit-05-04-thin-value` (LPT-233 split) | — |
 | Read check-raises | X/R on the felt; explain SoftPulse cue X/R only — PROBE/DELAY/DONK presses belong to Probes and delayed c-bets and Donk bets are polarized (curriculum residual LPT-684); densified SoftPulse one gold (LPT-517); unit `unit-05-05-lines-probes` (LPT-236 split) | — |
-| Probes and delayed c-bets | explain SoftPulse cues PROBE → DELAY → PLAN; checkpoint SoftPulse-off densify stem non-spoiling (LPT-742); unit `unit-05-05-lines-probes` (LPT-236 split) | — |
-| Donk bets are polarized | explain SoftPulse cues DONK → STRONG → AIR; SoftPulse-quiet densify stem situation + tap verb only — never name Often polarized while SoftPulse stays off until Hint (LPT-861); unit `unit-05-05-lines-probes` (LPT-236 split) | — |
+| Probes and delayed c-bets | explain SoftPulse cues PROBE → DELAY → PLAN with teaching captions (Bet after check / Hold fire / Fold, call, or 3-bet — never empty PROBE gloss; LPT-945); checkpoint SoftPulse-off densify stem non-spoiling (LPT-742); unit `unit-05-05-lines-probes` (LPT-236 split) | — |
+| Donk bets are polarized | explain SoftPulse cues DONK → STRONG → AIR with teaching captions (Lead into raiser / Premium hands / Nothing yet — never empty DONK gloss; LPT-946); SoftPulse-quiet densify stem situation + tap verb only — never name Often polarized while SoftPulse stays off until Hint (LPT-861); unit `unit-05-05-lines-probes` (LPT-236 split) | — |
 | Update each street | Action, Rewrite, Update; densified SoftPulse one gold (LPT-518); SoftPulse-quiet densify stem situation + tap verb only — never name Rebuild after every action while SoftPulse stays off until Hint (LPT-862); unit `unit-05-06-line-reading` (LPT-239 split) | — |
 | Capped versus uncapped lines | explain SoftPulse cues CHECK → CAPPED → UNCAPPED; checkpoint SoftPulse-off densify stem non-spoiling (LPT-745); unit `unit-05-06-line-reading` (LPT-239 split) | — |
 | Drop stale flop stories | explain SoftPulse cues FLOP → TURN → RE-PRICE; unit `unit-05-06-line-reading` (LPT-239 split) | — |
