@@ -431,6 +431,23 @@ PY
   fi
 }
 
+# Twice-daily launchd `tick` leaves no tmux run-loop between CT slots.
+# Status must say that, or health checks treat the gap as a dead loop and
+# `ensure` would start the legacy continuous run-loop (#2925).
+print_tick_schedule_status() {
+  [[ -f "$PLIST" ]] || return 0
+  grep -q '<string>tick</string>' "$PLIST" 2>/dev/null || return 0
+  # shellcheck source=agent_ct_slot.sh
+  source "$TOOLS/agent_ct_slot.sh"
+  local next=""
+  next="$(ct_slot_next "$UI_CT_TARGETS" 2>/dev/null || true)"
+  if [[ -n "$next" ]]; then
+    echo "schedule: tick twice daily (${UI_CT_TARGETS} CT); next ${next}"
+  else
+    echo "schedule: tick twice daily (${UI_CT_TARGETS} CT)"
+  fi
+}
+
 print_idle_status() {
   [[ -f "$IDLE_FILE" ]] || return 0
   python3 - "$IDLE_FILE" <<'PY' 2>/dev/null || true
@@ -3239,6 +3256,13 @@ EOF
     reconcile_health_from_coverage
     if loop_is_alive; then
       echo "loop: running (tmux -L $TMUX_SOCKET, session $SESSION, pid $(cat "$LOOP_PID_FILE"))"
+    elif [[ -f "$PLIST" ]] && grep -q '<string>tick</string>' "$PLIST" 2>/dev/null; then
+      if lt has-session -t "=$SESSION" 2>/dev/null; then
+        echo "loop: idle tmux session (run-loop dead; scheduled tick does not auto-restart)"
+      else
+        echo "loop: scheduled idle (no continuous run-loop between CT ticks)"
+      fi
+      print_tick_schedule_status
     elif lt has-session -t "=$SESSION" 2>/dev/null; then
       echo "loop: idle tmux session (run-loop dead; ensure will restart)"
     else
