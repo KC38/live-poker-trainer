@@ -5057,6 +5057,43 @@ void main() {
     },
   );
 
+  test(
+    'Pair-class AuthoredCue explains match coach claims on Q72 (LPT-1002)',
+    () {
+      final topPairIds = <String>[
+        'act-05-02-01-02-explain-stack-off',
+        'act-06-09-01-01-explain-fourbet',
+        'act-07-07-01-02-explain-tag',
+        'act-07-07-01-03-explain-lag',
+      ];
+      for (final id in topPairIds) {
+        final felt = authoredCueExplainFeltCodes(
+          _authoredExplain(id: id, targets: const ['DEEP', 'FOLD']),
+        );
+        expect(felt.heroCodes, ['Qh', '3d'], reason: id);
+        expect(felt.boardCodes, ['Qs', '7c', '2d'], reason: id);
+      }
+
+      final second = authoredCueExplainFeltCodes(
+        _authoredExplain(
+          id: 'act-06-11-03-02-explain-checkraise',
+          targets: const ['CHECK-RAISE', 'FOLD'],
+        ),
+      );
+      expect(second.heroCodes, ['7h', '3d']);
+      expect(second.boardCodes, ['Qs', '7c', '2d']);
+
+      final third = authoredCueExplainFeltCodes(
+        _authoredExplain(
+          id: 'act-06-07-01-02-explain-trash',
+          targets: const ['THIRD PAIR', 'FOLD'],
+        ),
+      );
+      expect(third.heroCodes, ['2h', '3d']);
+      expect(third.boardCodes, ['Qs', '7c', '2d']);
+    },
+  );
+
   testWidgets(
     'Same cards LAG call SoftPulse explain captions (LPT-985)',
     (tester) async {

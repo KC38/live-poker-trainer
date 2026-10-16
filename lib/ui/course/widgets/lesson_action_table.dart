@@ -14867,18 +14867,42 @@ String authoredSoftPulseExplainCaption(String target) {
 
 /// Hero/board for [LessonAuthoredCueExplainTable].
 ///
-/// Default SoftPulse explains keep the shared AhKd / Qs7c2d demo. Same-cards
-/// second-pair SoftPulse explains (Nit fold / LAG call) must match the
-/// `act-06-13-01-*` interactive spots — JhTd on QcTs3h2d7c — so coach copy
-/// that says "second pair" never sits over ace-high AK (LPT-994).
+/// Default SoftPulse explains keep the shared AhKd / Qs7c2d demo. Pair-class
+/// SoftPulse explains override that felt so coach copy that names top /
+/// second / third pair never sits over ace-high AK (LPT-994, LPT-1002).
 ({List<String> heroCodes, List<String> boardCodes})
 authoredCueExplainFeltCodes(CourseActivity activity) {
   final id = activity.id;
+  // Same-cards Nit fold / LAG call interactive spots (true second pair).
   if (id == 'act-06-13-01-02-explain-nit' ||
       id == 'act-06-13-01-03-explain-lag') {
     return (
       heroCodes: const ['Jh', 'Td'],
       boardCodes: const ['Qc', 'Ts', '3h', '2d', '7c'],
+    );
+  }
+  // Top pair on Q72 flop (fold light deep, 4-bet pots, TAG/LAG same-hand).
+  if (id == 'act-05-02-01-02-explain-stack-off' ||
+      id == 'act-06-09-01-01-explain-fourbet' ||
+      id == 'act-07-07-01-02-explain-tag' ||
+      id == 'act-07-07-01-03-explain-lag') {
+    return (
+      heroCodes: const ['Qh', '3d'],
+      boardCodes: const ['Qs', '7c', '2d'],
+    );
+  }
+  // Second pair on Q72 (TAG check-raise / no light re-raise).
+  if (id == 'act-06-11-03-02-explain-checkraise') {
+    return (
+      heroCodes: const ['7h', '3d'],
+      boardCodes: const ['Qs', '7c', '2d'],
+    );
+  }
+  // Third pair on Q72 (fold dominated trash).
+  if (id == 'act-06-07-01-02-explain-trash') {
+    return (
+      heroCodes: const ['2h', '3d'],
+      boardCodes: const ['Qs', '7c', '2d'],
     );
   }
   return (
