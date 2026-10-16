@@ -14576,6 +14576,20 @@ String authoredSoftPulseExplainCaption(String target) {
     // LPT-946). STRONG/AIR already captioned; DONK glosses lead-into-raiser
     // so the first SoftPulse tile is not label-only.
     'DONK': 'Lead into raiser',
+    // Capped versus uncapped lines SoftPulse explain (CHECK → CAPPED →
+    // UNCAPPED; LPT-947). CHECK already Pass the street; CAPPED/UNCAPPED
+    // match CappedUncappedDemo Nuts unlikely / Nuts still live — never leave
+    // those SoftPulse tiles label-only.
+    'CAPPED': 'Nuts unlikely',
+    'UNCAPPED': 'Nuts still live',
+    // Drop stale flop stories SoftPulse explain (FLOP → TURN → RE-PRICE;
+    // LPT-948). FLOP/TURN already captioned; RE-PRICE glosses update-the-plan
+    // so the last SoftPulse tile is not label-only.
+    'RE-PRICE': 'Update the plan',
+    // Sizing is range language SoftPulse explain (TINY → BIG → RANGE;
+    // LPT-949). TINY/RANGE already captioned; BIG glosses polarized size so
+    // the middle SoftPulse tile is not label-only.
+    'BIG': 'Polarized size',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.

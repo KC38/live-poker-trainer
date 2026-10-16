@@ -160,6 +160,10 @@ void main() {
     expect(authoredSoftPulseExplainCaption('FOLDS'), 'Folds too much');
     expect(authoredSoftPulseExplainCaption('PROBE'), 'Bet after check');
     expect(authoredSoftPulseExplainCaption('DONK'), 'Lead into raiser');
+    expect(authoredSoftPulseExplainCaption('CAPPED'), 'Nuts unlikely');
+    expect(authoredSoftPulseExplainCaption('UNCAPPED'), 'Nuts still live');
+    expect(authoredSoftPulseExplainCaption('RE-PRICE'), 'Update the plan');
+    expect(authoredSoftPulseExplainCaption('BIG'), 'Polarized size');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -3082,6 +3086,147 @@ void main() {
       expect(find.text('Lead into raiser'), findsOneWidget);
       expect(find.text('Premium hands'), findsOneWidget);
       expect(find.text('Nothing yet'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Capped lines SoftPulse explain captions CHECK + CAPPED + UNCAPPED (LPT-947)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-05-06-01-02-explain-capped',
+        targets: const ['CHECK', 'CAPPED', 'UNCAPPED'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('CHECK'), findsWidgets);
+      expect(find.text('CAPPED'), findsWidgets);
+      expect(find.text('UNCAPPED'), findsWidgets);
+      expect(find.text('Pass the street'), findsOneWidget);
+      expect(find.text('Nuts unlikely'), findsOneWidget);
+      expect(find.text('Nuts still live'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Drop stale SoftPulse explain captions FLOP + TURN + RE-PRICE (LPT-948)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-05-06-01-03-explain-stale',
+        targets: const ['FLOP', 'TURN', 'RE-PRICE'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('FLOP'), findsWidgets);
+      expect(find.text('TURN'), findsWidgets);
+      expect(find.text('RE-PRICE'), findsWidgets);
+      expect(find.text('Three cards'), findsOneWidget);
+      expect(find.text('Fourth card'), findsOneWidget);
+      expect(find.text('Update the plan'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Sizing SoftPulse explain captions TINY + BIG + RANGE (LPT-949)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-05-07-01-02-explain-sizing',
+        targets: const ['TINY', 'BIG', 'RANGE'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('TINY'), findsWidgets);
+      expect(find.text('BIG'), findsWidgets);
+      expect(find.text('RANGE'), findsWidgets);
+      expect(find.text('Too small'), findsOneWidget);
+      expect(find.text('Polarized size'), findsOneWidget);
+      expect(find.text('Keep a range'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
