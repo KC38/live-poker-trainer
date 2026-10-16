@@ -14606,6 +14606,23 @@ String authoredSoftPulseExplainCaption(String target) {
     'COOLER': 'Not a leak',
     'CHASE': "Don't chase",
     'RESET': 'Step away',
+    // Bankroll fits stakes SoftPulse explain (BANKROLL → STAKES → DECLINE;
+    // LPT-953). Gloss session cash / game size / pass bigger — never leave
+    // AuthoredCue tiles label-only.
+    'BANKROLL': 'Session cash',
+    'STAKES': 'Game size',
+    'DECLINE': 'Pass bigger',
+    // End sessions early SoftPulse explain (TIRED → WILD → CASH OUT; LPT-954).
+    // Gloss low energy / chaotic table / leave now — never leave AuthoredCue
+    // tiles label-only.
+    'TIRED': 'Low energy',
+    'WILD': 'Chaotic table',
+    'CASH OUT': 'Leave now',
+    // Spot nut advantage SoftPulse explain (NUTS → PAIRED → CALLER; LPT-955).
+    // NUTS already Chase the top; PAIRED/CALLER gloss board pairs / wider
+    // range — never leave those SoftPulse tiles label-only.
+    'PAIRED': 'Board pairs',
+    'CALLER': 'Wider range',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
