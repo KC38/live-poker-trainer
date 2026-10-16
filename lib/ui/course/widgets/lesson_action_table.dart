@@ -14423,6 +14423,20 @@ String authoredSoftPulseExplainCaption(String target) {
     // and re-raise-big beats — never leave those SoftPulse tiles label-only.
     'CALLERS': 'Called the open',
     'SQUEEZE': 'Re-raise big',
+    // Abort when the board changes SoftPulse explain (BOARD CHANGES → STOP;
+    // LPT-915). Gloss the turn-shifts / give-up-bluff ask — never leave
+    // AuthoredCue tiles label-only.
+    'BOARD CHANGES': 'Turn shifts',
+    'STOP': 'Give up bluff',
+    // Match pot size SoftPulse explain (MEDIUM → SMALL POT; LPT-916).
+    // Gloss medium-strength / keep-it-small — never leave AuthoredCue tiles
+    // label-only.
+    'MEDIUM': 'Medium strength',
+    'SMALL POT': 'Keep it small',
+    // Nearby live sizes SoftPulse explain (NEARBY → STORY; LPT-917).
+    // STORY already Believable line; NEARBY glosses several sizes OK —
+    // never leave the first SoftPulse tile label-only.
+    'NEARBY': 'Several sizes OK',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
