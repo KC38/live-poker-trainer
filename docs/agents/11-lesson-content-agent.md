@@ -160,8 +160,24 @@ pending file. PRIMARY stays on clean `main` for `/ui-design-agent`.
 ## Loop ops
 
 ```bash
-tools/lesson_content_agent_loop.sh setup|verify|start|status|stop|once
+tools/lesson_content_agent_loop.sh setup|verify|install|tick|status|stop|release-hold|once
 ```
+
+**Schedule:** one run every 12 hours, at 03:00 and 15:00 America/Chicago.
+`install` writes a launchd `StartCalendarInterval` plist that calls `tick`
+(no RunAtLoad, KeepAlive or StartInterval). Because the Mac mini is on IST,
+the plist lists both the CDT and CST local times, and `tick` only runs
+within ±10 minutes of a CT target, once per slot (`tools/agent_ct_slot.sh`).
+DST changes need no edits. The UI design agent uses the same gate at
+09:00 and 21:00 CT.
+
+**Never restart it yourself.** `stop` and `kill` write
+`~/.live-poker-trainer/content-agent.hold`. While it exists, `start`,
+`ensure`, `run-loop` and `tick` all refuse. Only Kushal decides when to
+`release-hold`. No agent (including the content agent, the UI agent and
+GrokBot) may run `start`/`ensure` or delete the hold or stop files: on
+Oct 15 2026 an agent's `start` wiped the stop file and restarted the loop
+after Kushal had stopped it.
 
 Shares `~/.live-poker-trainer/secrets.env` with the UI agent. Coverage:
 `~/.live-poker-trainer/content-agent-coverage.jsonl`. Does **not** touch

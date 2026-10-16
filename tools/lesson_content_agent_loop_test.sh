@@ -114,4 +114,43 @@ elapsed=$(( $(date +%s) - start ))
 rm -f "$STOP_FILE"
 (( elapsed < 10 )) || fail "sleep_unless_stopped should wake on STOP_FILE, took ${elapsed}s"
 
+# 12h CT schedule (Kushal 2026-10-16): calendar tick plist, CT gate, hold.
+sched_out="$(env -u CONTENT_AGENT_LOOP_SOURCE_ONLY TZ=Asia/Kolkata CONTENT_AGENT_INSTALL_NO_BOOTSTRAP=1 bash "$LOOP" install)"
+plist="$HOME/Library/LaunchAgents/com.livepokertrainer.lesson-content-agent.plist"
+[[ -f "$plist" ]] || fail "install should write plist: $sched_out"
+grep -q '<string>tick</string>' "$plist" || fail "plist must launch tick"
+grep -q '<key>StartCalendarInterval</key>' "$plist" || fail "plist must use a calendar"
+for hm in '13 30' '14 30' '1 30' '2 30'; do
+  h="${hm% *}"; m="${hm#* }"
+  grep -q "<key>Hour</key><integer>$h</integer><key>Minute</key><integer>$m</integer>" "$plist" \
+    || fail "IST candidate $h:$m missing for 03:00/15:00 CT"
+done
+! grep -q '<key>StartInterval</key>' "$plist" || fail "no StartInterval"
+! grep -q '<key>RunAtLoad</key><true/>' "$plist" || fail "no RunAtLoad"
+! grep -q '<key>KeepAlive</key><true/>' "$plist" || fail "no KeepAlive"
+! grep -q '<string>ensure</string>' "$plist" || fail "plist must not call ensure"
+# 10:00 CDT: not a slot -> no-op.
+off="$(env -u CONTENT_AGENT_LOOP_SOURCE_ONLY CT_SLOT_NOW_EPOCH=1792162800 bash "$LOOP" tick)"
+grep -q 'not-due' <<<"$off" || fail "tick at 10:00 CT must skip: $off"
+# 15:04 CDT and 03:06 CST (after Nov 1) are due.
+on="$(env -u CONTENT_AGENT_LOOP_SOURCE_ONLY CT_SLOT_NOW_EPOCH=1792181040 CONTENT_AGENT_TICK_DRY=1 bash "$LOOP" tick)"
+grep -q 'due for slot 2026-10-16T15:00' <<<"$on" || fail "tick at 15:04 CDT must be due: $on"
+cst="$(env -u CONTENT_AGENT_LOOP_SOURCE_ONLY CT_SLOT_NOW_EPOCH=1793696760 CONTENT_AGENT_TICK_DRY=1 bash "$LOOP" tick)"
+grep -q 'due for slot 2026-11-03T03:00' <<<"$cst" || fail "tick at 03:06 CST must be due: $cst"
+# A slot already run is skipped.
+echo 2026-10-16T15:00 >"$HOME/.live-poker-trainer/content-agent-tick-slots"
+again="$(env -u CONTENT_AGENT_LOOP_SOURCE_ONLY CT_SLOT_NOW_EPOCH=1792181040 CONTENT_AGENT_TICK_DRY=1 bash "$LOOP" tick)"
+grep -q 'already-ran' <<<"$again" || fail "second tick in a slot must skip: $again"
+# stop writes a persistent hold; start/ensure/tick refuse until release-hold.
+env -u CONTENT_AGENT_LOOP_SOURCE_ONLY bash "$LOOP" stop >/dev/null
+[[ -f "$HOME/.live-poker-trainer/content-agent.hold" ]] || fail "stop must write the hold file"
+held="$(env -u CONTENT_AGENT_LOOP_SOURCE_ONLY CT_SLOT_NOW_EPOCH=1792181040 bash "$LOOP" tick)"
+grep -q 'held' <<<"$held" || fail "tick must skip while held: $held"
+if env -u CONTENT_AGENT_LOOP_SOURCE_ONLY bash "$LOOP" start >/dev/null 2>&1; then
+  fail "start must refuse while held"
+fi
+grep -q 'held' <<<"$(env -u CONTENT_AGENT_LOOP_SOURCE_ONLY bash "$LOOP" ensure)" || fail "ensure must refuse while held"
+env -u CONTENT_AGENT_LOOP_SOURCE_ONLY bash "$LOOP" release-hold >/dev/null
+[[ ! -f "$HOME/.live-poker-trainer/content-agent.hold" ]] || fail "release-hold must clear the hold"
+
 echo "lesson-content-agent worktree isolation ok"

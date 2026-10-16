@@ -6,8 +6,25 @@
 # origin/main), never with --cwd PRIMARY. Learnings chore PRs must be
 # opened from that worktree so ui-agent keeps a clean main tip.
 #
-#   tools/lesson_content_agent_loop.sh setup|verify|start|install|ensure|
-#     status|attach|stop|kill|once
+#   tools/lesson_content_agent_loop.sh setup|verify|tick|install|uninstall|
+#     status|attach|stop|release-hold|kill|once|start|ensure
+#
+# Schedule (Kushal 2026-10-16): ONE run every 12h, never a back-to-back loop.
+#   install   launchd StartCalendarInterval -> `tick` at 03:00 and 15:00
+#             America/Chicago (CONTENT_AGENT_CT_TARGETS). The IST mini
+#             registers both CDT and CST local candidates; tick runs only
+#             within +/-10 min of a CT target, once per slot, so DST (Nov 1)
+#             needs no edits (tools/agent_ct_slot.sh). No RunAtLoad, no
+#             KeepAlive, no StartInterval.
+#   tick      one run; skips if held/stopped, a run or loop is live, or the
+#             CT time is not a target. CONTENT_AGENT_TICK_FORCE=1 skips the
+#             time gate; CONTENT_AGENT_TICK_DRY=1 only reports.
+#   stop/kill also write content-agent.hold, which persists (run-loop exit
+#             no longer erases the stop state). start/ensure/tick/run-loop
+#             refuse while it exists; only `release-hold` clears it.
+#   start/ensure  legacy continuous tmux loop; refused while held. Agents
+#             must not call these (Oct 15 2026: an agent's `start` wiped
+#             the stop file and restarted the loop after Kushal stopped it).
 #
 # Auth: ~/.live-poker-trainer/secrets.env (same as ui-design-agent).
 # Coverage: ~/.live-poker-trainer/content-agent-coverage.jsonl
@@ -27,6 +44,9 @@ PLIST="$HOME/Library/LaunchAgents/$LAUNCH_LABEL.plist"
 STATE_DIR="$HOME/.live-poker-trainer"
 LOG_DIR="$STATE_DIR/content-agent-logs"
 STOP_FILE="$STATE_DIR/content-agent.stop"
+HOLD_FILE="$STATE_DIR/content-agent.hold"
+CONTENT_CT_TARGETS="${CONTENT_AGENT_CT_TARGETS:-03:00 15:00}"
+CONTENT_TICK_STAMP="$STATE_DIR/content-agent-tick-slots"
 PID_FILE="$STATE_DIR/content-agent.pid"
 LOOP_PID_FILE="$STATE_DIR/content-agent-loop.pid"
 SECRETS_FILE="$STATE_DIR/secrets.env"
@@ -413,6 +433,10 @@ idle_sleep_until_content_changes() {
 }
 
 run_loop() {
+  if [[ -f "$HOLD_FILE" ]]; then
+    log "held ($HOLD_FILE); not starting the loop"
+    return 0
+  fi
   echo $$ >"$LOOP_PID_FILE"
   trap 'rm -f "$LOOP_PID_FILE"' EXIT
   rm -f "$STOP_FILE"
@@ -505,6 +529,10 @@ fi
 
 case "${1:-}" in
   start)
+    if [[ -f "$HOLD_FILE" && "${CONTENT_AGENT_FORCE_START:-}" != "1" ]]; then
+      echo "held ($HOLD_FILE): not starting. Kushal must approve; then: $SCRIPT release-hold" >&2
+      exit 3
+    fi
     if loop_is_alive; then
       echo "already running: $SCRIPT attach"
       exit 0
@@ -524,7 +552,12 @@ case "${1:-}" in
     echo "started lesson-content-agent (model=$(resolved_agent_model); attach: $SCRIPT attach)"
     ;;
   install)
+    # Twice-daily one-shot runs at CT targets (see header). Replaces the old
+    # RunAtLoad + StartInterval=300 `ensure` plist that respawned the loop.
+    # shellcheck source=agent_ct_slot.sh
+    source "$TOOLS/agent_ct_slot.sh"
     mkdir -p "$(dirname "$PLIST")"
+    _cal="$(ct_slot_plist_entries "$CONTENT_CT_TARGETS")"
     cat >"$PLIST" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -532,20 +565,48 @@ case "${1:-}" in
 <dict>
   <key>Label</key><string>$LAUNCH_LABEL</string>
   <key>ProgramArguments</key>
-  <array><string>/bin/bash</string><string>$(primary)/tools/lesson_content_agent_loop.sh</string><string>ensure</string></array>
-  <key>RunAtLoad</key><true/>
-  <key>StartInterval</key><integer>300</integer>
+  <array><string>/bin/bash</string><string>$(primary)/tools/lesson_content_agent_loop.sh</string><string>tick</string></array>
+  <key>StartCalendarInterval</key>
+  <array>
+$_cal
+  </array>
+  <key>RunAtLoad</key><false/>
+  <key>KeepAlive</key><false/>
   <key>AbandonProcessGroup</key><true/>
   <key>StandardOutPath</key><string>$LOG_DIR/launchd.log</string>
   <key>StandardErrorPath</key><string>$LOG_DIR/launchd.log</string>
 </dict>
 </plist>
 EOF
-    launchctl bootout "gui/$(id -u)/$LAUNCH_LABEL" 2>/dev/null || true
-    launchctl bootstrap "gui/$(id -u)" "$PLIST"
-    echo "installed $PLIST"
+    if [[ "${CONTENT_AGENT_INSTALL_NO_BOOTSTRAP:-}" != "1" ]]; then
+      launchctl bootout "gui/$(id -u)/$LAUNCH_LABEL" 2>/dev/null || true
+      launchctl bootstrap "gui/$(id -u)" "$PLIST"
+    fi
+    echo "installed $PLIST: one run (tick) at $CONTENT_CT_TARGETS CT; next $(ct_slot_next "$CONTENT_CT_TARGETS")"
+    [[ -f "$HOLD_FILE" ]] && echo "note: held ($HOLD_FILE); ticks are no-ops until: $SCRIPT release-hold"
+    unset _cal
+    ;;
+  tick)
+    if [[ -f "$HOLD_FILE" ]]; then echo "tick: held ($HOLD_FILE); skipping"; exit 0; fi
+    if [[ -f "$STOP_FILE" ]]; then echo "tick: stop file present; skipping"; exit 0; fi
+    if loop_is_alive; then echo "tick: legacy loop is live; skipping"; exit 0; fi
+    if [[ -f "$PID_FILE" ]] && kill -0 "$(cat "$PID_FILE" 2>/dev/null)" 2>/dev/null; then
+      echo "tick: a run is already live; skipping"; exit 0
+    fi
+    # shellcheck source=agent_ct_slot.sh
+    source "$TOOLS/agent_ct_slot.sh"
+    _slot="manual-$(date +%s)"
+    if [[ "${CONTENT_AGENT_TICK_FORCE:-}" != "1" ]]; then
+      _slot="$(ct_slot_due "$CONTENT_CT_TARGETS" "$CONTENT_TICK_STAMP")" || { echo "tick: $_slot; skipping"; exit 0; }
+    fi
+    if [[ "${CONTENT_AGENT_TICK_DRY:-}" == "1" ]]; then echo "tick: due for slot $_slot (dry run; not starting)"; exit 0; fi
+    ct_slot_mark "$CONTENT_TICK_STAMP" "$_slot"
+    if [[ "$LAUNCHER" == "sdk" ]] && ! ensure_sdk_deps; then echo "tick: SDK deps failed" >&2; exit 1; fi
+    log "tick: starting one run (CT slot $_slot)"
+    one_run || log "tick: one_run exited $?"
     ;;
   ensure)
+    [[ -f "$HOLD_FILE" ]] && { echo "ensure: held ($HOLD_FILE)"; exit 0; }
     loop_is_alive && exit 0
     bash "$SCRIPT" start
     ;;
@@ -561,17 +622,21 @@ EOF
     one_run
     ;;
   stop)
-    touch "$STOP_FILE"
-    echo "loop stops after current run"
+    touch "$STOP_FILE" "$HOLD_FILE"
+    echo "loop stops after current run; held until: $SCRIPT release-hold"
+    ;;
+  release-hold)
+    rm -f "$HOLD_FILE" "$STOP_FILE"
+    echo "hold released; scheduled ticks may run (next $(source "$TOOLS/agent_ct_slot.sh"; ct_slot_next "$CONTENT_CT_TARGETS"))"
     ;;
   kill)
-    touch "$STOP_FILE"
+    touch "$STOP_FILE" "$HOLD_FILE"
     if [[ -f "$PID_FILE" ]]; then
       kill -TERM "$(cat "$PID_FILE")" 2>/dev/null || true
     fi
     lt kill-session -t "=$SESSION" 2>/dev/null || true
     rm -f "$PID_FILE" "$STOP_FILE"
-    echo "killed $SESSION"
+    echo "killed $SESSION (held: $HOLD_FILE)"
     ;;
   status)
     if loop_is_alive; then
@@ -579,6 +644,8 @@ EOF
     else
       echo "loop: not running"
     fi
+    [[ -f "$HOLD_FILE" ]] && echo "hold: $HOLD_FILE (release-hold to allow runs)"
+    if [[ -f "$PLIST" ]]; then echo "schedule: tick at $CONTENT_CT_TARGETS CT ($PLIST)"; else echo "schedule: not installed"; fi
     echo "model: $(resolved_agent_model)"
     echo "worktree: $(primary)/.worktrees/content-agent"
     echo "primary: $(primary) (ui-agent only; content-agent must not edit)"
@@ -604,7 +671,7 @@ EOF
     verify
     ;;
   *)
-    sed -n '2,12p' "$SCRIPT" | sed 's/^# \{0,1\}//'
+    sed -n '2,30p' "$SCRIPT" | sed 's/^# \{0,1\}//'
     exit 2
     ;;
 esac
