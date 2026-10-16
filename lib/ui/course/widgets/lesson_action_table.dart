@@ -14486,6 +14486,21 @@ String authoredSoftPulseExplainCaption(String target) {
     // tiles label-only.
     'RARE ENTRY': 'Seldom plays',
     'BIG AGGRESSION': 'Bets hard',
+    // Wait for samples SoftPulse explain (TWO FOLDS → MORE HANDS; LPT-928).
+    // Gloss tiny-sample / keep-waiting — never leave AuthoredCue tiles
+    // label-only.
+    'TWO FOLDS': 'Tiny sample',
+    'MORE HANDS': 'Keep waiting',
+    // Spot a Nit SoftPulse explain (FEW HANDS → BIG RAISES; LPT-929).
+    // Gloss narrow-entry / heavy-bets — never leave AuthoredCue tiles
+    // label-only.
+    'FEW HANDS': 'Narrow entry',
+    'BIG RAISES': 'Heavy bets',
+    // Respect their heavy action SoftPulse explain (NIT RAISES → CREDIT;
+    // LPT-930). Gloss big-after-flop / believe-strength — never leave
+    // AuthoredCue tiles label-only.
+    'NIT RAISES': 'Big after flop',
+    'CREDIT': 'Believe strength',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
