@@ -15466,6 +15466,29 @@ class _PotChip extends StatelessWidget {
   }
 }
 
+/// Compact a [LessonActionDock] teaching label for the three-wide mini dock.
+///
+/// Long multi-word labels (e.g. "Silent call-down forever") must not rely on
+/// [TextOverflow.ellipsis] mid-phrase on ~100 pt tiles (LPT-1011). Short
+/// sizing chrome ("Raise to 6", "Jam for stacks") stays intact.
+String compactLessonActionDockLabel(String label) {
+  final authored = label.trim().toUpperCase();
+  if (authored.isEmpty) return authored;
+  final authoredWords = authored.split(RegExp(r'\s+'));
+  const fillers = {'AS', 'A', 'AN', 'THE', 'TO', 'OF', 'FOR', 'ON', 'IN'};
+  final kept =
+      authoredWords.where((w) => !fillers.contains(w)).toList(growable: false);
+  if (kept.isEmpty) return authored;
+  // Three-wide dock on the mini (~100 pt / Manrope 13 w900): ~14 chars per
+  // line; prefer at most two non-filler words when the full label is wider.
+  const maxChars = 14;
+  if (authored.length <= maxChars) return authored;
+  if (kept.length == 1) return kept.first;
+  final two = kept.take(2).join(' ');
+  if (two.length <= maxChars * 2) return two;
+  return kept.first;
+}
+
 /// Live-style action dock buttons for course choices.
 class LessonActionDock extends StatelessWidget {
   /// Creates the dock.
@@ -15650,17 +15673,8 @@ class _DockButton extends StatelessWidget {
         authoredWords.length >= 2 &&
         authoredWords.first != 'CHECK' &&
         authoredWords.first != 'FOLD';
-    // Long teaching labels only: "Raise as a bluff candidate" → RAISE BLUFF.
-    // Keep short sizing chrome intact ("RAISE TO 6").
-    const fillers = {'AS', 'A', 'AN', 'THE', 'TO', 'OF', 'FOR', 'ON', 'IN'};
-    final compactAuthored = () {
-      if (authoredWords.length <= 3) return authored;
-      final kept =
-          authoredWords.where((w) => !fillers.contains(w)).toList(growable: false);
-      if (kept.isEmpty) return authored;
-      if (kept.length <= 2) return kept.join(' ');
-      return kept.take(2).join(' ');
-    }();
+    // Long teaching labels compact before ellipsis (LPT-1011).
+    final compactAuthored = compactLessonActionDockLabel(choice.label);
     final short = unavailableLook
         ? switch (action.split(' ').first) {
             'CALL' => 'CALL (off)',

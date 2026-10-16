@@ -545,7 +545,7 @@ uses live `getCourseState` `completedLessonIds` (`lessonIsSoftPulseQuietReview`)
 so `agent_seed.py fresh --open` cannot SoftPulse-quiet a guided teach from
 a stale Home node (LPT-828). AuthoredCue SoftPulse explain
 `_DemoActionCard` captions use cream gloss on gold SoftPulse tiles
-(LPT-1009).
+(LPT-1009). Three-wide `LessonActionDock` teaching labels compact via `compactLessonActionDockLabel` so SoftPulse densify choices stay fully readable on the mini — no mid-label ellipsis (LPT-1011).
 
 ## Lesson tables
 

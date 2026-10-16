@@ -1125,7 +1125,7 @@ export function buildSectionThree() {
                     "Weak kickers lose big multiway pots.", {action: "FOLD"}),
                   choice("stack", "Jam for stacks", "clear_mistake",
                     "Classic overplay.", {action: "ALL_IN", betterChoiceId: "careful"}),
-                  choice("call-down", "Silent call-down forever", "questionable",
+                  choice("call-down", "Silent call-down", "questionable",
                     "Sometimes; default is not stacking lightly.", {action: "CALL"})
                 ],
                 // LPT-161, LPT-627
