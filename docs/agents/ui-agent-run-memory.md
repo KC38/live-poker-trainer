@@ -123,3 +123,8 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 ## Fold 2026-10-16
 
 - Prefer cream SoftPulse explain captions on `_DemoActionCard` (match densify) — slate gloss reads muddy under gold SoftPulse (LPT-1009). Never leave AuthoredCue SoftPulse explain on slate when densify already uses cream for the same reason.
+
+## Fold 2026-10-16
+
+- Prefer `facingBet: true` when pumping `LessonActionDock` for Call teaching labels — default open-pot chrome paints `CALL (off)` and hides compact teaching text (LPT-1011).
+- `sim_record.py frames` falls back to a t=0 still when `fps=` yields no PNGs on sub-second clips — do not abandon video review on "ffmpeg wrote no frames" alone.
