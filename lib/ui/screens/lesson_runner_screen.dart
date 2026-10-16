@@ -1053,6 +1053,11 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         return feedback;
       }
     }
+    // Hearts gate: do not keep densify "tap your action" while docks are
+    // disabled (LPT-1017). Point at Restore hearts chrome instead.
+    if (_heartsGateActive) {
+      return 'Out of hearts. Tap Restore hearts above.';
+    }
     if (controller.hintVisible && result == null) {
       final authored = controller.activity.hintMedia.isNotEmpty
           ? controller.activity.hintMedia.first.text
@@ -1412,8 +1417,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
           stage: LessonFrameScope(
             onLocalMiss: _reportLocalMiss,
             activityController: controller,
-            // SoftPulse off while out of hearts — AbsorbPointer blocks taps,
-            // but gold cues must not invite the next press (LPT-874).
+            // Densify docks + SoftPulse/Hint all stay inert under the gate
+            // (LPT-874 SoftPulse; LPT-1017 dock chrome).
+            playBlocked: _heartsGateActive,
             child: LessonSoftPulseScope(
               allowed: !_heartsGateActive && controller.showTargetCue,
               child: activityRegistry.build(

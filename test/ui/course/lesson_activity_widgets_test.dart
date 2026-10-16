@@ -9934,6 +9934,54 @@ await tester.tap(find.text('NIT'));
     },
   );
 
+  testWidgets(
+    'poker_action densify dock disabled under hearts playBlocked (LPT-1017)',
+    (tester) async {
+      await tester.binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final activity = CourseActivity(
+        id: 'act-02-04-01-scaffolded-call',
+        order: 2,
+        stage: ActivityStage.scaffolded,
+        renderer: ActivityRenderer.pokerActionSizing,
+        estimatedSeconds: 40,
+        accessibilityText: 'call in position densify',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'CO opens to 6. You have 76s on the button. Action?',
+        choices: const [
+          CourseChoice(id: 'call', label: 'Call', action: 'CALL'),
+          CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+          CourseChoice(id: 'threebet', label: '3-bet to 18', action: 'RAISE'),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      controller.notifyFeltDealReady(true);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LessonFrameScope(
+              onLocalMiss: (_) {},
+              activityController: controller,
+              playBlocked: true,
+              child: PokerActionSizingActivity(
+                activity: activity,
+                controller: controller,
+                showGuidance: false,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      final dock = tester.widget<LessonActionDock>(
+        find.byType(LessonActionDock),
+      );
+      expect(dock.enabled, isFalse);
+      expect(tester.takeException(), isNull);
+      controller.dispose();
+    },
+  );
+
   testWidgets('jump check hand opens steal on action dock', (tester) async {
     final activity = CourseActivity(
       id: 'act-01-06-02-jump-hand',
