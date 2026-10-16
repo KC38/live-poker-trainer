@@ -54,6 +54,27 @@ _LAYOUT_RAW = """
   if (densifiedSelect != null) return densifiedSelect;
 """
 
+_STARTING_HAND_WIRED = r"""
+String alignStartingHandCopy({
+  required String text,
+  required List<String> templateHero,
+  required List<String> dealtHero,
+}) {
+  // High-card class shorthand ("suited king", "offsuit ace") — LPT-1018.
+  next = _replaceIgnoringCase(next, '$fit $fromHigh', '$fit $toHigh');
+  return next;
+}
+"""
+
+_STARTING_HAND_MISSING = """
+String alignStartingHandCopy({
+  required String text,
+  required List<String> templateHero,
+  required List<String> dealtHero,
+}) {
+  return text;
+}
+"""
 
 class UiDensifyCardScanTest(unittest.TestCase):
     """Parser + card token detection + align wiring check."""
@@ -74,10 +95,20 @@ class UiDensifyCardScanTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / "rex_coach_line.dart"
             layout = Path(tmp) / "lesson_screen_layout.dart"
+            starting = Path(tmp) / "lesson_starting_hand_copy.dart"
             source.write_text(_SAMPLE, encoding="utf-8")
             layout.write_text(_LAYOUT_WIRED, encoding="utf-8")
+            starting.write_text(_STARTING_HAND_WIRED, encoding="utf-8")
             code = mod.main(
-                ["--source", str(source), "--layout", str(layout), "check"]
+                [
+                    "--source",
+                    str(source),
+                    "--layout",
+                    str(layout),
+                    "--starting-hand",
+                    str(starting),
+                    "check",
+                ]
             )
             self.assertEqual(code, 0)
 
@@ -85,10 +116,41 @@ class UiDensifyCardScanTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / "rex_coach_line.dart"
             layout = Path(tmp) / "lesson_screen_layout.dart"
+            starting = Path(tmp) / "lesson_starting_hand_copy.dart"
             source.write_text(_SAMPLE, encoding="utf-8")
             layout.write_text(_LAYOUT_RAW, encoding="utf-8")
+            starting.write_text(_STARTING_HAND_WIRED, encoding="utf-8")
             code = mod.main(
-                ["--source", str(source), "--layout", str(layout), "check"]
+                [
+                    "--source",
+                    str(source),
+                    "--layout",
+                    str(layout),
+                    "--starting-hand",
+                    str(starting),
+                    "check",
+                ]
+            )
+            self.assertEqual(code, 1)
+
+    def test_check_fails_when_high_card_class_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "rex_coach_line.dart"
+            layout = Path(tmp) / "lesson_screen_layout.dart"
+            starting = Path(tmp) / "lesson_starting_hand_copy.dart"
+            source.write_text(_SAMPLE, encoding="utf-8")
+            layout.write_text(_LAYOUT_WIRED, encoding="utf-8")
+            starting.write_text(_STARTING_HAND_MISSING, encoding="utf-8")
+            code = mod.main(
+                [
+                    "--source",
+                    str(source),
+                    "--layout",
+                    str(layout),
+                    "--starting-hand",
+                    str(starting),
+                    "check",
+                ]
             )
             self.assertEqual(code, 1)
 
@@ -148,15 +210,33 @@ class UiDensifyCardScanTest(unittest.TestCase):
                 ),
                 2,
             )
+            starting = Path(tmp) / "lesson_starting_hand_copy.dart"
+            starting.write_text(_STARTING_HAND_WIRED, encoding="utf-8")
             self.assertEqual(
                 mod.main(
-                    ["--source", str(source), "--layout", str(missing), "check"]
+                    [
+                        "--source",
+                        str(source),
+                        "--layout",
+                        str(missing),
+                        "--starting-hand",
+                        str(starting),
+                        "check",
+                    ]
                 ),
                 1,
             )
             self.assertEqual(
                 mod.main(
-                    ["--source", str(source), "--layout", str(layout), "check"]
+                    [
+                        "--source",
+                        str(source),
+                        "--layout",
+                        str(layout),
+                        "--starting-hand",
+                        str(starting),
+                        "check",
+                    ]
                 ),
                 0,
             )
