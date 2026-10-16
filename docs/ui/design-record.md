@@ -1757,7 +1757,9 @@ STOP → Give up bluff — LPT-915, MEDIUM → Medium strength /
 SMALL POT → Keep it small — LPT-916, NEARBY → Several sizes
 OK — LPT-917, TINY → Too small / VALUE → Get paid —
 LPT-918, LOW SPR → Pot vs stacks / COMMIT → Get it in —
-LPT-919). Play a full
+LPT-919, HIGH SPR → Room to play / FLEXIBLE → Keep pots
+small — LPT-921, FOLDS TO BETS → Fold frequency /
+STICKY → Calls often — LPT-920). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2139,9 +2141,9 @@ felt.
 | Avoid tiny sizes | explain SoftPulse cues TINY → VALUE with teaching captions (Too small / Get paid — never empty glosses; LPT-918); unit `unit-04-04-sizing` (LPT-179 split) | — |
 | Estimate SPR | SPR, Low, High; densified frame ask (LPT-412); scaffolded stacks match SPR ~1 (LPT-413); checkpoint SoftPulse-off densify stem non-spoiling (LPT-812); unit `unit-04-05-spr` (LPT-182 split) | — |
 | Commit at low SPR | explain SoftPulse cues LOW SPR → COMMIT with teaching captions (Pot vs stacks / Get it in — never empty glosses; LPT-919); unit `unit-04-05-spr` (LPT-182 split); `act-04-05-01-checkpoint` moved here from Estimate SPR (curriculum residual LPT-677) | — |
-| Stay flexible at high SPR | explain SoftPulse cues HIGH SPR → FLEXIBLE; unit `unit-04-05-spr` (LPT-182 split) | — |
+| Stay flexible at high SPR | explain SoftPulse cues HIGH SPR → FLEXIBLE with teaching captions (Room to play / Keep pots small — never empty glosses; LPT-921); unit `unit-04-05-spr` (LPT-182 split) | — |
 | Tag high participation | Enters on the felt; explain SoftPulse cue ENTERS only — CALLS/FOLDS presses belong to Tag low folding (curriculum residual LPT-761); densified frame asks (LPT-416); unit `unit-04-06-calling-station` (LPT-186 split) | participation note, observation bundle |
-| Tag low folding | explain SoftPulse cues FOLDS TO BETS → STICKY; scaffolded SoftPulse-quiet densify stem non-spoiling (no Sticky) (LPT-824); checkpoint SoftPulse-off densify stem non-spoiling (no Bundle) (LPT-810); unit `unit-04-06-calling-station` (LPT-186 split) | — |
+| Tag low folding | explain SoftPulse cues FOLDS TO BETS → STICKY with teaching captions (Fold frequency / Calls often — never empty glosses; LPT-920); scaffolded SoftPulse-quiet densify stem non-spoiling (no Sticky) (LPT-824); checkpoint SoftPulse-off densify stem non-spoiling (no Bundle) (LPT-810); unit `unit-04-06-calling-station` (LPT-186 split) | — |
 | Observation versus certainty | explain SoftPulse cues OBSERVATION → SAMPLES; unguided SoftPulse-quiet densify stem non-spoiling (no Low conf) (LPT-822); unit `unit-04-06-calling-station` (LPT-186 split) | — |
 | The Calling Station model | Station, High, Low; STATION caption Working label (LPT-789); scaffolded/unguided SoftPulse one gold (LPT-424); densified frame asks (LPT-420); scaffolded SoftPulse-quiet densify stem non-spoiling (no Working model) (LPT-817); unguided SoftPulse-quiet densify stem non-spoiling (no Station) (LPT-818); unit `unit-04-06-calling-station` (LPT-189 split); objective "Introduce Calling Station as a working model" so the checkpoint grades this lesson's concept (curriculum residual LPT-767) | label quizzes |
 | Spot a Calling Station | explain SoftPulse cues STICKY CALLS → RARE FOLDS; unguided SoftPulse-quiet densify stem non-spoiling (no Station) (LPT-818); unit `unit-04-06-calling-station` (LPT-189 split) | — |

@@ -14446,6 +14446,14 @@ String authoredSoftPulseExplainCaption(String target) {
     // Gloss pot-vs-stacks / get-it-in — never leave AuthoredCue tiles label-only.
     'LOW SPR': 'Pot vs stacks',
     'COMMIT': 'Get it in',
+    // Stay flexible at high SPR SoftPulse explain (HIGH SPR → FLEXIBLE; LPT-921).
+    // Gloss room-to-play / keep-pots-small — never leave AuthoredCue tiles label-only.
+    'HIGH SPR': 'Room to play',
+    'FLEXIBLE': 'Keep pots small',
+    // Tag low folding SoftPulse explain (FOLDS TO BETS → STICKY; LPT-920).
+    // Gloss fold-frequency / calls-often — never leave AuthoredCue tiles label-only.
+    'FOLDS TO BETS': 'Fold frequency',
+    'STICKY': 'Calls often',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
