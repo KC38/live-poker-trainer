@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "88f37ad8bb1ecbcbedea44f8f5c8122856dff88cc32ffd1d8ee9c8855b59e5f8",
+  "contentChecksum": "b301acb0e82f8e74b16fd10a1a5d5b61a7f997e036e5cad4049cd26910e62aeb",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -12550,7 +12550,7 @@
                     },
                     {
                       "id": "call-down",
-                      "label": "Silent call-down forever",
+                      "label": "Silent call-down",
                       "accessibilityText": "Silent call-down forever",
                       "action": "CALL"
                     }

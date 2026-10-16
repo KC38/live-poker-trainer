@@ -14204,7 +14204,7 @@
                     },
                     {
                       "id": "call-down",
-                      "label": "Silent call-down forever",
+                      "label": "Silent call-down",
                       "accessibilityText": "Silent call-down forever",
                       "grading": {
                         "grade": "questionable",
