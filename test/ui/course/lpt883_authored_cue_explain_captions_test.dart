@@ -116,6 +116,12 @@ void main() {
     expect(authoredSoftPulseExplainCaption('FLEXIBLE'), 'Keep pots small');
     expect(authoredSoftPulseExplainCaption('FOLDS TO BETS'), 'Fold frequency');
     expect(authoredSoftPulseExplainCaption('STICKY'), 'Calls often');
+    expect(authoredSoftPulseExplainCaption('STICKY CALLS'), 'Calls every street');
+    expect(authoredSoftPulseExplainCaption('RARE FOLDS'), 'Seldom folds');
+    expect(authoredSoftPulseExplainCaption('OBSERVATION'), 'Not a verdict');
+    expect(authoredSoftPulseExplainCaption('SAMPLES'), 'Build the count');
+    expect(authoredSoftPulseExplainCaption('SAMPLE'), 'Tiny sample');
+    expect(authoredSoftPulseExplainCaption('CONFIDENCE'), 'Keep it low');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -1892,6 +1898,141 @@ void main() {
       expect(find.text('STICKY'), findsWidgets);
       expect(find.text('Fold frequency'), findsOneWidget);
       expect(find.text('Calls often'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Spot Calling Station SoftPulse explain captions STICKY CALLS + RARE FOLDS (LPT-922)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-04-06-02-02-explain-spot',
+        targets: const ['STICKY CALLS', 'RARE FOLDS'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('STICKY CALLS'), findsWidgets);
+      expect(find.text('RARE FOLDS'), findsWidgets);
+      expect(find.text('Calls every street'), findsOneWidget);
+      expect(find.text('Seldom folds'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Observation versus certainty SoftPulse explain captions OBSERVATION + SAMPLES (LPT-923)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-04-06-01-03-explain-certainty',
+        targets: const ['OBSERVATION', 'SAMPLES'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('OBSERVATION'), findsWidgets);
+      expect(find.text('SAMPLES'), findsWidgets);
+      expect(find.text('Not a verdict'), findsOneWidget);
+      expect(find.text('Build the count'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Small samples SoftPulse explain captions SAMPLE + CONFIDENCE (LPT-924)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-04-06-02-03-explain-sample',
+        targets: const ['SAMPLE', 'CONFIDENCE'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('SAMPLE'), findsWidgets);
+      expect(find.text('CONFIDENCE'), findsWidgets);
+      expect(find.text('Tiny sample'), findsOneWidget);
+      expect(find.text('Keep it low'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
