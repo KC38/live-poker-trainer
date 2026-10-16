@@ -2249,10 +2249,10 @@ felt.
 | Cooler or mistake? | explain SoftPulse cues COOLER → MISTAKE → REVIEW with teaching captions (Not a leak / Avoidable leak / Judge the hand — never empty MISTAKE/REVIEW glosses; LPT-970); unit `unit-06-10-folds` (LPT-285 split) | — |
 | No ego call-downs | explain SoftPulse cues DUE → EGO → FOLD with teaching captions (Never owed / Skip revenge / Give up — never empty DUE gloss; LPT-971); unit `unit-06-10-folds` (LPT-285 split) | — |
 | Note selective entry | Tight on the felt; explain SoftPulse cue TIGHT only — BARREL/SAMPLE presses belong to Note disciplined aggression and Wait for samples (curriculum residual LPT-706); unguided SoftPulse one gold (LPT-494); unit `unit-06-11-tag` (LPT-288 split) | entry quizzes |
-| Note disciplined aggression | explain SoftPulse cues CALLED → GIVES UP; unit `unit-06-11-tag` (LPT-288 split) | — |
-| Wait for samples | explain SoftPulse cues TWO HANDS → NOTE BUNDLE; unit `unit-06-11-tag` (LPT-288 split) | — |
+| Note disciplined aggression | explain SoftPulse cues CALLED → GIVES UP with teaching captions (They call you / Folds bad turns — never empty glosses; LPT-972); unit `unit-06-11-tag` (LPT-288 split) | — |
+| Wait for samples | explain SoftPulse cues TWO HANDS → NOTE BUNDLE with teaching captions (Tiny sample / Keep noting — never empty glosses; LPT-973); unit `unit-06-11-tag` (LPT-288 split) | — |
 | The TAG model | Tight, Aggro, Model; unguided SoftPulse one gold (LPT-491); densified frame asks (LPT-648); unit `unit-06-11-tag` (LPT-291 split); objective "Introduce TAG as a working model" so the checkpoint grades this lesson's concept (curriculum residual LPT-708) | label quizzes |
-| Spot a TAG | explain SoftPulse cues FOLDS MOST → PLANNED BARRELS; unit `unit-06-11-tag` (LPT-291 split) | — |
+| Spot a TAG | explain SoftPulse cues FOLDS MOST → PLANNED BARRELS with teaching captions (Seldom plays / Barrels with plan — never empty glosses; LPT-974); unit `unit-06-11-tag` (LPT-291 split) | — |
 | TAG or Maniac? | explain SoftPulse cues ENTRY WIDTH → DISCIPLINE; unit `unit-06-11-tag` (LPT-291 split) | — |
 | Respect TAG aggression | Credit, Tighter on the felt; explain SoftPulse cue CREDIT → TIGHTER only — NO LIGHT press belongs to No light bluffs into a TAG check-raise (curriculum residual LPT-709); unit `unit-06-11-tag` (LPT-294 split); objective "Respect TAG aggression and cite the tendency" so the checkpoint grades this lesson's concept (curriculum residual LPT-710) | respect check |
 | No light bluffs into a TAG check-raise | explain SoftPulse cues CHECK-RAISE → FOLD; unit `unit-06-11-tag` (LPT-294 split) | — |

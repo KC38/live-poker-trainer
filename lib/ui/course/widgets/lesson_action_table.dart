@@ -14702,6 +14702,21 @@ String authoredSoftPulseExplainCaption(String target) {
     // the hand — never leave those SoftPulse tiles label-only.
     'MISTAKE': 'Avoidable leak',
     'REVIEW': 'Judge the hand',
+    // Note disciplined aggression SoftPulse explain (CALLED → GIVES UP;
+    // LPT-972). Gets-called / folds-bad-turns glosses — never leave those
+    // AuthoredCue SoftPulse tiles label-only.
+    'CALLED': 'They call you',
+    'GIVES UP': 'Folds bad turns',
+    // Wait for samples SoftPulse explain (TWO HANDS → NOTE BUNDLE; LPT-973).
+    // TWO HANDS matches TWO FOLDS Tiny sample; NOTE BUNDLE glosses keep
+    // noting — never leave those SoftPulse tiles label-only.
+    'TWO HANDS': 'Tiny sample',
+    'NOTE BUNDLE': 'Keep noting',
+    // Spot a TAG SoftPulse explain (FOLDS MOST → PLANNED BARRELS; LPT-974).
+    // FOLDS MOST matches RARE ENTRY Seldom plays; PLANNED BARRELS glosses
+    // barrels-with-plan — never leave those SoftPulse tiles label-only.
+    'FOLDS MOST': 'Seldom plays',
+    'PLANNED BARRELS': 'Barrels with plan',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
