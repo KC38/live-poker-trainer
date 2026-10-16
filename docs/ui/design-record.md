@@ -1769,7 +1769,10 @@ NO EGO → No feelings — LPT-932, CONSTANT RAISES → Raises often /
 NEVER GIVES UP → Never folds rivers — LPT-933, ONE HAND → Exact
 combo / RANGE → Keep a range — LPT-934, SHOWDOWNS → Cards speak —
 LPT-935, NEW EVIDENCE → Seat changed / RETIRE → Drop old label —
-LPT-936, TYPE → Player model — LPT-937, MULTIWAY → Many players / OOP → Out of position — LPT-938, SET → Three of a kind — LPT-939, ONE PAIR → Weak made — LPT-940, SPR → Stack vs pot — LPT-941, REVERSE → Lose more later / DOMINATED → Second best — LPT-942, NON-NUT → Not the nuts / SKIP → Pass the draw — LPT-943, FOLDS → Folds too much — LPT-944, PROBE → Bet after check — LPT-945, DONK → Lead into raiser — LPT-946, CAPPED → Nuts unlikely / UNCAPPED → Nuts still live — LPT-947, RE-PRICE → Update the plan — LPT-948, BIG → Polarized size — LPT-949). Play a full
+LPT-936, TYPE → Player model — LPT-937, MULTIWAY → Many players / OOP → Out of position — LPT-938, SET → Three of a kind — LPT-939, ONE PAIR → Weak made — LPT-940, SPR → Stack vs pot — LPT-941, REVERSE → Lose more later / DOMINATED → Second best — LPT-942, NON-NUT → Not the nuts / SKIP → Pass the draw — LPT-943, FOLDS → Folds too much — LPT-944, PROBE → Bet after check — LPT-945, DONK → Lead into raiser — LPT-946, CAPPED → Nuts unlikely / UNCAPPED → Nuts still live — LPT-947, RE-PRICE → Update the plan — LPT-948, BIG → Polarized size — LPT-949,
+TELL → Single cue / MYTH → Fake rule / REJECT → Ignore it — LPT-950,
+GEAR → Shifting play — LPT-951, COOLER → Not a leak / CHASE → Don't chase /
+RESET → Step away — LPT-952). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,

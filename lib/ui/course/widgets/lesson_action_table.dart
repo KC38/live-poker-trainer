@@ -14590,6 +14590,22 @@ String authoredSoftPulseExplainCaption(String target) {
     // LPT-949). TINY/RANGE already captioned; BIG glosses polarized size so
     // the middle SoftPulse tile is not label-only.
     'BIG': 'Polarized size',
+    // No magic tells SoftPulse explain (TELL → MYTH → REJECT; LPT-950).
+    // Gloss single-cue / fake-rule / ignore-it — never leave AuthoredCue tiles
+    // label-only.
+    'TELL': 'Single cue',
+    'MYTH': 'Fake rule',
+    'REJECT': 'Ignore it',
+    // Gear changes SoftPulse explain (GEAR → CHANGE → SAMPLE; LPT-951).
+    // CHANGE/SAMPLE already captioned; GEAR matches TablesChangeDemo GEARS
+    // Shifting play — never leave the first SoftPulse tile label-only.
+    'GEAR': 'Shifting play',
+    // Skip emotional pots SoftPulse explain (COOLER → CHASE → RESET; LPT-952).
+    // COOLER matches HardFoldCoolerDemo Not a leak; CHASE/RESET gloss
+    // don't-chase / step-away — never leave AuthoredCue tiles label-only.
+    'COOLER': 'Not a leak',
+    'CHASE': "Don't chase",
+    'RESET': 'Step away',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
