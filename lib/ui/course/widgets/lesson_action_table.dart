@@ -14470,6 +14470,22 @@ String authoredSoftPulseExplainCaption(String target) {
     // tiles label-only.
     'SAMPLE': 'Tiny sample',
     'CONFIDENCE': 'Keep it low',
+    // Bluff less without equity SoftPulse explain (RARELY FOLDS → GIVE UP;
+    // LPT-925). Gloss station-sticks / no-equity-fold — never leave
+    // AuthoredCue tiles label-only.
+    'RARELY FOLDS': 'Station sticks',
+    'GIVE UP': 'No equity fold',
+    // Cite the sticky-call tendency SoftPulse explain (EVIDENCE → UNKNOWN;
+    // LPT-926). EVIDENCE matches ExploitEvidenceDemo Prove before exploit;
+    // UNKNOWN glosses stay-cautious vs unknown seats — never leave
+    // AuthoredCue tiles label-only.
+    'EVIDENCE': 'Prove first',
+    'UNKNOWN': 'Stay cautious',
+    // Tag strong aggression SoftPulse explain (RARE ENTRY → BIG AGGRESSION;
+    // LPT-927). Gloss seldom-plays / bets-hard — never leave AuthoredCue
+    // tiles label-only.
+    'RARE ENTRY': 'Seldom plays',
+    'BIG AGGRESSION': 'Bets hard',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
