@@ -11,7 +11,7 @@
 /// LPT-962 / LPT-963 / LPT-964 / LPT-965 / LPT-966 / LPT-967 / LPT-968 /
 /// LPT-969 / LPT-970 / LPT-971 / LPT-972 / LPT-973 / LPT-974 / LPT-975 /
 /// LPT-976 / LPT-977 / LPT-978 / LPT-979 / LPT-980 / LPT-981 /
-/// LPT-982 / LPT-983 / LPT-984:
+/// LPT-982 / LPT-983 / LPT-984 / LPT-985 / LPT-986 / LPT-987:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -260,6 +260,26 @@ void main() {
     expect(
       authoredSoftPulseExplainCaption('NIT CHECK-RAISE'),
       'Value-heavy raise',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('LAG BARREL'),
+      'Wide aggressor fires',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('TENDENCY'),
+      'Player type note',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('LINE'),
+      'Their betting story',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('DEAD PLAN'),
+      'Thesis is dead',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('LET GO'),
+      'Abandon the line',
     );
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
@@ -4922,6 +4942,138 @@ void main() {
       expect(find.text('FOLD'), findsWidgets);
       expect(find.text('Value-heavy raise'), findsOneWidget);
       expect(find.text('Give up'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Same cards LAG call SoftPulse explain captions (LPT-985)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-13-01-03-explain-lag',
+        targets: const ['LAG BARREL', 'CALL'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('LAG BARREL'), findsWidgets);
+      expect(find.text('CALL'), findsWidgets);
+      expect(find.text('Wide aggressor fires'), findsOneWidget);
+      expect(find.text('Match the bet'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Cite the tendency SoftPulse explain captions (LPT-986)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-13-01-04-explain-cite',
+        targets: const ['TENDENCY', 'LINE'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('TENDENCY'), findsWidgets);
+      expect(find.text('LINE'), findsWidgets);
+      expect(find.text('Player type note'), findsOneWidget);
+      expect(find.text('Their betting story'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Abandon dead plans SoftPulse explain captions (LPT-987)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-07-01-01-03-explain-abandon',
+        targets: const ['DEAD PLAN', 'LET GO'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('DEAD PLAN'), findsWidgets);
+      expect(find.text('LET GO'), findsWidgets);
+      expect(find.text('Thesis is dead'), findsOneWidget);
+      expect(find.text('Abandon the line'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
