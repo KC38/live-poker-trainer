@@ -14511,6 +14511,16 @@ String authoredSoftPulseExplainCaption(String target) {
     // label-only.
     'FREQUENCIES': 'Count how often',
     'NO EGO': 'No feelings',
+    // Spot a Maniac SoftPulse explain (CONSTANT RAISES → NEVER GIVES UP;
+    // LPT-933). Gloss raises-often / never-folds-rivers — never leave
+    // AuthoredCue tiles label-only.
+    'CONSTANT RAISES': 'Raises often',
+    'NEVER GIVES UP': 'Never folds rivers',
+    // No exact hand too early SoftPulse explain (ONE HAND → RANGE; LPT-934).
+    // Gloss exact-combo / keep-a-range — never leave AuthoredCue tiles
+    // label-only.
+    'ONE HAND': 'Exact combo',
+    'RANGE': 'Keep a range',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.

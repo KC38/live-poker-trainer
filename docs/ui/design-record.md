@@ -1765,7 +1765,9 @@ Not a verdict / SAMPLES → Build the count — LPT-923,
 SAMPLE → Tiny sample / CONFIDENCE → Keep it low —
 LPT-924, EVERY STREET → Bets all streets / WEAK SHOWDOWNS →
 Weak at showdown — LPT-931, FREQUENCIES → Count how often /
-NO EGO → No feelings — LPT-932). Play a full
+NO EGO → No feelings — LPT-932, CONSTANT RAISES → Raises often /
+NEVER GIVES UP → Never folds rivers — LPT-933, ONE HAND → Exact
+combo / RANGE → Keep a range — LPT-934). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2135,7 +2137,7 @@ felt.
 | Section 3 jump check | densified frame asks (LPT-390) | — |
 | A seat is a range | One hand, Range on the felt; explain SoftPulse cue ONE HAND → RANGE only — UPDATE press belongs to Action moves ranges (curriculum residual LPT-759); densified frame asks (LPT-403); unguided/checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-01-ranges` (LPT-169 split) | — |
 | Action moves ranges | explain SoftPulse cues RAISE → NARROWER → CALL with teaching captions (Make it more / Fewer hands / Match the bet — never empty NARROWER gloss; LPT-912); scaffolded SoftPulse-quiet densify stem non-spoiling (no Stronger / BB stronger) (LPT-880); unit `unit-04-01-ranges` (LPT-169 split) | — |
-| No exact hand too early | explain SoftPulse cues ONE HAND → RANGE; unguided SoftPulse-quiet densify stem non-spoiling (no Too exact / Exactly AK) (LPT-867); unit `unit-04-01-ranges` (LPT-169 split) | — |
+| No exact hand too early | explain SoftPulse cues ONE HAND → RANGE with teaching captions (Exact combo / Keep a range — never empty glosses; LPT-934); unguided SoftPulse-quiet densify stem non-spoiling (no Too exact / Exactly AK) (LPT-867); unit `unit-04-01-ranges` (LPT-169 split) | — |
 | Value 3-bet | 3-bet, Ranges, Squeeze; unit `unit-04-02-threebet` (LPT-172 split) | — |
 | Facing a 3-bet | explain SoftPulse cues 3-BET → FOLD → CONTINUE with teaching captions (Re-raise open / Give up / Keep strong — never empty CONTINUE gloss; LPT-913); unit `unit-04-02-threebet` (LPT-172 split) | — |
 | Squeeze spots | explain SoftPulse cues OPEN → CALLERS → SQUEEZE with teaching captions (Someone raised / Called the open / Re-raise big — never empty CALLERS or SQUEEZE glosses; LPT-914); unit `unit-04-02-threebet` (LPT-172 split) | — |
@@ -2169,7 +2171,7 @@ felt.
 | Tag constant aggression | explain SoftPulse cues EVERY STREET → WEAK SHOWDOWNS with teaching captions (Bets all streets / Weak at showdown — never empty glosses; LPT-931); scaffolded SoftPulse-quiet densify stem non-spoiling (LPT-858); checkpoint SoftPulse-off densify stem non-spoiling (LPT-770); unit `unit-04-08-maniac` (LPT-205 split) | — |
 | Notes without ego | explain SoftPulse cues FREQUENCIES → NO EGO with teaching captions (Count how often / No feelings — never empty glosses; LPT-932); unguided SoftPulse-quiet densify stem non-spoiling (no Frequencies and shows) (LPT-860); unit `unit-04-08-maniac` (LPT-205 split) | — |
 | The Maniac model | Maniac, Entry, Aggro; densified SoftPulse one gold (LPT-489); explain Nice! short ladder (LPT-490); checkpoint SoftPulse-off densify stem non-spoiling (LPT-771); unit `unit-04-08-maniac` (LPT-208 split); objective "Introduce Maniac and unlock mixing all three types" so the checkpoint grades this lesson's concept (curriculum residual LPT-774) | label quizzes |
-| Spot a Maniac | explain SoftPulse cues CONSTANT RAISES → NEVER GIVES UP; unguided SoftPulse-quiet densify stem non-spoiling (no Maniac) (LPT-820); unit `unit-04-08-maniac` (LPT-208 split) | — |
+| Spot a Maniac | explain SoftPulse cues CONSTANT RAISES → NEVER GIVES UP with teaching captions (Raises often / Never folds rivers — never empty glosses; LPT-933); unguided SoftPulse-quiet densify stem non-spoiling (no Maniac) (LPT-820); unit `unit-04-08-maniac` (LPT-208 split) | — |
 | Widen value and bluff-catches | Wider, Hang, Ego; checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-08-maniac` (LPT-212 split) | call-wider reason |
 | Cite the aggression read | explain SoftPulse cues EVIDENCE → UNKNOWN; checkpoint SoftPulse-off densify stem non-spoiling (LPT-781); unit `unit-04-08-maniac` (LPT-212 split) | — |
 | Observation is not certainty | Observe on the felt; explain SoftPulse cue OBSERVE only — SAMPLES/SHOWDOWNS presses belong to Confidence grows with samples (curriculum residual LPT-775); densified SoftPulse one gold (LPT-495); unit `unit-04-09-type-id` (LPT-215 split) | confidence quizzes |
