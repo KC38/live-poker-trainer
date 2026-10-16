@@ -45,6 +45,43 @@ double? parseLessonPotChips(String potLabel) {
   return double.tryParse(matches.last.group(1)!);
 }
 
+/// Ordered pot milestones from labels like `Pot 3 → 9 → 29`.
+///
+/// Used to recover a prior open when facing a 3-bet (LPT-1020).
+List<double> parseLessonPotSteps(String potLabel) {
+  final head = potLabel.split('·').first;
+  final steps = <double>[];
+  for (final match in RegExp(r'(\d+(?:\.\d+)?)').allMatches(head)) {
+    final value = double.tryParse(match.group(1)!);
+    if (value != null && value > 0) steps.add(value);
+  }
+  return steps;
+}
+
+bool _villainLineIsThreeBetOrReraise(String line) {
+  return line.contains('3-bet') ||
+      line.contains('3bet') ||
+      line.contains('re-raise') ||
+      line.contains('reraise');
+}
+
+/// Prior open size from a multi-step pot when facing a 3-bet.
+///
+/// `Pot 3 → 9 → 29` after blinds means the open grew the pot to 9, so the
+/// opener put in `9 − blinds`. Returns null when the label is not a
+/// 3-step (or longer) progression.
+double? priorOpenFromPotSteps({
+  required List<double> potSteps,
+  required double smallBlind,
+  required double bigBlind,
+}) {
+  if (potSteps.length < 3) return null;
+  final afterOpen = potSteps[1];
+  final inferred = afterOpen - smallBlind - bigBlind;
+  if (inferred <= bigBlind) return null;
+  return inferred;
+}
+
 /// Facing bet / raise-to amount from villain copy.
 ///
 /// Handles `bets 5`, `opens to 6`, `3-bets to 20`, `Bets 18`.
@@ -148,11 +185,28 @@ LessonActionFeltMoney resolveLessonActionFeltMoney({
           : 0.0;
 
   var heroBet = 0.0;
+  var heroPriorOpen = false;
   if (spot.facingBet && facing > 0) {
     final callAmt = callAmountFromChoices(choices);
     // Call 4 vs open-to 6 ⇒ hero already has 2 in (e.g. big blind).
     if (callAmt != null && callAmt > 0 && callAmt < facing) {
       heroBet = facing - callAmt;
+    }
+    // Facing a 3-bet after the hero opened: bare `Call` has no chip amount,
+    // so callAmt stays null and heroBet would stay 0 — recover the open from
+    // `Pot 3 → 9 → 29` (open ≈ after-open pot − blinds) (LPT-1020).
+    if (heroBet == 0 &&
+        spot.boardCodes.isEmpty &&
+        _villainLineIsThreeBetOrReraise(line)) {
+      final inferred = priorOpenFromPotSteps(
+        potSteps: parseLessonPotSteps(spot.potLabel),
+        smallBlind: smallBlind,
+        bigBlind: bigBlind,
+      );
+      if (inferred != null && inferred < facing) {
+        heroBet = inferred;
+        heroPriorOpen = true;
+      }
     }
   }
   if (facing > 0 && villainSeat != 0) {
@@ -175,6 +229,9 @@ LessonActionFeltMoney resolveLessonActionFeltMoney({
 
   String? villainLabel;
   String? heroLabel;
+  if (heroPriorOpen) {
+    heroLabel = 'RAISE';
+  }
 
   // Completed preflop lines (not facingBet): put the open/call on the felt.
   // BB calls your open → Pot 13 with matched $6 street bets (LPT-97).

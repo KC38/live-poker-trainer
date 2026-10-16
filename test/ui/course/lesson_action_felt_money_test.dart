@@ -167,6 +167,51 @@ void main() {
       );
     });
 
+    test('LPT-1020: BTN densify vs BB 3-bet keeps hero prior open on-seat', () {
+      // Facing a 3-bet scaffolded densify: hero BTN opened to 6, BB 3-bets
+      // to 20, Pot 3 → 9 → 29. Bare Call has no chip amount.
+      const spot = LessonActionSpot(
+        heroCodes: ['7h', '2d'],
+        potLabel: 'Pot 3 → 9 → 29',
+        villainLine: 'BB 3-bets to 20',
+        streetLabel: 'Preflop · BTN · 72o',
+        facingBet: true,
+        feltStatusLine: 'Trash vs 3-bet — fold',
+      );
+      final layout = resolveLessonActionFeltLayout(spot);
+      expect(layout.dealerIndex, 0);
+      expect(layout.bbIndex, layout.villainSeatIndex);
+
+      final money = resolveLessonActionFeltMoney(
+        spot: spot,
+        choices: const [
+          CourseChoice(id: '4bet', label: '4-bet bluff', action: 'RAISE'),
+          CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+          CourseChoice(id: 'call', label: 'Call', action: 'CALL'),
+        ],
+        seatCount: layout.seatCount,
+        villainSeatIndex: layout.villainSeatIndex,
+        sbIndex: layout.sbIndex,
+        bbIndex: layout.bbIndex,
+      );
+
+      expect(money.potTotal, 29);
+      expect(money.streetBets[0], 6); // hero prior open
+      expect(money.streetBets[layout.sbIndex!], 1);
+      expect(money.streetBets[layout.bbIndex!], 20);
+      expect(money.heroActionLabel, 'RAISE');
+      expect(money.villainActionLabel, 'RAISE');
+      expect(parseLessonPotSteps('Pot 3 → 9 → 29'), [3, 9, 29]);
+      expect(
+        priorOpenFromPotSteps(
+          potSteps: const [3, 9, 29],
+          smallBlind: 1,
+          bigBlind: 2,
+        ),
+        6,
+      );
+    });
+
     test('Raise to 15 charges the facing bet and grows the pot', () {
       const raise = CourseChoice(
         id: 'raise-15',
