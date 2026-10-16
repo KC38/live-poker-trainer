@@ -14549,6 +14549,21 @@ String authoredSoftPulseExplainCaption(String target) {
     // LPT-940). DEEP/FOLD already captioned; ONE PAIR matches SDV Weak made —
     // never leave the middle SoftPulse tile label-only.
     'ONE PAIR': 'Weak made',
+    // Plan streets at high SPR SoftPulse explain (SPR → TURN → RIVER; LPT-941).
+    // TURN/RIVER already captioned; SPR glosses stack-vs-pot so the first
+    // SoftPulse tile is not label-only.
+    'SPR': 'Stack vs pot',
+    // Spot reverse implied odds SoftPulse explain (REVERSE → DOMINATED → FOLD;
+    // LPT-942). FOLD already Give up; REVERSE/DOMINATED gloss lose-more-later /
+    // second-best — never leave those SoftPulse tiles label-only.
+    'REVERSE': 'Lose more later',
+    'DOMINATED': 'Second best',
+    // Skip dominated draws multiway SoftPulse explain (NON-NUT → MULTIWAY →
+    // SKIP; LPT-943). MULTIWAY already Many players; NON-NUT/SKIP gloss
+    // not-the-nuts / pass-the-draw — never leave those SoftPulse tiles
+    // label-only.
+    'NON-NUT': 'Not the nuts',
+    'SKIP': 'Pass the draw',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
