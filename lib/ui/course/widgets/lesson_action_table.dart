@@ -14693,6 +14693,10 @@ String authoredSoftPulseExplainCaption(String target) {
     // No ego 4-bets SoftPulse explain (4BET → EGO → AVOID; LPT-969).
     // 4BET/AVOID already captioned; EGO matches Versus-maniacs Skip revenge.
     'EGO': 'Skip revenge',
+    // No ego call-downs SoftPulse explain (DUE → EGO → FOLD; LPT-971).
+    // EGO/FOLD already Skip revenge / Give up; DUE glosses "never due" —
+    // never leave the first SoftPulse tile label-only.
+    'DUE': 'Never owed',
     // Cooler or mistake SoftPulse explain (COOLER → MISTAKE → REVIEW; LPT-970).
     // COOLER already Not a leak; MISTAKE/REVIEW gloss avoidable leak vs judge
     // the hand — never leave those SoftPulse tiles label-only.

@@ -110,3 +110,11 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 ## Fold 2026-10-15
 
 - Prefer treating repeated `Xcode build done` with no post-Launching Dart VM URI (prebuilt launch code 1 → full build → timeout) as SIM_NOT_READY after one refresh + one `flutter_run_fast` retry — do not keep relaunching the same stuck Launching log; openlesson may print ok while the isolate dies (`Lost connection to device`) and screenshots stay on Home (2026-10-16 Wait your turn walk).
+
+## Fold 2026-10-16
+
+- Prefer checking other AuthoredCue activities that share a SoftPulse cue
+  label before writing a global `authoredSoftPulseExplainCaption` gloss
+  (REVIEW is Cooler-or-mistake Judge the hand and also review-habits On a
+  schedule — LPT-970 / act-07-09-01-03). When glosses conflict, add an
+  activityId override rather than overwriting the shared map key.

@@ -9,7 +9,7 @@
 /// LPT-950 / LPT-951 / LPT-952 / LPT-953 / LPT-954 / LPT-955 /
 /// LPT-956 / LPT-957 / LPT-958 / LPT-959 / LPT-960 / LPT-961 /
 /// LPT-962 / LPT-963 / LPT-964 / LPT-965 / LPT-966 / LPT-967 / LPT-968 /
-/// LPT-969 / LPT-970:
+/// LPT-969 / LPT-970 / LPT-971:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -209,6 +209,7 @@ void main() {
     expect(authoredSoftPulseExplainCaption('4BET'), 'Lower SPR');
     expect(authoredSoftPulseExplainCaption('CAREFUL'), 'Near-committed');
     expect(authoredSoftPulseExplainCaption('EGO'), 'Skip revenge');
+    expect(authoredSoftPulseExplainCaption('DUE'), 'Never owed');
     expect(authoredSoftPulseExplainCaption('MISTAKE'), 'Avoidable leak');
     expect(authoredSoftPulseExplainCaption('REVIEW'), 'Judge the hand');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
@@ -4254,6 +4255,52 @@ void main() {
       expect(find.text('Not a leak'), findsOneWidget);
       expect(find.text('Avoidable leak'), findsOneWidget);
       expect(find.text('Judge the hand'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'No ego call-downs SoftPulse explain captions (LPT-971)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-10-01-03-explain-ego',
+        targets: const ['DUE', 'EGO', 'FOLD'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('DUE'), findsWidgets);
+      expect(find.text('EGO'), findsWidgets);
+      expect(find.text('FOLD'), findsWidgets);
+      expect(find.text('Never owed'), findsOneWidget);
+      expect(find.text('Skip revenge'), findsOneWidget);
+      expect(find.text('Give up'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
