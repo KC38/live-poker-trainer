@@ -1759,7 +1759,11 @@ OK — LPT-917, TINY → Too small / VALUE → Get paid —
 LPT-918, LOW SPR → Pot vs stacks / COMMIT → Get it in —
 LPT-919, HIGH SPR → Room to play / FLEXIBLE → Keep pots
 small — LPT-921, FOLDS TO BETS → Fold frequency /
-STICKY → Calls often — LPT-920). Play a full
+STICKY → Calls often — LPT-920, STICKY CALLS → Calls every
+street / RARE FOLDS → Seldom folds — LPT-922, OBSERVATION →
+Not a verdict / SAMPLES → Build the count — LPT-923,
+SAMPLE → Tiny sample / CONFIDENCE → Keep it low —
+LPT-924). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
