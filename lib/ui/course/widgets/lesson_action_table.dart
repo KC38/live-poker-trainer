@@ -14734,6 +14734,20 @@ String authoredSoftPulseExplainCaption(String target) {
     // LPT-978). BARRELS already Fire multi-street; MANY HANDS glosses
     // sample across spots — never leave that SoftPulse tile label-only.
     'MANY HANDS': 'Across many spots',
+    // Planned pressure, not a Maniac SoftPulse explain
+    // (FOLDS SOMETIMES → PLAN; LPT-979). PLAN already Fold, call, or 3-bet;
+    // FOLDS SOMETIMES glosses still-folds-some — never leave the first
+    // SoftPulse tile label-only.
+    'FOLDS SOMETIMES': 'Still folds some',
+    // Spot a LAG SoftPulse explain (WIDE OPENS → BARRELS; LPT-980).
+    // BARRELS already Fire multi-street; WIDE OPENS glosses opens-many —
+    // never leave the first SoftPulse tile label-only.
+    'WIDE OPENS': 'Opens many hands',
+    // LAG or Calling Station SoftPulse explain (RAISES → CALLS; LPT-981).
+    // LAG presses with raises vs Station just calls — never leave those
+    // SoftPulse tiles label-only.
+    'RAISES': 'Raises and barrels',
+    'CALLS': 'Just calls',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
