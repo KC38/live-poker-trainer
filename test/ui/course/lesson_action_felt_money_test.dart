@@ -292,6 +292,47 @@ void main() {
       expect(money.villainActionLabel, 'RAISE');
     });
 
+    test('LPT-1024: tighten densify paints BTN open + BB/MP callers', () {
+      const spot = LessonActionSpot(
+        heroCodes: ['7h', '6h'],
+        potLabel: 'Pot 3 → 9 → 19',
+        villainLine: 'BTN open · BB + MP call',
+        streetLabel: 'Preflop · SB · 76s',
+        facingBet: true,
+        feltStatusLine: 'OOP multiway — fold medium connectors',
+      );
+      final layout = resolveLessonActionFeltLayout(spot);
+      expect(layout.callerSeatIndexes.toSet(), {1, 3});
+
+      final money = resolveLessonActionFeltMoney(
+        spot: spot,
+        choices: const [
+          CourseChoice(id: 'call', label: 'Call', action: 'CALL'),
+          CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+          CourseChoice(id: 'jam', label: 'Jam 100bb', action: 'RAISE'),
+        ],
+        seatCount: layout.seatCount,
+        villainSeatIndex: layout.villainSeatIndex,
+        callerSeatIndexes: layout.callerSeatIndexes,
+        sbIndex: layout.sbIndex,
+        bbIndex: layout.bbIndex,
+      );
+
+      expect(money.potTotal, 19);
+      expect(money.streetBets[layout.villainSeatIndex], 6);
+      for (final seat in layout.callerSeatIndexes) {
+        expect(money.streetBets[seat], 6);
+      }
+      expect(money.streetBets[layout.sbIndex!], 1);
+      // BB is a named caller — street bet is the call-to, not the $2 post.
+      expect(money.streetBets[layout.bbIndex!], 6);
+      expect(
+        money.streetBets.fold<double>(0, (a, b) => a + b),
+        19,
+      );
+      expect(money.villainActionLabel, 'RAISE');
+    });
+
     test('LPT-1020: BTN densify vs BB 3-bet keeps hero prior open on-seat', () {
       // Facing a 3-bet scaffolded densify: hero BTN opened to 6, BB 3-bets
       // to 20, Pot 3 → 9 → 29. Bare Call has no chip amount.

@@ -181,9 +181,10 @@ double? callAmountFromChoices(List<CourseChoice> choices) {
 /// an open — otherwise `_applyLessonStageStreetMoney` zeroes every other
 /// seat's `currentBet` and sweeps SB/BB into the center pot (LPT-1016).
 ///
-/// Pass [callerSeatIndexes] for multiway opens (`UTG opens · 2 callers`) so
-/// caller street bets match the pot progression when the line has no
-/// `opens to N` amount (LPT-1021).
+/// Pass [callerSeatIndexes] for multiway opens (`UTG opens · 2 callers` or
+/// named `BTN open · BB + MP call`) so caller street bets match the pot
+/// progression when the line has no `opens to N` amount (LPT-1021 /
+/// LPT-1024).
 ///
 /// Postflop `facingBet` lines that name a check-raise / barrel / bet without
 /// a chip amount (and without a Call-N choice) infer a pot-sized street bet
