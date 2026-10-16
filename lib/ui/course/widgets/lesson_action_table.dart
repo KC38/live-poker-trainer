@@ -14762,6 +14762,20 @@ String authoredSoftPulseExplainCaption(String target) {
     // LPT-984). FOLD already Give up; NIT CHECK-RAISE glosses value-heavy —
     // never leave the first SoftPulse tile label-only.
     'NIT CHECK-RAISE': 'Value-heavy raise',
+    // Same cards LAG call SoftPulse explain (LAG BARREL → CALL; LPT-985).
+    // CALL already Match the bet; LAG BARREL glosses wide-aggressor fire —
+    // never leave the first SoftPulse tile label-only.
+    'LAG BARREL': 'Wide aggressor fires',
+    // Cite the tendency SoftPulse explain (TENDENCY → LINE; LPT-986).
+    // Gloss player-type note / their betting story — never leave those
+    // SoftPulse tiles label-only.
+    'TENDENCY': 'Player type note',
+    'LINE': 'Their betting story',
+    // Abandon dead plans SoftPulse explain (DEAD PLAN → LET GO; LPT-987).
+    // Gloss thesis-is-dead / abandon the line — never leave those SoftPulse
+    // tiles label-only.
+    'DEAD PLAN': 'Thesis is dead',
+    'LET GO': 'Abandon the line',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
