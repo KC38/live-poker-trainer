@@ -91,6 +91,32 @@ void main() {
       expect(layout.foldedSeatIndexes.toSet(), {4, 5});
     });
 
+    test('LPT-1024: BTN open + named BB/MP callers keep CALL seats', () {
+      const spot = LessonActionSpot(
+        heroCodes: ['7h', '6h'],
+        potLabel: 'Pot 3 → 9 → 19',
+        villainLine: 'BTN open · BB + MP call',
+        streetLabel: 'Preflop · SB · 76s',
+        facingBet: true,
+      );
+
+      final layout = resolveLessonActionFeltLayout(spot);
+
+      expect(
+        parseLessonNamedCallerPositions('BTN open · BB + MP call').toSet(),
+        {'BB', 'MP'},
+      );
+      expect(parseLessonCallerCount('BTN open · BB + MP call'), 2);
+      // Hero SB → dealer 5; BTN=5, BB=1, MP→HJ=3.
+      expect(layout.dealerIndex, 5);
+      expect(layout.villainSeatIndex, 5);
+      expect(layout.callerSeatIndexes.toSet(), {1, 3});
+      expect(layout.seatActionLabels[5], 'RAISE');
+      expect(layout.seatActionLabels[1], 'CALL');
+      expect(layout.seatActionLabels[3], 'CALL');
+      expect(layout.foldedSeatIndexes.toSet(), {2, 4});
+    });
+
     test('explicit heads-up spots stay two-seat', () {
       const spot = LessonActionSpot(
         heroCodes: ['Ah', 'Kd'],

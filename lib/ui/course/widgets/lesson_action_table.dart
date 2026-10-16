@@ -988,9 +988,10 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         feltStatusLine: 'Value language — half pot',
       );
     case 'act-05-01-01-scaffolded':
+      // Pot 3 → 9 → 19: blinds → BTN open-to 6 → BB + MP call (LPT-1024).
       return const LessonActionSpot(
         heroCodes: ['7h', '6h'],
-        potLabel: 'Pot 7.5',
+        potLabel: 'Pot 3 → 9 → 19',
         villainLine: 'BTN open · BB + MP call',
         streetLabel: 'Preflop · SB · 76s',
         facingBet: true,

@@ -170,10 +170,12 @@ String? parseLessonActionHeroPosition(String? streetLabel) {
   return null;
 }
 
-/// Count of callers named in [villainLine] (`2 callers`, `two callers`).
+/// Count of callers named in [villainLine] (`2 callers`, `two callers`,
+/// `BB + MP call`).
 ///
 /// Used so squeeze-style densify keeps those seats live with CALL badges
 /// instead of folding everyone between the opener and the hero (LPT-1021).
+/// Named callers (`BB + MP call`) are counted too (LPT-1024).
 int? parseLessonCallerCount(String? villainLine) {
   if (villainLine == null || villainLine.isEmpty) return null;
   final lower = villainLine.toLowerCase();
@@ -191,7 +193,47 @@ int? parseLessonCallerCount(String? villainLine) {
       return entry.value;
     }
   }
+  final named = parseLessonNamedCallerPositions(villainLine);
+  if (named.isNotEmpty) return named.length;
   return null;
+}
+
+/// Position tokens named as callers in [villainLine] (`BB + MP call`).
+///
+/// Tighten-speculative densify authors callers by seat rather than
+/// `N callers` between opener and hero (LPT-1024). Excludes the opener.
+List<String> parseLessonNamedCallerPositions(String? villainLine) {
+  if (villainLine == null || villainLine.isEmpty) return const <String>[];
+  final lower = villainLine.toLowerCase();
+  if (!RegExp(r'\bcalls?\b').hasMatch(lower)) return const <String>[];
+  // Prefer the segment after `·` / `;` that contains "call".
+  final segments = lower.split(RegExp(r'[·;|]'));
+  final callSegment = segments.firstWhere(
+    (s) => RegExp(r'\bcalls?\b').hasMatch(s),
+    orElse: () => lower,
+  );
+  final opener = parseLessonActionVillainPosition(villainLine);
+  const tokens = <String>[
+    'utg+1',
+    'mp+1',
+    'utg',
+    'mp',
+    'hj',
+    'co',
+    'btn',
+    'sb',
+    'bb',
+  ];
+  final found = <String>[];
+  for (final token in tokens) {
+    if (!RegExp('\\b${RegExp.escape(token)}\\b').hasMatch(callSegment)) {
+      continue;
+    }
+    final pos = token.toUpperCase();
+    if (opener != null && pos == opener) continue;
+    found.add(pos);
+  }
+  return List<String>.unmodifiable(found);
 }
 
 /// Opener / bettor position from [villainLine], when named.
@@ -237,12 +279,25 @@ int lessonSixMaxDealerIndexForHero(String heroPosition) {
   return (6 - offset) % 6;
 }
 
+/// Maps nine-max-only labels onto six-max seats (MP → HJ, UTG+1 → UTG).
+String lessonSixMaxPositionAlias(String position) {
+  switch (position) {
+    case 'MP':
+    case 'MP+1':
+      return 'HJ';
+    case 'UTG+1':
+      return 'UTG';
+    default:
+      return position;
+  }
+}
+
 /// Seat index for [position] when [dealerIndex] is the button (six-max).
 int lessonSixMaxSeatIndex({
   required String position,
   required int dealerIndex,
 }) {
-  final offset = _sixMaxOffsetFromButton[position];
+  final offset = _sixMaxOffsetFromButton[lessonSixMaxPositionAlias(position)];
   if (offset == null) return 0;
   return (dealerIndex + offset) % 6;
 }
@@ -409,15 +464,41 @@ LessonActionFeltLayout _resolveRingLayout({
               );
       // "UTG opens · 2 callers" — keep the first N seats after the opener as
       // live CALL seats; fold the rest (BTN/SB) so dead money stays (LPT-1021).
-      final callerCount = parseLessonCallerCount(spot.villainLine) ?? 0;
-      final callers =
-          callerCount <= 0
-              ? const <int>[]
-              : between.take(callerCount).toList(growable: false);
-      final folded =
-          callerCount <= 0
-              ? between
-              : between.skip(callerCount).toList(growable: false);
+      // "BTN open · BB + MP call" — named callers are not between BTN and SB
+      // (BB acts after SB); resolve those seats and fold everyone else
+      // (LPT-1024).
+      final namedCallerPositions = parseLessonNamedCallerPositions(
+        spot.villainLine,
+      );
+      final List<int> callers;
+      final List<int> folded;
+      if (namedCallerPositions.isNotEmpty) {
+        final namedSeats = <int>[
+          for (final pos in namedCallerPositions)
+            nineMax
+                ? lessonNineMaxSeatIndex(position: pos, dealerIndex: dealer)
+                : lessonSixMaxSeatIndex(position: pos, dealerIndex: dealer),
+        ];
+        callers = [
+          for (final seat in namedSeats)
+            if (seat != 0 && seat != openerSeat) seat,
+        ];
+        final live = <int>{0, openerSeat, ...callers};
+        folded = [
+          for (var i = 1; i < seatCount; i++)
+            if (!live.contains(i)) i,
+        ];
+      } else {
+        final callerCount = parseLessonCallerCount(spot.villainLine) ?? 0;
+        callers =
+            callerCount <= 0
+                ? const <int>[]
+                : between.take(callerCount).toList(growable: false);
+        folded =
+            callerCount <= 0
+                ? between
+                : between.skip(callerCount).toList(growable: false);
+      }
       final labels = <int, String>{
         openerSeat: _raiseOrBetLabel(spot.villainLine),
         for (final seat in callers) seat: 'CALL',
