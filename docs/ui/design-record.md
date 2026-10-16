@@ -1769,7 +1769,7 @@ NO EGO → No feelings — LPT-932, CONSTANT RAISES → Raises often /
 NEVER GIVES UP → Never folds rivers — LPT-933, ONE HAND → Exact
 combo / RANGE → Keep a range — LPT-934, SHOWDOWNS → Cards speak —
 LPT-935, NEW EVIDENCE → Seat changed / RETIRE → Drop old label —
-LPT-936, TYPE → Player model — LPT-937, MULTIWAY → Many players / OOP → Out of position — LPT-938, SET → Three of a kind — LPT-939, ONE PAIR → Weak made — LPT-940). Play a full
+LPT-936, TYPE → Player model — LPT-937, MULTIWAY → Many players / OOP → Out of position — LPT-938, SET → Three of a kind — LPT-939, ONE PAIR → Weak made — LPT-940, SPR → Stack vs pot — LPT-941, REVERSE → Lose more later / DOMINATED → Second best — LPT-942, NON-NUT → Not the nuts / SKIP → Pass the draw — LPT-943). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2187,10 +2187,10 @@ felt.
 | Value thicker when callers stick | explain SoftPulse cues CALLERS → SET → BET with teaching captions (Called the open / Three of a kind / Put chips in — never empty SET gloss; LPT-939); unit `unit-05-01-multiway-ranges` (LPT-224 split) | — |
 | Depth pays speculative hands | Deep, Realize, Stack; unit `unit-05-02-deep-stacks` (LPT-227 split) | — |
 | Don't stack off light deep | explain SoftPulse cues DEEP → ONE PAIR → FOLD with teaching captions (Wider trees / Weak made / Give up — never empty ONE PAIR gloss; LPT-940); unit `unit-05-02-deep-stacks` (LPT-227 split) | — |
-| Plan streets at high SPR | explain SoftPulse cues SPR → TURN → RIVER; unguided SoftPulse-quiet densify stem non-spoiling (no Map turn/river plans) (LPT-859); unit `unit-05-02-deep-stacks` (LPT-227 split); objective "Plan high-SPR streets with position, implied odds, and folds" so the checkpoint grades this lesson's concept (curriculum residual LPT-680) | — |
+| Plan streets at high SPR | explain SoftPulse cues SPR → TURN → RIVER with teaching captions (Stack vs pot / Fourth card / Fifth card — never empty SPR gloss; LPT-941); unguided SoftPulse-quiet densify stem non-spoiling (no Map turn/river plans) (LPT-859); unit `unit-05-02-deep-stacks` (LPT-227 split); objective "Plan high-SPR streets with position, implied odds, and folds" so the checkpoint grades this lesson's concept (curriculum residual LPT-680) | — |
 | Estimate implied odds | Implied on the felt; explain SoftPulse cue IMPLIED only — REVERSE/SECOND presses belong to Spot reverse implied odds and Skip dominated draws multiway (curriculum residual LPT-681); densified SoftPulse one gold (LPT-515); checkpoint SoftPulse-off densify stem non-spoiling (LPT-734); unit `unit-05-03-implied-odds` (LPT-230 split) | — |
-| Spot reverse implied odds | explain SoftPulse cues REVERSE → DOMINATED → FOLD; unit `unit-05-03-implied-odds` (LPT-230 split) | — |
-| Skip dominated draws multiway | explain SoftPulse cues NON-NUT → MULTIWAY → SKIP; unit `unit-05-03-implied-odds` (LPT-230 split) | — |
+| Spot reverse implied odds | explain SoftPulse cues REVERSE → DOMINATED → FOLD with teaching captions (Lose more later / Second best / Give up — never empty REVERSE/DOMINATED glosses; LPT-942); unit `unit-05-03-implied-odds` (LPT-230 split) | — |
+| Skip dominated draws multiway | explain SoftPulse cues NON-NUT → MULTIWAY → SKIP with teaching captions (Not the nuts / Many players / Pass the draw — never empty NON-NUT/SKIP glosses; LPT-943); unit `unit-05-03-implied-odds` (LPT-230 split) | — |
 | Thin value versus sticky callers | Thin on the felt; explain SoftPulse cue THIN only — CATCH/BARRELS presses belong to Catch wider versus aggression (curriculum residual LPT-682); densified SoftPulse one gold (LPT-516); checkpoint SoftPulse-off densify stem non-spoiling (LPT-736); unit `unit-05-04-thin-value` (LPT-233 split); objective "Choose thin value only when the read justifies it" so the checkpoint grades this lesson's concept (curriculum residual LPT-683) | — |
 | Catch wider versus aggression | explain SoftPulse cues MANIAC → BARREL → CALL; unit `unit-05-04-thin-value` (LPT-233 split) | — |
 | Skip thin value versus overfolders | explain SoftPulse cues NIT → FOLDS → CHECK; unit `unit-05-04-thin-value` (LPT-233 split) | — |

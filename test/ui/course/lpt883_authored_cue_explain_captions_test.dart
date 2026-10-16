@@ -5,7 +5,7 @@
 /// LPT-911 / LPT-912 / LPT-913 / LPT-914 / LPT-915 / LPT-916 / LPT-917 /
 /// LPT-918 / LPT-919 / LPT-925 / LPT-926 / LPT-927 / LPT-931 / LPT-932 /
 /// LPT-933 / LPT-934 / LPT-935 / LPT-936 / LPT-937 / LPT-938 / LPT-939 /
-/// LPT-940:
+/// LPT-940 / LPT-941 / LPT-942 / LPT-943:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -152,6 +152,11 @@ void main() {
     expect(authoredSoftPulseExplainCaption('OOP'), 'Out of position');
     expect(authoredSoftPulseExplainCaption('SET'), 'Three of a kind');
     expect(authoredSoftPulseExplainCaption('ONE PAIR'), 'Weak made');
+    expect(authoredSoftPulseExplainCaption('SPR'), 'Stack vs pot');
+    expect(authoredSoftPulseExplainCaption('REVERSE'), 'Lose more later');
+    expect(authoredSoftPulseExplainCaption('DOMINATED'), 'Second best');
+    expect(authoredSoftPulseExplainCaption('NON-NUT'), 'Not the nuts');
+    expect(authoredSoftPulseExplainCaption('SKIP'), 'Pass the draw');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -2792,6 +2797,147 @@ void main() {
       expect(find.text('Wider trees'), findsOneWidget);
       expect(find.text('Weak made'), findsOneWidget);
       expect(find.text('Give up'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Plan high SPR SoftPulse explain captions SPR + TURN + RIVER (LPT-941)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-05-02-01-03-explain-plan',
+        targets: const ['SPR', 'TURN', 'RIVER'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('SPR'), findsWidgets);
+      expect(find.text('TURN'), findsWidgets);
+      expect(find.text('RIVER'), findsWidgets);
+      expect(find.text('Stack vs pot'), findsOneWidget);
+      expect(find.text('Fourth card'), findsOneWidget);
+      expect(find.text('Fifth card'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Reverse implied SoftPulse explain captions REVERSE + DOMINATED + FOLD (LPT-942)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-05-03-01-02-explain-reverse',
+        targets: const ['REVERSE', 'DOMINATED', 'FOLD'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('REVERSE'), findsWidgets);
+      expect(find.text('DOMINATED'), findsWidgets);
+      expect(find.text('FOLD'), findsWidgets);
+      expect(find.text('Lose more later'), findsOneWidget);
+      expect(find.text('Second best'), findsOneWidget);
+      expect(find.text('Give up'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Skip dominated draws SoftPulse explain captions NON-NUT + MULTIWAY + SKIP (LPT-943)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-05-03-01-03-explain-draws',
+        targets: const ['NON-NUT', 'MULTIWAY', 'SKIP'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('NON-NUT'), findsWidgets);
+      expect(find.text('MULTIWAY'), findsWidgets);
+      expect(find.text('SKIP'), findsWidgets);
+      expect(find.text('Not the nuts'), findsOneWidget);
+      expect(find.text('Many players'), findsOneWidget);
+      expect(find.text('Pass the draw'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
