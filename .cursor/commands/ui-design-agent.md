@@ -239,17 +239,22 @@ table in the design record, using the coverage ledger
    `python3 tools/ui_densify_spoil_scan.py list` (or `check`; catches numeric tap/pick tiles, em-dash fragments, and -unguided/-scaffolded ids without quiet comments — LPT-877/878/880). Idle coach
    naming a tile answer while SoftPulse is off / after Hint only is a
    `ui-agent` KEY — do not hunt these only by eye (LPT-849 class).
-4. A densify stem with template **card codes** from
+4. AuthoredCue SoftPulse **explain caption gaps** from
+   `python3 tools/ui_softpulse_caption_scan.py list` (or `drafts --limit 3`
+   for Jira-ready titles). Label-only SoftPulse explain tiles missing
+   `authoredSoftPulseExplainCaption` are a `ui-agent` KEY — do not eye-hunt
+   the LPT-883 wave (scanner + drafts; still capture mini proof before Done).
+5. A densify stem with template **card codes** from
    `python3 tools/ui_densify_card_scan.py list` — **walk proof only**.
    Tokens in the stem map are expected for `alignLessonActionCopy`
    rewrite (LPT-851 Done). Run `… check` (exit 0 = align wired). File a
    remap ticket only when mini idle coach still names template cards
    while the felt shows isomorphic ranks — never because `list` is
    non-empty.
-5. A surface never walked.
-6. A surface whose code changed since its last walk
+6. A surface never walked.
+7. A surface whose code changed since its last walk
    (`git diff --name-only <last sha>..HEAD -- <code path>` is not empty).
-7. The surface walked longest ago.
+8. The surface walked longest ago.
 
 Prefer surfaces that the **Known gaps** section names, then motion
 targets (`ui_motion_targets.py list` / `classes`). When walking a

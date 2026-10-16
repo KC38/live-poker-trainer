@@ -189,6 +189,38 @@ class SoftPulseCaptionScanTest(unittest.TestCase):
             )
             self.assertEqual(code, 1)
 
+    def test_drafts_print_jira_ready_titles(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            caption = root / "captions.dart"
+            visual = root / "visual.dart"
+            catalog = root / "catalog.json"
+            caption.write_text(_SAMPLE_CAPTIONS, encoding="utf-8")
+            visual.write_text(_SAMPLE_VISUAL, encoding="utf-8")
+            catalog.write_text(json.dumps(_SAMPLE_CATALOG), encoding="utf-8")
+            gaps = mod.find_caption_gaps(
+                catalog=catalog,
+                caption_source=caption,
+                visual_source=visual,
+            )
+            draft = mod.draft_ticket(gaps[0])
+            self.assertIn("CONTINUE", draft["title"])
+            self.assertIn("authoredSoftPulseExplainCaption", draft["summary"])
+            code = mod.main(
+                [
+                    "drafts",
+                    "--limit",
+                    "1",
+                    "--catalog",
+                    str(catalog),
+                    "--caption-source",
+                    str(caption),
+                    "--visual-source",
+                    str(visual),
+                ]
+            )
+            self.assertEqual(code, 0)
+
     def test_repo_parsers_find_live_sources(self) -> None:
         keys = mod.parse_caption_keys(mod.DEFAULT_CAPTION_SOURCE)
         dedicated = mod.parse_dedicated_visual_ids(mod.DEFAULT_VISUAL_SOURCE)

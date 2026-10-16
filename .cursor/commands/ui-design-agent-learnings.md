@@ -205,7 +205,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `jira.py comment` exits non-zero, do **not** `transition … Done` — fix the
   attach/body and re-comment first (LPT-62: first closeout failed, Done raced
   ahead). After a successful closeout comment, `jira.py verify-embeds LPT-NN`
-  must pass before Done. Prefer `python3 tools/ui_motion_targets.py pick` on empty-queue discovery, then `tools/sim_record.py record|start/stop` + `frames` for SoftPulse/Hint/deal/transition bugs — attach MP4 + Read frame PNGs; stills alone miss timing (human-reported motion gaps). Keep `<surface>-issue.png` / `<KEY>-validated.png` for static copy/layout only.
+  must pass before Done. Prefer `python3 tools/ui_softpulse_caption_scan.py drafts --limit 3` (or `list`) on empty-queue discovery when AuthoredCue SoftPulse caption gaps remain, then `python3 tools/ui_motion_targets.py pick`, then `tools/sim_record.py record|start/stop` + `frames` for SoftPulse/Hint/deal/transition bugs — attach MP4 + Read frame PNGs; stills alone miss timing (human-reported motion gaps). Keep `<surface>-issue.png` / `<KEY>-validated.png` for static copy/layout only.
 
 - Prefer `tools/flutter_run_fast.sh` / `flutter_hot_restart.sh` /
   `refresh-simulator.sh` over hand-rolled tmux `flutter run`. Trust

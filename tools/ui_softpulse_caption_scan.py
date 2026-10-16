@@ -10,8 +10,11 @@ This CLI diffs catalog ``soft_pulse`` targets on activities that resolve to
 
 Commands:
 
-  list   Print activity id, lesson slug, and missing caption targets.
-  check  Exit 1 when any gap remains (CI / discovery gate).
+  list            Print activity id, lesson slug, and missing caption targets.
+  drafts [--limit N]
+                  Print Jira-ready title + summary lines for the next gaps
+                  (default N=3) so discovery can file without hand-rewriting.
+  check           Exit 1 when any gap remains (CI / discovery gate).
 
 Dedicated demo visuals (explicit ``case 'act-…':`` arms in
 ``resolveCoachDialogueVisual``) are skipped — they do not use
@@ -190,6 +193,53 @@ def _print_gaps(gaps: list[dict[str, object]]) -> None:
         print(f"  {row['id']}  lesson={slug}  missing=[{missing}]")
 
 
+def draft_ticket(row: dict[str, object]) -> dict[str, str]:
+    """Build a Jira-ready title + short summary for one caption gap."""
+    missing = [str(x) for x in row["missing"]]  # type: ignore[index]
+    labels = "/".join(missing)
+    slug = str(row.get("slug") or "")
+    activity_id = str(row.get("id") or "")
+    lesson_bit = slug.replace("lesson-", "").replace("-", " ") if slug else activity_id
+    title = f"{lesson_bit} SoftPulse {labels} missing teaching caption"
+    if len(missing) > 1:
+        title = f"{lesson_bit} SoftPulse {labels} missing teaching captions"
+    # Keep titles short for Jira.
+    if len(title) > 120:
+        title = f"SoftPulse {labels} missing teaching captions ({activity_id})"
+    summary = (
+        f"AuthoredCue SoftPulse explain `{activity_id}` "
+        f"({slug or 'unknown lesson'}) shows label-only tiles for "
+        f"{', '.join(missing)}. Add entries to "
+        f"`authoredSoftPulseExplainCaption` (LPT-883 class)."
+    )
+    return {
+        "title": title,
+        "summary": summary,
+        "activity": activity_id,
+        "lesson": slug,
+        "missing": labels,
+    }
+
+
+def _print_drafts(gaps: list[dict[str, object]], *, limit: int) -> None:
+    if not gaps:
+        print("ok: no AuthoredCue SoftPulse caption gaps")
+        return
+    batch = gaps[: max(0, limit)]
+    print(
+        f"drafts: {len(batch)} of {len(gaps)} AuthoredCue SoftPulse caption gaps"
+    )
+    for index, row in enumerate(batch, start=1):
+        draft = draft_ticket(row)
+        print(f"--- {index} ---")
+        print(f"title: {draft['title']}")
+        print(f"summary: {draft['summary']}")
+        print(
+            f"surface: {draft['lesson'] or draft['activity']}  "
+            f"missing=[{draft['missing']}]"
+        )
+
+
 def main(argv: list[str] | None = None) -> int:
     """CLI entry."""
     parser = argparse.ArgumentParser(
@@ -198,8 +248,14 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "command",
-        choices=("list", "check"),
-        help="list gaps or fail when any remain",
+        choices=("list", "drafts", "check"),
+        help="list gaps, print filing drafts, or fail when any remain",
+    )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=3,
+        help="max drafts to print (drafts command only; default 3)",
     )
     parser.add_argument(
         "--catalog",
@@ -225,7 +281,10 @@ def main(argv: list[str] | None = None) -> int:
         caption_source=args.caption_source,
         visual_source=args.visual_source,
     )
-    _print_gaps(gaps)
+    if args.command == "drafts":
+        _print_drafts(gaps, limit=args.limit)
+    else:
+        _print_gaps(gaps)
     if args.command == "check" and gaps:
         return 1
     return 0
