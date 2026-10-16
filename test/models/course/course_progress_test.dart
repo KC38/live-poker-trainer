@@ -3,6 +3,106 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_progress.dart';
 import 'package:live_poker_trainer/models/user_stats_model.dart';
 
+CourseLesson _placeLesson({
+  required String id,
+  required int order,
+  List<String> prerequisites = const [],
+}) {
+  return CourseLesson(
+    id: id,
+    order: order,
+    title: id,
+    summary: id,
+    objectives: const [],
+    prerequisites: prerequisites,
+    remediationLessonIds: const [],
+    estimatedMinutes: 4,
+    difficultyBand: 1,
+    playerTypeRefs: const [],
+    introducesPlayerTypes: const [],
+    activities: const [],
+  );
+}
+
+/// Three-lesson path: A (Cards) → B (Seats) → C (Turns).
+CourseCatalog _placeCatalog({
+  Map<String, List<String>> lessonSplitMap = const {},
+}) {
+  return CourseCatalog(
+    catalogVersion: '2.0.0',
+    minClientVersion: '2.0.0',
+    scope: 'live_cash_nlh',
+    coachId: 'rex',
+    contentChecksum: 'test',
+    playerTypes: const [],
+    lessonSplitMap: lessonSplitMap,
+    sections: [
+      CourseSection(
+        id: 'section-1',
+        order: 1,
+        title: 'Foundations',
+        summary: 'Basics',
+        experienceBand: 'never_played',
+        units: [
+          CourseUnit(
+            id: 'unit-1',
+            order: 1,
+            title: 'Cards',
+            summary: 'Cards',
+            lessons: [_placeLesson(id: 'lesson-a', order: 1)],
+          ),
+          CourseUnit(
+            id: 'unit-2',
+            order: 2,
+            title: 'Seats',
+            summary: 'Seats',
+            lessons: [
+              _placeLesson(
+                id: 'lesson-b',
+                order: 1,
+                prerequisites: const ['lesson-a'],
+              ),
+            ],
+          ),
+        ],
+      ),
+      CourseSection(
+        id: 'section-2',
+        order: 2,
+        title: 'Flop',
+        summary: 'Later',
+        experienceBand: 'some_live',
+        units: [
+          CourseUnit(
+            id: 'unit-2-1',
+            order: 1,
+            title: 'Turns',
+            summary: 'Turns',
+            lessons: [
+              _placeLesson(
+                id: 'lesson-c',
+                order: 1,
+                prerequisites: const ['lesson-b'],
+              ),
+            ],
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
+CourseProgress _placeFrom(
+  Map<String, dynamic> profile, {
+  Map<String, List<String>> lessonSplitMap = const {},
+}) {
+  return CourseProgress.fromState({
+    'available': true,
+    'profile': profile,
+    'reviewsDue': const [],
+  }, _placeCatalog(lessonSplitMap: lessonSplitMap));
+}
+
 void main() {
   final catalog = CourseCatalog(
     catalogVersion: '2.0.0',
@@ -248,4 +348,115 @@ void main() {
       expect(course.currentSectionTitle, 'Flop and turn');
     },
   );
+
+  test('open currentLessonId wins over frontier, resume, and recommended', () {
+    final course = _placeFrom({
+      'currentLessonId': 'lesson-c',
+      'recommendedLessonId': 'lesson-a',
+      'resume': {'lessonId': 'lesson-a'},
+      'completedLessonIds': const <String>[],
+    });
+    expect(course.coursePlaceEyebrow, 'SECTION 2, UNIT 1');
+    expect(course.coursePlaceTitle, 'Turns');
+  });
+
+  test(
+    'finished current falls through to an open resume before the frontier',
+    () {
+      final course = _placeFrom({
+        'currentLessonId': 'lesson-a',
+        'completedLessonIds': const ['lesson-a'],
+        'resume': {'lessonId': 'lesson-c'},
+      });
+      // Resume is in the catalog and unfinished, so it wins even though
+      // lesson-c's prerequisite (lesson-b) is still open.
+      expect(course.coursePlaceEyebrow, 'SECTION 2, UNIT 1');
+      expect(course.coursePlaceTitle, 'Turns');
+    },
+  );
+
+  test('finished pointers stop at the first lesson with met prerequisites', () {
+    final course = _placeFrom({
+      'currentLessonId': 'lesson-a',
+      'recommendedLessonId': 'lesson-c',
+      'resume': {'lessonId': 'lesson-a'},
+      'completedLessonIds': const ['lesson-a'],
+    });
+    expect(course.coursePlaceEyebrow, 'SECTION 1, UNIT 2');
+    expect(course.coursePlaceTitle, 'Seats');
+  });
+
+  test(
+    'a finished path uses recommended, then the completed current lesson',
+    () {
+      final finished = _placeFrom({
+        'currentLessonId': 'lesson-a',
+        'recommendedLessonId': 'lesson-c',
+        'completedLessonIds': const ['lesson-a', 'lesson-b', 'lesson-c'],
+      });
+      expect(finished.coursePlaceEyebrow, 'SECTION 2, UNIT 1');
+      expect(finished.coursePlaceTitle, 'Turns');
+
+      final unknownRecommended = _placeFrom({
+        'currentLessonId': 'lesson-b',
+        'recommendedLessonId': 'missing-lesson',
+        'completedLessonIds': const ['lesson-a', 'lesson-b', 'lesson-c'],
+      });
+      expect(unknownRecommended.coursePlaceEyebrow, 'SECTION 1, UNIT 2');
+      expect(unknownRecommended.coursePlaceTitle, 'Seats');
+    },
+  );
+
+  test('unknown pointers on a finished path do not invent a section', () {
+    final course = _placeFrom({
+      'currentLessonId': 'nope',
+      'recommendedLessonId': 'also-missing',
+      'resume': {'lessonId': 'still-missing'},
+      'completedLessonIds': const ['lesson-a', 'lesson-b', 'lesson-c'],
+    });
+    expect(course.coursePlaceEyebrow, isNull);
+    expect(course.currentSectionTitle, isNull);
+    expect(course.coursePlaceTitle, isNull);
+  });
+
+  test('a retired completed id expands successors before the frontier', () {
+    const split = {
+      'lesson-retired': ['lesson-a'],
+    };
+    final expanded = _placeFrom({
+      'currentLessonId': 'lesson-a',
+      'completedLessonIds': const ['lesson-retired'],
+    }, lessonSplitMap: split);
+    expect(expanded.coursePlaceEyebrow, 'SECTION 1, UNIT 2');
+    expect(expanded.coursePlaceTitle, 'Seats');
+
+    // Successors stay open until the retired key itself is completed.
+    final notExpanded = _placeFrom({
+      'currentLessonId': 'lesson-a',
+      'completedLessonIds': const <String>[],
+    }, lessonSplitMap: split);
+    expect(notExpanded.coursePlaceEyebrow, 'SECTION 1, UNIT 1');
+    expect(notExpanded.coursePlaceTitle, 'Cards');
+  });
+
+  test('junk completed ids are ignored and a non-map resume does not win', () {
+    final junk = _placeFrom({
+      'currentLessonId': 'lesson-a',
+      'completedLessonIds': [1, '', 'lesson-a', null],
+    });
+    expect(junk.coursePlaceEyebrow, 'SECTION 1, UNIT 2');
+    expect(junk.coursePlaceTitle, 'Seats');
+
+    final corruptList = _placeFrom({'completedLessonIds': 'lesson-a'});
+    expect(corruptList.coursePlaceEyebrow, 'SECTION 1, UNIT 1');
+    expect(corruptList.coursePlaceTitle, 'Cards');
+
+    final badResume = _placeFrom({
+      'currentLessonId': 'lesson-a',
+      'completedLessonIds': const ['lesson-a'],
+      'resume': 'lesson-c',
+    });
+    expect(badResume.coursePlaceEyebrow, 'SECTION 1, UNIT 2');
+    expect(badResume.coursePlaceTitle, 'Seats');
+  });
 }
