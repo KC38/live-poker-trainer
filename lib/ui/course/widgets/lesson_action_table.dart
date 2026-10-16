@@ -14564,6 +14564,18 @@ String authoredSoftPulseExplainCaption(String target) {
     // label-only.
     'NON-NUT': 'Not the nuts',
     'SKIP': 'Pass the draw',
+    // Skip thin value versus overfolders SoftPulse explain (NIT → FOLDS →
+    // CHECK; LPT-944). NIT/CHECK already captioned; FOLDS glosses
+    // folds-too-much so the middle SoftPulse tile is not label-only.
+    'FOLDS': 'Folds too much',
+    // Probes and delayed c-bets SoftPulse explain (PROBE → DELAY → PLAN;
+    // LPT-945). DELAY/PLAN already captioned; PROBE glosses bet-after-check
+    // so the first SoftPulse tile is not label-only.
+    'PROBE': 'Bet after check',
+    // Donk bets are polarized SoftPulse explain (DONK → STRONG → AIR;
+    // LPT-946). STRONG/AIR already captioned; DONK glosses lead-into-raiser
+    // so the first SoftPulse tile is not label-only.
+    'DONK': 'Lead into raiser',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.

@@ -5,7 +5,7 @@
 /// LPT-911 / LPT-912 / LPT-913 / LPT-914 / LPT-915 / LPT-916 / LPT-917 /
 /// LPT-918 / LPT-919 / LPT-925 / LPT-926 / LPT-927 / LPT-931 / LPT-932 /
 /// LPT-933 / LPT-934 / LPT-935 / LPT-936 / LPT-937 / LPT-938 / LPT-939 /
-/// LPT-940 / LPT-941 / LPT-942 / LPT-943:
+/// LPT-940 / LPT-941 / LPT-942 / LPT-943 / LPT-944 / LPT-945 / LPT-946:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -157,6 +157,9 @@ void main() {
     expect(authoredSoftPulseExplainCaption('DOMINATED'), 'Second best');
     expect(authoredSoftPulseExplainCaption('NON-NUT'), 'Not the nuts');
     expect(authoredSoftPulseExplainCaption('SKIP'), 'Pass the draw');
+    expect(authoredSoftPulseExplainCaption('FOLDS'), 'Folds too much');
+    expect(authoredSoftPulseExplainCaption('PROBE'), 'Bet after check');
+    expect(authoredSoftPulseExplainCaption('DONK'), 'Lead into raiser');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -2938,6 +2941,147 @@ void main() {
       expect(find.text('Not the nuts'), findsOneWidget);
       expect(find.text('Many players'), findsOneWidget);
       expect(find.text('Pass the draw'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Skip thin overfolders SoftPulse explain captions NIT + FOLDS + CHECK (LPT-944)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-05-04-01-03-explain-overfold',
+        targets: const ['NIT', 'FOLDS', 'CHECK'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('NIT'), findsWidgets);
+      expect(find.text('FOLDS'), findsWidgets);
+      expect(find.text('CHECK'), findsWidgets);
+      expect(find.text('Working label'), findsOneWidget);
+      expect(find.text('Folds too much'), findsOneWidget);
+      expect(find.text('Pass the street'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Probes SoftPulse explain captions PROBE + DELAY + PLAN (LPT-945)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-05-05-01-02-explain-probe',
+        targets: const ['PROBE', 'DELAY', 'PLAN'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('PROBE'), findsWidgets);
+      expect(find.text('DELAY'), findsWidgets);
+      expect(find.text('PLAN'), findsWidgets);
+      expect(find.text('Bet after check'), findsOneWidget);
+      expect(find.text('Hold fire'), findsOneWidget);
+      expect(find.text('Fold, call, or 3-bet'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Donk bets SoftPulse explain captions DONK + STRONG + AIR (LPT-946)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-05-05-01-03-explain-donk',
+        targets: const ['DONK', 'STRONG', 'AIR'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('DONK'), findsWidgets);
+      expect(find.text('STRONG'), findsWidgets);
+      expect(find.text('AIR'), findsWidgets);
+      expect(find.text('Lead into raiser'), findsOneWidget);
+      expect(find.text('Premium hands'), findsOneWidget);
+      expect(find.text('Nothing yet'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
