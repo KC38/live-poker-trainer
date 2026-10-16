@@ -70,6 +70,7 @@ class LessonActionFeltLayout {
     this.foldedSeatIndexes = const <int>[],
     this.seatActionLabels = const <int, String>{},
     this.villainSeatIndex = 1,
+    this.callerSeatIndexes = const <int>[],
     this.headsUp = false,
   });
 
@@ -99,6 +100,9 @@ class LessonActionFeltLayout {
 
   /// Seat that holds a facing bet / open for felt money.
   final int villainSeatIndex;
+
+  /// Seats that called the open before the hero acts (LPT-1021).
+  final List<int> callerSeatIndexes;
 
   /// True when this spot is authored as heads-up.
   final bool headsUp;
@@ -162,6 +166,30 @@ String? parseLessonActionHeroPosition(String? streetLabel) {
       lower.contains('early position') ||
       RegExp(r'\bep\b').hasMatch(lower)) {
     return 'UTG';
+  }
+  return null;
+}
+
+/// Count of callers named in [villainLine] (`2 callers`, `two callers`).
+///
+/// Used so squeeze-style densify keeps those seats live with CALL badges
+/// instead of folding everyone between the opener and the hero (LPT-1021).
+int? parseLessonCallerCount(String? villainLine) {
+  if (villainLine == null || villainLine.isEmpty) return null;
+  final lower = villainLine.toLowerCase();
+  final digit = RegExp(r'(\d+)\s+callers?').firstMatch(lower);
+  if (digit != null) return int.tryParse(digit.group(1)!);
+  const words = <String, int>{
+    'one': 1,
+    'two': 2,
+    'three': 3,
+    'four': 4,
+    'five': 5,
+  };
+  for (final entry in words.entries) {
+    if (RegExp('${entry.key}\\s+callers?').hasMatch(lower)) {
+      return entry.value;
+    }
   }
   return null;
 }
@@ -367,7 +395,7 @@ LessonActionFeltLayout _resolveRingLayout({
           nineMax
               ? lessonNineMaxSeatIndex(position: opener, dealerIndex: dealer)
               : lessonSixMaxSeatIndex(position: opener, dealerIndex: dealer);
-      final folded =
+      final between =
           nineMax
               ? lessonNineMaxFoldsBetween(
                 openerPosition: opener,
@@ -379,6 +407,21 @@ LessonActionFeltLayout _resolveRingLayout({
                 heroPosition: heroPos,
                 dealerIndex: dealer,
               );
+      // "UTG opens · 2 callers" — keep the first N seats after the opener as
+      // live CALL seats; fold the rest (BTN/SB) so dead money stays (LPT-1021).
+      final callerCount = parseLessonCallerCount(spot.villainLine) ?? 0;
+      final callers =
+          callerCount <= 0
+              ? const <int>[]
+              : between.take(callerCount).toList(growable: false);
+      final folded =
+          callerCount <= 0
+              ? between
+              : between.skip(callerCount).toList(growable: false);
+      final labels = <int, String>{
+        openerSeat: _raiseOrBetLabel(spot.villainLine),
+        for (final seat in callers) seat: 'CALL',
+      };
       return LessonActionFeltLayout(
         villainCount: villainCount,
         seatCount: seatCount,
@@ -387,8 +430,9 @@ LessonActionFeltLayout _resolveRingLayout({
         bbIndex: bb,
         activeSeatIndex: 0,
         foldedSeatIndexes: folded,
-        seatActionLabels: {openerSeat: _raiseOrBetLabel(spot.villainLine)},
+        seatActionLabels: labels,
         villainSeatIndex: openerSeat,
+        callerSeatIndexes: callers,
       );
     }
 

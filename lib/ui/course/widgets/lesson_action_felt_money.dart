@@ -158,12 +158,17 @@ double? callAmountFromChoices(List<CourseChoice> choices) {
 /// facing-bet densify so posted blinds stay on-seat when street money paints
 /// an open — otherwise `_applyLessonStageStreetMoney` zeroes every other
 /// seat's `currentBet` and sweeps SB/BB into the center pot (LPT-1016).
+///
+/// Pass [callerSeatIndexes] for multiway opens (`UTG opens · 2 callers`) so
+/// caller street bets match the pot progression when the line has no
+/// `opens to N` amount (LPT-1021).
 LessonActionFeltMoney resolveLessonActionFeltMoney({
   required LessonActionSpot spot,
   required List<CourseChoice> choices,
   CourseChoice? selected,
   int seatCount = 2,
   int villainSeatIndex = 1,
+  List<int> callerSeatIndexes = const <int>[],
   int? sbIndex,
   int? bbIndex,
   double smallBlind = lessonSmallBlind,
@@ -177,12 +182,25 @@ LessonActionFeltMoney resolveLessonActionFeltMoney({
   final bets = List<double>.filled(seats, 0);
   final labeledPot = parseLessonPotChips(spot.potLabel);
   final line = spot.villainLine?.toLowerCase() ?? '';
-  final facing =
+  var facing =
       spot.facingBet
           ? (parseFacingBetChips(spot.villainLine) ??
               callAmountFromChoices(choices) ??
               0)
           : 0.0;
+  // Squeeze densify: `UTG opens · 2 callers` has no `opens to N`. Recover the
+  // open-to from `Pot 3 → 9 → 21` (after-open pot − blinds) (LPT-1021).
+  if (spot.facingBet &&
+      facing <= 0 &&
+      spot.boardCodes.isEmpty &&
+      callerSeatIndexes.isNotEmpty) {
+    final inferred = priorOpenFromPotSteps(
+      potSteps: parseLessonPotSteps(spot.potLabel),
+      smallBlind: smallBlind,
+      bigBlind: bigBlind,
+    );
+    if (inferred != null) facing = inferred;
+  }
 
   var heroBet = 0.0;
   var heroPriorOpen = false;
@@ -211,6 +229,12 @@ LessonActionFeltMoney resolveLessonActionFeltMoney({
   }
   if (facing > 0 && villainSeat != 0) {
     bets[villainSeat] = facing;
+  }
+  if (facing > 0) {
+    for (final seat in callerSeatIndexes) {
+      if (seat <= 0 || seat >= seats || seat == villainSeat) continue;
+      bets[seat] = facing;
+    }
   }
   bets[0] = heroBet;
 
