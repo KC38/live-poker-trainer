@@ -14823,6 +14823,21 @@ String authoredSoftPulseExplainCaption(String target) {
     // TAG CHECK-RAISE glosses a strong TAG raise — never leave the first
     // SoftPulse tile label-only.
     'TAG CHECK-RAISE': 'Strong TAG raise',
+    // No evidence, baseline line SoftPulse explain
+    // (NO EVIDENCE → BASELINE; LPT-998). Gloss no-type-note / play-default —
+    // never leave AuthoredCue tiles label-only.
+    'NO EVIDENCE': 'No type note yet',
+    'BASELINE': 'Play your default',
+    // Produce one coherent action SoftPulse explain
+    // (FOUR INPUTS → ONE ACTION; LPT-999). Gloss the four inputs and the
+    // single decision — never leave AuthoredCue tiles label-only.
+    'FOUR INPUTS': 'Type, board, line, size',
+    'ONE ACTION': 'One clear decision',
+    // Write default lines SoftPulse explain
+    // (COMMON SPOT → DEFAULT; LPT-1000). Gloss recurring spots / pre-written
+    // lines — never leave AuthoredCue tiles label-only.
+    'COMMON SPOT': 'Recurring situation',
+    'DEFAULT': 'Pre-written line',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
