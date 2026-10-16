@@ -14501,6 +14501,11 @@ String authoredSoftPulseExplainCaption(String target) {
     // AuthoredCue tiles label-only.
     'NIT RAISES': 'Big after flop',
     'CREDIT': 'Believe strength',
+    // Tag constant aggression SoftPulse explain (EVERY STREET → WEAK
+    // SHOWDOWNS; LPT-931). Gloss bets-all-streets / weak-at-showdown —
+    // never leave AuthoredCue tiles label-only.
+    'EVERY STREET': 'Bets all streets',
+    'WEAK SHOWDOWNS': 'Weak at showdown',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
