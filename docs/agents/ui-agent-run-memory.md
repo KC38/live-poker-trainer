@@ -119,3 +119,7 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
   (REVIEW is Cooler-or-mistake Judge the hand and also review-habits On a
   schedule — LPT-970 / act-07-09-01-03). When glosses conflict, add an
   activityId override rather than overwriting the shared map key.
+
+## Fold 2026-10-16
+
+- Prefer cream SoftPulse explain captions on `_DemoActionCard` (match densify) — slate gloss reads muddy under gold SoftPulse (LPT-1009). Never leave AuthoredCue SoftPulse explain on slate when densify already uses cream for the same reason.

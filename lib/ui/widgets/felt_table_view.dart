@@ -326,9 +326,12 @@ class _FeltTableViewState extends State<FeltTableView> {
 
   /// Snapshot with folds / raises / street bets held until they should show.
   ///
-  /// While holes are still dealing, every [PlayerModel.currentBet] stays
-  /// hidden (including blinds) so chips do not appear before the deal
-  /// finishes. After holes land, each seat's bet and last-action badge
+  /// While holes are still dealing, post-deal street bets stay hidden.
+  /// Posted blinds unmask once teaching cards are ready
+  /// ([_softPulseCardsReady]) so SoftPulse never asks the learner to read
+  /// a false POT $0 after stacks already deducted blinds (LPT-1010). SoftPulse
+  /// still unlocks on hero holes without waiting for every villain back
+  /// (LPT-678). After all holes land, each seat's bet and last-action badge
   /// wait on [FeltActionRevealController.isRevealed] — blinds (not in the
   /// action order) show immediately; raises/calls/folds wait their turn.
   GameState _displayGame(GameState game) {
@@ -336,10 +339,17 @@ class _FeltTableViewState extends State<FeltTableView> {
       return game;
     }
     final holesDone = _deal.holesComplete;
+    final blindsMayShow = holesDone || _softPulseCardsReady;
     return game.copyWith(
       players: [
         for (var i = 0; i < game.players.length; i++)
-          _displayPlayer(game.players[i], i, holesDone: holesDone),
+          _displayPlayer(
+            game.players[i],
+            i,
+            game: game,
+            holesDone: holesDone,
+            blindsMayShow: blindsMayShow,
+          ),
       ],
     );
   }
@@ -348,13 +358,25 @@ class _FeltTableViewState extends State<FeltTableView> {
   PlayerModel _displayPlayer(
     PlayerModel player,
     int seatIndex, {
+    required GameState game,
     required bool holesDone,
+    required bool blindsMayShow,
   }) {
     if (!holesDone) {
+      final isBlindSeat =
+          seatIndex == game.sbIndex || seatIndex == game.bbIndex;
+      if (blindsMayShow && isBlindSeat) {
+        // Keep posted blind chips + pot truthful while later hole-backs
+        // finish; clear only last-action chrome (BLIND badges stay off).
+        return player.copyWith(folded: false, clearLastAction: true);
+      }
+      // Hide street bets and refund them into the stack so stacks do not
+      // show blinds paid while the pot is still $0.
       return player.copyWith(
         folded: false,
         clearLastAction: true,
         currentBet: 0,
+        stack: Money.round(player.stack + player.currentBet),
       );
     }
     if (_actions.isRevealed(seatIndex)) return player;
