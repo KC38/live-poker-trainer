@@ -15122,7 +15122,10 @@ class _DemoActionCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.manrope(
-                      color: AppColors.slate,
+                      // SoftPulse explain fills tint light (gold/cream) —
+                      // slate gloss reads muddy under SoftPulse (LPT-1009);
+                      // match densify cream captions for legibility.
+                      color: AppColors.cream.withValues(alpha: 0.82),
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                     ),
