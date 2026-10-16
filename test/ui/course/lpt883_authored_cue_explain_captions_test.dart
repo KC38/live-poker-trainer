@@ -10,7 +10,8 @@
 /// LPT-956 / LPT-957 / LPT-958 / LPT-959 / LPT-960 / LPT-961 /
 /// LPT-962 / LPT-963 / LPT-964 / LPT-965 / LPT-966 / LPT-967 / LPT-968 /
 /// LPT-969 / LPT-970 / LPT-971 / LPT-972 / LPT-973 / LPT-974 / LPT-975 /
-/// LPT-976 / LPT-977 / LPT-978 / LPT-979 / LPT-980 / LPT-981:
+/// LPT-976 / LPT-977 / LPT-978 / LPT-979 / LPT-980 / LPT-981 /
+/// LPT-982 / LPT-983 / LPT-984:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -243,6 +244,23 @@ void main() {
       'Raises and barrels',
     );
     expect(authoredSoftPulseExplainCaption('CALLS'), 'Just calls');
+    expect(authoredSoftPulseExplainCaption('STRONG HAND'), 'Premium made');
+    expect(
+      authoredSoftPulseExplainCaption('LET THEM BET'),
+      'Keep them betting',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('NO BIG BLUFF'),
+      'Skip hero bluffs',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('LET THEM'),
+      'They keep pressing',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('NIT CHECK-RAISE'),
+      'Value-heavy raise',
+    );
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -4772,6 +4790,138 @@ void main() {
       expect(find.text('CALLS'), findsWidgets);
       expect(find.text('Raises and barrels'), findsOneWidget);
       expect(find.text('Just calls'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Trap strong hands SoftPulse explain captions (LPT-982)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-12-03-02-explain-trap',
+        targets: const ['STRONG HAND', 'LET THEM BET'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('STRONG HAND'), findsWidgets);
+      expect(find.text('LET THEM BET'), findsWidgets);
+      expect(find.text('Premium made'), findsOneWidget);
+      expect(find.text('Keep them betting'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Fewer fancy bluffs SoftPulse explain captions (LPT-983)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-12-03-03-explain-fancy',
+        targets: const ['NO BIG BLUFF', 'LET THEM'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('NO BIG BLUFF'), findsWidgets);
+      expect(find.text('LET THEM'), findsWidgets);
+      expect(find.text('Skip hero bluffs'), findsOneWidget);
+      expect(find.text('They keep pressing'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Same cards Nit fold SoftPulse explain captions (LPT-984)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-13-01-02-explain-nit',
+        targets: const ['NIT CHECK-RAISE', 'FOLD'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('NIT CHECK-RAISE'), findsWidgets);
+      expect(find.text('FOLD'), findsWidgets);
+      expect(find.text('Value-heavy raise'), findsOneWidget);
+      expect(find.text('Give up'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );

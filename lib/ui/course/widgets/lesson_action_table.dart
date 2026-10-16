@@ -14748,6 +14748,20 @@ String authoredSoftPulseExplainCaption(String target) {
     // SoftPulse tiles label-only.
     'RAISES': 'Raises and barrels',
     'CALLS': 'Just calls',
+    // Trap strong hands SoftPulse explain (STRONG HAND → LET THEM BET;
+    // LPT-982). Gloss premium-made / keep-them-betting — never leave those
+    // SoftPulse tiles label-only.
+    'STRONG HAND': 'Premium made',
+    'LET THEM BET': 'Keep them betting',
+    // Fewer fancy bluffs SoftPulse explain (NO BIG BLUFF → LET THEM;
+    // LPT-983). Skip inventing big bluffs; they keep pressing — never leave
+    // those SoftPulse tiles label-only.
+    'NO BIG BLUFF': 'Skip hero bluffs',
+    'LET THEM': 'They keep pressing',
+    // Same cards Nit fold SoftPulse explain (NIT CHECK-RAISE → FOLD;
+    // LPT-984). FOLD already Give up; NIT CHECK-RAISE glosses value-heavy —
+    // never leave the first SoftPulse tile label-only.
+    'NIT CHECK-RAISE': 'Value-heavy raise',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
