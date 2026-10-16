@@ -13,7 +13,7 @@
 /// LPT-976 / LPT-977 / LPT-978 / LPT-979 / LPT-980 / LPT-981 /
 /// LPT-982 / LPT-983 / LPT-984 / LPT-985 / LPT-986 / LPT-987 /
 /// LPT-988 / LPT-989 / LPT-990 / LPT-991 / LPT-992 /
-/// LPT-993 / LPT-994 / LPT-995 / LPT-996:
+/// LPT-993 / LPT-994 / LPT-995 / LPT-996 / LPT-997:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -326,6 +326,10 @@ void main() {
     expect(
       authoredSoftPulseExplainCaption('SHORTER STACK'),
       'Min of the two',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('TAG CHECK-RAISE'),
+      'Strong TAG raise',
     );
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
@@ -5507,6 +5511,50 @@ void main() {
       expect(find.text('PLAN'), findsWidgets);
       expect(find.text('Min of the two'), findsOneWidget);
       expect(find.text('Fold, call, or 3-bet'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Same hand TAG check-raise SoftPulse explain captions (LPT-997)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-07-07-01-02-explain-tag',
+        targets: const ['TAG CHECK-RAISE', 'CAREFUL'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('TAG CHECK-RAISE'), findsWidgets);
+      expect(find.text('CAREFUL'), findsWidgets);
+      expect(find.text('Strong TAG raise'), findsOneWidget);
+      expect(find.text('Near-committed'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
