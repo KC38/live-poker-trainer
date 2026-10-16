@@ -193,13 +193,24 @@ def _print_gaps(gaps: list[dict[str, object]]) -> None:
         print(f"  {row['id']}  lesson={slug}  missing=[{missing}]")
 
 
+def _lesson_title_bit(slug: str, activity_id: str) -> str:
+    """Human lesson fragment for Jira titles (drop ``lesson-NN-NN-…`` prefix)."""
+    if not slug:
+        return activity_id
+    # lesson-06-07-01-03-no-fake-mdf → no-fake-mdf
+    trimmed = re.sub(r"^lesson-(?:\d+-)+", "", slug)
+    if not trimmed or trimmed == slug:
+        trimmed = slug.removeprefix("lesson-")
+    return trimmed.replace("-", " ")
+
+
 def draft_ticket(row: dict[str, object]) -> dict[str, str]:
     """Build a Jira-ready title + short summary for one caption gap."""
     missing = [str(x) for x in row["missing"]]  # type: ignore[index]
     labels = "/".join(missing)
     slug = str(row.get("slug") or "")
     activity_id = str(row.get("id") or "")
-    lesson_bit = slug.replace("lesson-", "").replace("-", " ") if slug else activity_id
+    lesson_bit = _lesson_title_bit(slug, activity_id)
     title = f"{lesson_bit} SoftPulse {labels} missing teaching caption"
     if len(missing) > 1:
         title = f"{lesson_bit} SoftPulse {labels} missing teaching captions"
