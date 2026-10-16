@@ -1777,7 +1777,7 @@ accordingly / SHAPE → Range shape / MATCH → Size fits shape — LPT-960,
 HUGE → Too big / AVOID → Skip random — LPT-961, CATCH → Bluff-catch hand /
 UNBLOCK → Keep their draws / BLUFFS → Missed draws live — LPT-962, TWEAK →
 Close choice only / NO EV → No fake decimals — LPT-963, THIRD PAIR → Weak
-pair / SCARY → Tough river — LPT-964, MDF → Exact percents / INTUITION → Decision-linked — LPT-965, LESS → Cut bluff mix — LPT-966, RANDOM → Theater mix / PURPOSE → Not coin-flip — LPT-967, 4BET → Lower SPR / CAREFUL → Near-committed — LPT-968, EGO → Skip revenge — LPT-969). Play a full
+pair / SCARY → Tough river — LPT-964, MDF → Exact percents / INTUITION → Decision-linked — LPT-965, LESS → Cut bluff mix — LPT-966, RANDOM → Theater mix / PURPOSE → Not coin-flip — LPT-967, 4BET → Lower SPR / CAREFUL → Near-committed — LPT-968, EGO → Skip revenge — LPT-969, MISTAKE → Avoidable leak / REVIEW → Judge the hand — LPT-970). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2246,7 +2246,7 @@ felt.
 | Plan 3-bet pots by SPR | 3-Bet, Depth on the felt; explain SoftPulse cue 3BET → DEPTH only — 4BET press belongs to Tighten up in 4-bet pots and No ego 4-bets (curriculum residual LPT-704); unit `unit-06-09-3bet4bet` (LPT-282 split) | — |
 | No ego 4-bets | explain SoftPulse cues 4BET → EGO → AVOID with teaching captions (Lower SPR / Skip revenge / Skip random — never empty EGO gloss; LPT-969); unit `unit-06-09-3bet4bet` (LPT-282 split) | — |
 | Make hard folds | Hard on the felt; explain SoftPulse cue HARD only — COOLER/EGO presses belong to Cooler or mistake? and No ego call-downs (curriculum residual LPT-705); unguided SoftPulse one gold Ego call (LPT-502); unit `unit-06-10-folds` (LPT-285 split) | — |
-| Cooler or mistake? | explain SoftPulse cues COOLER → MISTAKE → REVIEW; unit `unit-06-10-folds` (LPT-285 split) | — |
+| Cooler or mistake? | explain SoftPulse cues COOLER → MISTAKE → REVIEW with teaching captions (Not a leak / Avoidable leak / Judge the hand — never empty MISTAKE/REVIEW glosses; LPT-970); unit `unit-06-10-folds` (LPT-285 split) | — |
 | No ego call-downs | explain SoftPulse cues DUE → EGO → FOLD; unit `unit-06-10-folds` (LPT-285 split) | — |
 | Note selective entry | Tight on the felt; explain SoftPulse cue TIGHT only — BARREL/SAMPLE presses belong to Note disciplined aggression and Wait for samples (curriculum residual LPT-706); unguided SoftPulse one gold (LPT-494); unit `unit-06-11-tag` (LPT-288 split) | entry quizzes |
 | Note disciplined aggression | explain SoftPulse cues CALLED → GIVES UP; unit `unit-06-11-tag` (LPT-288 split) | — |

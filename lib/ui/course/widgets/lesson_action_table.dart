@@ -14693,6 +14693,11 @@ String authoredSoftPulseExplainCaption(String target) {
     // No ego 4-bets SoftPulse explain (4BET → EGO → AVOID; LPT-969).
     // 4BET/AVOID already captioned; EGO matches Versus-maniacs Skip revenge.
     'EGO': 'Skip revenge',
+    // Cooler or mistake SoftPulse explain (COOLER → MISTAKE → REVIEW; LPT-970).
+    // COOLER already Not a leak; MISTAKE/REVIEW gloss avoidable leak vs judge
+    // the hand — never leave those SoftPulse tiles label-only.
+    'MISTAKE': 'Avoidable leak',
+    'REVIEW': 'Judge the hand',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
