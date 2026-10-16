@@ -41,6 +41,11 @@ class DensifyCallerScanTest(unittest.TestCase):
             3,
         )
 
+    def test_parse_behind_and_called_by(self) -> None:
+        self.assertEqual(mod.parse_caller_count("Checked to you · two behind"), 2)
+        self.assertEqual(mod.parse_caller_count("Two players behind"), 2)
+        self.assertEqual(mod.parse_caller_count("Called by two"), 2)
+
     def test_parse_named_bb_mp(self) -> None:
         self.assertEqual(mod.parse_caller_count("BTN open · BB + MP call"), 2)
         self.assertEqual(

@@ -34,6 +34,8 @@ _MULTIWAYISH = re.compile(
     r"(?:two|three|four|five|six|seven|eight|nine)-?way|"
     r"bb\s*\+\s*mp|mp\s*\+\s*bb|"
     r"callers?\s+behind|"
+    r"(?:\d+|one|two|three|four|five)\s+(?:players?\s+)?behind|"
+    r"called by\s+(?:\d+|one|two|three|four|five)|"
     r"multiway"
     r")\b"
 )
@@ -122,6 +124,15 @@ def parse_caller_count(villain_line: str) -> int | None:
     for word, players in _WAY_WORDS.items():
         if re.search(rf"{word}-?way\b", lower):
             return players - 1
+    count_token = r"(\d+|one|two|three|four|five)"
+    behind = re.search(rf"\b{count_token}\s+(?:players?\s+)?behind\b", lower)
+    if behind is not None:
+        raw = behind.group(1)
+        return int(raw) if raw.isdigit() else _WORDS[raw]
+    called_by = re.search(rf"\bcalled by\s+{count_token}\b", lower)
+    if called_by is not None:
+        raw = called_by.group(1)
+        return int(raw) if raw.isdigit() else _WORDS[raw]
     named = parse_named_caller_positions(villain_line)
     if named:
         return len(named)

@@ -134,6 +134,9 @@ void main() {
       expect(parseLessonCallerCount('Checked to you · 4-way'), 3);
       expect(parseLessonCallerCount('Four-way · bet into you'), 3);
       expect(parseLessonCallerCount('Four-way limp · checked to you'), 3);
+      expect(parseLessonCallerCount('Checked to you · two behind'), 2);
+      expect(parseLessonCallerCount('Two players behind'), 2);
+      expect(parseLessonCallerCount('Called by two'), 2);
       // Hero BTN (default) → dealer 0; SB=1, BB=2, next=3.
       expect(layout.dealerIndex, 0);
       expect(layout.callerSeatIndexes.toSet(), {1, 2, 3});
@@ -155,6 +158,23 @@ void main() {
 
       expect(layout.callerSeatIndexes.toSet(), {1, 2, 3});
       expect(layout.foldedSeatIndexes.toSet(), {4, 5});
+    });
+
+    test('LPT-1025 class: two behind keeps two villains live', () {
+      const spot = LessonActionSpot(
+        heroCodes: ['Ah', 'Qh'],
+        boardCodes: ['Jh', '8h', '2c', '3d'],
+        potLabel: 'Pot 48',
+        villainLine: 'Checked to you · two behind',
+        streetLabel: 'Turn · Jh8h2c3d · AQs',
+        facingBet: false,
+        openPot: true,
+      );
+
+      final layout = resolveLessonActionFeltLayout(spot);
+
+      expect(layout.callerSeatIndexes.toSet(), {1, 2});
+      expect(layout.foldedSeatIndexes.toSet(), {3, 4, 5});
     });
 
     test('explicit heads-up spots stay two-seat', () {

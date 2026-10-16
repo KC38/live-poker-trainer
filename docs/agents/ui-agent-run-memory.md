@@ -148,4 +148,4 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 
 ## Fold 2026-10-16 (LPT-1025 word four-way)
 
-- Prefer `parseLessonCallerCount` word forms (`Four-way`, `three-way`) in addition to digit `4-way` / `Three callers` / `BB + MP call` — `ui_densify_caller_scan.py check` lists unparsed multiway villain lines (LPT-1024 / LPT-1025 class).
+- Prefer `parseLessonCallerCount` word forms (`Four-way`, `three-way`, `two behind`, `Called by two`) in addition to digit `4-way` / `Three callers` / `BB + MP call` — `ui_densify_caller_scan.py check` lists unparsed multiway villain lines (LPT-1024 / LPT-1025 class).

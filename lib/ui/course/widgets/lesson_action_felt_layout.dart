@@ -218,6 +218,28 @@ int? parseLessonCallerCount(String? villainLine) {
       return entry.value - 1;
     }
   }
+  // "two behind" / "Two players behind" / "Called by two" — capstone
+  // multiway lines that are not "N callers" or "N-way" (LPT-1025 class).
+  int? countToken(String raw) {
+    final parsed = int.tryParse(raw);
+    if (parsed != null) return parsed;
+    return words[raw];
+  }
+
+  final behind = RegExp(
+    r'\b(\d+|one|two|three|four|five)\s+(?:players?\s+)?behind\b',
+  ).firstMatch(lower);
+  if (behind != null) {
+    final n = countToken(behind.group(1)!);
+    if (n != null && n > 0) return n;
+  }
+  final calledBy = RegExp(
+    r'\bcalled by\s+(\d+|one|two|three|four|five)\b',
+  ).firstMatch(lower);
+  if (calledBy != null) {
+    final n = countToken(calledBy.group(1)!);
+    if (n != null && n > 0) return n;
+  }
   final named = parseLessonNamedCallerPositions(villainLine);
   if (named.isNotEmpty) return named.length;
   return null;
