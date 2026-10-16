@@ -14781,6 +14781,24 @@ String authoredSoftPulseExplainCaption(String target) {
     // those SoftPulse tiles label-only.
     'TEXTURE': 'Board shape',
     'CONFIRM OR CANCEL': 'Keep or drop plan',
+    // Bet flop only with a turn map SoftPulse explain
+    // (CONTINUE → GIVE-UP → MAP; LPT-989). CONTINUE already Keep strong;
+    // GIVE-UP/MAP match TurnMapDemo Cards to kill / Before flop bet —
+    // never leave those SoftPulse tiles label-only. Distinct from
+    // 'GIVE UP' (space) No equity fold on Calling Station explains.
+    'GIVE-UP': 'Cards to kill',
+    'MAP': 'Before flop bet',
+    // Choose bluffs with blockers SoftPulse explain
+    // (BLOCKER → FEWER CALLS; LPT-990). BLOCKER aligns BlockersDemo
+    // Remove hands; FEWER CALLS glosses they call less — never leave
+    // those SoftPulse tiles label-only.
+    'BLOCKER': 'Remove hands',
+    'FEWER CALLS': 'They call less',
+    // Check trash without a story SoftPulse explain
+    // (NO STORY → CHECK; LPT-991). CHECK already Pass the street; NO STORY
+    // glosses nothing to bet — never leave the first SoftPulse tile
+    // label-only.
+    'NO STORY': 'Nothing to bet',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
