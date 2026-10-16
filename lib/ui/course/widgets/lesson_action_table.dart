@@ -14717,6 +14717,11 @@ String authoredSoftPulseExplainCaption(String target) {
     // barrels-with-plan — never leave those SoftPulse tiles label-only.
     'FOLDS MOST': 'Seldom plays',
     'PLANNED BARRELS': 'Barrels with plan',
+    // TAG or Maniac SoftPulse explain (ENTRY WIDTH → DISCIPLINE; LPT-975).
+    // Gloss narrow-vs-wide entry / gives-up-when-called — never leave those
+    // SoftPulse tiles label-only.
+    'ENTRY WIDTH': 'Narrow vs wide',
+    'DISCIPLINE': 'Gives up when called',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
