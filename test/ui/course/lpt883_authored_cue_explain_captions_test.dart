@@ -3,7 +3,7 @@
 /// LPT-897 / LPT-898 / LPT-899 / LPT-900 / LPT-901 / LPT-902 / LPT-903 /
 /// LPT-904 / LPT-905 / LPT-906 / LPT-907 / LPT-908 / LPT-909 / LPT-910 /
 /// LPT-911 / LPT-912 / LPT-913 / LPT-914 / LPT-915 / LPT-916 / LPT-917 /
-/// LPT-918 / LPT-919 / LPT-925 / LPT-926 / LPT-927:
+/// LPT-918 / LPT-919 / LPT-925 / LPT-926 / LPT-927 / LPT-931:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -128,6 +128,11 @@ void main() {
     expect(authoredSoftPulseExplainCaption('UNKNOWN'), 'Stay cautious');
     expect(authoredSoftPulseExplainCaption('RARE ENTRY'), 'Seldom plays');
     expect(authoredSoftPulseExplainCaption('BIG AGGRESSION'), 'Bets hard');
+    expect(authoredSoftPulseExplainCaption('EVERY STREET'), 'Bets all streets');
+    expect(
+      authoredSoftPulseExplainCaption('WEAK SHOWDOWNS'),
+      'Weak at showdown',
+    );
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -2309,6 +2314,51 @@ void main() {
       expect(find.text('CREDIT'), findsWidgets);
       expect(find.text('Big after flop'), findsOneWidget);
       expect(find.text('Believe strength'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Constant aggression SoftPulse explain captions EVERY STREET + WEAK SHOWDOWNS (LPT-931)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-04-08-01-02-explain-pressure',
+        targets: const ['EVERY STREET', 'WEAK SHOWDOWNS'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('EVERY STREET'), findsWidgets);
+      expect(find.text('WEAK SHOWDOWNS'), findsWidgets);
+      expect(find.text('Bets all streets'), findsOneWidget);
+      expect(find.text('Weak at showdown'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
