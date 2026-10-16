@@ -10,7 +10,7 @@
 /// LPT-956 / LPT-957 / LPT-958 / LPT-959 / LPT-960 / LPT-961 /
 /// LPT-962 / LPT-963 / LPT-964 / LPT-965 / LPT-966 / LPT-967 / LPT-968 /
 /// LPT-969 / LPT-970 / LPT-971 / LPT-972 / LPT-973 / LPT-974 / LPT-975 /
-/// LPT-976 / LPT-977 / LPT-978:
+/// LPT-976 / LPT-977 / LPT-978 / LPT-979 / LPT-980 / LPT-981:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -230,6 +230,19 @@ void main() {
       authoredSoftPulseExplainCaption('MANY HANDS'),
       'Across many spots',
     );
+    expect(
+      authoredSoftPulseExplainCaption('FOLDS SOMETIMES'),
+      'Still folds some',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('WIDE OPENS'),
+      'Opens many hands',
+    );
+    expect(
+      authoredSoftPulseExplainCaption('RAISES'),
+      'Raises and barrels',
+    );
+    expect(authoredSoftPulseExplainCaption('CALLS'), 'Just calls');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -4627,6 +4640,138 @@ void main() {
       expect(find.text('MANY HANDS'), findsWidgets);
       expect(find.text('Fire multi-street'), findsOneWidget);
       expect(find.text('Across many spots'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Planned not Maniac SoftPulse explain captions (LPT-979)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-12-01-03-explain-plan',
+        targets: const ['FOLDS SOMETIMES', 'PLAN'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('FOLDS SOMETIMES'), findsWidgets);
+      expect(find.text('PLAN'), findsWidgets);
+      expect(find.text('Still folds some'), findsOneWidget);
+      expect(find.text('Fold, call, or 3-bet'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Spot a LAG SoftPulse explain captions (LPT-980)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-12-02-02-explain-spot',
+        targets: const ['WIDE OPENS', 'BARRELS'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('WIDE OPENS'), findsWidgets);
+      expect(find.text('BARRELS'), findsWidgets);
+      expect(find.text('Opens many hands'), findsOneWidget);
+      expect(find.text('Fire multi-street'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'LAG or Calling Station SoftPulse explain captions (LPT-981)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-12-02-03-explain-station',
+        targets: const ['RAISES', 'CALLS'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('RAISES'), findsWidgets);
+      expect(find.text('CALLS'), findsWidgets);
+      expect(find.text('Raises and barrels'), findsOneWidget);
+      expect(find.text('Just calls'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
