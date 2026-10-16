@@ -1777,7 +1777,7 @@ accordingly / SHAPE → Range shape / MATCH → Size fits shape — LPT-960,
 HUGE → Too big / AVOID → Skip random — LPT-961, CATCH → Bluff-catch hand /
 UNBLOCK → Keep their draws / BLUFFS → Missed draws live — LPT-962, TWEAK →
 Close choice only / NO EV → No fake decimals — LPT-963, THIRD PAIR → Weak
-pair / SCARY → Tough river — LPT-964, MDF → Exact percents / INTUITION → Decision-linked — LPT-965). Play a full
+pair / SCARY → Tough river — LPT-964, MDF → Exact percents / INTUITION → Decision-linked — LPT-965, LESS → Cut bluff mix — LPT-966, RANDOM → Theater mix / PURPOSE → Not coin-flip — LPT-967, 4BET → Lower SPR / CAREFUL → Near-committed — LPT-968, EGO → Skip revenge — LPT-969). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2240,11 +2240,11 @@ felt.
 | Fold dominated trash | explain SoftPulse cues THIRD PAIR → SCARY → FOLD with teaching captions (Weak pair / Tough river / Give up — never empty THIRD PAIR or SCARY glosses; LPT-964); unit `unit-06-07-min-defense` (LPT-273 split) | — |
 | No fake MDF math | explain SoftPulse cues MDF → INTUITION with teaching captions (Exact percents / Decision-linked — never empty glosses; LPT-965); unit `unit-06-07-min-defense` (LPT-273 split) | — |
 | Mix strong hands sometimes | Mix, Strong on the felt; explain SoftPulse cue MIX → STRONG only — PURPOSE press belongs to No mixing for its own sake (curriculum residual LPT-703); unguided SoftPulse one gold Need a reason (LPT-500); densified frame asks (LPT-644); unit `unit-06-08-mixed` (LPT-277 split) | — |
-| Types reduce mixing | explain SoftPulse cues TYPE → STATION → LESS; unit `unit-06-08-mixed` (LPT-277 split) | — |
-| No mixing for its own sake | explain SoftPulse cues RANDOM → PURPOSE; unit `unit-06-08-mixed` (LPT-277 split) | — |
-| Tighten up in 4-bet pots | 3-Bet, 4-Bet, Depth; unguided SoftPulse one gold Avoid ego (LPT-501); unit `unit-06-09-3bet4bet` (LPT-282 split) | — |
+| Types reduce mixing | explain SoftPulse cues TYPE → STATION → LESS with teaching captions (Player model / Working label / Cut bluff mix — never empty LESS gloss; LPT-966); unit `unit-06-08-mixed` (LPT-277 split) | — |
+| No mixing for its own sake | explain SoftPulse cues RANDOM → PURPOSE with teaching captions (Theater mix / Not coin-flip — never empty glosses; LPT-967); unit `unit-06-08-mixed` (LPT-277 split) | — |
+| Tighten up in 4-bet pots | explain SoftPulse cues 4BET → STRONG → CAREFUL with teaching captions (Lower SPR / Premium hands / Near-committed — never empty 4BET or CAREFUL glosses; LPT-968); unguided SoftPulse one gold Avoid ego (LPT-501); unit `unit-06-09-3bet4bet` (LPT-282 split) | — |
 | Plan 3-bet pots by SPR | 3-Bet, Depth on the felt; explain SoftPulse cue 3BET → DEPTH only — 4BET press belongs to Tighten up in 4-bet pots and No ego 4-bets (curriculum residual LPT-704); unit `unit-06-09-3bet4bet` (LPT-282 split) | — |
-| No ego 4-bets | explain SoftPulse cues 4BET → EGO → AVOID; unit `unit-06-09-3bet4bet` (LPT-282 split) | — |
+| No ego 4-bets | explain SoftPulse cues 4BET → EGO → AVOID with teaching captions (Lower SPR / Skip revenge / Skip random — never empty EGO gloss; LPT-969); unit `unit-06-09-3bet4bet` (LPT-282 split) | — |
 | Make hard folds | Hard on the felt; explain SoftPulse cue HARD only — COOLER/EGO presses belong to Cooler or mistake? and No ego call-downs (curriculum residual LPT-705); unguided SoftPulse one gold Ego call (LPT-502); unit `unit-06-10-folds` (LPT-285 split) | — |
 | Cooler or mistake? | explain SoftPulse cues COOLER → MISTAKE → REVIEW; unit `unit-06-10-folds` (LPT-285 split) | — |
 | No ego call-downs | explain SoftPulse cues DUE → EGO → FOLD; unit `unit-06-10-folds` (LPT-285 split) | — |

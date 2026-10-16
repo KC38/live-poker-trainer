@@ -8,7 +8,8 @@
 /// LPT-940 / LPT-941 / LPT-942 / LPT-943 / LPT-944 / LPT-945 / LPT-946 /
 /// LPT-950 / LPT-951 / LPT-952 / LPT-953 / LPT-954 / LPT-955 /
 /// LPT-956 / LPT-957 / LPT-958 / LPT-959 / LPT-960 / LPT-961 /
-/// LPT-962 / LPT-963 / LPT-964 / LPT-965:
+/// LPT-962 / LPT-963 / LPT-964 / LPT-965 / LPT-966 / LPT-967 / LPT-968 /
+/// LPT-969:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -202,6 +203,12 @@ void main() {
     expect(authoredSoftPulseExplainCaption('SCARY'), 'Tough river');
     expect(authoredSoftPulseExplainCaption('MDF'), 'Exact percents');
     expect(authoredSoftPulseExplainCaption('INTUITION'), 'Decision-linked');
+    expect(authoredSoftPulseExplainCaption('LESS'), 'Cut bluff mix');
+    expect(authoredSoftPulseExplainCaption('RANDOM'), 'Theater mix');
+    expect(authoredSoftPulseExplainCaption('PURPOSE'), 'Not coin-flip');
+    expect(authoredSoftPulseExplainCaption('4BET'), 'Lower SPR');
+    expect(authoredSoftPulseExplainCaption('CAREFUL'), 'Near-committed');
+    expect(authoredSoftPulseExplainCaption('EGO'), 'Skip revenge');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -4017,6 +4024,188 @@ void main() {
       expect(find.text('INTUITION'), findsWidgets);
       expect(find.text('Exact percents'), findsOneWidget);
       expect(find.text('Decision-linked'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Types reduce mixing SoftPulse explain captions (LPT-966)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-08-01-02-explain-types',
+        targets: const ['TYPE', 'STATION', 'LESS'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('TYPE'), findsWidgets);
+      expect(find.text('STATION'), findsWidgets);
+      expect(find.text('LESS'), findsWidgets);
+      expect(find.text('Player model'), findsOneWidget);
+      expect(find.text('Working label'), findsOneWidget);
+      expect(find.text('Cut bluff mix'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'No pure random SoftPulse explain captions (LPT-967)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-08-01-03-explain-random',
+        targets: const ['RANDOM', 'PURPOSE'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('RANDOM'), findsWidgets);
+      expect(find.text('PURPOSE'), findsWidgets);
+      expect(find.text('Theater mix'), findsOneWidget);
+      expect(find.text('Not coin-flip'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Tighten up in 4-bet pots SoftPulse explain captions (LPT-968)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-09-01-01-explain-fourbet',
+        targets: const ['4BET', 'STRONG', 'CAREFUL'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('4BET'), findsWidgets);
+      expect(find.text('STRONG'), findsWidgets);
+      expect(find.text('CAREFUL'), findsWidgets);
+      expect(find.text('Lower SPR'), findsOneWidget);
+      expect(find.text('Premium hands'), findsOneWidget);
+      expect(find.text('Near-committed'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'No ego 4-bets SoftPulse explain captions (LPT-969)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-09-01-03-explain-ego',
+        targets: const ['4BET', 'EGO', 'AVOID'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('4BET'), findsWidgets);
+      expect(find.text('EGO'), findsWidgets);
+      expect(find.text('AVOID'), findsWidgets);
+      expect(find.text('Lower SPR'), findsOneWidget);
+      expect(find.text('Skip revenge'), findsOneWidget);
+      expect(find.text('Skip random'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
