@@ -13,7 +13,7 @@
 /// LPT-976 / LPT-977 / LPT-978 / LPT-979 / LPT-980 / LPT-981 /
 /// LPT-982 / LPT-983 / LPT-984 / LPT-985 / LPT-986 / LPT-987 /
 /// LPT-988 / LPT-989 / LPT-990 / LPT-991 / LPT-992 /
-/// LPT-993 / LPT-995 / LPT-996:
+/// LPT-993 / LPT-994 / LPT-995 / LPT-996:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -4992,6 +4992,38 @@ void main() {
     },
   );
 
+  test(
+    'Same cards second-pair AuthoredCue explains use JhTd felt (LPT-994)',
+    () {
+      final lag = authoredCueExplainFeltCodes(
+        _authoredExplain(
+          id: 'act-06-13-01-03-explain-lag',
+          targets: const ['LAG BARREL', 'CALL'],
+        ),
+      );
+      expect(lag.heroCodes, ['Jh', 'Td']);
+      expect(lag.boardCodes, ['Qc', 'Ts', '3h', '2d', '7c']);
+
+      final nit = authoredCueExplainFeltCodes(
+        _authoredExplain(
+          id: 'act-06-13-01-02-explain-nit',
+          targets: const ['NIT CHECK-RAISE', 'FOLD'],
+        ),
+      );
+      expect(nit.heroCodes, ['Jh', 'Td']);
+      expect(nit.boardCodes, ['Qc', 'Ts', '3h', '2d', '7c']);
+
+      final other = authoredCueExplainFeltCodes(
+        _authoredExplain(
+          id: 'act-06-13-01-04-explain-cite',
+          targets: const ['TENDENCY', 'LINE'],
+        ),
+      );
+      expect(other.heroCodes, ['Ah', 'Kd']);
+      expect(other.boardCodes, ['Qs', '7c', '2d']);
+    },
+  );
+
   testWidgets(
     'Same cards LAG call SoftPulse explain captions (LPT-985)',
     (tester) async {
@@ -5033,6 +5065,7 @@ void main() {
       expect(find.text('Wide aggressor fires'), findsOneWidget);
       expect(find.text('Match the bet'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+      // Felt codes locked by authoredCueExplainFeltCodes unit test (LPT-994).
     },
   );
 
