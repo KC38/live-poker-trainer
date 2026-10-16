@@ -295,6 +295,10 @@ String lessonFrameDealSettlingSpeech(
   }
   final core =
       lead.isEmpty ? 'Watch the deal.' : '$lead — watch the deal.';
+  // Felt-tap select_identify defaults to "Tap the best answer." — there is no
+  // dock mid-deal, so never append that quiz footer (Your two cards densify
+  // LPT-1026). Dock densify still gets "Tap your action below the table."
+  if (tap.isEmpty || tap == 'Tap the best answer.') return core;
   return withLessonTapInstruction(core, tap);
 }
 

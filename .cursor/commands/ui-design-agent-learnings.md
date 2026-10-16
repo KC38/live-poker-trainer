@@ -230,8 +230,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   facing-open coach honesty — SoftPulse/holes can unlock while
   `FeltActionRevealController` still hides the open (blinds-only POT \$3);
   settling speech must drop `opens to` leads (LPT-1019), not only `You have`
-  (LPT-1012). Prefer waiting until the target beat is settled before
-  `<KEY>-validated.png` (not bootstrap spinner). On hole-card peeks, wait
+  (LPT-1012). Felt-tap select_identify densify must not append
+  **Tap the best answer.** mid-deal — poll speech for ~1s after Continue;
+  settling is **Watch the deal.** only (LPT-1026). Prefer waiting until the
+  target beat is settled before `<KEY>-validated.png` (not bootstrap spinner). On hole-card peeks, wait
   until the hero cards are face-up (not empty outlines) before `tap You`,
   and do not show empty board slots when no board is in play for that beat.
   On locked-start, capture the Open-previous / Retry gate and read Rex's
