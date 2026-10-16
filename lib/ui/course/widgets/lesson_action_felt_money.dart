@@ -84,10 +84,15 @@ double? priorOpenFromPotSteps({
 
 /// Facing bet / raise-to amount from villain copy.
 ///
-/// Handles `bets 5`, `opens to 6`, `3-bets to 20`, `Bets 18`.
+/// Handles `bets 5`, `opens to 6`, `3-bets to 20`, `Bets 18`, and
+/// `check-raises to 12` (Respect Nit densify / peer check-raise lines).
 double? parseFacingBetChips(String? villainLine) {
   if (villainLine == null || villainLine.isEmpty) return null;
   final lower = villainLine.toLowerCase();
+  final checkRaiseTo = RegExp(
+    r'check-?raises?\s+to\s+(\d+(?:\.\d+)?)',
+  ).firstMatch(lower);
+  if (checkRaiseTo != null) return double.tryParse(checkRaiseTo.group(1)!);
   final toMatch = RegExp(
     r'(?:open(?:s|ed)?|raise(?:s|d)?|3-?bet(?:s)?|re-?raise(?:s|d)?)\s+to\s+(\d+(?:\.\d+)?)',
   ).firstMatch(lower);
@@ -95,6 +100,23 @@ double? parseFacingBetChips(String? villainLine) {
   final betMatch = RegExp(r'bets?\s+(\d+(?:\.\d+)?)').firstMatch(lower);
   if (betMatch != null) return double.tryParse(betMatch.group(1)!);
   return null;
+}
+
+/// Whether [villainLine] names a postflop bet / check-raise / barrel that
+/// should paint street chips even when the copy has no `to N` amount.
+bool villainLineImpliesPostflopFacingHeat(String? villainLine) {
+  if (villainLine == null || villainLine.isEmpty) return false;
+  final lower = villainLine.toLowerCase();
+  if (lower.contains('check-raise') || lower.contains('check raise')) {
+    return true;
+  }
+  if (lower.contains('barrel')) return true;
+  if (RegExp(r'\bbets?\b').hasMatch(lower)) return true;
+  // Bare "raise" / "raises" without "open" (preflop opens use other paths).
+  if (RegExp(r'\braises?\b').hasMatch(lower) && !lower.contains('open')) {
+    return true;
+  }
+  return false;
 }
 
 /// Whether resolved money should paint onto [LessonTableStage].
@@ -162,6 +184,10 @@ double? callAmountFromChoices(List<CourseChoice> choices) {
 /// Pass [callerSeatIndexes] for multiway opens (`UTG opens · 2 callers`) so
 /// caller street bets match the pot progression when the line has no
 /// `opens to N` amount (LPT-1021).
+///
+/// Postflop `facingBet` lines that name a check-raise / barrel / bet without
+/// a chip amount (and without a Call-N choice) infer a pot-sized street bet
+/// from `potLabel` so RAISE/BET paints (LPT-1022).
 LessonActionFeltMoney resolveLessonActionFeltMoney({
   required LessonActionSpot spot,
   required List<CourseChoice> choices,
@@ -200,6 +226,18 @@ LessonActionFeltMoney resolveLessonActionFeltMoney({
       bigBlind: bigBlind,
     );
     if (inferred != null) facing = inferred;
+  }
+  // Postflop check-raise / barrel / bet lines often omit `to N` and use a
+  // bare Call choice (`Hero-call forever`). Infer a pot-sized (or 2× for
+  // "huge") street bet so RAISE/BET paints and coach copy stays honest
+  // (Respect Nit densify LPT-1022; TAG check-raise peers).
+  if (spot.facingBet &&
+      facing <= 0 &&
+      spot.boardCodes.isNotEmpty &&
+      labeledPot != null &&
+      labeledPot > 0 &&
+      villainLineImpliesPostflopFacingHeat(spot.villainLine)) {
+    facing = line.contains('huge') ? labeledPot * 2 : labeledPot;
   }
 
   var heroBet = 0.0;
