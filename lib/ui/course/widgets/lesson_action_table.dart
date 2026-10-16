@@ -14465,6 +14465,21 @@ String authoredSoftPulseExplainCaption(String target) {
     // AuthoredCue tiles label-only.
     'OBSERVATION': 'Not a verdict',
     'SAMPLES': 'Build the count',
+    // Confidence grows with samples SoftPulse explain (SAMPLES → SHOWDOWNS;
+    // LPT-935). SAMPLES already Build the count; SHOWDOWNS matches
+    // ObservationCertaintyDemo Cards speak — never leave the second
+    // SoftPulse tile label-only.
+    'SHOWDOWNS': 'Cards speak',
+    // Retire labels SoftPulse explain (NEW EVIDENCE → RETIRE; LPT-936).
+    // Gloss seat-changed / drop-old-label — never leave AuthoredCue tiles
+    // label-only.
+    'NEW EVIDENCE': 'Seat changed',
+    'RETIRE': 'Drop old label',
+    // Combine type, position, and stack SoftPulse explain (TYPE → POSITION →
+    // STACK; LPT-937). POSITION/STACK already captioned; TYPE matches
+    // TypeBoardLineDemo Player model — never leave the first SoftPulse tile
+    // label-only.
+    'TYPE': 'Player model',
     // Small samples SoftPulse explain (SAMPLE → CONFIDENCE; LPT-924).
     // Gloss tiny-sample / keep-confidence-low — never leave AuthoredCue
     // tiles label-only.
