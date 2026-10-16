@@ -2247,7 +2247,7 @@ felt.
 | No ego 4-bets | explain SoftPulse cues 4BET → EGO → AVOID with teaching captions (Lower SPR / Skip revenge / Skip random — never empty EGO gloss; LPT-969); unit `unit-06-09-3bet4bet` (LPT-282 split) | — |
 | Make hard folds | Hard on the felt; explain SoftPulse cue HARD only — COOLER/EGO presses belong to Cooler or mistake? and No ego call-downs (curriculum residual LPT-705); unguided SoftPulse one gold Ego call (LPT-502); unit `unit-06-10-folds` (LPT-285 split) | — |
 | Cooler or mistake? | explain SoftPulse cues COOLER → MISTAKE → REVIEW with teaching captions (Not a leak / Avoidable leak / Judge the hand — never empty MISTAKE/REVIEW glosses; LPT-970); unit `unit-06-10-folds` (LPT-285 split) | — |
-| No ego call-downs | explain SoftPulse cues DUE → EGO → FOLD; unit `unit-06-10-folds` (LPT-285 split) | — |
+| No ego call-downs | explain SoftPulse cues DUE → EGO → FOLD with teaching captions (Never owed / Skip revenge / Give up — never empty DUE gloss; LPT-971); unit `unit-06-10-folds` (LPT-285 split) | — |
 | Note selective entry | Tight on the felt; explain SoftPulse cue TIGHT only — BARREL/SAMPLE presses belong to Note disciplined aggression and Wait for samples (curriculum residual LPT-706); unguided SoftPulse one gold (LPT-494); unit `unit-06-11-tag` (LPT-288 split) | entry quizzes |
 | Note disciplined aggression | explain SoftPulse cues CALLED → GIVES UP; unit `unit-06-11-tag` (LPT-288 split) | — |
 | Wait for samples | explain SoftPulse cues TWO HANDS → NOTE BUNDLE; unit `unit-06-11-tag` (LPT-288 split) | — |
