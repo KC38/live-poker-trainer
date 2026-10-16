@@ -331,7 +331,12 @@ def extract_frames(
     max_frames: int = DEFAULT_FRAME_MAX,
     ffmpeg_bin: str = "ffmpeg",
 ) -> list[Path]:
-    """Extract review PNGs from [video] into [out_dir]."""
+    """Extract review PNGs from [video] into [out_dir].
+
+    Short clips (< ``every`` seconds) often yield zero PNGs with
+    ``-vf fps=…`` alone — discovery then stalls on "ffmpeg wrote no frames".
+    Fall back to a single still at t=0 so agents can still Read proof.
+    """
     if not video.is_file() or video.stat().st_size <= 0:
         raise SystemExit(f"sim_record: video missing or empty: {video}")
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -357,6 +362,25 @@ def extract_frames(
     ]
     subprocess.run(cmd, check=True)
     frames = sorted(out_dir.glob(f"{stem}-frame-*.png"))
+    if not frames:
+        # Sub-second / short clips: grab one still at the start.
+        still = out_dir / f"{stem}-frame-001.png"
+        fallback = [
+            ffmpeg_bin,
+            "-hide_banner",
+            "-loglevel",
+            "error",
+            "-y",
+            "-ss",
+            "0",
+            "-i",
+            str(video),
+            "-frames:v",
+            "1",
+            str(still),
+        ]
+        subprocess.run(fallback, check=True)
+        frames = sorted(out_dir.glob(f"{stem}-frame-*.png"))
     if not frames:
         raise SystemExit(f"sim_record: ffmpeg wrote no frames from {video}")
     return frames

@@ -74,6 +74,39 @@ class SimRecordCmdTest(unittest.TestCase):
                 self.assertGreater(frame.stat().st_size, 0)
                 self.assertTrue(frame.name.startswith("demo-frame-"))
 
+    def test_extract_frames_falls_back_on_subsecond_clip(self) -> None:
+        """fps=1 on a 0.2s clip yields no PNGs without the still fallback."""
+        if subprocess.run(["which", "ffmpeg"], capture_output=True).returncode != 0:
+            self.skipTest("ffmpeg not installed")
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            video = root / "short.mp4"
+            subprocess.run(
+                [
+                    "ffmpeg",
+                    "-hide_banner",
+                    "-loglevel",
+                    "error",
+                    "-y",
+                    "-f",
+                    "lavfi",
+                    "-i",
+                    "color=c=blue:s=320x240:d=0.2",
+                    "-c:v",
+                    "libx264",
+                    "-pix_fmt",
+                    "yuv420p",
+                    str(video),
+                ],
+                check=True,
+            )
+            frames = sim_record.extract_frames(
+                video, root / "frames", every=1.0, max_frames=8
+            )
+            self.assertEqual(len(frames), 1)
+            self.assertTrue(frames[0].is_file())
+            self.assertGreater(frames[0].stat().st_size, 0)
+
     def test_parser_record_defaults(self) -> None:
         args = sim_record.build_parser().parse_args(
             ["record", "--out", "/tmp/a.mp4"]
