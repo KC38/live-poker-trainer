@@ -207,8 +207,6 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   ahead). After a successful closeout comment, `jira.py verify-embeds LPT-NN`
   must pass before Done. Prefer `python3 tools/ui_softpulse_caption_scan.py drafts --limit 3` (or `list`) when AuthoredCue SoftPulse caption gaps remain; when that scan is clean prefer `python3 tools/ui_authored_cue_felt_scan.py drafts --limit 3` (LPT-994 pair-class felt honesty), then `python3 tools/ui_motion_targets.py pick`, then `tools/sim_record.py record|start/stop` + `frames` for SoftPulse/Hint/deal/transition bugs — attach MP4 + Read frame PNGs; stills alone miss timing (human-reported motion gaps). Keep `<surface>-issue.png` / `<KEY>-validated.png` for static copy/layout only.
 
-- Prefer `facingBet: true` when pumping `LessonActionDock` for Call teaching labels in widget tests — default open-pot chrome paints `CALL (off)` and hides compact teaching text (LPT-1011).
-
 - Prefer `tools/flutter_run_fast.sh` / `flutter_hot_restart.sh` /
   `refresh-simulator.sh` over hand-rolled tmux `flutter run`. Trust
   refresh after hot-restart (it waits for Dart VM / cold-starts cached
@@ -217,6 +215,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   Hint-disabled deadlock (how-pots before #1706). On How pots open-pot,
   wait until the felt deal settles before judging Hint SoftPulse — early
   Hint greys the button while `feltDealReady` is still false (LPT-84). On
+  Steal-more / poker_action densify, also wait for both hero holes face-up
+  before judging coach honesty — catalog `You have K9o` flashes mid-deal;
+  settled speech is after SoftPulse; mid-deal is
+  `lessonFrameDealSettlingSpeech` (LPT-1012). On
   Xcode "No space left on device", run
   `python3 tools/disk_guard.py --min-free-gb 40` then retry once (LPT-61)
   — do not wipe primary DerivedData or `needs-human` on the first disk-full

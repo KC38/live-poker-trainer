@@ -1072,6 +1072,14 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         );
       }
     }
+    // SoftPulse already waits on feltDealReady; coach that names hero holes
+    // must wait too — only while a felt is actively dealing (LPT-1012).
+    if (controller.feltDealTracked && !controller.feltDealReady) {
+      return lessonFrameDealSettlingSpeech(
+        controller.activity,
+        handStepIndex: controller.draft.handStepIndex,
+      );
+    }
     return lessonFrameSpeech(
       controller.activity,
       handStepIndex: controller.draft.handStepIndex,

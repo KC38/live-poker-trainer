@@ -98,6 +98,13 @@ class LessonActivityController extends ChangeNotifier {
   /// True when the felt has no in-flight deal (or this step has no felt).
   bool get feltDealReady => _feltDealReady;
 
+  /// True after this bind's felt called [notifyFeltDealReady] at least once.
+  ///
+  /// Idle coach that names hero holes waits on [feltDealReady] only when the
+  /// felt is tracking a deal — no-felt steps stay on normal frame speech
+  /// (LPT-1012).
+  bool get feltDealTracked => _feltDealTracked;
+
   /// One lesson screen: activity id plus the active hand-street index.
   String get currentNodeKey => '${_activity.id}#${_draft.handStepIndex}';
 

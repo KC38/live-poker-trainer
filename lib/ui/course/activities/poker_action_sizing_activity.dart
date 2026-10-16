@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_action_felt_layout.d
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_felt_money.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
@@ -80,11 +81,15 @@ class PokerActionSizingActivity extends StatelessWidget {
                   activity: activity,
                   fallback: fallback,
                 );
-        final coach = alignLessonActionCopy(
-          activity,
-          resolved.coach,
-          generation: controller.bindGeneration,
-        );
+        // Framed runners use [lessonFrameDealSettlingSpeech]; unframed Rex
+        // still must not name holes mid-deal (LPT-1012).
+        final coach = controller.feltDealTracked && !controller.feltDealReady
+            ? lessonFrameDealSettlingSpeech(activity)
+            : alignLessonActionCopy(
+              activity,
+              resolved.coach,
+              generation: controller.bindGeneration,
+            );
         final showPrompt = resolved.showPrompt;
         // Keep the coach slot under Nice!/Oops! (opacity 0) so the Column
         // height does not collapse and remount the felt (redeal). Framed
