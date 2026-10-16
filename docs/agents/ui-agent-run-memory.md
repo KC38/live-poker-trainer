@@ -51,6 +51,7 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 
 ## Fold 2026-10-14
 
+- AuthoredCue SoftPulse felt honesty: run `python3 tools/ui_authored_cue_felt_scan.py drafts --limit 3` (or `list`) when coach names top/second/third pair over the default AhKd/Q72 explain felt — LPT-994 class (Nit/LAG overrides already honest).
 - SoftPulse AuthoredCue caption gaps: run `python3 tools/ui_softpulse_caption_scan.py drafts --limit 3` (or `list`) before filing another LPT-883-class ticket — diffs catalog soft_pulse targets on authoredCues explains against `authoredSoftPulseExplainCaption` and prints Jira-ready titles.
 - Prefer checking SoftPulse explain widget fixtures for `teachSpec` soft_pulse
 
