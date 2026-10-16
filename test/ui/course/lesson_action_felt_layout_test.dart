@@ -67,6 +67,28 @@ void main() {
       expect(layout.villainSeatIndex, 1);
       expect(layout.foldedSeatIndexes.toSet(), {2, 3, 4, 5});
       expect(layout.seatActionLabels[1], 'RAISE');
+      expect(layout.callerSeatIndexes, isEmpty);
+    });
+
+    test('LPT-1021: UTG open + two callers keeps callers live with CALL', () {
+      const spot = LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        potLabel: 'Pot 3 → 9 → 21',
+        villainLine: 'UTG opens · 2 callers',
+        streetLabel: 'Preflop · BB · AKo',
+        facingBet: true,
+      );
+
+      final layout = resolveLessonActionFeltLayout(spot);
+
+      expect(parseLessonCallerCount('UTG opens · 2 callers'), 2);
+      expect(layout.villainSeatIndex, 1);
+      expect(layout.callerSeatIndexes.toSet(), {2, 3});
+      expect(layout.seatActionLabels[1], 'RAISE');
+      expect(layout.seatActionLabels[2], 'CALL');
+      expect(layout.seatActionLabels[3], 'CALL');
+      // BTN + SB still fold; dead SB stays in the pot story.
+      expect(layout.foldedSeatIndexes.toSet(), {4, 5});
     });
 
     test('explicit heads-up spots stay two-seat', () {

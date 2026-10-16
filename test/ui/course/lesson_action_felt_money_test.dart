@@ -167,6 +167,46 @@ void main() {
       );
     });
 
+    test('LPT-1021: squeeze densify paints open + two callers from pot steps', () {
+      const spot = LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        potLabel: 'Pot 3 → 9 → 21',
+        villainLine: 'UTG opens · 2 callers',
+        streetLabel: 'Preflop · BB · AKo',
+        facingBet: true,
+        feltStatusLine: 'Multiway — AKo in BB',
+      );
+      final layout = resolveLessonActionFeltLayout(spot);
+      expect(layout.callerSeatIndexes.length, 2);
+
+      final money = resolveLessonActionFeltMoney(
+        spot: spot,
+        choices: const [
+          CourseChoice(id: 'squeeze', label: 'Squeeze to ~20', action: 'RAISE'),
+          CourseChoice(id: 'limp', label: 'Limp behind', action: 'CALL'),
+          CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+        ],
+        seatCount: layout.seatCount,
+        villainSeatIndex: layout.villainSeatIndex,
+        callerSeatIndexes: layout.callerSeatIndexes,
+        sbIndex: layout.sbIndex,
+        bbIndex: layout.bbIndex,
+      );
+
+      expect(money.potTotal, 21);
+      expect(money.streetBets[layout.villainSeatIndex], 6);
+      for (final seat in layout.callerSeatIndexes) {
+        expect(money.streetBets[seat], 6);
+      }
+      expect(money.streetBets[layout.sbIndex!], 1);
+      expect(money.streetBets[layout.bbIndex!], 2);
+      expect(
+        money.streetBets.fold<double>(0, (a, b) => a + b),
+        21,
+      );
+      expect(money.villainActionLabel, 'RAISE');
+    });
+
     test('LPT-1020: BTN densify vs BB 3-bet keeps hero prior open on-seat', () {
       // Facing a 3-bet scaffolded densify: hero BTN opened to 6, BB 3-bets
       // to 20, Pot 3 → 9 → 29. Bare Call has no chip amount.

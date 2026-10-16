@@ -153,6 +153,7 @@ class AuthoredMultiStepActivity extends StatelessWidget {
             selected: selectedChoice,
             seatCount: layout.seatCount,
             villainSeatIndex: layout.villainSeatIndex,
+            callerSeatIndexes: layout.callerSeatIndexes,
             sbIndex: layout.sbIndex,
             bbIndex: layout.bbIndex,
           );
