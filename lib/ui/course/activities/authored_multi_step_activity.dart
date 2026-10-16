@@ -153,6 +153,8 @@ class AuthoredMultiStepActivity extends StatelessWidget {
             selected: selectedChoice,
             seatCount: layout.seatCount,
             villainSeatIndex: layout.villainSeatIndex,
+            sbIndex: layout.sbIndex,
+            bbIndex: layout.bbIndex,
           );
           final applyFeltMoney = shouldApplyLessonActionFeltMoney(
             spot: spot,

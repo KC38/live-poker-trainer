@@ -131,6 +131,42 @@ void main() {
       expect(money.potTotal, 9);
     });
 
+    test('LPT-1016: SB densify vs BTN open keeps SB/BB posts on-seat', () {
+      // Value 3-bet unguided densify: hero SB, BTN opens to 6, Pot 3 → 9.
+      const spot = LessonActionSpot(
+        heroCodes: ['Kh', 'Kd'],
+        potLabel: 'Pot 3 → 9',
+        villainLine: 'BTN opens to 6',
+        streetLabel: 'Preflop · Small blind · 1/2',
+        facingBet: true,
+      );
+      final layout = resolveLessonActionFeltLayout(spot);
+      expect(layout.sbIndex, 0);
+      expect(layout.dealerIndex, layout.villainSeatIndex);
+
+      final money = resolveLessonActionFeltMoney(
+        spot: spot,
+        choices: const [
+          CourseChoice(id: 'call', label: 'Call', action: 'CALL'),
+          CourseChoice(id: '3bet', label: '3-bet to 18', action: 'RAISE'),
+          CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+        ],
+        seatCount: layout.seatCount,
+        villainSeatIndex: layout.villainSeatIndex,
+        sbIndex: layout.sbIndex,
+        bbIndex: layout.bbIndex,
+      );
+
+      expect(money.potTotal, 9);
+      expect(money.streetBets[0], 1); // hero SB posted
+      expect(money.streetBets[layout.bbIndex!], 2);
+      expect(money.streetBets[layout.villainSeatIndex], 6);
+      expect(
+        money.streetBets.fold<double>(0, (a, b) => a + b),
+        9,
+      );
+    });
+
     test('Raise to 15 charges the facing bet and grows the pot', () {
       const raise = CourseChoice(
         id: 'raise-15',
@@ -711,7 +747,9 @@ void main() {
     await tester.pumpWidget(
       _framedAction(activity, controller, showGuidance: true),
     );
-    await tester.pumpAndSettle();
+    // SoftPulse breathes forever — prefer pump over pumpAndSettle (LPT-1016).
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
 
     final hole = find.byKey(const ValueKey<String>('dealt-hole-0-0'));
     expect(hole, findsOneWidget);

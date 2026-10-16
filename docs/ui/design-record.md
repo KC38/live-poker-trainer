@@ -243,10 +243,13 @@ before the hero's decision are shown after the deal, not before it.
 Street bets stay off the felt until hole cards have landed; posted blinds
 unmask once teaching cards (hero holes + board) are ready — the same gate
 as SoftPulse — so the pot is truthful before SoftPulse asks the learner to
-read it (Pot and stacks LPT-1010). SoftPulse still unlocks on hero holes
-without waiting for every villain back (Open strong LPT-678). Each
-raise/call/fold then lands in act order after the deal — never while cards
-are still dealing (Live Training + lesson felts). Framed open-pot math
+read it (Pot and stacks LPT-1010). Facing-bet densify that paints an open
+still keeps SB/BB posts on-seat (pucks + chips + stack deductions) — street
+money must not sweep blinds into the center pot only while coach copy names
+the small or big blind (Value 3-bet LPT-1016). SoftPulse still unlocks on
+hero holes without waiting for every villain back (Open strong LPT-678).
+Each raise/call/fold then lands in act order after the deal — never while
+cards are still dealing (Live Training + lesson felts). Framed open-pot math
 (`kOpenPotActivityId` / `act-01-05-01-unguided-pot`) does not redeal or
 replay post-deal actions when Nice! / Oops! locks the dock (LPT-642).
 
@@ -2123,7 +2126,7 @@ felt.
 | Widen on the button | explain SoftPulse cues BUTTON → WIDER with teaching captions (Acts last / Open more hands — never empty WIDER gloss; LPT-898); unit `unit-02-03-open-fold` (LPT-124 split) | — |
 | Fold weak hands | Fold on the felt; explain SoftPulse cue FOLD only — CALL/3-BET presses belong to Call in position and Value 3-bet (curriculum residual LPT-743); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
 | Call in position | explain SoftPulse cues PLAYABLE → IN POSITION → CALL with teaching captions (Can call open / Act after raiser / Match the bet — never empty PLAYABLE or IN POSITION glosses; LPT-900); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
-| Value 3-bet | explain SoftPulse cues STRONG → 3-BET with teaching captions (Premium hands / Re-raise open — never empty 3-BET gloss; LPT-901); 3-bet on the felt; RANGES/SQUEEZE presses belong to Facing a 3-bet and Squeeze spots (curriculum residual LPT-760); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
+| Value 3-bet | explain SoftPulse cues STRONG → 3-BET with teaching captions (Premium hands / Re-raise open — never empty 3-BET gloss; LPT-901); densify facing BTN open keeps SB/BB posts on-seat (LPT-1016); 3-bet on the felt; RANGES/SQUEEZE presses belong to Facing a 3-bet and Squeeze spots (curriculum residual LPT-760); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
 | Chips to big blinds | Chips→BB on the felt; explain SoftPulse cue CHIPS→BB only — SHORTER/DEPTH presses belong to Shorter stack is effective and Stack depth (curriculum residual LPT-748); checkpoint SoftPulse-off densify stem non-spoiling (LPT-785); unit `unit-02-05-stacks` (LPT-130 split) | — |
 | Shorter stack is effective | explain SoftPulse cues SHORTER → EFFECTIVE with teaching captions (Min of the two / Playable stack — never empty glosses; LPT-899); scaffolded SoftPulse-quiet densify stem non-spoiling (no 60bb tile) (LPT-849); unit `unit-02-05-stacks` (LPT-130 split) | — |
 | Stack depth | explain SoftPulse cues 50BB → 100BB → 200BB with teaching captions (Short / simple / Standard / Deep / room — never empty glosses; LPT-902); unguided SoftPulse-quiet densify stem non-spoiling (no 50bb) (LPT-850); unit `unit-02-05-stacks` (LPT-130 split) | — |
