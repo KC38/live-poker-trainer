@@ -154,6 +154,24 @@ String alignStartingHandCopy({
       _pairPluralWord(dealtHigh),
     );
   }
+  // High-card class shorthand ("suited king", "offsuit ace") — Widen on
+  // the button Nice! kept "suited king" after K9s → Q5s (LPT-1018).
+  if (!templatePair && !dealtPair && templateHigh != dealtHigh) {
+    final templateSuited = templateA.suit == templateB.suit;
+    final dealtSuited = dealtA.suit == dealtB.suit;
+    if (templateSuited == dealtSuited) {
+      final fit = templateSuited ? 'suited' : 'offsuit';
+      final fromHigh = _rankWords[templateHigh];
+      final toHigh = _rankWords[dealtHigh];
+      if (fromHigh != null && toHigh != null) {
+        next = _replaceIgnoringCase(
+          next,
+          '$fit $fromHigh',
+          '$fit $toHigh',
+        );
+      }
+    }
+  }
   next = next.replaceAll(
     RegExp('\\b${RegExp.escape(templateLabel)}\\b'),
     dealtLabel,
