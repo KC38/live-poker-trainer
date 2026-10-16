@@ -9,7 +9,7 @@
 /// LPT-950 / LPT-951 / LPT-952 / LPT-953 / LPT-954 / LPT-955 /
 /// LPT-956 / LPT-957 / LPT-958 / LPT-959 / LPT-960 / LPT-961 /
 /// LPT-962 / LPT-963 / LPT-964 / LPT-965 / LPT-966 / LPT-967 / LPT-968 /
-/// LPT-969 / LPT-970 / LPT-971 / LPT-972 / LPT-973 / LPT-974:
+/// LPT-969 / LPT-970 / LPT-971 / LPT-972 / LPT-973 / LPT-974 / LPT-975:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -218,6 +218,11 @@ void main() {
     expect(authoredSoftPulseExplainCaption('NOTE BUNDLE'), 'Keep noting');
     expect(authoredSoftPulseExplainCaption('FOLDS MOST'), 'Seldom plays');
     expect(authoredSoftPulseExplainCaption('PLANNED BARRELS'), 'Barrels with plan');
+    expect(authoredSoftPulseExplainCaption('ENTRY WIDTH'), 'Narrow vs wide');
+    expect(
+      authoredSoftPulseExplainCaption('DISCIPLINE'),
+      'Gives up when called',
+    );
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -4439,6 +4444,50 @@ void main() {
       expect(find.text('PLANNED BARRELS'), findsWidgets);
       expect(find.text('Seldom plays'), findsOneWidget);
       expect(find.text('Barrels with plan'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'TAG or Maniac SoftPulse explain captions (LPT-975)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-06-11-02-03-explain-maniac',
+        targets: const ['ENTRY WIDTH', 'DISCIPLINE'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('ENTRY WIDTH'), findsWidgets);
+      expect(find.text('DISCIPLINE'), findsWidgets);
+      expect(find.text('Narrow vs wide'), findsOneWidget);
+      expect(find.text('Gives up when called'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );

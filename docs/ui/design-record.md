@@ -1777,7 +1777,7 @@ accordingly / SHAPE → Range shape / MATCH → Size fits shape — LPT-960,
 HUGE → Too big / AVOID → Skip random — LPT-961, CATCH → Bluff-catch hand /
 UNBLOCK → Keep their draws / BLUFFS → Missed draws live — LPT-962, TWEAK →
 Close choice only / NO EV → No fake decimals — LPT-963, THIRD PAIR → Weak
-pair / SCARY → Tough river — LPT-964, MDF → Exact percents / INTUITION → Decision-linked — LPT-965, LESS → Cut bluff mix — LPT-966, RANDOM → Theater mix / PURPOSE → Not coin-flip — LPT-967, 4BET → Lower SPR / CAREFUL → Near-committed — LPT-968, EGO → Skip revenge — LPT-969, MISTAKE → Avoidable leak / REVIEW → Judge the hand — LPT-970). Play a full
+pair / SCARY → Tough river — LPT-964, MDF → Exact percents / INTUITION → Decision-linked — LPT-965, LESS → Cut bluff mix — LPT-966, RANDOM → Theater mix / PURPOSE → Not coin-flip — LPT-967, 4BET → Lower SPR / CAREFUL → Near-committed — LPT-968, EGO → Skip revenge — LPT-969, MISTAKE → Avoidable leak / REVIEW → Judge the hand — LPT-970, DUE → Never owed — LPT-971, CALLED → They call you / GIVES UP → Folds bad turns — LPT-972, TWO HANDS → Tiny sample / NOTE BUNDLE → Keep noting — LPT-973, FOLDS MOST → Seldom plays / PLANNED BARRELS → Barrels with plan — LPT-974, ENTRY WIDTH → Narrow vs wide / DISCIPLINE → Gives up when called — LPT-975). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2253,7 +2253,7 @@ felt.
 | Wait for samples | explain SoftPulse cues TWO HANDS → NOTE BUNDLE with teaching captions (Tiny sample / Keep noting — never empty glosses; LPT-973); unit `unit-06-11-tag` (LPT-288 split) | — |
 | The TAG model | Tight, Aggro, Model; unguided SoftPulse one gold (LPT-491); densified frame asks (LPT-648); unit `unit-06-11-tag` (LPT-291 split); objective "Introduce TAG as a working model" so the checkpoint grades this lesson's concept (curriculum residual LPT-708) | label quizzes |
 | Spot a TAG | explain SoftPulse cues FOLDS MOST → PLANNED BARRELS with teaching captions (Seldom plays / Barrels with plan — never empty glosses; LPT-974); unit `unit-06-11-tag` (LPT-291 split) | — |
-| TAG or Maniac? | explain SoftPulse cues ENTRY WIDTH → DISCIPLINE; unit `unit-06-11-tag` (LPT-291 split) | — |
+| TAG or Maniac? | explain SoftPulse cues ENTRY WIDTH → DISCIPLINE with teaching captions (Narrow vs wide / Gives up when called — never empty glosses; LPT-975); unit `unit-06-11-tag` (LPT-291 split) | — |
 | Respect TAG aggression | Credit, Tighter on the felt; explain SoftPulse cue CREDIT → TIGHTER only — NO LIGHT press belongs to No light bluffs into a TAG check-raise (curriculum residual LPT-709); unit `unit-06-11-tag` (LPT-294 split); objective "Respect TAG aggression and cite the tendency" so the checkpoint grades this lesson's concept (curriculum residual LPT-710) | respect check |
 | No light bluffs into a TAG check-raise | explain SoftPulse cues CHECK-RAISE → FOLD; unit `unit-06-11-tag` (LPT-294 split) | — |
 | Bet thin only into callers | explain SoftPulse cues RARELY CALLS → CHECK; unit `unit-06-11-tag` (LPT-294 split) | — |
