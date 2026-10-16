@@ -1772,7 +1772,9 @@ LPT-935, NEW EVIDENCE → Seat changed / RETIRE → Drop old label —
 LPT-936, TYPE → Player model — LPT-937, MULTIWAY → Many players / OOP → Out of position — LPT-938, SET → Three of a kind — LPT-939, ONE PAIR → Weak made — LPT-940, SPR → Stack vs pot — LPT-941, REVERSE → Lose more later / DOMINATED → Second best — LPT-942, NON-NUT → Not the nuts / SKIP → Pass the draw — LPT-943, FOLDS → Folds too much — LPT-944, PROBE → Bet after check — LPT-945, DONK → Lead into raiser — LPT-946, CAPPED → Nuts unlikely / UNCAPPED → Nuts still live — LPT-947, RE-PRICE → Update the plan — LPT-948, BIG → Polarized size — LPT-949,
 TELL → Single cue / MYTH → Fake rule / REJECT → Ignore it — LPT-950,
 GEAR → Shifting play — LPT-951, COOLER → Not a leak / CHASE → Don't chase /
-RESET → Step away — LPT-952). Play a full
+RESET → Step away — LPT-952, MERGED → Medium-strong — LPT-959, SIZE → Size
+accordingly / SHAPE → Range shape / MATCH → Size fits shape — LPT-960,
+HUGE → Too big / AVOID → Skip random — LPT-961). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2223,11 +2225,11 @@ felt.
 | Respect uncapped aggression | explain SoftPulse cues RAISE → BET → RESPECT; unguided SoftPulse-quiet densify stem non-spoiling (no Uncapped) (LPT-853); unit `unit-06-03-capped` (LPT-260 split) | — |
 | Attack capped ranges | explain SoftPulse cues CAPPED → THIN → BLUFF with teaching captions (Nuts unlikely / Extract light / Make them fold — never empty THIN gloss; LPT-958); scaffolded SoftPulse-quiet densify stem non-spoiling (no Bet thin / thin value) (LPT-873); checkpoint SoftPulse-off densify stem non-spoiling (no Attack) (LPT-809); unit `unit-06-03-capped` (LPT-260 split) | — |
 | Recognize polarized sizing | Polar on the felt; explain SoftPulse cue POLAR only — MERGED/SIZE presses belong to Merged sizes for thin value and Match size to shape (curriculum residual LPT-696); densified frame asks (LPT-637); unit `unit-06-04-polar-merged` (LPT-264 split) | — |
-| Merged sizes for thin value | explain SoftPulse cues MERGED → MEDIUM → VALUE; unit `unit-06-04-polar-merged` (LPT-264 split) | — |
-| Match size to shape | explain SoftPulse cues SIZE → SHAPE → MATCH; unit `unit-06-04-polar-merged` (LPT-264 split) | — |
+| Merged sizes for thin value | explain SoftPulse cues MERGED → MEDIUM → VALUE with teaching captions (Medium-strong / Medium strength / Get paid — never empty MERGED gloss; LPT-959); unit `unit-06-04-polar-merged` (LPT-264 split) | — |
+| Match size to shape | explain SoftPulse cues SIZE → SHAPE → MATCH with teaching captions (Size accordingly / Range shape / Size fits shape — never empty SIZE/SHAPE/MATCH glosses; LPT-960); unit `unit-06-04-polar-merged` (LPT-264 split) | — |
 | Overbet polar spots | Overbet, Polar on the felt; explain SoftPulse cue OVERBET → POLAR only — GEO press belongs to Plan geometric sizes (curriculum residual LPT-699); densified frame asks (LPT-638); unguided SoftPulse one gold (LPT-497); unit `unit-06-05-overbets` (LPT-267 split) | — |
 | Plan geometric sizes | explain SoftPulse cues FLOP → TURN → RIVER; unit `unit-06-05-overbets` (LPT-267 split) | — |
-| No random huge bets | explain SoftPulse cues HUGE → MEDIUM → AVOID; unit `unit-06-05-overbets` (LPT-267 split) | — |
+| No random huge bets | explain SoftPulse cues HUGE → MEDIUM → AVOID with teaching captions (Too big / Medium strength / Skip random — never empty HUGE/AVOID glosses; LPT-961); unit `unit-06-05-overbets` (LPT-267 split) | — |
 | Bluff with the right blockers | Block on the felt; explain SoftPulse cue BLOCK only — USE/NO EV presses belong to Catch with unblockers and Blockers without fake EV (curriculum residual LPT-700); densified frame asks (LPT-639); unguided SoftPulse one gold (LPT-498); unit `unit-06-06-blockers` (LPT-270 split) | — |
 | Catch with unblockers | explain SoftPulse cues CATCH → UNBLOCK → BLUFFS; unit `unit-06-06-blockers` (LPT-270 split) | — |
 | Blockers without fake EV | explain SoftPulse cues TWEAK → NO EV; unit `unit-06-06-blockers` (LPT-270 split) | — |
