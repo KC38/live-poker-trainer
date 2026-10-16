@@ -33,6 +33,24 @@ void main() {
         'RAISE BLUFF',
       );
     });
+
+    test('blank, filler-only, and over-wide pairs do not blank the button', () {
+      expect(compactLessonActionDockLabel('   '), '');
+      expect(
+        compactLessonActionDockLabel('for the of a on in as an the to'),
+        'FOR THE OF A ON IN AS AN THE TO',
+      );
+      expect(
+        compactLessonActionDockLabel('Antidisestablishment'),
+        'ANTIDISESTABLISHMENT',
+      );
+      expect(
+        compactLessonActionDockLabel(
+          'Antidisappointment supercalifragilistic',
+        ),
+        'ANTIDISAPPOINTMENT',
+      );
+    });
   });
 
   testWidgets(

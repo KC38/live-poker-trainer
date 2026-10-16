@@ -68,6 +68,12 @@ void main() {
       await tester.pump();
       expect(dealReady, isFalse);
 
+      // Before teaching cards land, posted blinds are refunded into stacks
+      // so the felt cannot show POT $0 with SB/BB already paid.
+      expect(find.textContaining('POT \$0'), findsWidgets);
+      expect(find.textContaining('\$199'), findsNothing);
+      expect(find.textContaining('\$198'), findsNothing);
+
       for (var i = 0; i < 20 && !dealReady; i++) {
         await tester.pump(CardDealPace.dealCard);
         await tester.pump(CardDealPace.revealSettle);
@@ -84,6 +90,74 @@ void main() {
         findsWidgets,
       );
       expect(find.textContaining('POT \$0'), findsNothing);
+      expect(find.textContaining('\$199'), findsWidgets);
+      expect(find.textContaining('\$198'), findsWidgets);
+    },
+  );
+
+  testWidgets(
+    'non-blind street bets stay hidden until every hole lands (LPT-1010)',
+    (tester) async {
+      CardDealPace.debugInstant = false;
+      await tester.binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      // Seat 1 bets $10. SB/BB keep their posted blinds. SoftPulse may
+      // unlock on the hero's holes while villain backs are still dealing;
+      // only the blinds unmask in that window.
+      final game = lessonTableStageGame(
+        heroCodes: const ['Ah', 'Kd'],
+        villainCount: lessonBlindsVillainCount,
+        dealerIndex: lessonBlindsButtonIndex,
+        sbIndex: lessonBlindsSmallBlindIndex,
+        bbIndex: lessonBlindsBigBlindIndex,
+        streetBets: const [0, 10, 0, 0, 1, 2],
+      );
+
+      var dealReady = false;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 560,
+              child: FeltTableView(
+                game: game,
+                chipDisplayMode: ChipDisplayMode.dollars,
+                showHoleCardBacks: true,
+                heroCardsFaceUp: true,
+                dealKey: 'street-bet-hidden-until-holes-complete',
+                features: const TableFeatures(
+                  stacks: true,
+                  pot: true,
+                  blinds: true,
+                  positions: true,
+                ),
+                onDealReady: (ready) => dealReady = ready,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(dealReady, isFalse);
+      expect(find.text('\$10'), findsNothing);
+      expect(find.textContaining('POT \$0'), findsWidgets);
+
+      for (var i = 0; i < 20 && !dealReady; i++) {
+        await tester.pump(CardDealPace.dealCard);
+        await tester.pump(CardDealPace.revealSettle);
+      }
+      expect(dealReady, isTrue);
+      expect(find.text('\$10'), findsNothing);
+      expect(find.textContaining('\$190'), findsNothing);
+      expect(
+        find.textContaining(
+          'POT ${ChipFormat.chips(3, game.bigBlind, ChipDisplayMode.dollars)}',
+        ),
+        findsWidgets,
+      );
+      expect(find.textContaining('POT \$13'), findsNothing);
     },
   );
 }
