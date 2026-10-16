@@ -14675,6 +14675,24 @@ String authoredSoftPulseExplainCaption(String target) {
     // — never leave AuthoredCue tiles label-only.
     'MDF': 'Exact percents',
     'INTUITION': 'Decision-linked',
+    // Types reduce mixing SoftPulse explain (TYPE → STATION → LESS; LPT-966).
+    // TYPE/STATION already Player model / Working label; LESS glosses cut
+    // bluff-mix versus a clear type — never leave AuthoredCue tiles label-only.
+    'LESS': 'Cut bluff mix',
+    // No pure random SoftPulse explain (RANDOM → PURPOSE; LPT-967).
+    // PURPOSE matches MixedStrategyDemo Not coin-flip; RANDOM glosses
+    // theater-for-its-own-sake — never leave AuthoredCue tiles label-only.
+    'RANDOM': 'Theater mix',
+    'PURPOSE': 'Not coin-flip',
+    // Tighten up in 4-bet pots SoftPulse explain (4BET → STRONG → CAREFUL;
+    // LPT-968). 4BET matches ThreeBetFourBetSprDemo Lower SPR; STRONG
+    // already Premium hands; CAREFUL glosses near-committed play — never
+    // leave those SoftPulse tiles label-only.
+    '4BET': 'Lower SPR',
+    'CAREFUL': 'Near-committed',
+    // No ego 4-bets SoftPulse explain (4BET → EGO → AVOID; LPT-969).
+    // 4BET/AVOID already captioned; EGO matches Versus-maniacs Skip revenge.
+    'EGO': 'Skip revenge',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
