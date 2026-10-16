@@ -268,6 +268,28 @@ String lessonFrameSpeech(
   );
 }
 
+/// Frame speech while the felt deal has not settled (LPT-1012).
+///
+/// Catalog prompts like `Nit in BB. You have K9o on BTN. Action?` must not
+/// name hero holes until both cards are face-up — SoftPulse already waits on
+/// [LessonActivityController.feltDealReady]; the bubble must match.
+String lessonFrameDealSettlingSpeech(
+  CourseActivity activity, {
+  int handStepIndex = 0,
+}) {
+  final tap = lessonTapInstruction(activity, handStepIndex: handStepIndex);
+  final prompt = (activity.prompt ?? '').trim();
+  var lead = '';
+  final youHave = RegExp(r'You have\b', caseSensitive: false).firstMatch(prompt);
+  if (youHave != null) {
+    lead = prompt.substring(0, youHave.start).trim();
+    lead = lead.replaceAll(RegExp(r'[.?!]+$'), '').trim();
+  }
+  final core =
+      lead.isEmpty ? 'Watch the deal.' : '$lead — watch the deal.';
+  return withLessonTapInstruction(core, tap);
+}
+
 /// What to tap on a step whose copy does not already say it.
 ///
 /// Empty for explain steps: each one authors its own tap line.
