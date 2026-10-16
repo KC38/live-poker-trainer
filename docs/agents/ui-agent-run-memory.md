@@ -136,3 +136,8 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 ## Fold 2026-10-16
 
 - Prefer running `tools/fold_agent_learnings.sh ui` from the ticket worktree (or copy its diff into `$WT` and `git checkout --` on primary) — folding from primary dirties `docs/agents/ui-agent-run-memory.md` on main (LPT-1016).
+
+## Fold 2026-10-16 (LPT-1018)
+
+- Prefer Oops → Continue remount (or a second densify generation) when validating high-card class rewrite: isomorphic remap often keeps the template high (Kxs → Kys), so Nice! still saying "suited king" is not a failed fix — miss once for a non-king high before closeout proof (LPT-1018).
+- `ui_densify_card_scan.py check` also gates `alignStartingHandCopy` high-card class rewrite (`suited king` → remapped high; LPT-1018).

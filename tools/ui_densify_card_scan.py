@@ -14,9 +14,11 @@ Commands:
   list                 Print densify activity ids whose stem embeds card codes
                        (walk candidates; not an open-bug list).
   check [--id ID]      Exit 0 when densify speech is wired through
-                       ``alignLessonActionCopy`` / ``alignLessonTableCopy``.
-                       Exit 1 when densifiedSelect is returned raw (LPT-851
-                       class regression) or --id is unknown.
+                       ``alignLessonActionCopy`` / ``alignLessonTableCopy``
+                       **and** ``alignStartingHandCopy`` still rewrites
+                       high-card class shorthand (``suited king`` → remapped
+                       high; LPT-1018). Exit 1 on align-raw regression,
+                       missing high-card rewrite, or unknown --id.
 
 Card token: rank ``2-9TJQKA`` + suit ``cdhs`` (case-insensitive), word-boundary.
 """
@@ -32,6 +34,15 @@ REPO = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCE = REPO / "lib" / "ui" / "course" / "widgets" / "rex_coach_line.dart"
 DEFAULT_LAYOUT = (
     REPO / "lib" / "ui" / "course" / "widgets" / "lesson_screen_layout.dart"
+)
+DEFAULT_STARTING_HAND = (
+    REPO / "lib" / "ui" / "course" / "widgets" / "lesson_starting_hand_copy.dart"
+)
+
+# High-card class shorthand rewrite arm (LPT-1018).
+_HIGH_CARD_CLASS_MARKER = re.compile(
+    r"suited king|High-card class shorthand|LPT-1018",
+    re.IGNORECASE,
 )
 
 # Board Ks 9d / You hold Kh Qh / Flop As 7d
@@ -125,6 +136,36 @@ def densify_align_wired(layout: Path) -> bool:
     )
 
 
+def starting_hand_high_card_class_wired(source: Path) -> bool:
+    """True when ``alignStartingHandCopy`` rewrites suited/offsuit high (LPT-1018)."""
+    if not source.is_file():
+        return False
+    text = source.read_text(encoding="utf-8")
+    start = text.find("String alignStartingHandCopy")
+    if start < 0:
+        return False
+    # Bound to the function body.
+    body = text[start:]
+    end = body.find("\nString ")
+    if end < 0:
+        end = body.find("\nfinal ")
+    if end > 0:
+        body = body[:end]
+    if not _HIGH_CARD_CLASS_MARKER.search(body):
+        return False
+    # Require the fit+rank rewrite (not only a comment).
+    return bool(
+        re.search(
+            r"\$fit \$fromHigh",
+            body,
+        )
+        and re.search(
+            r"\$fit \$toHigh",
+            body,
+        )
+    )
+
+
 def cmd_list(args: argparse.Namespace) -> int:
     """Print densify stems that embed template card codes (not open bugs)."""
     source = Path(args.source).expanduser()
@@ -141,9 +182,10 @@ def cmd_list(args: argparse.Namespace) -> int:
 
 
 def cmd_check(args: argparse.Namespace) -> int:
-    """Exit 1 only when densify speech returns raw (align wiring missing)."""
+    """Exit 1 when densify speech skips align or high-card rewrite is missing."""
     source = Path(args.source).expanduser()
     layout = Path(args.layout).expanduser()
+    starting_hand = Path(args.starting_hand).expanduser()
     stems = parse_densify_stems(source)
     rows = stems_with_cards(stems)
     if args.id:
@@ -161,11 +203,21 @@ def cmd_check(args: argparse.Namespace) -> int:
             print(f"  {activity_id}: {', '.join(tokens)}")
             print(f"    {stem[:120]}")
         return 1
+    if not starting_hand_high_card_class_wired(starting_hand):
+        print(
+            "FAIL: alignStartingHandCopy missing high-card class rewrite "
+            "('suited king' / 'offsuit ace' → remapped high; LPT-1018)"
+        )
+        return 1
     if not rows:
-        print("ok: align wired; no densify stems with card tokens")
+        print(
+            "ok: align wired + high-card class rewrite; "
+            "no densify stems with card tokens"
+        )
         return 0
     print(
-        f"ok: align wired ({len(rows)} stem(s) keep template tokens for rewrite)"
+        f"ok: align wired + high-card class rewrite "
+        f"({len(rows)} stem(s) keep template tokens for rewrite)"
     )
     for activity_id, tokens, _stem in rows:
         print(f"  {activity_id}: {', '.join(tokens)}")
@@ -188,6 +240,11 @@ def build_parser() -> argparse.ArgumentParser:
         default=str(DEFAULT_LAYOUT),
         help="path to lesson_screen_layout.dart (align wiring)",
     )
+    parser.add_argument(
+        "--starting-hand",
+        default=str(DEFAULT_STARTING_HAND),
+        help="path to lesson_starting_hand_copy.dart (LPT-1018 rewrite)",
+    )
     sub = parser.add_subparsers(dest="cmd", required=True)
     p_list = sub.add_parser(
         "list",
@@ -196,7 +253,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_list.set_defaults(func=cmd_list)
     p_check = sub.add_parser(
         "check",
-        help="exit 1 only if densify speech path skips align (regression)",
+        help="exit 1 if densify align or high-card class rewrite is missing",
     )
     p_check.add_argument("--id", help="limit listing to one activity id")
     p_check.set_defaults(func=cmd_check)
