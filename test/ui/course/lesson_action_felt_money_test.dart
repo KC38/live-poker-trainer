@@ -49,6 +49,91 @@ void main() {
       expect(money.heroActionLabel, isNull);
     });
 
+    test(
+      'LPT-1022: check-raises to N paints RAISE street chips',
+      () {
+        final money = resolveLessonActionFeltMoney(
+          spot: const LessonActionSpot(
+            heroCodes: ['Jh', '9d'],
+            boardCodes: ['Qc', '9s', '3h'],
+            potLabel: 'Pot 12',
+            villainLine: 'Nit check-raises to 12',
+            facingBet: true,
+          ),
+          choices: const [
+            CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+            CourseChoice(
+              id: 'hero-call',
+              label: 'Hero-call forever',
+              action: 'CALL',
+            ),
+          ],
+        );
+
+        expect(money.streetBets, [0, 12]);
+        expect(money.villainActionLabel, 'RAISE');
+        // Labeled pot already accounts for the line — keep Pot 12.
+        expect(money.potTotal, 12);
+      },
+    );
+
+    test(
+      'LPT-1022: Respect Nit densify infers pot-sized check-raise chips',
+      () {
+        const spot = LessonActionSpot(
+          heroCodes: ['Jh', '9d'],
+          boardCodes: ['Qc', '9s', '3h'],
+          potLabel: 'Pot 12',
+          villainLine: 'Nit check-raises your c-bet',
+          streetLabel: 'Flop · middle pair',
+          facingBet: true,
+          feltStatusLine: 'Nit heat is usually strong',
+        );
+        final layout = resolveLessonActionFeltLayout(spot);
+        final money = resolveLessonActionFeltMoney(
+          spot: spot,
+          choices: const [
+            CourseChoice(id: 'fold-mid', label: 'Fold', action: 'FOLD'),
+            CourseChoice(
+              id: 'hero-call',
+              label: 'Hero-call forever',
+              action: 'CALL',
+            ),
+          ],
+          seatCount: layout.seatCount,
+          villainSeatIndex: layout.villainSeatIndex,
+          sbIndex: layout.sbIndex,
+          bbIndex: layout.bbIndex,
+        );
+
+        expect(money.streetBets[layout.villainSeatIndex], 12);
+        expect(money.villainActionLabel, 'RAISE');
+        expect(money.streetBets[0], 0);
+      },
+    );
+
+    test(
+      'LPT-1022: huge check-raise infers 2× pot street chips',
+      () {
+        final money = resolveLessonActionFeltMoney(
+          spot: const LessonActionSpot(
+            heroCodes: ['Kh', 'Jd'],
+            boardCodes: ['As', 'Th', '8h'],
+            potLabel: 'Pot 36',
+            villainLine: 'Nit check-raises huge',
+            facingBet: true,
+          ),
+          choices: const [
+            CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+            CourseChoice(id: 'call', label: 'Call', action: 'CALL'),
+          ],
+        );
+
+        expect(money.streetBets, [0, 72]);
+        expect(money.villainActionLabel, 'RAISE');
+      },
+    );
+
     test('calling the half-pot bet grows the pot to 15', () {
       final money = resolveLessonActionFeltMoney(
         spot: const LessonActionSpot(
