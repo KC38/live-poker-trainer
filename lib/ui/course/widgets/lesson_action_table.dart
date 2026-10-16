@@ -14454,6 +14454,22 @@ String authoredSoftPulseExplainCaption(String target) {
     // Gloss fold-frequency / calls-often — never leave AuthoredCue tiles label-only.
     'FOLDS TO BETS': 'Fold frequency',
     'STICKY': 'Calls often',
+    // Spot a Calling Station SoftPulse explain (STICKY CALLS → RARE FOLDS;
+    // LPT-922). Gloss calls-every-street / seldom-folds — never leave
+    // AuthoredCue tiles label-only.
+    'STICKY CALLS': 'Calls every street',
+    'RARE FOLDS': 'Seldom folds',
+    // Observation versus certainty SoftPulse explain (OBSERVATION → SAMPLES;
+    // LPT-923). OBSERVATION glosses one hand is not a verdict; SAMPLES
+    // matches ObservationCertaintyDemo Build the count — never leave
+    // AuthoredCue tiles label-only.
+    'OBSERVATION': 'Not a verdict',
+    'SAMPLES': 'Build the count',
+    // Small samples SoftPulse explain (SAMPLE → CONFIDENCE; LPT-924).
+    // Gloss tiny-sample / keep-confidence-low — never leave AuthoredCue
+    // tiles label-only.
+    'SAMPLE': 'Tiny sample',
+    'CONFIDENCE': 'Keep it low',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
