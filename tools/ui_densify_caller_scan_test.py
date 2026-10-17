@@ -46,6 +46,14 @@ class DensifyCallerScanTest(unittest.TestCase):
         self.assertEqual(mod.parse_caller_count("Two players behind"), 2)
         self.assertEqual(mod.parse_caller_count("Called by two"), 2)
 
+    def test_parse_bare_multiway_and_sticky(self) -> None:
+        self.assertEqual(mod.parse_caller_count("Multiway · deep stacks"), 2)
+        self.assertEqual(mod.parse_caller_count("Raise · reraise multiway"), 2)
+        self.assertEqual(
+            mod.parse_caller_count("Sticky caller · checked to you"),
+            1,
+        )
+
     def test_parse_named_bb_mp(self) -> None:
         self.assertEqual(mod.parse_caller_count("BTN open · BB + MP call"), 2)
         self.assertEqual(
@@ -61,10 +69,10 @@ class DensifyCallerScanTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "table.dart"
             path.write_text(sample, encoding="utf-8")
-            # Invented line matches multiwayish via "callers" but won't parse
-            # if we use a pattern without digit/word — force a GAP line:
+            # Bare "multiway" now parses to 2 — use uncounted "callers behind".
             path.write_text(
-                "villainLine: 'Mystery multiway pot',\nvillainLine: 'Three callers · wet board',\n",
+                "villainLine: 'Extra callers behind',\n"
+                "villainLine: 'Three callers · wet board',\n",
                 encoding="utf-8",
             )
             self.assertEqual(

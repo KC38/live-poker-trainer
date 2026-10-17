@@ -36,14 +36,10 @@ _MULTIWAYISH = re.compile(
     r"callers?\s+behind|"
     r"(?:\d+|one|two|three|four|five)\s+(?:players?\s+)?behind|"
     r"called by\s+(?:\d+|one|two|three|four|five)|"
+    r"sticky\s+callers?|"
     r"multiway"
     r")\b"
 )
-# Soft / non-count lines — coach flavor without a numeric multiway contract.
-_SOFT_SKIP = re.compile(
-    r"(?i)^(sticky caller|raise · reraise multiway|multiway · deep stacks)$"
-)
-
 _WORDS = {
     "one": 1,
     "two": 2,
@@ -133,6 +129,10 @@ def parse_caller_count(villain_line: str) -> int | None:
     if called_by is not None:
         raw = called_by.group(1)
         return int(raw) if raw.isdigit() else _WORDS[raw]
+    if re.search(r"\bsticky\s+callers?\b", lower):
+        return 1
+    if re.search(r"\bmultiway\b", lower):
+        return 2
     named = parse_named_caller_positions(villain_line)
     if named:
         return len(named)
@@ -156,8 +156,6 @@ def multiway_gaps(source: Path) -> list[tuple[str, int | None]]:
     """Multiway-looking lines with their parsed counts (None = gap)."""
     gaps: list[tuple[str, int | None]] = []
     for line in extract_villain_lines(source):
-        if _SOFT_SKIP.match(line.strip()):
-            continue
         if not _MULTIWAYISH.search(line):
             continue
         gaps.append((line, parse_caller_count(line)))
