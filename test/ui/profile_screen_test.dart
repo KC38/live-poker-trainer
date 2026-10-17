@@ -571,7 +571,7 @@ void main() {
   );
 
   testWidgets(
-    'LPT-1015: Live Training empty banner clears ShellBottomNav at mini size',
+    'LPT-1015: Live Training empty banner clears ShellBottomNav on first paint',
     (tester) async {
       tester.view.physicalSize = const Size(375, 812);
       tester.view.devicePixelRatio = 1;
@@ -634,15 +634,15 @@ void main() {
 
       final banner = find.textContaining('style shows up here');
       expect(banner, findsOneWidget);
-      await tester.ensureVisible(banner);
-      await tester.pumpAndSettle();
-
+      // First paint — do not ensureVisible / scroll (LPT-1015 mini repro).
       final bannerBottom = tester.getBottomLeft(banner).dy;
       final navTop = tester.getTopLeft(find.byType(ShellBottomNav)).dy;
       expect(
         bannerBottom,
         lessThanOrEqualTo(navTop),
-        reason: 'Live Training empty banner must sit above ShellBottomNav',
+        reason:
+            'Live Training empty banner must sit above ShellBottomNav on '
+            'first paint at 375×812',
       );
       expect(tester.takeException(), isNull);
     },
