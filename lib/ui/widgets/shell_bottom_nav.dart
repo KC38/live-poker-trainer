@@ -41,7 +41,11 @@ class ShellBottomNav extends StatelessWidget {
 
   static const double _iconSize = 36;
   static const double _slotSize = 52;
-  static const double _barHeight = 64;
+
+  /// Chrome height above the home-indicator inset (LPT-1015 Profile clearance).
+  static const double barHeight = 64;
+
+  static const double _barHeight = barHeight;
 
   @override
   Widget build(BuildContext context) {
