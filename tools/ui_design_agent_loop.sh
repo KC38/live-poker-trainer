@@ -12,7 +12,10 @@
 #                                          so the schedule survives DST (Nov 1) with no edits.
 #                                          No RunAtLoad, no KeepAlive, no StartInterval, no loop.
 #   tools/ui_design_agent_loop.sh install-continuous  legacy: ensure every 5 minutes (back-to-back loop)
-#   tools/ui_design_agent_loop.sh tick     one scheduled run; skips if held, stopped, or a run/loop is live
+#   tools/ui_design_agent_loop.sh tick     one scheduled run; skips if held, stopped, or a run/loop is live.
+#                                          Exit 2 (sdk-error) retries once unless
+#                                          UI_AGENT_TICK_SDK_RETRY=0 or stop/hold
+#                                          appears during the gap.
 #   tools/ui_design_agent_loop.sh ensure   start the loop only when run-loop is alive
 #   tools/ui_design_agent_loop.sh status   loop, simulator lock, and latest run log
 #   tools/ui_design_agent_loop.sh attach   watch the loop
@@ -2866,6 +2869,29 @@ sleep_unless_stopped() {
   done
 }
 
+# One scheduled walk. Exit 2 (Machine SDK error) retries once so a single
+# status=error does not burn the ~12h CT slot. UI_AGENT_TICK_SDK_RETRY=0
+# disables the retry. Stop or hold during the gap skips the second walk
+# and still reports the first exit 2.
+tick_one_run_with_sdk_retry() {
+  local _tick_code=0
+  one_run || _tick_code=$?
+  if [[ "$_tick_code" -eq 2 && "${UI_AGENT_TICK_SDK_RETRY:-1}" == "1" ]]; then
+    echo "tick: one_run exited 2 (sdk-error); retrying once after ${GAP}s"
+    sleep_unless_stopped "$GAP" || true
+    if [[ -f "$STOP_FILE" || -f "$HOLD_FILE" ]]; then
+      echo "tick: stop/hold during sdk-error retry; not retrying"
+    else
+      _tick_code=0
+      one_run || _tick_code=$?
+    fi
+  fi
+  if [[ "$_tick_code" -ne 0 ]]; then
+    echo "tick: one_run exited $_tick_code"
+  fi
+  return 0
+}
+
 # Empty-queue backoff: same as sleep_unless_stopped, but also wake when an
 # actionable ui-agent ticket appears (Jira lag after filing, or a human /
 # content-agent label during the 900s sleep) so discovery/fix is not
@@ -3169,22 +3195,7 @@ EOF
     echo "$(date "+%Y-%m-%dT%H:%M:%S%z") tick: starting one run (CT slot $_slot)"
     # One CT slot is ~12h apart. A single Machine SDK status=error used to
     # burn the whole evening walk (20261017-073007). Retry once by default.
-    _tick_code=0
-    one_run || _tick_code=$?
-    if [[ "$_tick_code" -eq 2 && "${UI_AGENT_TICK_SDK_RETRY:-1}" == "1" ]]; then
-      echo "tick: one_run exited 2 (sdk-error); retrying once after ${GAP}s"
-      sleep_unless_stopped "$GAP" || true
-      if [[ -f "$STOP_FILE" || -f "$HOLD_FILE" ]]; then
-        echo "tick: stop/hold during sdk-error retry; not retrying"
-      else
-        _tick_code=0
-        one_run || _tick_code=$?
-      fi
-    fi
-    if [[ "$_tick_code" -ne 0 ]]; then
-      echo "tick: one_run exited $_tick_code"
-    fi
-    unset _tick_code
+    tick_one_run_with_sdk_retry
     ;;
   install-continuous)
     mkdir -p "$(dirname "$PLIST")"

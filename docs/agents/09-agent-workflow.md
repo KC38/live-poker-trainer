@@ -43,7 +43,10 @@ make-change does **not** drive UI or take screenshots; that is for UI design
 ## UI design agent
 
 Command: `.cursor/commands/ui-design-agent.md`. Loop:
-`tools/ui_design_agent_loop.sh`. Keep learnings file updated.
+`tools/ui_design_agent_loop.sh`. A scheduled tick that exits 2 retries
+once (`tick_one_run_with_sdk_retry`); `UI_AGENT_TICK_SDK_RETRY=0` disables
+it, and stop/hold during the gap skips the second walk. Keep learnings
+file updated.
 
 Browser-validatable layout tickets go to **GrokBot** (`grokbot` label) on
 Linux / Chrome — see [10-grokbot.md](10-grokbot.md). The Mac mini agent

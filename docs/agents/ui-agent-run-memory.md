@@ -148,4 +148,4 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 
 ## Fold 2026-10-16 (LPT-1025 word four-way)
 
-- Prefer `parseLessonCallerCount` word forms (`Four-way`, `three-way`, `two behind`, `Called by two`, bare `multiway` → 2, `Sticky caller` → 1) in addition to digit `4-way` / `Three callers` / `BB + MP call` — `ui_densify_caller_scan.py check` lists unparsed multiway villain lines (LPT-1024 / LPT-1025 class).
+- Prefer `parseLessonCallerCount` word forms (`Four-way`, `three-way`, `two behind`, `Called by two`, bare `multiway` → 2, `Sticky caller` → 1) in addition to digit `4-way` / `Three callers` / `BB + MP call`. Explicit counts win over those soft fallbacks (`Three callers · multiway` stays 3, `4-way sticky caller` stays 3). `sticky seat` is not a caller — the missed-draw river stays the one-villain ring. `ui_densify_caller_scan.py check` lists unparsed multiway villain lines (LPT-1024 / LPT-1025 class).

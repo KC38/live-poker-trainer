@@ -6,8 +6,9 @@
 # local time, so install() registers BOTH local candidates for each CT
 # target (the CDT one and the CST one, an hour apart) and tick() runs only
 # when the current America/Chicago time is within CT_SLOT_WINDOW_MIN
-# (default 10) of a target. A stamp file keeps one run per CT slot, so the
-# off-season candidate is a no-op. No edits needed at DST changes.
+# (default 10, inclusive) of a target. A stamp file keeps one run per CT
+# slot (last 40 ids), so the off-season candidate is a no-op. No edits
+# needed at DST changes.
 #
 # Source this file, then:
 #   ct_slot_calendar "03:00 15:00"      -> "H M" lines (local) for launchd

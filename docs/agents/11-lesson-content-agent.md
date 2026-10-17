@@ -167,9 +167,12 @@ tools/lesson_content_agent_loop.sh setup|verify|install|tick|status|stop|release
 `install` writes a launchd `StartCalendarInterval` plist that calls `tick`
 (no RunAtLoad, KeepAlive or StartInterval). Because the Mac mini is on IST,
 the plist lists both the CDT and CST local times, and `tick` only runs
-within ±10 minutes of a CT target, once per slot (`tools/agent_ct_slot.sh`).
+within ±10 minutes of a CT target (the 10th minute still runs), once per
+slot. The stamp file keeps the last 40 slot ids (`tools/agent_ct_slot.sh`).
 DST changes need no edits. The UI design agent uses the same gate at
-09:00 and 21:00 CT.
+09:00 and 21:00 CT. Its tick retries a walk that exits 2 (sdk-error) once,
+unless `UI_AGENT_TICK_SDK_RETRY=0` or a stop/hold file appears during the
+gap. A stop/hold skip still reports that first exit 2.
 
 **Never restart it yourself.** `stop` and `kill` write
 `~/.live-poker-trainer/content-agent.hold`. While it exists, `start`,
