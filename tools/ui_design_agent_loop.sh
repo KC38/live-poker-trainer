@@ -2157,6 +2157,16 @@ for ln in reversed(lines):
         continue
     tail = row.get("tail") or ""
     result = row.get("result")
+    # Terminal non-ticket outcomes (esp. sdk-error with "# ui-agent-sdk
+    # status=error …" tails) must suppress run-log preview — otherwise
+    # status dumps mid-flight thinking tokens after a failed CT tick.
+    if result in (
+        "sdk-error",
+        "usage-limit",
+        "gateway-timeout",
+        "interrupted",
+    ):
+        raise SystemExit(0)
     if (
         result
         and result not in (None, "stalled", "sim-not-ready")
@@ -2164,6 +2174,7 @@ for ln in reversed(lines):
             tail.startswith("coverage:")
             or tail.startswith("healed from")
             or tail.startswith("reconciled from")
+            or tail.startswith("# ui-agent-sdk")
         )
     ):
         raise SystemExit(0)
@@ -3156,7 +3167,24 @@ EOF
     ct_slot_mark "$UI_TICK_STAMP" "$_slot"
     if ! prepare_launcher; then echo "tick: launcher prep failed (SDK deps)" >&2; exit 1; fi
     echo "$(date "+%Y-%m-%dT%H:%M:%S%z") tick: starting one run (CT slot $_slot)"
-    one_run || echo "tick: one_run exited $?"
+    # One CT slot is ~12h apart. A single Machine SDK status=error used to
+    # burn the whole evening walk (20261017-073007). Retry once by default.
+    _tick_code=0
+    one_run || _tick_code=$?
+    if [[ "$_tick_code" -eq 2 && "${UI_AGENT_TICK_SDK_RETRY:-1}" == "1" ]]; then
+      echo "tick: one_run exited 2 (sdk-error); retrying once after ${GAP}s"
+      sleep_unless_stopped "$GAP" || true
+      if [[ -f "$STOP_FILE" || -f "$HOLD_FILE" ]]; then
+        echo "tick: stop/hold during sdk-error retry; not retrying"
+      else
+        _tick_code=0
+        one_run || _tick_code=$?
+      fi
+    fi
+    if [[ "$_tick_code" -ne 0 ]]; then
+      echo "tick: one_run exited $_tick_code"
+    fi
+    unset _tick_code
     ;;
   install-continuous)
     mkdir -p "$(dirname "$PLIST")"

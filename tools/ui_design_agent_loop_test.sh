@@ -1805,6 +1805,35 @@ health_has_structured_stamp "$stamp_preview" \
   || fail "health_has_structured_stamp should match coverage:closed stamp"
 health_has_structured_stamp "19990101-000000" \
   && fail "health_has_structured_stamp must miss other stamps"
+# sdk-error with "# ui-agent-sdk status=error" tail must also suppress preview
+# (20261017-073007 dumped thinking tokens into every health-cycle status).
+stamp_sdk_err="20261017-073007"
+printf '%s\n' \
+  "{\"at\":\"2026-10-17T07:50:44+05:30\",\"stamp\":\"$stamp_sdk_err\",\"exit\":2,\"seconds\":1237,\"ticket\":null,\"result\":\"sdk-error\",\"tail\":\"# ui-agent-sdk status=error resultId=run-75c68cee\"}" \
+  >"$HEALTH_FILE"
+health_has_structured_stamp "$stamp_sdk_err" \
+  || fail "health_has_structured_stamp should match sdk-error stamp"
+sdk_err_preview_log="$LOG_DIR/run-$stamp_sdk_err.log"
+printf '%s\n' \
+  'Sizing-quiet densify{"t":1,"type":"thinking"}' \
+  'is confirmed clean. The{"t":1,"type":"thinking"}' \
+  'profile-clip bug remains{"t":1,"type":"thinking"}' \
+  '# ui-agent-sdk status=error resultId=run-75c68cee' \
+  >"$sdk_err_preview_log"
+status_sdk_out="$(UI_AGENT_LOOP_SOURCE_ONLY= bash "$LOOP" status 2>&1 || true)"
+grep -qi 'profile-clip' <<<"$status_sdk_out" \
+  && fail "status must not dump sdk-error thinking crumbs: $status_sdk_out"
+grep -q 'sdk-error' <<<"$status_sdk_out" \
+  || fail "status should still show last run sdk-error: $status_sdk_out"
+# Drop the sdk-error log so later status prose checks see stamp_preview as latest.
+rm -f "$sdk_err_preview_log"
+printf '%s\n' \
+  "{\"at\":\"2026-10-13T09:54:58+05:30\",\"stamp\":\"$stamp_preview\",\"exit\":0,\"seconds\":1937,\"ticket\":\"LPT-644\",\"result\":\"closed\",\"tail\":\"coverage:closed ticket:LPT-644 surface:lesson-runner:mix-with-a-reason\"}" \
+  >"$HEALTH_FILE"
+grep -q 'UI_AGENT_TICK_SDK_RETRY' "$LOOP" \
+  || fail "tick must support UI_AGENT_TICK_SDK_RETRY after sdk-error"
+grep -q 'retrying once after' "$LOOP" \
+  || fail "tick must log sdk-error retry"
 prose_log="$LOG_DIR/run-$stamp_preview.log"
 printf '%s\n' \
   '# ui-agent-sdk status=finished' \
