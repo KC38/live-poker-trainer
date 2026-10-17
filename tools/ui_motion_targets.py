@@ -93,7 +93,7 @@ TARGETS: tuple[MotionTarget, ...] = (
         id="section-end-ceremony",
         motion_class="dynamic",
         surface="home:section-end-ceremony",
-        seed="complete a section (or seed section-end) → section ceremony",
+        seed="agent_tap / ext.poker.agent cmd=opensectionend (or opensectionend:1:Never Played)",
         prove="one ceremony beat (mascot, title, one button); no flash/double sheet",
     ),
     MotionTarget(
