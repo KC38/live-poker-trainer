@@ -74,63 +74,90 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final statsAsync = ref.watch(userStatsProvider);
     final canPop = Navigator.of(context).canPop();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        // Tab root: no back when Profile is not pushed above another route.
-        automaticallyImplyLeading: canPop,
-        leading:
-            canPop
-                ? IconButton(
-                  tooltip: 'Back',
-                  onPressed: () => Navigator.of(context).maybePop(),
+    // Nested under AppShell's Scaffold + ShellBottomNav. Outer Scaffold
+    // body constraints are often loose (max height infinite); without an
+    // explicit height this Scaffold sizes to the full screen and paints
+    // into the tab bar (LPT-1015 first-paint clip on mini).
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final media = MediaQuery.of(context);
+        final navExtent =
+            ShellBottomNav.barHeight + media.padding.bottom;
+        final maxH = constraints.maxHeight;
+        final height =
+            maxH.isFinite && maxH < media.size.height - 1
+                ? maxH
+                : media.size.height - navExtent;
+        final width =
+            constraints.maxWidth.isFinite
+                ? constraints.maxWidth
+                : media.size.width;
+        return MediaQuery(
+          data: media.copyWith(size: Size(width, height)),
+          child: SizedBox(
+            height: height,
+            width: width,
+            child: Scaffold(
+            appBar: AppBar(
+              title: const Text('Profile'),
+              // Tab root: no back when Profile is not pushed above another route.
+              automaticallyImplyLeading: canPop,
+              leading:
+                  canPop
+                      ? IconButton(
+                        tooltip: 'Back',
+                        onPressed: () => Navigator.of(context).maybePop(),
+                        icon: const Icon(
+                          Icons.arrow_back_ios_new,
+                          size: 18,
+                          color: AppColors.slate,
+                        ),
+                      )
+                      : null,
+              actions: [
+                IconButton(
+                  tooltip: 'Settings',
+                  onPressed:
+                      () => Navigator.push(
+                        context,
+                        softFadeRoute(
+                          const SettingsScreen(),
+                          name: AnalyticsScreens.settings,
+                        ),
+                      ),
                   icon: const Icon(
-                    Icons.arrow_back_ios_new,
-                    size: 18,
+                    Icons.settings_outlined,
+                    semanticLabel: 'Settings',
                     color: AppColors.slate,
                   ),
-                )
-                : null,
-        actions: [
-          IconButton(
-            tooltip: 'Settings',
-            onPressed:
-                () => Navigator.push(
-                  context,
-                  softFadeRoute(
-                    const SettingsScreen(),
-                    name: AnalyticsScreens.settings,
-                  ),
                 ),
-            icon: const Icon(
-              Icons.settings_outlined,
-              semanticLabel: 'Settings',
-              color: AppColors.slate,
+              ],
+            ),
+            body: Container(
+              decoration: const BoxDecoration(
+                gradient: RadialGradient(
+                  center: Alignment(0, -0.7),
+                  radius: 1.2,
+                  colors: [AppColors.bgMid, AppColors.bgDark],
+                ),
+              ),
+              child: profileAsync.when(
+                loading:
+                    () => const Center(
+                      child: CircularProgressIndicator(color: AppColors.gold),
+                    ),
+                error: (e, _) => _ErrorState(message: '$e'),
+                data:
+                    (profile) => _ProfileBody(
+                      profile: profile,
+                      coachingStats: statsAsync.valueOrNull,
+                    ),
+              ),
             ),
           ),
-        ],
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: RadialGradient(
-            center: Alignment(0, -0.7),
-            radius: 1.2,
-            colors: [AppColors.bgMid, AppColors.bgDark],
           ),
-        ),
-        child: profileAsync.when(
-          loading:
-              () => const Center(
-                child: CircularProgressIndicator(color: AppColors.gold),
-              ),
-          error: (e, _) => _ErrorState(message: '$e'),
-          data:
-              (profile) => _ProfileBody(
-                profile: profile,
-                coachingStats: statsAsync.valueOrNull,
-              ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -148,8 +175,12 @@ class _ProfileBody extends ConsumerWidget {
     final anonymous =
         ref.watch(appAuthProvider).asData?.value.isAnonymous == true;
 
-    // Clear ShellBottomNav + home indicator so the Live Training empty
-    // banner is not clipped under the tab bar (LPT-1015 class on mini).
+    // Clear ShellBottomNav so the Live Training empty banner is not clipped
+    // under the tab bar on first paint or after scroll (LPT-1015). Profile
+    // sits in AppShell's body (already above the nav + home indicator);
+    // padding.bottom is often 0 there — still add barHeight so scroll-end
+    // content clears the fold. Tighten vertical rhythm above Live Training
+    // so the empty banner fits on first paint at 375×812.
     final bottomClearance =
         24 +
         ShellBottomNav.barHeight +
@@ -164,36 +195,53 @@ class _ProfileBody extends ConsumerWidget {
         ref.invalidate(courseProgressProvider);
       },
       child: ListView(
-        padding: EdgeInsets.fromLTRB(20, 12, 20, bottomClearance),
+        padding: EdgeInsets.fromLTRB(20, 8, 20, bottomClearance),
         children: [
           _ProfileHeader(profile: profile),
           if (anonymous) ...[
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             // Theme elevated (radius 14) — not M3 stadium FilledButton (LPT-46).
             ElevatedButton(
               onPressed: () => pushSaveProgressAuth(context),
               child: const Text('Create an account'),
             ),
           ],
-          const SizedBox(height: 26),
+          // Empty Live Training CTA above Course so it clears ShellBottomNav
+          // on first paint at 375×812 (LPT-1015). Course stays next.
+          if (!metrics.style.isKnown) ...[
+            const SizedBox(height: 16),
+            const _SectionTitle('Live Training'),
+            const SizedBox(height: 4),
+            Text(
+              'Coaching record, results, and style from full-hand play.',
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 12.5,
+              ),
+            ),
+            const SizedBox(height: 10),
+            _NeedsMoreHands(style: metrics.style),
+          ],
+          const SizedBox(height: 16),
           const _SectionTitle('Course'),
           const SizedBox(height: 4),
           Text(
             'Lesson progress. Separate from Live Training coaching.',
             style: GoogleFonts.manrope(color: AppColors.slate, fontSize: 12.5),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           const _CourseProgressSection(),
-          const SizedBox(height: 26),
-          const _SectionTitle('Live Training'),
-          const SizedBox(height: 4),
-          Text(
-            'Coaching record, results, and style from full-hand play.',
-            style: GoogleFonts.manrope(color: AppColors.slate, fontSize: 12.5),
-          ),
-          if (!metrics.style.isKnown) ...[
-            const SizedBox(height: 14),
-            _NeedsMoreHands(style: metrics.style),
+          if (metrics.style.isKnown) ...[
+            const SizedBox(height: 16),
+            const _SectionTitle('Live Training'),
+            const SizedBox(height: 4),
+            Text(
+              'Coaching record, results, and style from full-hand play.',
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 12.5,
+              ),
+            ),
           ],
           if (coachingStats != null && coachingStats!.totalSpots > 0) ...[
             const SizedBox(height: 16),
@@ -201,7 +249,7 @@ class _ProfileBody extends ConsumerWidget {
             const SizedBox(height: 10),
             _CoachingRecord(stats: coachingStats!),
           ],
-          const SizedBox(height: 26),
+          const SizedBox(height: 16),
           _TrendCard(metrics: metrics, coachingStats: coachingStats),
           if (coachingStats != null) ...[
             const SizedBox(height: 26),

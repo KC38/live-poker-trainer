@@ -373,7 +373,7 @@ On SoftPulse-off identify docks (`identifyUnavailable`), also Read the
   before filing SoftPulse-dead — Hint disabled mid-deal was the LPT-678
   deadlock; SoftPulse unlocks when hero holes land, not every villain back.
 
-- Prefer `tools/flutter_run_fast.sh --checkout PRIMARY` when `refresh-simulator.sh` aborts on untracked primary dirt (e.g. content-agent probe tests) — hot-restart origin/main Dart; do not discard dirt or `needs-human` (LPT-407). After merge resolutions, `rg '<<<<<<<|=======|>>>>>>>'` before commit (LPT-520). Judge Live Training lock copy against auth: anonymous → `LiveAccessSnapshot.anonymous()` / create-account hub text, never Baseline jump check even if `agent_seed` completed it (LPT-697); signed-in course-locked keeps `liveTrainingLockedMessage`.
+- Prefer `tools/flutter_run_fast.sh --checkout PRIMARY` when `refresh-simulator.sh` aborts on untracked primary dirt (e.g. content-agent probe tests) — hot-restart origin/main Dart; do not discard dirt or `needs-human` (LPT-407). After merge resolutions, `rg '<<<<<<<|=======|>>>>>>>'` before commit (LPT-520). Judge Live Training lock copy against auth: anonymous → `LiveAccessSnapshot.anonymous()` / create-account hub text, never Baseline jump check even if `agent_seed` completed it (LPT-697); signed-in course-locked keeps `liveTrainingLockedMessage`. Prefer first-paint Profile / shell-nav asserts **without** `ensureVisible` (scroll masks nested-Scaffold overflow under `ShellBottomNav`; LPT-1015 web NR / ensureVisible-only while mini first paint clipped) — size nested tab Scaffolds to AppShell body height; keep Live Training empty CTA above Course when style is unknown.
 
 ## Ops (simulator, CLI, Jira)
 
