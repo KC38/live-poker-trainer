@@ -374,6 +374,30 @@ grep -q 'due for slot 2026-11-03T21:00' <<<"$cst_out" || fail "tick at 21:05 CST
 ! grep -q '<key>StartInterval</key>' "$plist" || fail "plist must not respawn every few minutes"
 grep -A0 '<key>RunAtLoad</key><false/>' "$plist" >/dev/null || fail "no RunAtLoad"
 grep -q 'ui_design_agent_loop.sh' "$plist" || fail "plist must name the loop script"
+# Tick install: ensure / release-hold / soft-stop must not resurrect continuous.
+tick_ensure_out="$(bash "$LOOP" ensure)"
+grep -q 'ensure: skipped (login item is tick schedule' <<<"$tick_ensure_out" \
+  || fail "ensure under tick must skip continuous start: $tick_ensure_out"
+! grep -q 'ensure: starting loop' <<<"$tick_ensure_out" \
+  || fail "ensure under tick must not start loop: $tick_ensure_out"
+tick_release_out="$(bash "$LOOP" release-hold)"
+grep -q 'tick schedule stays idle' <<<"$tick_release_out" \
+  || fail "release-hold under tick must stay idle: $tick_release_out"
+soft_out="$(UI_AGENT_LOOP_SOURCE_ONLY= bash "$LOOP" soft-stop)"
+grep -q 'tick schedule stays idle until the next CT slot' <<<"$soft_out" \
+  || fail "soft-stop under tick must stay idle: $soft_out"
+rm -f "$STOP_FILE"
+# Soft-stop scheduler must no-op under tick (no continuous revive).
+UI_AGENT_LOOP_SOURCE_ONLY=1 source "$LOOP" || fail "re-source after tick install"
+LOG_DIR="$tmp/tick-soft-logs"
+mkdir -p "$LOG_DIR"
+rm -f "$LOG_DIR/soft-stop-ensure.log"
+schedule_ensure_after_soft_stop
+grep -q 'ensure: skipped (tick schedule' "$LOG_DIR/soft-stop-ensure.log" \
+  || fail "tick soft-stop must skip ensure: $(cat "$LOG_DIR/soft-stop-ensure.log" 2>/dev/null)"
+! grep -q 'ensure: scheduled' "$LOG_DIR/soft-stop-ensure.log" \
+  || fail "tick soft-stop must not schedule ensure worker"
+LOG_DIR="$tmp"
 grep -F -q "bootstrap gui/$(id -u) $plist" "$LAUNCH_LOG" \
   || fail "install should bootstrap the agent: $(cat "$LAUNCH_LOG")"
 grep -q 'login item: installed (com.livepokertrainer.ui-design-agent)' \
@@ -859,7 +883,9 @@ LOG_DIR="$tmp/soft-logs"
 mkdir -p "$LOG_DIR"
 UI_AGENT_SOFT_STOP_ENSURE_SLEEP=0
 # Unit-test HOME/tmux isolation: exercise the nohup worker path directly.
+# Force continuous path — earlier `install` left a tick plist in this HOME.
 UI_AGENT_SOFT_STOP_ENSURE_NO_TMUX=1
+UI_AGENT_ENSURE_FORCE=1
 schedule_ensure_after_soft_stop
 # Wait for background nohup child.
 for _ in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
@@ -876,7 +902,7 @@ grep -q 'ensure: exit=0' "$LOG_DIR/soft-stop-ensure.log" \
   || fail "soft-stop-ensure.log missing exit=0: $(cat "$LOG_DIR/soft-stop-ensure.log")"
 SCRIPT="$_prev_script"
 LOG_DIR="$_prev_log_dir"
-unset UI_AGENT_SOFT_STOP_ENSURE_SLEEP UI_AGENT_SOFT_STOP_ENSURE_NO_TMUX
+unset UI_AGENT_SOFT_STOP_ENSURE_SLEEP UI_AGENT_SOFT_STOP_ENSURE_NO_TMUX UI_AGENT_ENSURE_FORCE
 UI_AGENT_USAGE_LIMIT_SLEEP=1234
 USAGE_LIMIT_SLEEP=1234
 [[ "$(sleep_usage_limit_seconds "$usage_log")" == 1234 ]] \
