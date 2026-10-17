@@ -27,6 +27,7 @@ import 'package:live_poker_trainer/ui/screens/profile_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_identity_sheet.dart';
+import 'package:live_poker_trainer/ui/widgets/shell_bottom_nav.dart';
 
 class _FakeUserRepository extends UserRepository {
   _FakeUserRepository()
@@ -566,6 +567,84 @@ void main() {
       expect(find.text('Never Played'), findsNothing);
       expect(find.text('75'), findsOneWidget);
       expect(find.text('No reviews due'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'LPT-1015: Live Training empty banner clears ShellBottomNav at mini size',
+    (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            authUidProvider.overrideWithValue('test-user'),
+            userDocProvider.overrideWith((ref) async => users.document),
+            userRepositoryProvider.overrideWithValue(users),
+            progressRepositoryProvider.overrideWithValue(progress),
+            analyticsServiceProvider.overrideWithValue(
+              AnalyticsService(enabled: false),
+            ),
+            courseProgressProvider.overrideWith(
+              (ref) async => const CourseProgress(
+                loaded: true,
+                available: false,
+                lifetimeXp: 12,
+                gems: 0,
+                currentStreak: 2,
+                acceptedAccuracy: 0.5,
+                mastery: 0.4,
+                reviewsDue: 1,
+                currentSectionOrder: 1,
+                currentSectionTitle: 'Never Played',
+                currentUnitOrder: 1,
+                currentUnitTitle: 'Cards and the table',
+              ),
+            ),
+          ],
+          child: MaterialApp(
+            theme: buildPokerTheme(),
+            home: Scaffold(
+              body: const ProfileScreen(),
+              bottomNavigationBar: ShellBottomNav(
+                selectedIndex: 2,
+                onDestinationSelected: (_) {},
+                tabs: const [
+                  ShellNavTab(
+                    label: 'Home',
+                    asset: 'assets/brand/nav_home.svg',
+                  ),
+                  ShellNavTab(
+                    label: 'Live Training',
+                    asset: 'assets/brand/nav_live.svg',
+                  ),
+                  ShellNavTab(
+                    label: 'Profile',
+                    asset: 'assets/brand/nav_profile.svg',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final banner = find.textContaining('style shows up here');
+      expect(banner, findsOneWidget);
+      await tester.ensureVisible(banner);
+      await tester.pumpAndSettle();
+
+      final bannerBottom = tester.getBottomLeft(banner).dy;
+      final navTop = tester.getTopLeft(find.byType(ShellBottomNav)).dy;
+      expect(
+        bannerBottom,
+        lessThanOrEqualTo(navTop),
+        reason: 'Live Training empty banner must sit above ShellBottomNav',
+      );
+      expect(tester.takeException(), isNull);
     },
   );
 }

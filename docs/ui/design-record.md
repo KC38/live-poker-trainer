@@ -1942,7 +1942,9 @@ to earned XP).
 
 Live Training on the same screen stays about full-hand play: style, coaching
 record, and the empty state that asks for more hands. Lesson mastery never
-appears as live-hand style in the header.
+appears as live-hand style in the header. The Profile scroll bottom padding
+clears `ShellBottomNav.barHeight` plus the home-indicator inset so the Live
+Training empty banner is not clipped under the tab bar (LPT-1015).
 
 ### Shipped
 

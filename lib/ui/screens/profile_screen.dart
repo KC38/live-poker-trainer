@@ -32,6 +32,7 @@ import 'package:live_poker_trainer/ui/screens/settings_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_identity_sheet.dart';
+import 'package:live_poker_trainer/ui/widgets/shell_bottom_nav.dart';
 
 /// Consolidated Progress / You screen (profile + coaching stats).
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -147,6 +148,13 @@ class _ProfileBody extends ConsumerWidget {
     final anonymous =
         ref.watch(appAuthProvider).asData?.value.isAnonymous == true;
 
+    // Clear ShellBottomNav + home indicator so the Live Training empty
+    // banner is not clipped under the tab bar (LPT-1015 class on mini).
+    final bottomClearance =
+        24 +
+        ShellBottomNav.barHeight +
+        MediaQuery.paddingOf(context).bottom;
+
     return RefreshIndicator(
       color: AppColors.gold,
       backgroundColor: AppColors.bgElevated,
@@ -156,7 +164,7 @@ class _ProfileBody extends ConsumerWidget {
         ref.invalidate(courseProgressProvider);
       },
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 40),
+        padding: EdgeInsets.fromLTRB(20, 12, 20, bottomClearance),
         children: [
           _ProfileHeader(profile: profile),
           if (anonymous) ...[
