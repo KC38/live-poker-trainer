@@ -29,6 +29,7 @@ import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/brand_logo.dart';
+import 'package:live_poker_trainer/ui/widgets/shell_tab_body.dart';
 import 'package:live_poker_trainer/models/live_access.dart';
 
 /// Live Training destination — full-hand simulator launcher and table setup.
@@ -184,7 +185,8 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
             const SingleActivator(LogicalKeyboardKey.keyS): _launchTraining,
           },
         },
-        child: Scaffold(
+        child: ShellTabBody(
+          child: Scaffold(
           body: Container(
             decoration: const BoxDecoration(
               gradient: RadialGradient(
@@ -347,6 +349,7 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
               ),
             ),
           ),
+        ),
         ),
       ),
     );

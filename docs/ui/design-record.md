@@ -1943,10 +1943,11 @@ to earned XP).
 Live Training on the same screen stays about full-hand play: style, coaching
 record, and the empty state that asks for more hands. Lesson mastery never
 appears as live-hand style in the header. When Live style is unknown, the Live Training empty banner is placed above
-Course so it clears `ShellBottomNav` on first paint at 375×812. `ProfileScreen`
-also sizes its nested Scaffold to AppShell's body max height so it cannot paint
-into the tab bar; scroll bottom padding still clears `ShellBottomNav.barHeight`
-plus any bottom inset so later sections are not clipped after scroll (LPT-1015).
+Course so it clears `ShellBottomNav` on first paint at 375×812. Home, Live
+Training, and Profile wrap with `ShellTabBody` so a nested Scaffold cannot
+paint into the tab bar when IndexedStack gives a loose max height; Profile
+scroll bottom padding still clears `ShellBottomNav.barHeight` plus any bottom
+inset so later sections are not clipped after scroll (LPT-1015).
 
 ### Shipped
 

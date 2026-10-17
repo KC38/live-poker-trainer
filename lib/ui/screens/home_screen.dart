@@ -33,6 +33,7 @@ import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/shell_tab_body.dart';
 
 /// Home tab — interactive live-cash course path.
 class HomeScreen extends ConsumerStatefulWidget {
@@ -185,55 +186,58 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       _scheduleAutoFocus(snap);
     });
 
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: RadialGradient(
-            center: Alignment(0, -0.55),
-            radius: 1.15,
-            colors: [Color(0xFF1A2E28), AppColors.bgMid, AppColors.bgDark],
-            stops: [0.0, 0.45, 1.0],
+    // Nested under AppShell — size to shell body (LPT-1015 class).
+    return ShellTabBody(
+      child: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: RadialGradient(
+              center: Alignment(0, -0.55),
+              radius: 1.15,
+              colors: [Color(0xFF1A2E28), AppColors.bgMid, AppColors.bgDark],
+              stops: [0.0, 0.45, 1.0],
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: asyncHome.when(
-            skipLoadingOnReload: true,
-            skipLoadingOnRefresh: true,
-            loading:
-                () => const _HomeMessage(
-                  title: 'Loading course',
-                  body: 'Pulling your path from the server…',
-                ),
-            error:
-                (error, _) => _HomeMessage(
-                  title: 'Could not load course',
-                  body: error.toString(),
-                  actionLabel: 'Retry',
-                  onAction:
+          child: SafeArea(
+            child: asyncHome.when(
+              skipLoadingOnReload: true,
+              skipLoadingOnRefresh: true,
+              loading:
+                  () => const _HomeMessage(
+                    title: 'Loading course',
+                    body: 'Pulling your path from the server…',
+                  ),
+              error:
+                  (error, _) => _HomeMessage(
+                    title: 'Could not load course',
+                    body: error.toString(),
+                    actionLabel: 'Retry',
+                    onAction:
+                        () => ref.read(courseHomeProvider.notifier).refresh(),
+                  ),
+              data: (snapshot) {
+                _lastNextSectionId ??= snapshot.nextNode?.sectionId;
+                _scheduleAutoFocus(snapshot);
+                final pathSectionId = resolveHomePathSectionId(
+                  snapshot,
+                  focusedSectionId: _focusedSectionId,
+                );
+                final pathNodes = homePathNodesForSection(
+                  snapshot.nodes,
+                  pathSectionId,
+                );
+                return _HomeBody(
+                  snapshot: snapshot,
+                  pathNodes: pathNodes,
+                  focusLessonKey: _focusLessonKey,
+                  onRetry:
                       () => ref.read(courseHomeProvider.notifier).refresh(),
-                ),
-            data: (snapshot) {
-              _lastNextSectionId ??= snapshot.nextNode?.sectionId;
-              _scheduleAutoFocus(snapshot);
-              final pathSectionId = resolveHomePathSectionId(
-                snapshot,
-                focusedSectionId: _focusedSectionId,
-              );
-              final pathNodes = homePathNodesForSection(
-                snapshot.nodes,
-                pathSectionId,
-              );
-              return _HomeBody(
-                snapshot: snapshot,
-                pathNodes: pathNodes,
-                focusLessonKey: _focusLessonKey,
-                onRetry:
-                    () => ref.read(courseHomeProvider.notifier).refresh(),
-                onNodeTap: (node) => _onNodeTap(snapshot, node),
-                onOpenSections: () => _openSections(snapshot),
-                onHeartsTap: () => _onHeartsTap(snapshot),
-              );
-            },
+                  onNodeTap: (node) => _onNodeTap(snapshot, node),
+                  onOpenSections: () => _openSections(snapshot),
+                  onHeartsTap: () => _onHeartsTap(snapshot),
+                );
+              },
+            ),
           ),
         ),
       ),
