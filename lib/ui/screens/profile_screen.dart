@@ -33,6 +33,7 @@ import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_avatar.dart';
 import 'package:live_poker_trainer/ui/widgets/profile_identity_sheet.dart';
 import 'package:live_poker_trainer/ui/widgets/shell_bottom_nav.dart';
+import 'package:live_poker_trainer/ui/widgets/shell_tab_body.dart';
 
 /// Consolidated Progress / You screen (profile + coaching stats).
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -74,90 +75,66 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final statsAsync = ref.watch(userStatsProvider);
     final canPop = Navigator.of(context).canPop();
 
-    // Nested under AppShell's Scaffold + ShellBottomNav. Outer Scaffold
-    // body constraints are often loose (max height infinite); without an
-    // explicit height this Scaffold sizes to the full screen and paints
-    // into the tab bar (LPT-1015 first-paint clip on mini).
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final media = MediaQuery.of(context);
-        final navExtent =
-            ShellBottomNav.barHeight + media.padding.bottom;
-        final maxH = constraints.maxHeight;
-        final height =
-            maxH.isFinite && maxH < media.size.height - 1
-                ? maxH
-                : media.size.height - navExtent;
-        final width =
-            constraints.maxWidth.isFinite
-                ? constraints.maxWidth
-                : media.size.width;
-        return MediaQuery(
-          data: media.copyWith(size: Size(width, height)),
-          child: SizedBox(
-            height: height,
-            width: width,
-            child: Scaffold(
-            appBar: AppBar(
-              title: const Text('Profile'),
-              // Tab root: no back when Profile is not pushed above another route.
-              automaticallyImplyLeading: canPop,
-              leading:
-                  canPop
-                      ? IconButton(
-                        tooltip: 'Back',
-                        onPressed: () => Navigator.of(context).maybePop(),
-                        icon: const Icon(
-                          Icons.arrow_back_ios_new,
-                          size: 18,
-                          color: AppColors.slate,
-                        ),
-                      )
-                      : null,
-              actions: [
-                IconButton(
-                  tooltip: 'Settings',
-                  onPressed:
-                      () => Navigator.push(
-                        context,
-                        softFadeRoute(
-                          const SettingsScreen(),
-                          name: AnalyticsScreens.settings,
-                        ),
-                      ),
-                  icon: const Icon(
-                    Icons.settings_outlined,
-                    semanticLabel: 'Settings',
-                    color: AppColors.slate,
+    // Nested under AppShell — size to shell body (LPT-1015).
+    return ShellTabBody(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Profile'),
+          // Tab root: no back when Profile is not pushed above another route.
+          automaticallyImplyLeading: canPop,
+          leading:
+              canPop
+                  ? IconButton(
+                    tooltip: 'Back',
+                    onPressed: () => Navigator.of(context).maybePop(),
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new,
+                      size: 18,
+                      color: AppColors.slate,
+                    ),
+                  )
+                  : null,
+          actions: [
+            IconButton(
+              tooltip: 'Settings',
+              onPressed:
+                  () => Navigator.push(
+                    context,
+                    softFadeRoute(
+                      const SettingsScreen(),
+                      name: AnalyticsScreens.settings,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            body: Container(
-              decoration: const BoxDecoration(
-                gradient: RadialGradient(
-                  center: Alignment(0, -0.7),
-                  radius: 1.2,
-                  colors: [AppColors.bgMid, AppColors.bgDark],
-                ),
-              ),
-              child: profileAsync.when(
-                loading:
-                    () => const Center(
-                      child: CircularProgressIndicator(color: AppColors.gold),
-                    ),
-                error: (e, _) => _ErrorState(message: '$e'),
-                data:
-                    (profile) => _ProfileBody(
-                      profile: profile,
-                      coachingStats: statsAsync.valueOrNull,
-                    ),
+              icon: const Icon(
+                Icons.settings_outlined,
+                semanticLabel: 'Settings',
+                color: AppColors.slate,
               ),
             ),
+          ],
+        ),
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: RadialGradient(
+              center: Alignment(0, -0.7),
+              radius: 1.2,
+              colors: [AppColors.bgMid, AppColors.bgDark],
+            ),
           ),
+          child: profileAsync.when(
+            loading:
+                () => const Center(
+                  child: CircularProgressIndicator(color: AppColors.gold),
+                ),
+            error: (e, _) => _ErrorState(message: '$e'),
+            data:
+                (profile) => _ProfileBody(
+                  profile: profile,
+                  coachingStats: statsAsync.valueOrNull,
+                ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
