@@ -1830,10 +1830,81 @@ rm -f "$sdk_err_preview_log"
 printf '%s\n' \
   "{\"at\":\"2026-10-13T09:54:58+05:30\",\"stamp\":\"$stamp_preview\",\"exit\":0,\"seconds\":1937,\"ticket\":\"LPT-644\",\"result\":\"closed\",\"tail\":\"coverage:closed ticket:LPT-644 surface:lesson-runner:mix-with-a-reason\"}" \
   >"$HEALTH_FILE"
-grep -q 'UI_AGENT_TICK_SDK_RETRY' "$LOOP" \
-  || fail "tick must support UI_AGENT_TICK_SDK_RETRY after sdk-error"
-grep -q 'retrying once after' "$LOOP" \
-  || fail "tick must log sdk-error retry"
+# Exit 2 retries once. A later success does not report failure. A second
+# exit 2 is reported and is not retried again. Exit 1, retry disabled,
+# and stop/hold during the gap do not start a second walk. Stop/hold
+# still reports the first exit 2.
+(
+  STOP_FILE="$tmp/sdk-retry.stop"
+  HOLD_FILE="$tmp/sdk-retry.hold"
+  rm -f "$STOP_FILE" "$HOLD_FILE"
+  sdk_runs() { wc -l <"$1" | tr -d ' '; }
+  run_retry() {
+    local counter="$1"
+    : >"$counter"
+    GAP=0 tick_one_run_with_sdk_retry
+  }
+  c="$tmp/sdk-retry-runs"
+  one_run() {
+    echo x >>"$c"
+    [[ "$(sdk_runs "$c")" -eq 1 ]] && return 2
+    return 0
+  }
+  out="$(run_retry "$c")"
+  [[ "$(sdk_runs "$c")" -eq 2 ]] || fail "sdk-error must retry once: $out"
+  grep -q 'retrying once after 0s' <<<"$out" || fail "retry log missing: $out"
+  grep -qx 'tick: one_run exited 2' <<<"$out" \
+    && fail "successful retry must not report failure: $out"
+
+  one_run() { echo x >>"$c"; return 2; }
+  out="$(run_retry "$c")"
+  [[ "$(sdk_runs "$c")" -eq 2 ]] || fail "sdk-error must not retry twice: $out"
+  grep -q 'retrying once after 0s' <<<"$out" \
+    || fail "double failure should still retry once: $out"
+  grep -c 'retrying once' <<<"$out" | grep -qx 1 || fail "only one retry: $out"
+  grep -qx 'tick: one_run exited 2' <<<"$out" \
+    || fail "second exit 2 must be reported: $out"
+
+  one_run() { echo x >>"$c"; return 1; }
+  out="$(run_retry "$c")"
+  [[ "$(sdk_runs "$c")" -eq 1 ]] || fail "exit 1 must not retry: $out"
+  grep -qx 'tick: one_run exited 1' <<<"$out" || fail "exit 1 must be reported: $out"
+  grep -q 'retrying once' <<<"$out" && fail "exit 1 must not look like sdk-error: $out"
+
+  one_run() { echo x >>"$c"; return 0; }
+  out="$(run_retry "$c")"
+  [[ "$(sdk_runs "$c")" -eq 1 ]] || fail "exit 0 must run once: $out"
+  [[ -z "$out" ]] || fail "exit 0 must be silent: $out"
+
+  UI_AGENT_TICK_SDK_RETRY=0
+  one_run() { echo x >>"$c"; return 2; }
+  out="$(run_retry "$c")"
+  [[ "$(sdk_runs "$c")" -eq 1 ]] || fail "SDK retry disable must run once: $out"
+  grep -q 'retrying once' <<<"$out" && fail "disabled retry must not retry: $out"
+  grep -qx 'tick: one_run exited 2' <<<"$out" \
+    || fail "disabled retry must report exit 2: $out"
+  UI_AGENT_TICK_SDK_RETRY=1
+
+  touch "$HOLD_FILE"
+  one_run() { echo x >>"$c"; return 2; }
+  out="$(run_retry "$c")"
+  [[ "$(sdk_runs "$c")" -eq 1 ]] \
+    || fail "hold during retry must not start a second walk: $out"
+  grep -q 'stop/hold during sdk-error retry' <<<"$out" \
+    || fail "hold skip log missing: $out"
+  grep -qx 'tick: one_run exited 2' <<<"$out" \
+    || fail "hold skip must still report exit 2: $out"
+  rm -f "$HOLD_FILE"
+
+  touch "$STOP_FILE"
+  one_run() { echo x >>"$c"; return 2; }
+  out="$(run_retry "$c")"
+  [[ "$(sdk_runs "$c")" -eq 1 ]] \
+    || fail "stop during retry must not start a second walk: $out"
+  grep -q 'stop/hold during sdk-error retry' <<<"$out" \
+    || fail "stop skip log missing: $out"
+  rm -f "$STOP_FILE"
+)
 prose_log="$LOG_DIR/run-$stamp_preview.log"
 printf '%s\n' \
   '# ui-agent-sdk status=finished' \
