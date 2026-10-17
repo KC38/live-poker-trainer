@@ -10,6 +10,8 @@
 /// `next`/`dismiss` (dismisses mid-hand coach; otherwise next hand),
 /// `retry`/`resume`,
 /// `back` ([AgentUiDriver] pops the top route — modal sheets included),
+/// `openlesson:<id>`,
+/// `opensectionend` / `opensectionend:<order>:<title>` (section-end ceremony),
 /// `tap` / `taptext` / `tap:<label>` (UI text tap; optional `text=` param),
 /// `type` / `enter` / `type:<value>` (fill focused/first EditableText),
 /// `signout`.

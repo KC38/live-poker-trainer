@@ -166,6 +166,23 @@ void main() {
     expect(buried, 0);
   });
 
+  testWidgets('opensectionend pushes the section-end ceremony', (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(body: Text('Home')),
+      ),
+    );
+    AgentUiDriver.install();
+    AgentCommands.debugEmit('opensectionend:2:Cards and the table');
+    await tester.pumpAndSettle();
+
+    expect(find.text('SECTION 2'), findsOneWidget);
+    expect(find.text('Cards and the table'), findsOneWidget);
+    expect(find.text('CONTINUE'), findsOneWidget);
+    final last = await AgentCommands.debugQuery('last') as Map;
+    expect(last['outcome'], contains('opened section-end 2'));
+  });
+
   testWidgets('back pops a modal bottom sheet', (tester) async {
     await tester.pumpWidget(
       MaterialApp(

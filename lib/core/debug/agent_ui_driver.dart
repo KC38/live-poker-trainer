@@ -12,6 +12,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:live_poker_trainer/core/debug/agent_commands.dart';
+import 'package:live_poker_trainer/ui/screens/section_complete_screen.dart';
 
 /// Installs a global agent UI driver (debug builds only).
 final class AgentUiDriver {
@@ -47,6 +48,8 @@ final class AgentUiDriver {
   ///
   /// [signOut] is invoked for `signout` / `sign_out` commands.
   /// [openLesson] opens a course lesson by id (`openlesson:<id>`).
+  /// `opensectionend` / `opensectionend:<order>:<title>` pushes the
+  /// section-end ceremony for motion walks (LPT-793 / ui_motion_targets).
   static void install({
     Future<void> Function()? signOut,
     Future<void> Function(String lessonId)? openLesson,
@@ -83,6 +86,14 @@ final class AgentUiDriver {
       await _openLesson?.call(id);
       return;
     }
+    if (normalized == 'opensectionend' ||
+        normalized == 'open_section_end' ||
+        normalized.startsWith('opensectionend:') ||
+        normalized.startsWith('open_section_end:')) {
+      // Parse from the raw cmd so section titles keep their casing.
+      _record(cmd, await _openSectionEnd(cmd.trim()));
+      return;
+    }
     if (normalized.startsWith('type:') || normalized.startsWith('enter:')) {
       final value = cmd.substring(cmd.indexOf(':') + 1);
       _record(cmd, await _typeText(value));
@@ -95,6 +106,53 @@ final class AgentUiDriver {
     }
     if (needle == null || needle.isEmpty) return;
     _record(cmd, await _tapText(needle));
+  }
+
+  /// Pushes [SectionCompleteScreen] for section-end ceremony filming.
+  ///
+  /// Does not await the route pop — same fire-and-forget pattern as
+  /// `openlesson` recording — so the agent bus stays free for taps.
+  static Future<String> _openSectionEnd(String cmd) async {
+    var order = 1;
+    var title = 'Never Played';
+    final colon = cmd.indexOf(':');
+    if (colon >= 0) {
+      final rest = cmd.substring(colon + 1).trim();
+      if (rest.isNotEmpty) {
+        final parts = rest.split(':');
+        order = int.tryParse(parts.first.trim()) ?? 1;
+        if (parts.length > 1) {
+          final named = parts.sublist(1).join(':').trim();
+          if (named.isNotEmpty) title = named;
+        }
+      }
+    }
+
+    final navigators = <NavigatorState>[];
+    void visit(Element element) {
+      if (element is StatefulElement && element.state is NavigatorState) {
+        navigators.add(element.state as NavigatorState);
+      }
+      element.visitChildren(visit);
+    }
+
+    WidgetsBinding.instance.rootElement?.visitChildren(visit);
+    for (final nav in navigators.reversed) {
+      if (!nav.mounted) continue;
+      unawaited(
+        nav.push<void>(
+          MaterialPageRoute<void>(
+            builder:
+                (_) => SectionCompleteScreen(
+                  sectionOrder: order,
+                  sectionTitle: title,
+                ),
+          ),
+        ),
+      );
+      return 'opened section-end $order "$title"';
+    }
+    return 'nomatch: no navigator for section-end';
   }
 
   /// Pops the deepest navigator that can pop (sheet/dialog/route).
