@@ -91,6 +91,20 @@ class UiMotionTargetsTest(unittest.TestCase):
                 "softpulse-breathe",
             )
         )
+        self.assertTrue(
+            mod.lead_credits_motion(
+                "discovery: suits multi-press SoftPulse OK; hearts-0 SoftPulse "
+                "gate OK",
+                "multi-press-suits",
+            )
+        )
+        self.assertTrue(
+            mod.lead_credits_motion(
+                "discovery: suits multi-press SoftPulse OK; hearts-0 SoftPulse "
+                "gate OK",
+                "hearts-breathe",
+            )
+        )
         self.assertFalse(
             mod.lead_credits_motion(
                 "motion pick remaining: hearts-breathe, lesson-result-ceremony, "

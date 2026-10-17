@@ -123,8 +123,18 @@ DEFAULT_COVERAGE = Path.home() / ".live-poker-trainer" / "ui-agent-coverage.json
 LEAD_TOKENS: dict[str, tuple[str, ...]] = {
     "deal-your-two-cards": ("deal-your-two-cards", "deal-your-two"),
     "deal-blinds-button": ("deal-blinds-button", "blinds-and-button"),
-    "multi-press-suits": ("multi-press-suits",),
-    "multi-press-best-five": ("multi-press-best-five", "best-five"),
+    # Agents write "suits multi-press SoftPulse OK" (LPT-1015 coverage).
+    "multi-press-suits": (
+        "multi-press-suits",
+        "suits multi-press",
+        "multi-press suits",
+    ),
+    "multi-press-best-five": (
+        "multi-press-best-five",
+        "best-five",
+        "best five multi-press",
+        "multi-press best-five",
+    ),
     "softpulse-breathe": ("softpulse-breathe", "soft-pulse-breathe"),
     "hearts-breathe": ("hearts-breathe", "hearts-0", "hearts-zero"),
     "lesson-result-ceremony": ("lesson-result-ceremony", "lesson-result"),
@@ -222,11 +232,13 @@ def load_coverage(path: Path) -> list[dict]:
 
 
 def _normalize_lead(text: str) -> str:
-    """Lowercase lead prose and collapse SoftPulse spelling variants."""
+    """Lowercase lead prose and collapse SoftPulse / hyphen variants."""
     low = text.lower()
     low = low.replace("soft pulse", "softpulse")
     low = low.replace("soft-pulse", "softpulse")
-    return low
+    # "suits multi-press" and "multi-press-suits" share the same tokens.
+    low = re.sub(r"[-_]+", " ", low)
+    return re.sub(r"\s+", " ", low).strip()
 
 
 def lead_credits_motion(lead: str, motion_id: str) -> bool:
