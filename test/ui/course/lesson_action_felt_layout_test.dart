@@ -137,6 +137,9 @@ void main() {
       expect(parseLessonCallerCount('Checked to you · two behind'), 2);
       expect(parseLessonCallerCount('Two players behind'), 2);
       expect(parseLessonCallerCount('Called by two'), 2);
+      expect(parseLessonCallerCount('Multiway · deep stacks'), 2);
+      expect(parseLessonCallerCount('Raise · reraise multiway'), 2);
+      expect(parseLessonCallerCount('Sticky caller · checked to you'), 1);
       // Hero BTN (default) → dealer 0; SB=1, BB=2, next=3.
       expect(layout.dealerIndex, 0);
       expect(layout.callerSeatIndexes.toSet(), {1, 2, 3});
@@ -175,6 +178,39 @@ void main() {
 
       expect(layout.callerSeatIndexes.toSet(), {1, 2});
       expect(layout.foldedSeatIndexes.toSet(), {3, 4, 5});
+    });
+
+    test('LPT-1025 class: bare multiway keeps two villains live', () {
+      const spot = LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        boardCodes: ['Qs', '7c', '2d'],
+        potLabel: 'Pot 36',
+        villainLine: 'Multiway · deep stacks',
+        streetLabel: 'Flop · Multiway',
+        facingBet: true,
+      );
+
+      final layout = resolveLessonActionFeltLayout(spot);
+
+      expect(layout.callerSeatIndexes.toSet(), {1, 2});
+      expect(layout.foldedSeatIndexes.toSet(), {3, 4, 5});
+    });
+
+    test('LPT-1025 class: sticky caller keeps one villain live', () {
+      const spot = LessonActionSpot(
+        heroCodes: ['Ah', 'Kd'],
+        boardCodes: ['Qs', '7c', '2d'],
+        potLabel: 'Pot 22',
+        villainLine: 'Sticky caller · checked to you',
+        streetLabel: 'Flop · open pot',
+        facingBet: false,
+        openPot: true,
+      );
+
+      final layout = resolveLessonActionFeltLayout(spot);
+
+      expect(layout.callerSeatIndexes.toSet(), {1});
+      expect(layout.foldedSeatIndexes.toSet(), {2, 3, 4, 5});
     });
 
     test('explicit heads-up spots stay two-seat', () {

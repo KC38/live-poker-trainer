@@ -240,6 +240,11 @@ int? parseLessonCallerCount(String? villainLine) {
     final n = countToken(calledBy.group(1)!);
     if (n != null && n > 0) return n;
   }
+  // "Sticky caller · checked to you" — one live villain (not heads-up fold).
+  if (RegExp(r'\bsticky\s+callers?\b').hasMatch(lower)) return 1;
+  // Bare "multiway" / "Raise · reraise multiway" with no N-way count —
+  // keep two villains live (LPT-1025 class soft lines).
+  if (RegExp(r'\bmultiway\b').hasMatch(lower)) return 2;
   final named = parseLessonNamedCallerPositions(villainLine);
   if (named.isNotEmpty) return named.length;
   return null;
