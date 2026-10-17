@@ -76,6 +76,62 @@ class UiMotionTargetsTest(unittest.TestCase):
             )
             self.assertIsNotNone(walked_at)
 
+    def test_lead_ok_credits_motion_without_surface(self) -> None:
+        """Densify surface + lead OK list demotes those motion ids in pick."""
+        self.assertTrue(
+            mod.lead_credits_motion(
+                "coach-transition / SoftPulse-breathe / lesson-result / "
+                "deal-your-two OK on walk",
+                "coach-transition",
+            )
+        )
+        self.assertTrue(
+            mod.lead_credits_motion(
+                "coach-transition / SoftPulse-breathe OK on walk",
+                "softpulse-breathe",
+            )
+        )
+        self.assertFalse(
+            mod.lead_credits_motion(
+                "motion pick remaining: hearts-breathe, lesson-result-ceremony, "
+                "section-end-ceremony",
+                "hearts-breathe",
+            )
+        )
+        self.assertTrue(
+            mod.lead_credits_motion(
+                "motion pick remaining: coach-transition OK on barrel; "
+                "hearts-breathe / lesson-result still under-walked",
+                "coach-transition",
+            )
+        )
+        self.assertFalse(
+            mod.lead_credits_motion(
+                "motion pick remaining: coach-transition OK on barrel; "
+                "hearts-breathe / lesson-result still under-walked",
+                "hearts-breathe",
+            )
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            cov = Path(tmp) / "coverage.jsonl"
+            row = {
+                "at": datetime(2026, 10, 16, tzinfo=timezone.utc).isoformat(),
+                "surface": "lesson-01-01-01-your-two-cards",
+                "result": "closed",
+                "ticket": "LPT-1026",
+                "leads": [
+                    "coach-transition / softpulse-breathe OK on walk",
+                    "motion pick remaining: hearts-breathe, "
+                    "lesson-result-ceremony, section-end-ceremony",
+                ],
+            }
+            cov.write_text(json.dumps(row) + "\n", encoding="utf-8")
+            picked = mod.pick_targets(coverage_path=cov, limit=5)
+            ids = [t.id for t in picked]
+            self.assertNotIn("coach-transition", ids[:3])
+            self.assertNotIn("softpulse-breathe", ids[:3])
+            self.assertIn("hearts-breathe", ids)
+
     def test_cli_list(self) -> None:
         code = mod.main(["list"])
         self.assertEqual(code, 0)

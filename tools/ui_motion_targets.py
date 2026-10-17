@@ -10,13 +10,15 @@ Commands:
   list                 Print every target (tsv: id, class, surface, seed hint).
   classes              Print motion classes and what to prove on video.
   pick [--coverage F]  Prefer never-walked / oldest motion surfaces from
-                       ``~/.live-poker-trainer/ui-agent-coverage.jsonl``.
+                       ``~/.live-poker-trainer/ui-agent-coverage.jsonl``
+                       (surface field, aliases, and lead OK claims).
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from dataclasses import dataclass
 from datetime import datetime
@@ -116,6 +118,21 @@ DEFAULT_COVERAGE = Path.home() / ".live-poker-trainer" / "ui-agent-coverage.json
 # (lesson slug vs ``lesson-runner:…``, densify ticket surfaces, ceremony
 # aliases). Without these, ``pick`` forever ranks already-walked motion
 # targets as never-walked and starves the rest of the catalog.
+# Short tokens agents put in coverage ``--lead`` prose when they walk a
+# motion target during a densify lesson (surface stays the lesson slug).
+LEAD_TOKENS: dict[str, tuple[str, ...]] = {
+    "deal-your-two-cards": ("deal-your-two-cards", "deal-your-two"),
+    "deal-blinds-button": ("deal-blinds-button", "blinds-and-button"),
+    "multi-press-suits": ("multi-press-suits",),
+    "multi-press-best-five": ("multi-press-best-five", "best-five"),
+    "softpulse-breathe": ("softpulse-breathe", "soft-pulse-breathe"),
+    "hearts-breathe": ("hearts-breathe", "hearts-0", "hearts-zero"),
+    "lesson-result-ceremony": ("lesson-result-ceremony", "lesson-result"),
+    "section-end-ceremony": ("section-end-ceremony", "section-end"),
+    "pot-and-stacks": ("pot-and-stacks", "felt-pot-stacks"),
+    "coach-transition": ("coach-transition", "coach-mood"),
+}
+
 SURFACE_ALIASES: dict[str, tuple[str, ...]] = {
     "lesson-01-01-01-your-two-cards": (
         "lesson-01-01-01-your-two-cards",
@@ -204,17 +221,76 @@ def load_coverage(path: Path) -> list[dict]:
     return rows
 
 
+def _normalize_lead(text: str) -> str:
+    """Lowercase lead prose and collapse SoftPulse spelling variants."""
+    low = text.lower()
+    low = low.replace("soft pulse", "softpulse")
+    low = low.replace("soft-pulse", "softpulse")
+    return low
+
+
+def lead_credits_motion(lead: str, motion_id: str) -> bool:
+    """True when coverage lead prose claims this motion id was walked OK.
+
+    Agents often keep ``surface`` as the densify lesson slug and write
+    ``coach-transition / softpulse-breathe OK on walk`` in leads. Those
+    claims must demote the motion id in ``pick``. Do not credit
+    ``motion pick remaining: … still under-walked`` lists unless the id
+    itself is marked OK in that lead (LPT-1026-class starvation).
+    """
+    raw = (lead or "").strip()
+    if not raw:
+        return False
+    low = _normalize_lead(raw)
+    tokens = LEAD_TOKENS.get(motion_id, (motion_id,))
+    token_res = [
+        re.compile(rf"(?<![a-z0-9]){re.escape(_normalize_lead(tok))}(?![a-z0-9])")
+        for tok in tokens
+    ]
+
+    def has_token(chunk: str) -> bool:
+        return any(rx.search(chunk) for rx in token_res)
+
+    remaining_ish = (
+        "remaining" in low
+        or "under-walked" in low
+        or "under walked" in low
+    )
+    if remaining_ish:
+        for seg in re.split(r"[;|]", low):
+            if not has_token(seg):
+                continue
+            if re.search(r"\bok\b", seg) and not re.search(
+                r"under-?walked|still\s+under",
+                seg,
+            ):
+                return True
+        return False
+    if not has_token(low):
+        return False
+    return bool(re.search(r"\b(ok|walked|clean)\b", low))
+
+
 def last_walk_by_surface(rows: Iterable[dict]) -> dict[str, datetime]:
-    """Map surface → latest walk time."""
+    """Map surface → latest walk time (field + lead OK claims)."""
     latest: dict[str, datetime] = {}
     for row in rows:
-        surface = str(row.get("surface") or "").strip()
-        if not surface:
-            continue
         at = _parse_at(str(row.get("at") or ""))
-        prev = latest.get(surface)
-        if prev is None or at > prev:
-            latest[surface] = at
+        surface = str(row.get("surface") or "").strip()
+        if surface:
+            prev = latest.get(surface)
+            if prev is None or at > prev:
+                latest[surface] = at
+        leads = row.get("leads") or []
+        if not isinstance(leads, list):
+            continue
+        for target in TARGETS:
+            for lead in leads:
+                if not lead_credits_motion(str(lead), target.id):
+                    continue
+                prev = latest.get(target.surface)
+                if prev is None or at > prev:
+                    latest[target.surface] = at
     return latest
 
 
