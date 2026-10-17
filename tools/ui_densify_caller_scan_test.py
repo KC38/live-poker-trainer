@@ -54,6 +54,26 @@ class DensifyCallerScanTest(unittest.TestCase):
             1,
         )
 
+    def test_explicit_count_beats_soft_fallback(self) -> None:
+        """N callers / N-way win; sticky seat is not a caller count."""
+        self.assertEqual(
+            mod.parse_caller_count("Three callers · multiway"),
+            3,
+        )
+        self.assertEqual(
+            mod.parse_caller_count("Checked to you · 4-way sticky caller"),
+            3,
+        )
+        self.assertEqual(
+            mod.parse_caller_count("Called by three · multiway"),
+            3,
+        )
+        self.assertEqual(mod.parse_caller_count("sticky callers"), 1)
+        self.assertIsNone(
+            mod.parse_caller_count("Same sticky seat · brick river"),
+        )
+        self.assertIsNone(mod.parse_caller_count(""))
+
     def test_parse_named_bb_mp(self) -> None:
         self.assertEqual(mod.parse_caller_count("BTN open · BB + MP call"), 2)
         self.assertEqual(

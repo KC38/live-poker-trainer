@@ -213,6 +213,56 @@ void main() {
       expect(layout.foldedSeatIndexes.toSet(), {2, 3, 4, 5});
     });
 
+    test('explicit caller counts beat bare multiway and sticky caller', () {
+      expect(parseLessonCallerCount('Three callers · multiway'), 3);
+      expect(
+        parseLessonCallerCount('Checked to you · 4-way sticky caller'),
+        3,
+      );
+      expect(parseLessonCallerCount('Called by three · multiway'), 3);
+      expect(parseLessonCallerCount('sticky callers'), 1);
+      expect(parseLessonCallerCount(null), isNull);
+      expect(parseLessonCallerCount(''), isNull);
+
+      const counted = LessonActionSpot(
+        heroCodes: ['9h', '9d'],
+        boardCodes: ['9s', '8c', '7h'],
+        potLabel: 'Pot 24',
+        villainLine: 'Three callers · multiway',
+        streetLabel: 'Flop · top set',
+        facingBet: false,
+        openPot: true,
+      );
+      final countedLayout = resolveLessonActionFeltLayout(counted);
+      expect(countedLayout.callerSeatIndexes.toSet(), {1, 2, 3});
+      expect(countedLayout.foldedSeatIndexes.toSet(), {4, 5});
+    });
+
+    test('sticky seat stays the one-villain ring', () {
+      expect(
+        parseLessonCallerCount('Same sticky seat · brick river'),
+        isNull,
+      );
+
+      const spot = LessonActionSpot(
+        heroCodes: ['8h', '7h'],
+        boardCodes: ['Kh', '9h', '2c', '3d', '5s'],
+        potLabel: 'Pot 24',
+        villainLine: 'Same sticky seat · brick river',
+        streetLabel: 'River · missed draw',
+        facingBet: false,
+        openPot: true,
+      );
+
+      final layout = resolveLessonActionFeltLayout(spot);
+
+      // Hero BTN → BB is seat 2. A sticky-caller parse would keep SB
+      // (seat 1) on the multiway path instead.
+      expect(layout.callerSeatIndexes, isEmpty);
+      expect(layout.villainSeatIndex, 2);
+      expect(layout.foldedSeatIndexes.toSet(), {1, 3, 4, 5});
+    });
+
     test('explicit heads-up spots stay two-seat', () {
       const spot = LessonActionSpot(
         heroCodes: ['Ah', 'Kd'],

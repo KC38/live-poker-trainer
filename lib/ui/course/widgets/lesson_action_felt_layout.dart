@@ -240,6 +240,9 @@ int? parseLessonCallerCount(String? villainLine) {
     final n = countToken(calledBy.group(1)!);
     if (n != null && n > 0) return n;
   }
+  // Soft fallbacks run last so "Three callers · multiway" and
+  // "4-way sticky caller" keep the explicit count. "sticky seat" is
+  // not a caller — the missed-draw river stays the one-villain ring.
   // "Sticky caller · checked to you" — one live villain (not heads-up fold).
   if (RegExp(r'\bsticky\s+callers?\b').hasMatch(lower)) return 1;
   // Bare "multiway" / "Raise · reraise multiway" with no N-way count —
