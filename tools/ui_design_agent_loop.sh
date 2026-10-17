@@ -16,11 +16,11 @@
 #   tools/ui_design_agent_loop.sh ensure   start the loop only when run-loop is alive
 #   tools/ui_design_agent_loop.sh status   loop, simulator lock, and latest run log
 #   tools/ui_design_agent_loop.sh attach   watch the loop
-#   tools/ui_design_agent_loop.sh stop     soft-stop: finish current run, then ensure restarts
+#   tools/ui_design_agent_loop.sh stop     soft-stop: finish current run; continuous→ensure, tick→idle
 #   tools/ui_design_agent_loop.sh soft-stop  alias for stop (reload bash / structural fixes)
 #   tools/ui_design_agent_loop.sh soft-stop-wait  soft-stop, then block until loop is idle again
 #   tools/ui_design_agent_loop.sh soft-stop-hold  soft-stop-wait + block ensure until release-hold
-#   tools/ui_design_agent_loop.sh release-hold  allow ensure to start the loop again
+#   tools/ui_design_agent_loop.sh release-hold  continuous→ensure; tick→stay idle until CT slot
 #   tools/ui_design_agent_loop.sh kill     stop now and free a lock this loop holds
 #   tools/ui_design_agent_loop.sh once     one run in the foreground
 #
@@ -431,12 +431,18 @@ PY
   fi
 }
 
+# True when LaunchAgent is the twice-daily `tick` install (not continuous
+# `ensure` every 5 minutes). Soft-stop / ensure / release-hold must not
+# resurrect the legacy continuous run-loop while this is active (#2925).
+launchd_uses_tick() {
+  [[ -f "$PLIST" ]] && grep -q '<string>tick</string>' "$PLIST" 2>/dev/null
+}
+
 # Twice-daily launchd `tick` leaves no tmux run-loop between CT slots.
 # Status must say that, or health checks treat the gap as a dead loop and
 # `ensure` would start the legacy continuous run-loop (#2925).
 print_tick_schedule_status() {
-  [[ -f "$PLIST" ]] || return 0
-  grep -q '<string>tick</string>' "$PLIST" 2>/dev/null || return 0
+  launchd_uses_tick || return 0
   # shellcheck source=agent_ct_slot.sh
   source "$TOOLS/agent_ct_slot.sh"
   local next=""
@@ -2786,6 +2792,15 @@ PY
 schedule_ensure_after_soft_stop() {
   mkdir -p "$LOG_DIR"
   local ensure_log="$LOG_DIR/soft-stop-ensure.log"
+  # Tick install has no continuous loop to revive — soft-stop just ends the
+  # session; the next CT calendar fire starts one_run. Scheduling ensure here
+  # would flip the mini back to back-to-back agents between ticks.
+  if launchd_uses_tick && [[ "${UI_AGENT_ENSURE_FORCE:-}" != "1" ]]; then
+    {
+      echo "$(date "+%Y-%m-%dT%H:%M:%S%z") ensure: skipped (tick schedule; next CT slot starts one run)"
+    } >>"$ensure_log"
+    return 0
+  fi
   local delay="${UI_AGENT_SOFT_STOP_ENSURE_SLEEP:-2}"
   local worker="$LOG_DIR/soft-stop-ensure-worker.sh"
   {
@@ -2974,7 +2989,11 @@ run_loop() {
   trap - EXIT
   log "ui-design-agent loop stopped"
   if [[ "$soft_stopped" -eq 1 ]]; then
-    log "soft-stop complete; scheduling ensure (skip LaunchAgent StartInterval wait)"
+    if launchd_uses_tick && [[ "${UI_AGENT_ENSURE_FORCE:-}" != "1" ]]; then
+      log "soft-stop complete; tick schedule stays idle until the next CT slot"
+    else
+      log "soft-stop complete; scheduling ensure (skip LaunchAgent StartInterval wait)"
+    fi
     schedule_ensure_after_soft_stop
   fi
 }
@@ -3166,6 +3185,10 @@ EOF
       echo "ensure: held (rm $HOLD_FILE or: $SCRIPT release-hold)"
       exit 0
     fi
+    if launchd_uses_tick && [[ "${UI_AGENT_ENSURE_FORCE:-}" != "1" ]]; then
+      echo "ensure: skipped (login item is tick schedule; use install-continuous or UI_AGENT_ENSURE_FORCE=1 to start a continuous loop)"
+      exit 0
+    fi
     if loop_is_alive; then
       # LaunchAgent StartInterval calls ensure every few minutes while the
       # loop is healthy (empty-queue sleep). Rate-limit the stdout line so
@@ -3196,11 +3219,16 @@ EOF
     one_run
     ;;
   stop|soft-stop)
-    # Soft-stop: finish the current run, exit run-loop, then schedule ensure
-    # so a fresh bash reloads structural loop changes. `kill`/`uninstall`
-    # leave the loop down.
+    # Soft-stop: finish the current run, exit run-loop. Under continuous
+    # install, schedule ensure so a fresh bash reloads structural loop
+    # changes. Under tick install, stay idle until the next CT slot.
+    # `kill`/`uninstall` leave the loop down.
     touch "$STOP_FILE"
-    echo "soft-stop requested: loop finishes the current run, then ensure restarts it"
+    if launchd_uses_tick; then
+      echo "soft-stop requested: loop finishes the current run; tick schedule stays idle until the next CT slot"
+    else
+      echo "soft-stop requested: loop finishes the current run, then ensure restarts it"
+    fi
     ;;
   soft-stop-wait)
     # Soft-stop and block until the loop is idle again. Use before filing
@@ -3227,8 +3255,16 @@ EOF
   release-hold)
     if [[ -f "$HOLD_FILE" ]]; then
       rm -f "$HOLD_FILE"
+      if launchd_uses_tick && [[ "${UI_AGENT_ENSURE_FORCE:-}" != "1" ]]; then
+        echo "release-hold: cleared; tick schedule stays idle until the next CT slot"
+        exit 0
+      fi
       echo "release-hold: cleared; starting ensure"
     else
+      if launchd_uses_tick && [[ "${UI_AGENT_ENSURE_FORCE:-}" != "1" ]]; then
+        echo "release-hold: no hold file; tick schedule stays idle until the next CT slot"
+        exit 0
+      fi
       echo "release-hold: no hold file; starting ensure"
     fi
     bash "$SCRIPT" ensure
@@ -3296,10 +3332,18 @@ PY
     fi
     if [[ -f "$PLIST" ]]; then echo "login item: installed ($LAUNCH_LABEL)"; else echo "login item: not installed ($SCRIPT install)"; fi
     if [[ -f "$STOP_FILE" ]]; then
-      echo "loop: stop requested (exits after current run; next ensure → launcher=$LAUNCHER runtime=$SDK_RUNTIME model=$(resolved_agent_model))"
+      if launchd_uses_tick; then
+        echo "loop: stop requested (exits after current run; tick schedule stays idle until next CT slot)"
+      else
+        echo "loop: stop requested (exits after current run; next ensure → launcher=$LAUNCHER runtime=$SDK_RUNTIME model=$(resolved_agent_model))"
+      fi
     fi
     if [[ -f "$HOLD_FILE" ]]; then
-      echo "loop: ensure held (release: $SCRIPT release-hold)"
+      if launchd_uses_tick; then
+        echo "loop: ensure held (release: $SCRIPT release-hold; tick stays idle)"
+      else
+        echo "loop: ensure held (release: $SCRIPT release-hold)"
+      fi
     fi
     if [[ -f "$PID_FILE" ]]; then echo "current run pid: $(cat "$PID_FILE")"; fi
     sim_lock status || true
