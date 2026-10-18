@@ -55,7 +55,10 @@ TARGETS: tuple[MotionTarget, ...] = (
         # Live post-LPT-87 id (retired lesson-01-01-03-blinds-and-button).
         # SB→BB SoftPulse lives on Small and big blinds; D-only is dealer-button.
         surface="lesson-01-01-03-02-small-and-big-blind",
-        seed="openlesson lesson-01-01-03-02-small-and-big-blind",
+        seed=(
+            "openlesson lesson-01-01-03-02-small-and-big-blind → "
+            "tap Hint → wait-gold (scaffolded SoftPulse waits for Hint)"
+        ),
         prove="multi-press SB→BB SoftPulse advances; Hint waves; no layout jump",
     ),
     MotionTarget(
