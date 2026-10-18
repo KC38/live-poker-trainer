@@ -351,9 +351,10 @@ grep -q 'login item: not installed' <<<"$status_out" \
   || fail "login item should start uninstalled: $status_out"
 
 # Idle leftover session (tmux up, run-loop dead) must be replaced by ensure.
+# No LaunchAgent yet — FORCE opts into continuous revive (tick is the default).
 rm -f "$HOME/.live-poker-trainer/ui-agent-loop.pid"
 : >"$TMUX_LOG"
-ensure_out="$(bash "$LOOP" ensure)"
+ensure_out="$(UI_AGENT_ENSURE_FORCE=1 bash "$LOOP" ensure)"
 grep -q 'replacing idle tmux session' <<<"$ensure_out$start_out$(cat "$TMUX_LOG")" \
   || grep -q 'kill-session' "$TMUX_LOG" \
   || fail "ensure must kill idle session when run-loop is dead: out=$ensure_out log=$(cat "$TMUX_LOG")"
@@ -434,6 +435,12 @@ bash "$LOOP" uninstall >/dev/null
 [[ ! -f "$plist" ]] || fail "uninstall should remove the plist"
 grep -q 'login item: not installed' <<<"$(bash "$LOOP" status)" \
   || fail "status should clear the login item"
+# Wiped LaunchAgent must not resurrect continuous (2026-10-18 health ensure).
+no_plist_ensure="$(bash "$LOOP" ensure)"
+grep -q 'ensure: skipped (no LaunchAgent' <<<"$no_plist_ensure" \
+  || fail "ensure with no plist must skip continuous: $no_plist_ensure"
+! grep -q 'ensure: starting loop' <<<"$no_plist_ensure" \
+  || fail "ensure with no plist must not start loop: $no_plist_ensure"
 
 # Session-log backfill + health reconcile (TTY log often empty).
 export UI_AGENT_LOOP_SOURCE_ONLY=1

@@ -509,6 +509,26 @@ class UiQueueStatsTest(unittest.TestCase):
         )
 
 
+class TransitionCliTest(unittest.TestCase):
+    """``transition KEY Done`` must work without ``--to`` (2026-10-18 closeout)."""
+
+    def test_positional_status_transitions(self) -> None:
+        with mock.patch.object(jira, "transition", return_value="Done") as move:
+            code = jira.main(["transition", "LPT-1029", "Done"])
+        self.assertEqual(code, 0)
+        move.assert_called_once_with("LPT-1029", "Done")
+
+    def test_to_flag_still_works(self) -> None:
+        with mock.patch.object(jira, "transition", return_value="Done") as move:
+            code = jira.main(["transition", "LPT-1029", "--to", "Done"])
+        self.assertEqual(code, 0)
+        move.assert_called_once_with("LPT-1029", "Done")
+
+    def test_missing_status_exits_nonzero(self) -> None:
+        code = jira.main(["transition", "LPT-1029"])
+        self.assertEqual(code, 1)
+
+
 class RequestFailureTest(unittest.TestCase):
     """HTTP and network failures become JiraError text the agent can read."""
 
