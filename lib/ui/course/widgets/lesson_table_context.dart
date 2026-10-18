@@ -9168,7 +9168,9 @@ class LessonTableContext extends StatelessWidget {
   Widget _buildLabelModelOutcomes() {
     return _buildOutcomePhases(
       semanticsInteractive:
-          'Interactive label model — tap working model or permanent verdict',
+          // SoftPulse-quiet densify: never name Working model in Semantics
+          // (LPT-1030; coach spoil was LPT-817).
+          'Interactive label model — tap a verdict',
       semanticsStatic: 'Label model outcomes',
       caption: scene.caption ?? 'Update the label as samples change',
       // SoftPulse + Rex own the cue — one gold Working model only (LPT-424).
@@ -9490,7 +9492,8 @@ class LessonTableContext extends StatelessWidget {
   Widget _buildMeetNitModelOutcomes() {
     return _buildOutcomePhases(
       semanticsInteractive:
-          'Interactive label model — tap working model or insult',
+          // SoftPulse-quiet densify: never name Working model (LPT-1030).
+          'Interactive label model — tap a verdict',
       semanticsStatic: 'Nit model outcomes',
       caption: scene.caption ?? 'How to treat the Nit label',
       // SoftPulse + Rex own the cue — one gold Working model only (LPT-440).
@@ -12403,7 +12406,8 @@ class LessonTableContext extends StatelessWidget {
   Widget _buildMeetTagModelOutcomes() {
     return _buildOutcomePhases(
       semanticsInteractive:
-          'Interactive label model — tap working model or insult',
+          // SoftPulse-quiet densify: never name Working model (LPT-1030).
+          'Interactive label model — tap a verdict',
       semanticsStatic: 'TAG model outcomes',
       caption: scene.caption ?? 'How to treat the TAG label',
       // SoftPulse + Rex own the cue — don’t gold-tip Working model.

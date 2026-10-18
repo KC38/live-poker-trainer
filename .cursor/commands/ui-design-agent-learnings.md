@@ -365,7 +365,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `assessmentRole` checkpoint / jump_test densify asks as a SoftPulse paint
   bug when `teachSpec.cues` use `kind: none` — assessments never SoftPulse
   and Hint stays off on purpose (SoftPulse would spoil the answer); close
-  as intentional (LPT-653). Hunt SoftPulse-quiet densify spoils with live
+  as intentional (LPT-653).   Hunt SoftPulse-quiet densify spoils with live
   SoftPulse:none + Hint enabled + coach naming a choice tile — not only
   `kind: none` / `ui_densify_spoil_scan list` (scaffolded SoftPulse-after-Hint
   stems missing a SoftPulse-quiet comment are invisible to quiet-only scans;
@@ -373,6 +373,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   stems that embed an exact choice label (e.g. **55bb** among 55bb /
   120bb / 175bb) are still spoils — LPT-787-style situation numbers are
   OK only when they are not the tile text itself (LPT-877 jump-stack).
+  Also read densify stage Semantics on SoftPulse-off (`tree` parent label) —
+  coach can be clean while `semanticsInteractive` still says
+  `tap working model or…` (LPT-1030; LPT-817 covered coach only).
   - Prefer reading SoftPulse-quiet densify **dock Material fills** (Raise/Open gold vs Limp muted) when SoftPulse is none — coach stem can be clean while OPEN TO 6 gold-fills the answer (LPT-1013; LPT-879 was identify-only).
 On SoftPulse-off identify docks (`identifyUnavailable`), also Read the
   dock chrome — Raise/Bet gold fill with muted Check/Call spoils even when
