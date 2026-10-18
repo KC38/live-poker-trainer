@@ -207,6 +207,87 @@ void main() {
 
       expect(controller.draft.orderedIds, isEmpty);
       expect(misses, isNotEmpty);
+      expect(
+        misses.first,
+        contains('SoftPulse marks'),
+      );
+    },
+  );
+
+  testWidgets(
+    'jump ranks SoftPulse-off miss copy does not mention SoftPulse (LPT-1028)',
+    (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      final activity = CourseActivity(
+        id: 'act-01-06-02-jump-ranks',
+        order: 1,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.jumpTest,
+        renderer: ActivityRenderer.compareRank,
+        estimatedSeconds: 40,
+        accessibilityText:
+            'Jump test: tap showdown seats strongest to weakest.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Tap the hands from strongest to weakest.',
+        sequenceItems: const [
+          CourseChoice(id: 'you', label: 'You'),
+          CourseChoice(id: 'sam', label: 'Sam'),
+          CourseChoice(id: 'jo', label: 'Jo'),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      addTearDown(controller.dispose);
+      final misses = <String>[];
+
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(
+            theme: buildPokerTheme().copyWith(
+              splashFactory: NoSplash.splashFactory,
+              highlightColor: Colors.transparent,
+            ),
+            home: Scaffold(
+              body: TableFeaturesScope(
+                features: TableFeatures.forLessonId(
+                  'lesson-01-06-02-section-one-jump',
+                ),
+                child: LessonFrameScope(
+                  onLocalMiss: misses.add,
+                  child: CompareRankActivity(
+                    activity: activity,
+                    controller: controller,
+                    showGuidance: false,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      final table = tester.widget<LessonShowdownOrderTable>(
+        find.byType(LessonShowdownOrderTable),
+      );
+      expect(table.strictOrder, isTrue);
+      expect(table.showGuidance, isFalse);
+      final nextId = table.spot.correctOrder.first;
+      final wrongId = table.spot.correctOrder.firstWhere((id) => id != nextId);
+      final wrongSeat = table.spot.seatIds.indexOf(wrongId);
+      final wrongKey = wrongSeat == 0
+          ? const ValueKey<String>('lesson-seat-hero')
+          : ValueKey<String>('lesson-seat-$wrongSeat');
+
+      await tester.tap(find.byKey(wrongKey));
+      await tester.pump();
+
+      expect(controller.draft.orderedIds, isEmpty);
+      expect(misses, isNotEmpty);
+      expect(misses.first, isNot(contains('SoftPulse')));
+      expect(misses.first, contains('strongest to weakest'));
     },
   );
 }
