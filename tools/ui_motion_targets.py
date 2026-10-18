@@ -153,7 +153,14 @@ LEAD_TOKENS: dict[str, tuple[str, ...]] = {
     "hearts-breathe": ("hearts-breathe", "hearts-0", "hearts-zero"),
     "lesson-result-ceremony": ("lesson-result-ceremony", "lesson-result"),
     "section-end-ceremony": ("section-end-ceremony", "section-end"),
-    "pot-and-stacks": ("pot-and-stacks", "felt-pot-stacks"),
+    # Agents write "pot-stacks OK" (LPT-1027) — hyphen collapse alone yields
+    # "pot stacks", which does not match normalized "pot and stacks".
+    "pot-and-stacks": (
+        "pot-and-stacks",
+        "felt-pot-stacks",
+        "pot-stacks",
+        "pot stacks",
+    ),
     "coach-transition": ("coach-transition", "coach-mood"),
 }
 
