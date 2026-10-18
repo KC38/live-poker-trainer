@@ -248,13 +248,15 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `python3 tools/agent_tap.py wait-gold` after `openlesson` / deal settle
   (and wait for Nice! after the last explain tap) before taps or validated
   shots — early taps nomatch Home (LPT-79/97). When the timeout says Hint is
-  enabled with SoftPulse off, tap Hint then `wait-gold` again — blinds
-  scaffolded SoftPulse waits for Hint (LPT-73); bare wait-gold after
-  openlesson burns ~45s (20261018-073008). Acting order explain can take
-  ~7s before `gold SoftPulse:` names UTG; do not file SoftPulse-off from a
-  1–2s tree (LPT-147). Hero hole SoftPulse under seat Semantics needs
-  `agentGlowOf` descendant walk — paint-without-tree-gold was LPT-840, not
-  SoftPulse-off.
+  enabled with SoftPulse off, confirm Hint in `tree` before tapping — jump_test
+  SoftPulse-off can print that tip while Hint is disabled (LPT-1028); else tap
+  Hint then `wait-gold` again — blinds scaffolded SoftPulse waits for Hint
+  (LPT-73); bare wait-gold after openlesson burns ~45s (20261018-073008).
+  SoftPulse-off showdown Oops that says SoftPulse marks is a coach bug
+  (LPT-1028). Acting order explain can take ~7s before `gold SoftPulse:` names
+  UTG; do not file SoftPulse-off from a 1–2s tree (LPT-147). Hero hole SoftPulse
+  under seat Semantics needs `agentGlowOf` descendant walk —
+  paint-without-tree-gold was LPT-840, not SoftPulse-off.
 - Prefer adopting `sim_lock_run_id` from
   `~/.live-poker-trainer/ui-agent-handoff.json` (then
   `simulator-lock.json`) when `$SIM_LOCK_RUN_ID` is unset in a
