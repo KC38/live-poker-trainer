@@ -129,11 +129,19 @@ DEFAULT_COVERAGE = Path.home() / ".live-poker-trainer" / "ui-agent-coverage.json
 # Short tokens agents put in coverage ``--lead`` prose when they walk a
 # motion target during a densify lesson (surface stays the lesson slug).
 LEAD_TOKENS: dict[str, tuple[str, ...]] = {
-    "deal-your-two-cards": ("deal-your-two-cards", "deal-your-two"),
+    # Agents write "your two cards OK" without the motion id hyphenation.
+    "deal-your-two-cards": (
+        "deal-your-two-cards",
+        "deal-your-two",
+        "your two cards",
+        "your-two-cards",
+    ),
     "deal-blinds-button": (
         "deal-blinds-button",
         "blinds-and-button",
         "small-and-big-blind",
+        "deal blinds",
+        "blinds softpulse",
         "sb→bb",
         "sb->bb",
     ),

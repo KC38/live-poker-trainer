@@ -80,8 +80,16 @@ from pathlib import Path
 import sys
 path = Path(sys.argv[1])
 text = path.read_text(encoding="utf-8")
-old = "after openlesson use agent_tap.py wait-gold before taps"
-new = "after openlesson use agent_tap.py wait-gold UNIQUE_RELOAD before taps"
+old = (
+    "after openlesson use agent_tap.py wait-gold before taps "
+    "(if timeout says Hint enabled with SoftPulse off, tap Hint then "
+    "wait-gold again — blinds SoftPulse waits for Hint)"
+)
+new = (
+    "after openlesson use agent_tap.py wait-gold UNIQUE_RELOAD before taps "
+    "(if timeout says Hint enabled with SoftPulse off, tap Hint then "
+    "wait-gold again — blinds SoftPulse waits for Hint)"
+)
 if old not in text:
     raise SystemExit(f"missing prompt needle in {path}")
 path.write_text(text.replace(old, new, 1), encoding="utf-8")
