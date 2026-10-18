@@ -134,6 +134,12 @@ class UiMotionTargetsTest(unittest.TestCase):
         )
         self.assertTrue(
             mod.lead_credits_motion(
+                "deal-blinds SB→BB SoftPulse OK on small-and-big-blind",
+                "deal-blinds-button",
+            )
+        )
+        self.assertTrue(
+            mod.lead_credits_motion(
                 "discovery: suits multi-press SoftPulse OK; hearts-0 SoftPulse "
                 "gate OK",
                 "hearts-breathe",

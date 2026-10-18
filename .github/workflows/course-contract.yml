@@ -20,6 +20,13 @@ jobs:
           npm run course:test
           npm run course:check
 
+      # LPT-1027: curriculum splits retired openlesson seeds while motion pick
+      # still pointed at them — catch that in CI, not on a discovery walk.
+      - name: Motion-target openlesson seeds match catalog
+        run: |
+          python3 tools/ui_motion_targets.py check-seeds
+          python3 tools/ui_motion_targets_test.py
+
       - uses: subosito/flutter-action@v2
         with:
           channel: stable

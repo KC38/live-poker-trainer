@@ -127,7 +127,13 @@ DEFAULT_COVERAGE = Path.home() / ".live-poker-trainer" / "ui-agent-coverage.json
 # motion target during a densify lesson (surface stays the lesson slug).
 LEAD_TOKENS: dict[str, tuple[str, ...]] = {
     "deal-your-two-cards": ("deal-your-two-cards", "deal-your-two"),
-    "deal-blinds-button": ("deal-blinds-button", "blinds-and-button"),
+    "deal-blinds-button": (
+        "deal-blinds-button",
+        "blinds-and-button",
+        "small-and-big-blind",
+        "sb→bb",
+        "sb->bb",
+    ),
     # Agents write "suits multi-press SoftPulse OK" (LPT-1015 coverage).
     "multi-press-suits": (
         "multi-press-suits",
