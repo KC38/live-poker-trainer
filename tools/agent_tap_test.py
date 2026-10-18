@@ -161,6 +161,42 @@ class AgentTapWaitGoldTest(unittest.TestCase):
                 tree_fn=lambda: {"gold": ["BTN"]},
             )
         self.assertIn("no gold SoftPulse", str(ctx.exception))
+        self.assertNotIn("tap Hint then wait-gold", str(ctx.exception))
+
+    def test_hint_may_unlock_softpulse(self) -> None:
+        self.assertFalse(
+            agent_tap.hint_may_unlock_softpulse({"gold": ["SB"], "entries": []})
+        )
+        self.assertFalse(
+            agent_tap.hint_may_unlock_softpulse({"gold": [], "entries": []})
+        )
+        self.assertTrue(
+            agent_tap.hint_may_unlock_softpulse(
+                {
+                    "gold": [],
+                    "entries": [
+                        {"label": "Hint", "tap": "tap", "rect": [0, 0, 1, 1]},
+                    ],
+                }
+            )
+        )
+
+    def test_wait_gold_timeout_hints_when_hint_enabled(self) -> None:
+        with self.assertRaises(SystemExit) as ctx:
+            agent_tap.wait_gold(
+                timeout=0.05,
+                poll=0.01,
+                tree_fn=lambda: {
+                    "gold": [],
+                    "entries": [
+                        {"label": "Hint", "tap": "tap", "rect": [0, 0, 1, 1]},
+                        {"label": "SB", "rect": [0, 0, 1, 1]},
+                    ],
+                },
+            )
+        msg = str(ctx.exception)
+        self.assertIn("no gold SoftPulse", msg)
+        self.assertIn("tap Hint then wait-gold again", msg)
 
 
 if __name__ == "__main__":

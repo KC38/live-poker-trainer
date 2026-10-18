@@ -152,6 +152,26 @@ def gold_ready(tree: dict[str, Any], needle: str = "") -> bool:
     return any(lowered in label.lower() for label in gold)
 
 
+def hint_may_unlock_softpulse(tree: dict[str, Any]) -> bool:
+    """True when SoftPulse is off but Hint looks tappable (Hint-gated gold).
+
+    Blinds scaffolded SoftPulse waits for Hint (LPT-73). A bare
+    ``wait-gold`` after ``openlesson`` then burns the full timeout with
+    ``gold SoftPulse: none`` while Hint stays enabled — call that out in
+    the timeout so the next tap is Hint, not SoftPulse-off filing.
+    """
+    if list(tree.get("gold") or []):
+        return False
+    for entry in tree.get("entries") or []:
+        label = str(entry.get("label") or "").strip()
+        if label.casefold() != "hint":
+            continue
+        tap = entry.get("tap")
+        if tap is None or tap is True or str(tap).strip():
+            return True
+    return False
+
+
 def wait_gold(
     log: Path | None = None,
     timeout: float = 45.0,
@@ -169,8 +189,14 @@ def wait_gold(
             return last
         time.sleep(poll)
     detail = f" matching {text!r}" if text.strip() else ""
+    hint = ""
+    if hint_may_unlock_softpulse(last):
+        hint = (
+            "; Hint is enabled with SoftPulse off — tap Hint then "
+            "wait-gold again (scaffolded SoftPulse waits for Hint)"
+        )
     raise SystemExit(
-        f"agent_tap: no gold SoftPulse within {timeout:.0f}s{detail}"
+        f"agent_tap: no gold SoftPulse within {timeout:.0f}s{detail}{hint}"
     )
 
 
