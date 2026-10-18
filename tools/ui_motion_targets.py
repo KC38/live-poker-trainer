@@ -12,6 +12,8 @@ Commands:
   pick [--coverage F]  Prefer never-walked / oldest motion surfaces from
                        ``~/.live-poker-trainer/ui-agent-coverage.jsonl``
                        (surface field, aliases, and lead OK claims).
+  check-seeds          Exit 1 if any ``openlesson`` seed is missing from
+                       ``assets/course/v2/catalog.json`` (LPT-1027).
 """
 
 from __future__ import annotations
@@ -50,9 +52,11 @@ TARGETS: tuple[MotionTarget, ...] = (
     MotionTarget(
         id="deal-blinds-button",
         motion_class="multi_frame",
-        surface="lesson-01-01-03-blinds-and-button",
-        seed="openlesson lesson-01-01-03-blinds-and-button",
-        prove="multi-press D→SB→BB SoftPulse advances; Hint waves; puck SoftPulse without layout jump",
+        # Live post-LPT-87 id (retired lesson-01-01-03-blinds-and-button).
+        # SB→BB SoftPulse lives on Small and big blinds; D-only is dealer-button.
+        surface="lesson-01-01-03-02-small-and-big-blind",
+        seed="openlesson lesson-01-01-03-02-small-and-big-blind",
+        prove="multi-press SB→BB SoftPulse advances; Hint waves; no layout jump",
     ),
     MotionTarget(
         id="multi-press-suits",
@@ -64,8 +68,9 @@ TARGETS: tuple[MotionTarget, ...] = (
     MotionTarget(
         id="multi-press-best-five",
         motion_class="multi_frame",
-        surface="lesson-01-02-02-best-five-kickers",
-        seed="openlesson lesson-01-02-02-best-five-kickers",
+        # Live post-LPT-93 id (retired lesson-01-02-02-best-five-kickers).
+        surface="lesson-01-02-02-01-best-five",
+        seed="openlesson lesson-01-02-02-01-best-five",
         prove="playOrder / checkpoint SoftPulse sequence; Hint disabled while gold on",
     ),
     MotionTarget(
@@ -148,10 +153,10 @@ SURFACE_ALIASES: dict[str, tuple[str, ...]] = {
         "lesson-01-01-01-your-two-cards",
         "lesson-runner:your-two-cards",
     ),
-    "lesson-01-01-03-blinds-and-button": (
-        "lesson-01-01-03-blinds-and-button",
-        "lesson-01-01-03-01-dealer-button",
+    "lesson-01-01-03-02-small-and-big-blind": (
         "lesson-01-01-03-02-small-and-big-blind",
+        "lesson-01-01-03-blinds-and-button",  # retired pre-split alias
+        "lesson-01-01-03-01-dealer-button",
         "lesson-blind-labels",
         "lesson-button-and-blinds",
         "lesson-runner:blinds-and-button",
@@ -160,9 +165,9 @@ SURFACE_ALIASES: dict[str, tuple[str, ...]] = {
         "lesson-01-01-02-01-suits",
         "lesson-runner:suits",
     ),
-    "lesson-01-02-02-best-five-kickers": (
-        "lesson-01-02-02-best-five-kickers",
+    "lesson-01-02-02-01-best-five": (
         "lesson-01-02-02-01-best-five",
+        "lesson-01-02-02-best-five-kickers",  # retired pre-split alias
         "lesson-best-five-checkpoint-build",
         "lesson-runner:best-five-kickers",
     ),
@@ -205,6 +210,57 @@ CLASSES = {
         "Film from before motion starts until settled."
     ),
 }
+
+# Repo-root relative path to the shipped course catalog (LPT-1027).
+_DEFAULT_CATALOG = (
+    Path(__file__).resolve().parent.parent / "assets" / "course" / "v2" / "catalog.json"
+)
+_OPENLESSON_SEED_RE = re.compile(
+    r"(?:^|\s)(?:openlesson|agent_seed\s+openlesson)\s+(lesson-[\w-]+)",
+    re.IGNORECASE,
+)
+
+
+def catalog_lesson_ids(catalog_path: Path | None = None) -> frozenset[str]:
+    """Return every ``lesson-…`` id in the course catalog JSON."""
+    path = catalog_path or _DEFAULT_CATALOG
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    found: set[str] = set()
+
+    def walk(node: object) -> None:
+        if isinstance(node, dict):
+            raw = node.get("id")
+            if isinstance(raw, str) and raw.startswith("lesson-"):
+                found.add(raw)
+            for value in node.values():
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+
+    walk(payload)
+    return frozenset(found)
+
+
+def openlesson_seed_ids(
+    targets: tuple[MotionTarget, ...] = TARGETS,
+) -> list[str]:
+    """Lesson ids embedded in ``openlesson …`` seeds (skips prose-only seeds)."""
+    ids: list[str] = []
+    for target in targets:
+        match = _OPENLESSON_SEED_RE.search(target.seed)
+        if match:
+            ids.append(match.group(1))
+    return ids
+
+
+def missing_openlesson_seeds(
+    targets: tuple[MotionTarget, ...] = TARGETS,
+    catalog_path: Path | None = None,
+) -> list[str]:
+    """Return openlesson seed ids absent from the catalog (should be empty)."""
+    catalog = catalog_lesson_ids(catalog_path)
+    return [lesson_id for lesson_id in openlesson_seed_ids(targets) if lesson_id not in catalog]
 
 
 def _parse_at(raw: str) -> datetime:
@@ -373,6 +429,20 @@ def cmd_pick(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_check_seeds(args: argparse.Namespace) -> int:
+    """Exit 1 when any openlesson seed is missing from the catalog (LPT-1027)."""
+    catalog = Path(args.catalog).expanduser() if args.catalog else _DEFAULT_CATALOG
+    missing = missing_openlesson_seeds(catalog_path=catalog)
+    if missing:
+        print(
+            "missing openlesson seeds in catalog: " + ", ".join(missing),
+            file=sys.stderr,
+        )
+        return 1
+    print("ok: all openlesson motion-target seeds exist in catalog")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     """CLI parser."""
     parser = argparse.ArgumentParser(
@@ -392,6 +462,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_pick.add_argument("--limit", type=int, default=3, help="how many to print")
     p_pick.set_defaults(func=cmd_pick)
+    p_check = sub.add_parser(
+        "check-seeds",
+        help="fail if openlesson seeds are missing from catalog.json",
+    )
+    p_check.add_argument(
+        "--catalog",
+        default=str(_DEFAULT_CATALOG),
+        help="path to assets/course/v2/catalog.json",
+    )
+    p_check.set_defaults(func=cmd_check_seeds)
     return parser
 
 

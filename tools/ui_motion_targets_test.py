@@ -55,7 +55,7 @@ class UiMotionTargetsTest(unittest.TestCase):
         """Sibling lesson/runner surfaces count as a walk for the motion id."""
         with tempfile.TemporaryDirectory() as tmp:
             cov = Path(tmp) / "coverage.jsonl"
-            # Exact canonical never logged — only the densify ticket surface.
+            # Canonical live id logged — retired pre-split alias still credited.
             row = {
                 "at": datetime(2026, 10, 15, tzinfo=timezone.utc).isoformat(),
                 "surface": "lesson-01-02-02-01-best-five",
@@ -66,15 +66,49 @@ class UiMotionTargetsTest(unittest.TestCase):
             picked = mod.pick_targets(coverage_path=cov, limit=10)
             surfaces = [t.surface for t in picked]
             self.assertNotIn(
-                "lesson-01-02-02-best-five-kickers",
+                "lesson-01-02-02-01-best-five",
                 surfaces[:3],
-                "alias walk should demote best-five below never-walked picks",
+                "live-id walk should demote best-five below never-walked picks",
             )
             walked_at = mod.last_walk_for_surface(
                 mod.last_walk_by_surface(mod.load_coverage(cov)),
-                "lesson-01-02-02-best-five-kickers",
+                "lesson-01-02-02-01-best-five",
             )
             self.assertIsNotNone(walked_at)
+            # Retired pre-split coverage surface still credits the live target.
+            retired = {
+                "at": datetime(2026, 10, 14, tzinfo=timezone.utc).isoformat(),
+                "surface": "lesson-01-01-03-blinds-and-button",
+                "result": "closed",
+            }
+            cov.write_text(
+                json.dumps(row) + "\n" + json.dumps(retired) + "\n",
+                encoding="utf-8",
+            )
+            blinds_at = mod.last_walk_for_surface(
+                mod.last_walk_by_surface(mod.load_coverage(cov)),
+                "lesson-01-01-03-02-small-and-big-blind",
+            )
+            self.assertIsNotNone(blinds_at)
+
+    def test_openlesson_seeds_exist_in_catalog(self) -> None:
+        """Every openlesson seed must resolve in assets/course/v2/catalog.json."""
+        missing = mod.missing_openlesson_seeds()
+        self.assertEqual(
+            missing,
+            [],
+            f"stale motion-target openlesson seeds: {missing}",
+        )
+        self.assertEqual(mod.main(["check-seeds"]), 0)
+        by_id = {t.id: t for t in mod.TARGETS}
+        self.assertEqual(
+            by_id["multi-press-best-five"].surface,
+            "lesson-01-02-02-01-best-five",
+        )
+        self.assertEqual(
+            by_id["deal-blinds-button"].surface,
+            "lesson-01-01-03-02-small-and-big-blind",
+        )
 
     def test_lead_ok_credits_motion_without_surface(self) -> None:
         """Densify surface + lead OK list demotes those motion ids in pick."""
