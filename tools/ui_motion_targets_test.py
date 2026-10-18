@@ -138,6 +138,19 @@ class UiMotionTargetsTest(unittest.TestCase):
                 "deal-blinds-button",
             )
         )
+        # LPT-1027 wrote "pot-stacks OK" without the "and".
+        self.assertTrue(
+            mod.lead_credits_motion(
+                "section-end SoftPulse breathe pot-stacks OK on walk",
+                "pot-and-stacks",
+            )
+        )
+        self.assertTrue(
+            mod.lead_credits_motion(
+                "pot - stacks OK on walk",
+                "pot-and-stacks",
+            )
+        )
         self.assertTrue(
             mod.lead_credits_motion(
                 "discovery: suits multi-press SoftPulse OK; hearts-0 SoftPulse "
