@@ -1013,30 +1013,71 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     final controller = _activityController;
     final attempt = _attempt;
     if (controller == null || attempt == null) return;
-    controller.presentLocalMiss(
-      alignLessonActionSubmitResult(
-        activity: controller.activity,
-        generation: controller.bindGeneration,
-        result: SubmitCourseStepResult(
+    // Match server evaluateLifeAndAcceptance: guided SoftPulse teaching is a
+    // free miss; scaffolded / unguided / checkpoint / jump_test still spend
+    // (LPT-59). Local showdown-order Oops used to hardcode lifeLost:false so
+    // jump ranks never emptied a heart (LPT-1029).
+    final lifeLost = localMissSpendsHeart(controller.activity.stage);
+    final livesRemaining =
+        lifeLost
+            ? (attempt.livesRemaining - 1).clamp(0, attempt.livesMax)
+            : attempt.livesRemaining;
+    final result = alignLessonActionSubmitResult(
+      activity: controller.activity,
+      generation: controller.bindGeneration,
+      result: SubmitCourseStepResult(
+        attemptId: attempt.attemptId,
+        activityId: controller.activity.id,
+        grade: SoftGrade.clearMistake,
+        feedback: feedback,
+        accepted: false,
+        lifeLost: lifeLost,
+        livesRemaining: livesRemaining,
+        xpAwarded: 0,
+        remediationRequired: false,
+        resume: CourseResumePointer(
           attemptId: attempt.attemptId,
+          lessonId: attempt.lessonId,
           activityId: controller.activity.id,
-          grade: SoftGrade.clearMistake,
-          feedback: feedback,
-          accepted: false,
-          lifeLost: false,
-          livesRemaining: attempt.livesRemaining,
-          xpAwarded: 0,
-          remediationRequired: false,
-          resume: CourseResumePointer(
-            attemptId: attempt.attemptId,
-            lessonId: attempt.lessonId,
-            activityId: controller.activity.id,
-            activityIndex: attempt.activityIndex,
-          ),
-          duplicate: false,
+          activityIndex: attempt.activityIndex,
         ),
+        duplicate: false,
       ),
     );
+    controller.presentLocalMiss(result);
+    setState(() {
+      _attempt = CourseAttemptSnapshot(
+        attemptId: attempt.attemptId,
+        lessonId: attempt.lessonId,
+        catalogVersion: attempt.catalogVersion,
+        status: attempt.status,
+        activityIndex: attempt.activityIndex,
+        currentActivityId: attempt.currentActivityId,
+        livesRemaining: livesRemaining,
+        livesMax: attempt.livesMax,
+        acceptedCount: attempt.acceptedCount,
+        scoredCount: attempt.scoredCount,
+        stepCount: attempt.stepCount,
+        jumpTestPassed: attempt.jumpTestPassed,
+      );
+    });
+    if (lifeLost) {
+      final analytics = ref.read(analyticsServiceProvider);
+      unawaited(
+        analytics.logLifeLost(
+          lessonId: attempt.lessonId,
+          activityId: controller.activity.id,
+          livesRemaining: livesRemaining,
+        ),
+      );
+      _syncReadyHomeHearts(result);
+      if (livesRemaining <= 0) {
+        _armPassiveHeartResync(livesNextRefillAtMs: result.livesNextRefillAtMs);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) unawaited(_promptHeartRefill());
+        });
+      }
+    }
   }
 
   String _frameSpeech(LessonActivityController controller) {
@@ -1954,6 +1995,15 @@ String _gradeWire(SoftGrade grade) {
     SoftGrade.clearMistake => 'clear_mistake',
   };
 }
+
+/// Whether a device-local Oops (`onLocalMiss`) spends a heart.
+///
+/// Mirrors `evaluateLifeAndAcceptance` in `functions/src/course_session.ts`:
+/// guided SoftPulse teaching is free; every other stage spends (LPT-59 /
+/// LPT-1029 jump ranks showdown-order local miss).
+@visibleForTesting
+bool localMissSpendsHeart(ActivityStage stage) =>
+    stage != ActivityStage.guided;
 
 String _stageWire(ActivityStage stage) {
   return switch (stage) {
