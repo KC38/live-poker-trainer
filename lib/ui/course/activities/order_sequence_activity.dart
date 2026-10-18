@@ -281,9 +281,13 @@ class OrderSequenceActivity extends StatelessWidget {
             showGuidance: showGuidance,
             strictOrder: true,
             onMiss: () {
+              // SoftPulse-off jump/checkpoint (kind: none) and SoftPulse-quiet
+              // densify must not tell the learner to follow SoftPulse (LPT-1028).
               LessonFrameScope.maybeOf(context)?.onLocalMiss(
-                'Tap seats in hand-strength order — start with the one '
-                'SoftPulse marks.',
+                showGuidance
+                    ? 'Tap seats in hand-strength order — start with the '
+                        'one SoftPulse marks.'
+                    : 'Tap seats from strongest to weakest.',
               );
             },
             onPick: (id) => appendOrderedId(
