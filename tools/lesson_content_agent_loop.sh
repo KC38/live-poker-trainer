@@ -130,6 +130,11 @@ prompt() {
 }
 
 ensure_sdk_deps() {
+  # Test hook: prove tick does not stamp the CT slot when prep fails.
+  if [[ "${CONTENT_AGENT_TICK_PREPARE_FAIL:-}" == "1" ]]; then
+    echo "tick: SDK deps failed" >&2
+    return 1
+  fi
   [[ -f "$SDK_DIR/package.json" ]] || return 1
   [[ -d "$SDK_DIR/node_modules/@cursor/sdk" ]] && return 0
   log "installing @cursor/sdk into $SDK_DIR"
@@ -600,8 +605,10 @@ EOF
       _slot="$(ct_slot_due "$CONTENT_CT_TARGETS" "$CONTENT_TICK_STAMP")" || { echo "tick: $_slot; skipping"; exit 0; }
     fi
     if [[ "${CONTENT_AGENT_TICK_DRY:-}" == "1" ]]; then echo "tick: due for slot $_slot (dry run; not starting)"; exit 0; fi
-    ct_slot_mark "$CONTENT_TICK_STAMP" "$_slot"
+    # Mark only after SDK prep succeeds so a deps failure does not burn the
+    # CT slot (dual-calendar +1h candidate can still fire).
     if [[ "$LAUNCHER" == "sdk" ]] && ! ensure_sdk_deps; then echo "tick: SDK deps failed" >&2; exit 1; fi
+    ct_slot_mark "$CONTENT_TICK_STAMP" "$_slot"
     log "tick: starting one run (CT slot $_slot)"
     one_run || log "tick: one_run exited $?"
     ;;

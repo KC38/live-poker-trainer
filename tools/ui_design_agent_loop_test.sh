@@ -371,6 +371,20 @@ on_out="$(CT_SLOT_NOW_EPOCH=1792159320 UI_AGENT_TICK_DRY=1 bash "$LOOP" tick)"
 grep -q 'due for slot 2026-10-16T09:00' <<<"$on_out" || fail "tick at 09:02 CDT must be due: $on_out"
 cst_out="$(CT_SLOT_NOW_EPOCH=1793761500 UI_AGENT_TICK_DRY=1 bash "$LOOP" tick)"
 grep -q 'due for slot 2026-11-03T21:00' <<<"$cst_out" || fail "tick at 21:05 CST must be due: $cst_out"
+# Prep failure must not stamp the slot (dual-calendar +1h can still retry).
+rm -f "$HOME/.live-poker-trainer/ui-agent-tick-slots"
+prep_code=0
+prep_out="$(
+  CT_SLOT_NOW_EPOCH=1792159320 UI_AGENT_TICK_PREPARE_FAIL=1 bash "$LOOP" tick 2>&1
+)" || prep_code=$?
+[[ "$prep_code" -eq 1 ]] || fail "prep-fail tick should exit 1: code=$prep_code out=$prep_out"
+grep -q 'launcher prep failed' <<<"$prep_out" \
+  || fail "prep-fail tick should report deps failure: $prep_out"
+grep -q '2026-10-16T09:00' "$HOME/.live-poker-trainer/ui-agent-tick-slots" 2>/dev/null \
+  && fail "prep fail must not mark CT slot: $(cat "$HOME/.live-poker-trainer/ui-agent-tick-slots")"
+still_due="$(CT_SLOT_NOW_EPOCH=1792159320 UI_AGENT_TICK_DRY=1 bash "$LOOP" tick)"
+grep -q 'due for slot 2026-10-16T09:00' <<<"$still_due" \
+  || fail "slot must stay due after prep fail: $still_due"
 ! grep -q '<key>StartInterval</key>' "$plist" || fail "plist must not respawn every few minutes"
 grep -A0 '<key>RunAtLoad</key><false/>' "$plist" >/dev/null || fail "no RunAtLoad"
 grep -q 'ui_design_agent_loop.sh' "$plist" || fail "plist must name the loop script"
