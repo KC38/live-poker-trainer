@@ -141,6 +141,24 @@ grep -q 'due for slot 2026-11-03T03:00' <<<"$cst" || fail "tick at 03:06 CST mus
 echo 2026-10-16T15:00 >"$HOME/.live-poker-trainer/content-agent-tick-slots"
 again="$(env -u CONTENT_AGENT_LOOP_SOURCE_ONLY CT_SLOT_NOW_EPOCH=1792181040 CONTENT_AGENT_TICK_DRY=1 bash "$LOOP" tick)"
 grep -q 'already-ran' <<<"$again" || fail "second tick in a slot must skip: $again"
+# SDK deps failure must not stamp the slot.
+rm -f "$HOME/.live-poker-trainer/content-agent-tick-slots"
+prep_code=0
+prep_out="$(
+  env -u CONTENT_AGENT_LOOP_SOURCE_ONLY CT_SLOT_NOW_EPOCH=1792181040 \
+    CONTENT_AGENT_TICK_PREPARE_FAIL=1 bash "$LOOP" tick 2>&1
+)" || prep_code=$?
+[[ "$prep_code" -eq 1 ]] || fail "content prep-fail tick should exit 1: $prep_out"
+grep -q 'SDK deps failed' <<<"$prep_out" \
+  || fail "content prep-fail should report: $prep_out"
+grep -q '2026-10-16T15:00' "$HOME/.live-poker-trainer/content-agent-tick-slots" 2>/dev/null \
+  && fail "content prep fail must not mark slot"
+content_still="$(
+  env -u CONTENT_AGENT_LOOP_SOURCE_ONLY CT_SLOT_NOW_EPOCH=1792181040 \
+    CONTENT_AGENT_TICK_DRY=1 bash "$LOOP" tick
+)"
+grep -q 'due for slot 2026-10-16T15:00' <<<"$content_still" \
+  || fail "content slot must stay due after prep fail: $content_still"
 # stop writes a persistent hold; start/ensure/tick refuse until release-hold.
 env -u CONTENT_AGENT_LOOP_SOURCE_ONLY bash "$LOOP" stop >/dev/null
 [[ -f "$HOME/.live-poker-trainer/content-agent.hold" ]] || fail "stop must write the hold file"

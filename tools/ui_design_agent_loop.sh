@@ -327,6 +327,11 @@ ensure_sdk_deps() {
 # Install SDK deps before claiming the mini so the first machine/local SDK
 # run after a soft-stop or reboot does not hold the lock during npm ci.
 prepare_launcher() {
+  # Test hook: prove tick does not stamp the CT slot when prep fails.
+  if [[ "${UI_AGENT_TICK_PREPARE_FAIL:-}" == "1" ]]; then
+    echo "tick: launcher prep failed (SDK deps)" >&2
+    return 1
+  fi
   [[ "$LAUNCHER" == "sdk" ]] || return 0
   ensure_sdk_deps
 }
@@ -3190,8 +3195,11 @@ EOF
       _slot="$(ct_slot_due "$UI_CT_TARGETS" "$UI_TICK_STAMP")" || { echo "tick: $_slot; skipping"; exit 0; }
     fi
     if [[ "${UI_AGENT_TICK_DRY:-}" == "1" ]]; then echo "tick: due for slot $_slot (dry run; not starting)"; exit 0; fi
-    ct_slot_mark "$UI_TICK_STAMP" "$_slot"
+    # Mark only after launcher prep succeeds. Stamping before prepare used to
+    # burn the CT slot (and the +1h DST candidate) when @cursor/sdk npm ci
+    # failed — no walk, and the next calendar fire said already-ran.
     if ! prepare_launcher; then echo "tick: launcher prep failed (SDK deps)" >&2; exit 1; fi
+    ct_slot_mark "$UI_TICK_STAMP" "$_slot"
     echo "$(date "+%Y-%m-%dT%H:%M:%S%z") tick: starting one run (CT slot $_slot)"
     # One CT slot is ~12h apart. A single Machine SDK status=error used to
     # burn the whole evening walk (20261017-073007). Retry once by default.
