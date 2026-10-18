@@ -3236,6 +3236,14 @@ EOF
       echo "ensure: skipped (login item is tick schedule; use install-continuous or UI_AGENT_ENSURE_FORCE=1 to start a continuous loop)"
       exit 0
     fi
+    # Missing LaunchAgent used to mean "start continuous". Health timers that
+    # run ensure then install then flipped a wiped tick install into a
+    # mid-slot discovery walk (2026-10-18). Default is twice-daily tick —
+    # refuse continuous until install-continuous or FORCE.
+    if [[ ! -f "$PLIST" ]] && [[ "${UI_AGENT_ENSURE_FORCE:-}" != "1" ]]; then
+      echo "ensure: skipped (no LaunchAgent; run: $SCRIPT install  # twice-daily tick, or install-continuous / UI_AGENT_ENSURE_FORCE=1)"
+      exit 0
+    fi
     if loop_is_alive; then
       # LaunchAgent StartInterval calls ensure every few minutes while the
       # loop is healthy (empty-queue sleep). Rate-limit the stdout line so

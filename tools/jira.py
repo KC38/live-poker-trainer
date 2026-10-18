@@ -29,6 +29,7 @@ Commands:
     repair-embeds KEY [KEY ...]     strip orphan wiki thumbs from description/comments
     transitions KEY                 id, name, and target status
     transition KEY --to STATUS      move by target status or transition name
+                                    (STATUS may also be positional: transition KEY Done)
     link --type Blocks --inward A --outward B   (A blocks B)
 """
 
@@ -799,9 +800,24 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("transitions", help="list transitions")
     p.add_argument("key")
 
-    p = sub.add_parser("transition", help="move an issue")
+    p = sub.add_parser(
+        "transition",
+        help="move an issue",
+        epilog="STATUS may be --to STATUS or a positional arg (transition KEY Done).",
+    )
     p.add_argument("key")
-    p.add_argument("--to", required=True, help="target status or transition name")
+    p.add_argument(
+        "status",
+        nargs="?",
+        default=None,
+        help="target status or transition name (alias for --to)",
+    )
+    p.add_argument(
+        "--to",
+        dest="to",
+        default=None,
+        help="target status or transition name",
+    )
 
     p = sub.add_parser("link", help="link two issues")
     p.add_argument("--type", required=True, help="Blocks, Relates, Duplicate, ...")
@@ -862,7 +878,18 @@ def main(argv: Optional[List[str]] = None) -> int:
             for item in transitions(args.key):
                 print(f"{item['id']}\t{item['name']}\t-> {item['to']['name']}")
         elif args.cmd == "transition":
-            print(f"{args.key} is now {transition(args.key, args.to)}")
+            target = args.to or args.status
+            if not target:
+                raise JiraError(
+                    "transition needs a status: "
+                    "jira.py transition KEY --to STATUS "
+                    "(or: transition KEY STATUS)"
+                )
+            if args.to and args.status and args.to != args.status:
+                raise JiraError(
+                    f"conflicting status args: positional '{args.status}' vs --to '{args.to}'"
+                )
+            print(f"{args.key} is now {transition(args.key, target)}")
         elif args.cmd == "link":
             link(args.type, args.inward, args.outward)
             print(f"linked {args.inward} {args.type} {args.outward}")
