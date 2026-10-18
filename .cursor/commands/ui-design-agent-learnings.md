@@ -111,10 +111,14 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   missing. Prefer `tester.element(finder)` / `tester.state<State>` over
   `tester.state<DealtCardReveal>` (needs a `State` subtype; LPT-97). Prefer `tester.pump` (not `pumpAndSettle`) after opening `HeartRefillSheet` — its 1s `Timer.periodic` never settles (LPT-1008).
 - Prefer `openlesson` with the catalog id from `course_catalog` / `rg`
-  (`lesson-01-02-02-best-five-kickers`), not the Home title and not a
-  guessed `01-01-0N` from ledger order — both yield "Unknown lesson".
-  Button and blinds is `lesson-01-01-03-blinds-and-button` (not
-  `…-button-and-blinds`). Prefer post-split ids in runner tests too
+  (`lesson-01-02-02-01-best-five`, not retired `…-best-five-kickers`), not
+  the Home title and not a guessed `01-01-0N` from ledger order — both yield
+  "Unknown lesson". Small and big blinds SoftPulse is
+  `lesson-01-01-03-02-small-and-big-blind` (not retired
+  `…-blinds-and-button` / `…-button-and-blinds`). Motion targets
+  `multi-press-best-five` / `deal-blinds-button` must seed those live ids —
+  run `python3 tools/ui_motion_targets.py check-seeds` after catalog splits
+  (LPT-1027). Prefer post-split ids in runner tests too
   (`lesson-01-01-02-01-suits`, not retired `…-suits-and-ranks`) or
   Unknown lesson masks start-gate assertions (LPT-872).
 - Prefer copying gitignored `lib/firebase_options.dart` (and iOS/Android
