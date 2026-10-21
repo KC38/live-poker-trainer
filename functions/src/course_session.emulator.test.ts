@@ -483,7 +483,7 @@ describe("course session integration", () => {
     const steps: Array<Record<string, unknown>> = [
       {activityId: "act-04-10-02-jump-range", choiceId: "j4-range"},
       {activityId: "act-04-10-02-jump-3bet", choiceId: "j4-3bet"},
-      {activityId: "act-04-10-02-jump-spr", numericValue: 4},
+      {activityId: "act-04-10-02-jump-spr", choiceId: "spr-4"},
       {activityId: "act-04-10-02-jump-size", choiceId: "j4-10"},
       {activityId: "act-04-10-02-jump-station", choiceId: "j4-cs"},
       {activityId: "act-04-10-02-jump-nit", choiceId: "j4-nit"},
@@ -542,7 +542,7 @@ describe("course session integration", () => {
     const steps: Array<Record<string, unknown>> = [
       {activityId: "act-04-10-02-jump-range", choiceId: "j4-range"},
       {activityId: "act-04-10-02-jump-3bet", choiceId: "j4-3bet"},
-      {activityId: "act-04-10-02-jump-spr", numericValue: 4},
+      {activityId: "act-04-10-02-jump-spr", choiceId: "spr-4"},
       {activityId: "act-04-10-02-jump-size", choiceId: "j4-10"},
       {activityId: "act-04-10-02-jump-station", choiceId: "j4-cs"},
       {activityId: "act-04-10-02-jump-nit", choiceId: "j4-nit"},
