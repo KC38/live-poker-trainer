@@ -129,6 +129,17 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
 
   AuthService get _auth => _ref.read(authServiceProvider);
 
+  /// True while [ensureAnonymousSession] is creating a guest.
+  ///
+  /// AppRoot runs [reconcileGuestInstall] as soon as the new uid reaches the
+  /// auth stream, before this install has claimed it. Without this guard the
+  /// fresh guest looks like a previous install's user and is signed out
+  /// mid-start, so every users/{uid} read is permission-denied.
+  bool _creatingGuest = false;
+
+  /// Anonymous uid this process created. Never from a previous install.
+  String? _createdGuestUid;
+
   /// Ensures the cloud user doc exists, then invalidates [userDocProvider].
   ///
   /// When [seedLocalPreferences] is true (registration), a brand-new doc is
@@ -194,9 +205,16 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
       return existing;
     }
     state = const AsyncValue.loading();
+    _creatingGuest = true;
     try {
-      final user = await _auth.signInAnonymously();
-      await _claimGuestInstall(user.uid);
+      final User user;
+      try {
+        user = await _auth.signInAnonymously();
+        _createdGuestUid = user.uid;
+        await _claimGuestInstall(user.uid);
+      } finally {
+        _creatingGuest = false;
+      }
       final repo = _ref.read(userRepositoryProvider);
       try {
         await repo
@@ -239,6 +257,8 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     await markGuestInstallGeneration(prefs);
     final user = _auth.currentUser;
     if (user == null || !user.isAnonymous) return;
+    // A guest created by this process is ours even before the claim lands.
+    if (_creatingGuest || user.uid == _createdGuestUid) return;
     final draft = prefs.getString(onboardingDraftPrefsKey);
     final action = guestInstallAction(
       anonymous: true,
