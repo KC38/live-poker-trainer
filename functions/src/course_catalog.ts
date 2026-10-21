@@ -202,6 +202,33 @@ export function lessonRequiresPlacementFlag(lesson: CourseLesson): boolean {
 }
 
 /**
+ * Placement credit for a passed jump test.
+ *
+ * A jump test places the learner at the start of the section it belongs to:
+ * every lesson in the earlier sections (bank order) counts as completed, so
+ * Home unlocks that section and lands on its first lesson instead of
+ * Section 1, Unit 1. The jump test itself is recorded by the caller. Returns
+ * an empty list for non-jump lessons and unknown ids.
+ */
+export function jumpTestPlacementCreditLessonIds(
+  lessonId: string,
+  bank: CourseBank = courseBank,
+): string[] {
+  const located = findLesson(lessonId, bank);
+  if (!located || !lessonRequiresPlacementFlag(located.lesson)) return [];
+  const ids: string[] = [];
+  for (const section of bank.sections) {
+    if (section.id === located.section.id) break;
+    for (const unit of section.units) {
+      for (const lesson of unit.lessons) {
+        ids.push(lesson.id);
+      }
+    }
+  }
+  return ids;
+}
+
+/**
  * Section whose validated jump-test completion grants unrestricted Live
  * Training. Content waves publish the actual jump node; Plan 10 enforces the
  * entitlement at Live callables.
