@@ -29,6 +29,7 @@ import {
   isLessonAttemptReadyToComplete,
   lessonAttemptAcceptedAccuracy,
   lessonXpTotal,
+  missingStartPrerequisite,
   localDateString,
   parseCourseFlags,
   profileLivesFromData,
@@ -1155,5 +1156,37 @@ describe("multi-step activity advance", () => {
         accepted: true,
       }),
     ).toBe(true);
+  });
+});
+
+describe("missingStartPrerequisite (deep-link lock)", () => {
+  const splitMap = courseBank.lessonSplitMap;
+
+  it("lets a fresh profile start the section 4 jump test", () => {
+    const jump = findLesson("lesson-04-10-02-section-four-jump-test")!;
+    expect(jump.lesson.prerequisites.length).toBeGreaterThan(0);
+    expect(missingStartPrerequisite({
+      prerequisites: jump.lesson.prerequisites,
+      requiresPlacement: lessonRequiresPlacementFlag(jump.lesson),
+      completedLessonIds: [],
+      lessonSplitMap: splitMap,
+    })).toBeUndefined();
+  });
+
+  it("still locks a normal lesson whose prerequisite is missing", () => {
+    const located = findLesson("lesson-04-10-01-02-combine-factors")!;
+    expect(lessonRequiresPlacementFlag(located.lesson)).toBe(false);
+    expect(missingStartPrerequisite({
+      prerequisites: located.lesson.prerequisites,
+      requiresPlacement: false,
+      completedLessonIds: [],
+      lessonSplitMap: splitMap,
+    })).toBe(located.lesson.prerequisites[0]);
+    expect(missingStartPrerequisite({
+      prerequisites: located.lesson.prerequisites,
+      requiresPlacement: false,
+      completedLessonIds: [...located.lesson.prerequisites],
+      lessonSplitMap: splitMap,
+    })).toBeUndefined();
   });
 });

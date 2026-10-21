@@ -875,13 +875,12 @@ export async function startCourseLessonForUser(options: {
       lessonId,
       courseBank.lessonSplitMap,
     );
-    const missingPrereq = located.lesson.prerequisites.find(
-      (prereqId) => !hasCompletedLessonId(
-        completedForPrereqs,
-        prereqId,
-        courseBank.lessonSplitMap,
-      ),
-    );
+    const missingPrereq = missingStartPrerequisite({
+      prerequisites: located.lesson.prerequisites,
+      requiresPlacement,
+      completedLessonIds: completedForPrereqs,
+      lessonSplitMap: courseBank.lessonSplitMap,
+    });
     if (missingPrereq) {
       throw new HttpsError(
         "failed-precondition",
@@ -1870,6 +1869,28 @@ function findChoiceOnActivity(
  * activity. Explain steps always advance. Multi-step hands stay put until the
  * graded choice belongs to the last authored street.
  */
+/**
+ * First catalog prerequisite blocking a new lesson start, if any.
+ *
+ * Jump tests are the skip-ahead path, so the deep-link lock does not apply
+ * to them; assertCourseAvailable already required placementTestsEnabled.
+ */
+export function missingStartPrerequisite(options: {
+  prerequisites: readonly string[];
+  requiresPlacement: boolean;
+  completedLessonIds: readonly string[];
+  lessonSplitMap: Parameters<typeof hasCompletedLessonId>[2];
+}): string | undefined {
+  if (options.requiresPlacement) return undefined;
+  return options.prerequisites.find(
+    (prereqId) => !hasCompletedLessonId(
+      options.completedLessonIds,
+      prereqId,
+      options.lessonSplitMap,
+    ),
+  );
+}
+
 export function shouldAdvanceActivityAfterSubmit(options: {
   activity: CourseActivity;
   choiceId?: string | null;
