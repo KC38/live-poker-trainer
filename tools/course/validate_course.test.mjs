@@ -10,6 +10,10 @@ import {
   runInvalidFixtureSuite,
   validateAndGenerate,
 } from "./validate_course.mjs";
+import {
+  parsePreflopPrompt,
+  preflopActionOrderProblems,
+} from "./preflop_action_order.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "../..");
@@ -397,4 +401,55 @@ test("wave one pilot lesson authors the same teachSpec as course.json (LPT-558)"
     assert.ok(wave, activity.id);
     assert.deepEqual(wave.teachSpec, activity.teachSpec, activity.id);
   }
+});
+
+test("seat order: flags callers that act out of turn around the hero", () => {
+  const problems = preflopActionOrderProblems(
+    "BTN open, BB + MP call. You have 76s in SB. Action?",
+  );
+  assert.deepEqual(problems.sort(), [
+    "caller BB acts after the SB hero and cannot have called yet",
+    "caller MP acts before the BTN open",
+  ]);
+});
+
+test("seat order: accepts a legal open + callers + hero order", () => {
+  assert.deepEqual(
+    preflopActionOrderProblems(
+      "MP opens to 6, CO and BTN call. You have 76s in SB. Action?",
+    ),
+    [],
+  );
+  assert.deepEqual(
+    parsePreflopPrompt("CO opens to 6. You have QQ on the button. Action?"),
+    {opener: "CO", callers: [], hero: "BTN"},
+  );
+});
+
+test("seat order: ignores raisers and postflop prompts", () => {
+  assert.equal(
+    parsePreflopPrompt("BTN opens, BB 3-bets, BTN calls. Whose range?")
+      ?.callers.length,
+    0,
+  );
+  assert.equal(parsePreflopPrompt("CO opens, BTN calls. Flop K72."), null);
+});
+
+test("seat order: every catalog lesson passes", () => {
+  const course = JSON.parse(
+    readFileSync(resolve(ROOT, "content/course/v2/course.json")),
+  );
+  const bad = [];
+  for (const s of course.sections) {
+    for (const u of s.units) {
+      for (const l of u.lessons) {
+        for (const a of l.activities) {
+          for (const t of [a.prompt, ...(a.handSteps ?? []).map((h) => h.prompt)]) {
+            for (const p of preflopActionOrderProblems(t)) bad.push(`${a.id}: ${p}`);
+          }
+        }
+      }
+    }
+  }
+  assert.deepEqual(bad, []);
 });
