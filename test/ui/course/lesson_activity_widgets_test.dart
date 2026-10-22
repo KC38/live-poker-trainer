@@ -7502,9 +7502,10 @@ await tester.tap(find.text('NIT'));
       expect(tester.takeException(), isNull);
       expect(find.text('Nice!'), findsOneWidget);
       expect(find.text('Continue'), findsOneWidget);
-      expect(find.byKey(const ValueKey('blinds-timing-felt')), findsOneWidget);
+      // Framed: blinds timing is a drill on the full table (Task C).
+      expect(find.byKey(const ValueKey('outcome-phases-table')), findsOneWidget);
       final feltHeight =
-          tester.getSize(find.byKey(const ValueKey('blinds-timing-felt'))).height;
+          tester.getSize(find.byKey(const ValueKey('outcome-phases-table'))).height;
       final layoutHeight =
           tester.getSize(find.byType(LessonScreenLayout)).height;
       expect(feltHeight, lessThan(layoutHeight));
@@ -11524,7 +11525,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s3 table-read guided taps 21-chip pot on felt', (tester) async {
+  testWidgets('s3 table-read guided taps 19-chip pot on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-03-01-01-guided',
       order: 2,
@@ -11535,9 +11536,9 @@ await tester.tap(find.text('NIT'));
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now?',
       choices: const [
+        CourseChoice(id: 'pot-19', label: '19'),
         CourseChoice(id: 'pot-21', label: '21'),
         CourseChoice(id: 'pot-18', label: '18'),
-        CourseChoice(id: 'pot-12', label: '12'),
       ],
     );
     expect(isTableRegionTapActivity(activity), isTrue);
@@ -11548,10 +11549,10 @@ await tester.tap(find.text('NIT'));
     expect(
       mapTableRegionToChoiceId(
         activityId: activity.id,
-        region: LessonTableRegion.potChipsTwentyOne,
+        region: LessonTableRegion.potChipsNineteen,
         choices: activity.choices,
       ),
-      'pot-21',
+      'pot-19',
     );
 
     final controller = LessonActivityController(activity: activity);
@@ -11565,20 +11566,16 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Blinds plus three 6s — add every contribution into the pot.'),
-      findsOneWidget,
-    );
-    expect(
       find.text('Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now?'),
       findsNothing,
     );
-    expect(find.text('21 chips'), findsOneWidget);
+    expect(find.text('19 chips'), findsOneWidget);
     // SoftPulse must not spoil the pot math / gold-tip the answer.
     expect(find.text('1+2+6+6+6'), findsNothing);
     expect(find.text('Full pot'), findsOneWidget);
-    await tester.tap(find.text('21 chips'));
+    await tester.tap(find.text('19 chips'));
     await tester.pump();
-    expect(controller.draft.choiceId, 'pot-21');
+    expect(controller.draft.choiceId, 'pot-19');
     controller.dispose();
   });
 
@@ -20076,7 +20073,7 @@ await tester.tap(find.text('NIT'));
       accessibilityText: 'Small probe can be reasonable.',
       acceptedGrades: const [SoftGrade.recommended],
       prompt:
-          'Preflop raiser checks flop. You are BB with middle pair. Action?',
+          'Preflop raiser checked back the flop. Turn: you are BB with middle pair. Action?',
       choices: const [
         CourseChoice(
           id: 'probe',
@@ -20090,7 +20087,7 @@ await tester.tap(find.text('NIT'));
           action: 'BET',
           amountBb: 12,
         ),
-        CourseChoice(id: 'never', label: 'Check back', action: 'CHECK'),
+        CourseChoice(id: 'never', label: 'Check', action: 'CHECK'),
       ],
     );
     expect(isLessonActionTableActivity(activity), isTrue);
@@ -20106,7 +20103,7 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       find.text(
-        'PFR checks · middle pair BB — capped ranges invite small probes.',
+        'PFR checked back the flop · middle pair BB — capped ranges invite a small turn probe.',
       ),
       findsOneWidget,
     );

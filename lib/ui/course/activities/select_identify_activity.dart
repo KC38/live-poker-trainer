@@ -21,6 +21,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_open_pot_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_pots.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_drill_scene.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
@@ -2235,6 +2236,39 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                     },
                   ),
                 )
+              else if (LessonFrameScope.maybeOf(context) != null &&
+                  lessonTableLayoutIsDrill(scene.layout))
+                // Choice / number drills draw the full six-max table with the
+                // answers in the action-button row — never a standalone panel.
+                Expanded(
+                  child: LessonTableContext(
+                    scene: scene,
+                    selectedRegion: _selectedRegion,
+                    selectedSeatIndex: _selectedSeatIndex,
+                    showSoftPulse:
+                        selected == null &&
+                        !locked &&
+                        ((widget.showGuidance &&
+                                (widget.activity.stage == ActivityStage.guided ||
+                                    widget.activity.stage ==
+                                        ActivityStage.scaffolded ||
+                                    widget.activity.stage ==
+                                        AssessmentRole.checkpoint ||
+                                    widget.controller.hintVisible)) ||
+                            widget.activity.id == 'act-01-02-02-unguided-board'),
+                    showInviteCue: !feltFirstSelect,
+                    enabled: !locked,
+                    onRegionTap: locked ? null : _submitRegion,
+                    drillSpec: resolveLessonTableDrillSpec(
+                      activity: widget.activity,
+                      heroCodes: scene.heroCodes,
+                      boardCodes: scene.boardCodes,
+                      villainCodes: scene.villainCodes,
+                      villainSeatCount: scene.villainSeatCount,
+                      caption: scene.caption,
+                    ),
+                  ),
+                )
               else
                 LessonTableContext(
                   scene: scene,
@@ -3165,6 +3199,7 @@ class _OutsCleanAcesTapActivity extends StatelessWidget {
                 locked: locked,
                 showGuidance: showGuidance,
                 height: bounded,
+                onTable: true,
               );
             },
           );

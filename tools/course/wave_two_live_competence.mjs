@@ -69,15 +69,15 @@ export function buildSectionThree() {
                 a11y: "Add blinds plus three contributions to size the pot.",
                 objectives: ["Track pot size and stack depths"],
                 choices: [
-                  choice("pot-21", "21", "recommended",
-                    "1+2+6+6+6 = 21 before the flop."),
+                  choice("pot-19", "19", "recommended",
+                    "6+6+6 plus the folded small blind's 1 = 19. BB's 2 is already inside its 6."),
+                  choice("pot-21", "21", "clear_mistake",
+                    "BB's 2 is part of its call to 6 — don't count it twice.", {betterChoiceId: "pot-19"}),
                   choice("pot-18", "18", "clear_mistake",
-                    "You dropped a blind.", {betterChoiceId: "pot-21"}),
-                  choice("pot-12", "12", "clear_mistake",
-                    "Only counted the open.", {betterChoiceId: "pot-21"})
+                    "You dropped the small blind — its 1 stays in the pot after SB folds.", {betterChoiceId: "pot-19"})
                 ],
                 // LPT-138
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "pot-21", kind: "soft_pulse"}]},
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "pot-19", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-03-01-01-scaffolded", order: 3, stage: "scaffolded",
@@ -375,11 +375,11 @@ export function buildSectionThree() {
                 objectives: ["Compare pot odds to draw equity"],
                 choices: [
                   choice("call-10", "10", "recommended",
-                    "You must call 10 into a 30 pot after calling."),
+                    "Match their 10 — you call 10 into a 30 pot (20 + their bet)."),
                   choice("call-20", "20", "clear_mistake",
                     "That is the pot, not the call.", {betterChoiceId: "call-10"}),
                   choice("call-30", "30", "clear_mistake",
-                    "That is the pot after you call — you only put in 10.",
+                    "30 is the pot you are calling into (20 + their 10) — you only put in 10.",
                     {betterChoiceId: "call-10"})
                 ],
                 // LPT-144, LPT-626

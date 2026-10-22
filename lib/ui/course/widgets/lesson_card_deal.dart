@@ -492,6 +492,22 @@ List<String> structurePreserveCodesLike({
   ];
 }
 
+/// Size band of a connector (`low` 32–54, `medium` 65–98, `high` T9),
+/// or null when [hero] is not a two-card connector.
+String? lessonConnectorRankBand(List<String> hero) {
+  final family = startingHandFamilyFromCodes(hero);
+  if (family != LessonStartingHandFamily.suitedConnector &&
+      family != LessonStartingHandFamily.offsuitConnector) {
+    return null;
+  }
+  final low = [
+    for (final code in hero.take(2)) CardModel.fromCode(code).rank,
+  ].reduce((a, b) => a < b ? a : b);
+  if (low <= 4) return 'low';
+  if (low <= 8) return 'medium';
+  return 'high';
+}
+
 List<List<String>> _isomorphicPreflopGroups(
   List<List<String>> groups,
   Random rng,
@@ -503,9 +519,13 @@ List<List<String>> _isomorphicPreflopGroups(
       for (final code in g) code,
   };
 
+  final band = lessonConnectorRankBand(hero);
   for (var attempt = 0; attempt < 48; attempt++) {
     final used = Set<String>.of(blocked);
     final newHero = dealStartingHandFamily(family, rng, used: used);
+    // Copy names the connector's size ("medium connectors" for 76s) — a
+    // 76s template must not deal 32s (Kushal's SB multiway screenshot).
+    if (band != null && lessonConnectorRankBand(newHero) != band) continue;
     final candidate = [newHero, ...groups.skip(1)];
     final remapped = permuteCardSuitGroups(candidate, rng);
     if (_groupsHaveUniqueCards(remapped)) {

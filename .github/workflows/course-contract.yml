@@ -34,7 +34,10 @@ jobs:
       - name: Dart course catalog parser tests
         run: |
           flutter pub get
-          flutter test test/models/course/course_catalog_test.dart
+          flutter test test/models/course/course_catalog_test.dart \
+            test/ui/course/lesson_table_layout_contract_test.dart \
+            test/ui/course/lesson_table_drill_scene_test.dart \
+            test/ui/course/lesson_copy_matches_felt_test.dart
 
       - name: Functions course catalog parser tests
         working-directory: functions

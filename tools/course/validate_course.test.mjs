@@ -14,6 +14,10 @@ import {
   parsePreflopPrompt,
   preflopActionOrderProblems,
 } from "./preflop_action_order.mjs";
+import {
+  loadTableLayoutAllowlist,
+  tableLayoutAllowlistProblems,
+} from "./table_layout_allowlist.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "../..");
@@ -452,4 +456,28 @@ test("seat order: every catalog lesson passes", () => {
     }
   }
   assert.deepEqual(bad, []);
+});
+
+test("table layout allowlist: shipped list is valid against the course", () => {
+  const course = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));
+  const allowlist = loadTableLayoutAllowlist(
+    resolve(ROOT, "content/course/v2/table_layout_allowlist.json"),
+  );
+  assert.deepEqual(tableLayoutAllowlistProblems(course, allowlist), []);
+});
+
+test("table layout allowlist: flags unknown ids and missing reasons", () => {
+  const course = {
+    sections: [{units: [{lessons: [{activities: [{id: "act-01-01-01-x"}]}]}]}],
+  };
+  const problems = tableLayoutAllowlistProblems(course, {
+    allow: {"act-99-99-99-nope": "Deck picker cannot sit on a ring", "act-01-01-01-x": ""},
+  });
+  assert.equal(problems.length, 2);
+  assert.match(problems[0], /unknown activity id "act-99-99-99-nope"/);
+  assert.match(problems[1], /"act-01-01-01-x" needs a reason/);
+  assert.deepEqual(
+    tableLayoutAllowlistProblems(course, {allow: {"act-01-01-01-x": "Deck picker cannot sit on a ring"}}),
+    [],
+  );
 });

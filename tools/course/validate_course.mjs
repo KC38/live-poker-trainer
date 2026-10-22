@@ -11,6 +11,10 @@
  */
 
 import {preflopActionOrderProblems} from "./preflop_action_order.mjs";
+import {
+  loadTableLayoutAllowlist,
+  tableLayoutAllowlistProblems,
+} from "./table_layout_allowlist.mjs";
 import {createHash} from "node:crypto";
 import {
   existsSync,
@@ -30,6 +34,10 @@ const CLIENT_OUT = resolve(REPO_ROOT, "assets/course/v2/catalog.json");
 const SERVER_OUT = resolve(
   REPO_ROOT,
   "functions/src/generated/course_bank.json",
+);
+const TABLE_LAYOUT_ALLOWLIST = resolve(
+  REPO_ROOT,
+  "content/course/v2/table_layout_allowlist.json",
 );
 const INVALID_FIXTURE_DIR = resolve(
   REPO_ROOT,
@@ -941,6 +949,14 @@ export function runCli(options) {
   const sourcePath = options.sourcePath ?? SOURCE_PATH;
   const course = loadCourseJson(sourcePath);
   const {errors, clientCatalog, serverBank} = validateAndGenerate(course);
+  if (!options.sourcePath) {
+    errors.push(
+      ...tableLayoutAllowlistProblems(
+        course,
+        loadTableLayoutAllowlist(TABLE_LAYOUT_ALLOWLIST),
+      ),
+    );
+  }
 
   if (errors.length > 0) {
     console.error("validate_course: failed");

@@ -1,0 +1,4 @@
+{
+  "description": "Course steps allowed to render without the full poker table in the lesson frame. Every other step (choice / number drills included) must draw the six-max table; test/ui/course/lesson_table_layout_contract_test.dart enforces it and course:check validates this file. Each entry needs a reason.",
+  "allow": {}
+}

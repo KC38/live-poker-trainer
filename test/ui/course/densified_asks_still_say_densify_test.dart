@@ -110,7 +110,7 @@ const _lines = <String, String>{
   'act-02-07-02-jump-pos':
       'Seat right before the button — pick it on the map.',
   'act-03-01-01-guided':
-      'Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now — pick 21.',
+      'Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now — pick 19.',
   // LPT-845: SoftPulse-quiet densify — no UTG / Seat left of the big blind spoil.
   'act-03-01-01-scaffolded':
       'Nine-handed. Dealer button is on seat 7 — tap who acts first preflop.',
