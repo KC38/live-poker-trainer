@@ -39,6 +39,15 @@ jobs:
             test/ui/course/lesson_table_drill_scene_test.dart \
             test/ui/course/lesson_copy_matches_felt_test.dart
 
+      # The felt deal runs once per step: every lesson step, right and wrong
+      # answers, Hint and rebuilds, with real (scaled) deal pacing (~3 min).
+      - name: Deal runs once per lesson step
+        env:
+          DEAL_ONCE_SWEEP: "1"
+        run: |
+          flutter test test/ui/course/lesson_deal_once_test.dart \
+            test/core/deal/felt_deal_ledger_test.dart
+
       - name: Functions course catalog parser tests
         working-directory: functions
         run: |

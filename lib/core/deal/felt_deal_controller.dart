@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
+import 'package:live_poker_trainer/core/deal/felt_deal_ledger.dart';
 
 /// Coordinates hole + board reveals so each card lands once, in order.
 ///
@@ -38,6 +39,16 @@ class FeltDealController extends ChangeNotifier {
   /// How many hole cards are shown at [seatIndex] (0–2).
   int holeVisibleAt(int seatIndex) => _holeVisible[seatIndex] ?? 0;
 
+  /// Cards on the felt right now (for [FeltDealLedger]).
+  FeltDealProgress get progress => FeltDealProgress(
+    holes: Map<int, int>.unmodifiable(_holeVisible),
+    board: _boardVisible,
+  );
+
+  /// True when the last new-epoch bind resumed cards from a ledger.
+  bool get resumed => _resumed;
+  var _resumed = false;
+
   /// True when every requested hole and board card has landed.
   bool get isComplete => _isComplete;
 
@@ -58,6 +69,7 @@ class FeltDealController extends ChangeNotifier {
     required int dealerIndex,
     required int boardTarget,
     required bool dealHoles,
+    FeltDealProgress? resume,
   }) {
     final target = boardTarget.clamp(0, 5);
     if (epoch != _epoch) {
@@ -69,6 +81,19 @@ class FeltDealController extends ChangeNotifier {
       _boardTarget = target;
       _holeVisible.clear();
       _seedAlreadyDealt(target);
+      _resumed = false;
+      if (resume != null && !resume.isEmpty) {
+        // A remounted felt for a hand already on the table: keep every card
+        // that landed — never deal it again.
+        _resumed = true;
+        resume.holes.forEach((seat, n) {
+          if (seat < 0 || seat >= _seatCount) return;
+          final keep = n.clamp(0, dealHoles ? 2 : 0);
+          if (keep > holeVisibleAt(seat)) _holeVisible[seat] = keep;
+        });
+        final board = resume.board.clamp(0, target);
+        if (board > _boardVisible) _boardVisible = board;
+      }
       if (CardDealPace.instant) {
         _snapComplete();
       } else {

@@ -42,6 +42,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
+import 'package:live_poker_trainer/ui/widgets/felt_deal_ledger_scope.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 /// Runs one catalog lesson through Plan 03 course callables.
@@ -1461,17 +1462,23 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             // Densify docks + SoftPulse/Hint all stay inert under the gate
             // (LPT-874 SoftPulse; LPT-1017 dock chrome).
             playBlocked: _heartsGateActive,
-            child: LessonSoftPulseScope(
-              allowed: !_heartsGateActive && controller.showTargetCue,
-              child: activityRegistry.build(
-                activity: activity,
-                controller: controller,
-                showGuidance: !_heartsGateActive && controller.showTargetCue,
-                onFeltAcknowledge:
-                    isTableRegionTapActivity(activity) &&
-                        activity.renderer == ActivityRenderer.coachDialogue
-                    ? _submit
-                    : null,
+            // The step's deal outlives any remount of the table below: an
+            // answer tap, Nice!/Oops!, Hint or undo can rebuild the stage
+            // with a new shape, but cards already dealt stay put.
+            child: FeltDealLedgerScope(
+              ledger: controller.feltDeals,
+              child: LessonSoftPulseScope(
+                allowed: !_heartsGateActive && controller.showTargetCue,
+                child: activityRegistry.build(
+                  activity: activity,
+                  controller: controller,
+                  showGuidance: !_heartsGateActive && controller.showTargetCue,
+                  onFeltAcknowledge:
+                      isTableRegionTapActivity(activity) &&
+                          activity.renderer == ActivityRenderer.coachDialogue
+                      ? _submit
+                      : null,
+                ),
               ),
             ),
           ),

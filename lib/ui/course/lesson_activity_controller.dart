@@ -3,6 +3,7 @@ library;
 
 import 'dart:async';
 
+import 'package:live_poker_trainer/core/deal/felt_deal_ledger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
@@ -81,6 +82,11 @@ class LessonActivityController extends ChangeNotifier {
   int _hintRequests = 0;
   String? _pendingIdempotencyKey;
   int _bindGeneration = 0;
+
+  /// Felt deal progress for this step. Survives any remount of the table so
+  /// answer taps / Nice! / Oops! / Hint / undo never deal the hand again;
+  /// cleared on a new step and on a retry that deals a fresh hand.
+  final FeltDealLedger feltDeals = FeltDealLedger();
 
   /// Face-down seat the learner just tapped, when seats have distinct labels.
   String? _tappedSeatLabel;
@@ -278,6 +284,7 @@ class LessonActivityController extends ChangeNotifier {
     _pendingIdempotencyKey = null;
     _tappedSeatLabel = null;
     _bindGeneration += 1;
+    feltDeals.clear();
     notifyListeners();
   }
 
@@ -499,6 +506,7 @@ class LessonActivityController extends ChangeNotifier {
     _sequentialPressesRemaining = false;
     _sequentialSoftPulseWaveOpen = true;
     _bindGeneration += 1;
+    feltDeals.clear();
     notifyListeners();
   }
 
