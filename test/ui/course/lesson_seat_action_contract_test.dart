@@ -9,10 +9,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_felt_layout.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_felt_money.dart';
+import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 
 /// Violations for one spot; empty when the felt is consistent.
-List<String> seatActionViolations(LessonActionSpot spot) {
+List<String> seatActionViolations(
+  LessonActionSpot spot, {
+  List<CourseChoice> choices = const <CourseChoice>[],
+}) {
   final layout = resolveLessonActionFeltLayout(spot);
   if (layout.headsUp) return const <String>[];
   final problems = <String>[];
@@ -56,6 +61,52 @@ List<String> seatActionViolations(LessonActionSpot spot) {
         problems.add('seat $seat acted before hero but shows no action');
       }
     }
+    // Out of turn: before the hero's decision only seats in [acted] can
+    // have folded, called or raised. A seat behind the hero (e.g. the BB
+    // behind an SB hero) cannot show CALL/RAISE/FOLD yet.
+    final actedSet = acted.toSet();
+    for (final seat in <int>{...folded, ...acting}) {
+      if (seat != 0 && !actedSet.contains(seat)) {
+        problems.add('seat $seat acts out of turn (after the hero)');
+      }
+    }
+    // Pot / chips: rebuild the preflop pot from the scripted actions.
+    if (spot.facingBet) {
+      final money = resolveLessonActionFeltMoney(
+        spot: spot,
+        choices: choices,
+        seatCount: layout.seatCount,
+        villainSeatIndex: layout.villainSeatIndex,
+        callerSeatIndexes: layout.callerSeatIndexes,
+        sbIndex: layout.sbIndex,
+        bbIndex: layout.bbIndex,
+      );
+      final facing = money.streetBets[layout.villainSeatIndex];
+      var expected = 0.0;
+      for (var i = 0; i < layout.seatCount; i++) {
+        final blind = i == layout.sbIndex
+            ? lessonSmallBlind
+            : (i == layout.bbIndex ? lessonBigBlind : 0.0);
+        if (i == layout.villainSeatIndex ||
+            layout.callerSeatIndexes.contains(i)) {
+          expected += facing;
+        } else if (i == 0) {
+          expected += money.streetBets[0] > blind ? money.streetBets[0] : blind;
+        } else {
+          expected += blind;
+        }
+      }
+      if ((money.potTotal - expected).abs() > 0.01) {
+        problems.add(
+          'pot ${money.potTotal} does not match scripted chips $expected',
+        );
+      }
+      for (final seat in layout.callerSeatIndexes) {
+        if ((money.streetBets[seat] - facing).abs() > 0.01) {
+          problems.add('caller seat $seat has ${money.streetBets[seat]} in');
+        }
+      }
+    }
     if (spot.facingBet &&
         !layout.seatActionLabels.containsKey(layout.villainSeatIndex)) {
       problems.add('facing seat ${layout.villainSeatIndex} has no RAISE/BET');
@@ -97,7 +148,10 @@ void main() {
             final spot = resolveLessonActionSpot(activity);
             if (spot != null) {
               checked++;
-              for (final p in seatActionViolations(spot)) {
+              for (final p in seatActionViolations(
+                spot,
+                choices: activity.choices,
+              )) {
                 violations.add('${activity.id}: $p');
               }
             }
@@ -108,7 +162,10 @@ void main() {
               );
               if (stepSpot == null) continue;
               checked++;
-              for (final p in seatActionViolations(stepSpot)) {
+              for (final p in seatActionViolations(
+                stepSpot,
+                choices: step.choices,
+              )) {
                 violations.add('${activity.id}/${step.id}: $p');
               }
             }
@@ -205,5 +262,33 @@ void main() {
       layout.villainSeatIndex,
       lessonSixMaxSeatIndex(position: 'BB', dealerIndex: layout.dealerIndex!),
     );
+  });
+
+  test(
+    'BB calling before the SB hero is flagged out of turn (old 05-01-01)',
+    () {
+      const spot = LessonActionSpot(
+        heroCodes: ['7h', '6h'],
+        potLabel: 'Pot 3 → 9 → 19',
+        villainLine: 'BTN open · BB + MP call',
+        streetLabel: 'Preflop · SB · 76s',
+        facingBet: true,
+      );
+      expect(
+        seatActionViolations(spot),
+        contains(contains('acts out of turn')),
+      );
+    },
+  );
+
+  test('MP open + CO/BTN callers vs SB hero: pot 21, BB still to act', () {
+    const spot = LessonActionSpot(
+      heroCodes: ['7h', '6h'],
+      potLabel: 'Pot 3 → 9 → 21',
+      villainLine: 'MP opens to 6 · CO + BTN call',
+      streetLabel: 'Preflop · SB · 76s',
+      facingBet: true,
+    );
+    expect(seatActionViolations(spot), isEmpty);
   });
 }

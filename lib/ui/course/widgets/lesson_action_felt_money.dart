@@ -280,10 +280,14 @@ LessonActionFeltMoney resolveLessonActionFeltMoney({
   // Preflop facing opens: keep SB/BB posts visible on their seats. Applying
   // only the opener's raise-to would replace posted blinds with 0 and leave
   // coach copy naming "small blind" with no SB puck/chips (LPT-1016).
+  // Blind chips that now sit on the felt as street bets (posted blinds are
+  // part of any SB/BB street bet). `Pot 3` already counts them.
+  var blindsOnFelt = 0.0;
   if (spot.facingBet && spot.boardCodes.isEmpty) {
     void keepBlind(int? seat, double amount) {
       if (seat == null || seat < 0 || seat >= seats) return;
       if (bets[seat] < amount) bets[seat] = amount;
+      blindsOnFelt += amount;
     }
 
     keepBlind(sbIndex, smallBlind);
@@ -328,7 +332,10 @@ LessonActionFeltMoney resolveLessonActionFeltMoney({
   var potTotal = labeledPot ?? streetSum;
   // `Pot 3` + `opens to 6` is collected blinds only — add street bets.
   if (labeledPot != null && labeledPot + 1e-9 < streetSum) {
-    potTotal = labeledPot + streetSum;
+    // Do not count posted blinds twice: `Pot 3` (blinds) + UTG open to 6
+    // with SB/BB posts on the felt is $9, not $12.
+    final dead = labeledPot - blindsOnFelt;
+    potTotal = streetSum + (dead > 0 ? dead : 0);
   }
 
   if (facing > 0) {
