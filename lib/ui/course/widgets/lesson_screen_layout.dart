@@ -17,6 +17,7 @@ import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_hint_off_bubble.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_open_pot_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
@@ -760,6 +761,20 @@ String _lessonFrameLine(
   );
 }
 
+/// Capstone hands / explains that coach copy marks as no-hint.
+const Set<String> lessonFrameNoHintIds = <String>{
+  'act-07-10-01-explain',
+  'act-07-10-02-explain',
+  'act-07-10-03-explain',
+  'act-07-10-04-explain',
+  'act-07-10-05-explain',
+  'act-07-10-01-hand',
+  'act-07-10-02-hand',
+  'act-07-10-03-hand',
+  'act-07-10-04-hand',
+  'act-07-10-05-hand',
+};
+
 /// Whether this step intentionally leaves Hint disabled.
 ///
 /// [isReview] is true when the learner already completed this lesson. Review
@@ -780,20 +795,7 @@ bool lessonFrameHintsDisabled(
       '${activity.id} ${activity.accessibilityText} ${activity.prompt ?? ''}'
           .toLowerCase();
   if (blob.contains('no hints')) return true;
-  // Capstone hands / explains that coach copy marks as no-hint.
-  const noHintIds = <String>{
-    'act-07-10-01-explain',
-    'act-07-10-02-explain',
-    'act-07-10-03-explain',
-    'act-07-10-04-explain',
-    'act-07-10-05-explain',
-    'act-07-10-01-hand',
-    'act-07-10-02-hand',
-    'act-07-10-03-hand',
-    'act-07-10-04-hand',
-    'act-07-10-05-hand',
-  };
-  return noHintIds.contains(activity.id);
+  return lessonFrameNoHintIds.contains(activity.id);
 }
 
 /// Whether the Hint tool may accept a tap for [activity] (content gate).
@@ -816,6 +818,59 @@ bool lessonFrameCanHint(
       ) !=
       null;
 }
+
+/// Friendly reason Hint is off on [activity], or null when Hint is allowed.
+///
+/// Shown in a bubble when the learner taps the disabled Hint button.
+String? lessonFrameHintOffReason(
+  CourseActivity activity, {
+  bool isReview = false,
+  int bindGeneration = 0,
+}) {
+  if (lessonFrameCanHint(
+    activity,
+    isReview: isReview,
+    bindGeneration: bindGeneration,
+  )) {
+    return null;
+  }
+  switch (activity.assessmentRole) {
+    case AssessmentRole.jumpTest:
+      return kHintOffJumpTest;
+    case AssessmentRole.checkpoint:
+      return kHintOffCheckpoint;
+    case AssessmentRole.transfer:
+      return kHintOffTransfer;
+    case null:
+      break;
+  }
+  // Coach talk and no-hint steps: nothing to find, just follow along.
+  final noHintCopy =
+      '${activity.accessibilityText} ${activity.prompt ?? ''}'
+          .toLowerCase()
+          .contains('no hints');
+  if (activity.renderer == ActivityRenderer.coachDialogue ||
+      noHintCopy ||
+      lessonFrameNoHintIds.contains(activity.id)) {
+    return kHintOffNothingToHint;
+  }
+  // Teaching cues already glow on the answer.
+  if (lessonFrameHintShownByDefault(activity, isReview: isReview)) {
+    return kHintOffAlreadyShowing;
+  }
+  return kHintOffNothingToHint;
+}
+
+/// Hint-off reasons (bubble copy).
+const String kHintOffJumpTest =
+    'Hints are off during jump tests, so show what you know!';
+const String kHintOffCheckpoint =
+    "No hints on checkpoints, but you've got this.";
+const String kHintOffTransfer = 'No hints on this test, so trust your read.';
+const String kHintOffAlreadyShowing =
+    'Your hint is already showing. Follow the glow!';
+const String kHintOffNothingToHint =
+    'Nothing to hint here, just watch the action.';
 
 /// Guided steps that replay an interactive explain SoftPulse task.
 ///
@@ -1333,6 +1388,7 @@ class LessonToolRow extends StatelessWidget {
     required this.canUndo,
     required this.canRedo,
     required this.canHint,
+    this.hintOffReason,
   });
 
   final VoidCallback onUndo;
@@ -1341,6 +1397,9 @@ class LessonToolRow extends StatelessWidget {
   final bool canUndo;
   final bool canRedo;
   final bool canHint;
+
+  /// Why Hint is intentionally off; a tap on the disabled button explains it.
+  final String? hintOffReason;
 
   @override
   Widget build(BuildContext context) {
@@ -1363,11 +1422,15 @@ class LessonToolRow extends StatelessWidget {
             onPressed: canRedo ? onRedo : null,
           ),
           const Spacer(),
-          _ToolButton(
-            tooltip: 'Hint',
-            icon: Icons.lightbulb_outline,
-            label: 'HINT',
-            onPressed: canHint ? onHint : null,
+          LessonHintOffBubble(
+            reason: canHint ? null : hintOffReason,
+            builder: (context, showReason) => _ToolButton(
+              tooltip: 'Hint',
+              icon: Icons.lightbulb_outline,
+              label: 'HINT',
+              onPressed: canHint ? onHint : null,
+              onDisabledTap: showReason,
+            ),
           ),
         ],
       ),
@@ -1381,12 +1444,16 @@ class _ToolButton extends StatelessWidget {
     required this.icon,
     required this.onPressed,
     this.label,
+    this.onDisabledTap,
   });
 
   final String tooltip;
   final IconData icon;
   final VoidCallback? onPressed;
   final String? label;
+
+  /// Tap handler while disabled (explains why); keeps the disabled look.
+  final VoidCallback? onDisabledTap;
 
   @override
   Widget build(BuildContext context) {
@@ -1396,12 +1463,19 @@ class _ToolButton extends StatelessWidget {
       message: tooltip,
       child: Semantics(
         button: true,
+        enabled: enabled,
         label: tooltip,
+        hint: !enabled && onDisabledTap != null
+            ? 'Off on this step. Tap to hear why.'
+            : null,
         child: Material(
           color: AppColors.bgElevated,
           borderRadius: BorderRadius.circular(14),
           child: InkWell(
-            onTap: onPressed,
+            onTap: onPressed ?? onDisabledTap,
+            // A disabled tool explains itself without looking pressable.
+            splashFactory: enabled ? null : NoSplash.splashFactory,
+            highlightColor: enabled ? null : Colors.transparent,
             borderRadius: BorderRadius.circular(14),
             child: Container(
               height: 48,
@@ -1582,6 +1656,7 @@ class LessonScreenLayout extends StatelessWidget {
     required this.canUndo,
     required this.canRedo,
     required this.canHint,
+    this.hintOffReason,
     this.showToolRow = true,
     this.result,
     this.onContinue,
@@ -1607,6 +1682,9 @@ class LessonScreenLayout extends StatelessWidget {
   final bool canUndo;
   final bool canRedo;
   final bool canHint;
+
+  /// Why Hint is intentionally off (see [lessonFrameHintOffReason]).
+  final String? hintOffReason;
 
   /// When false, omit Undo / Redo / Hint (bootstrap, locked start, start
   /// error). Active steps keep the row even when every control is disabled.
@@ -1733,6 +1811,7 @@ class LessonScreenLayout extends StatelessWidget {
             canUndo: canUndo,
             canRedo: canRedo,
             canHint: canHint,
+            hintOffReason: hintOffReason,
           ),
       ],
     );
