@@ -403,6 +403,15 @@ class RecommendedStartScreen extends ConsumerWidget {
           data: (catalog) => catalog.lessonById(recommendation.startLessonId),
           orElse: () => null,
         );
+    final jumpSectionOrder =
+        recommendation.sectionOrder ??
+        ref
+            .watch(courseCatalogProvider)
+            .maybeWhen(
+              data: (catalog) =>
+                  catalog.sectionForLesson(recommendation.startLessonId)?.order,
+              orElse: () => null,
+            );
     return _OnboardingScaffold(
       progress: _onboardingProgress(3),
       onBack: () {
@@ -427,7 +436,7 @@ class RecommendedStartScreen extends ConsumerWidget {
           const SizedBox(height: 12),
           Text(
             recommendation.jumpTestOffered
-                ? 'You asked for Regular. A published jump test is available — it never unlocks content by itself.'
+                ? jumpTestOfferCopy(jumpSectionOrder)
                 : recommendation.experienceBand == ExperienceBand.regularLive
                 ? 'Regular players will get a jump test when it publishes. For now, start with the first interactive lesson.'
                 : 'A short interactive lesson. Progress is temporary until you create an account.',

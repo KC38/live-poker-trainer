@@ -37,6 +37,13 @@ Hint** (`transfer` = Capstone intentional no-Hint assessment, LPT-348). Home pat
 separate stage). Legacy catalogs map explain→guided; unguided→scaffolded;
 old checkpoint/jump_test stages→scaffolded+role.
 
+Jump-test placement: a jump test may start without its prerequisites
+(`missingStartPrerequisite`). Completing (passing) one credits every lesson in
+the earlier sections onto `completedLessonIds`
+(`jumpTestPlacementCreditLessonIds`, `functions/src/course_catalog.ts`), so
+Home lands on the first lesson of the jump test's section — e.g. the Section 4
+jump check places a regular at Section 4, Unit 1, not Section 1, Unit 1.
+
 Curriculum splits: catalog `lessonSplitMap` maps a retired multi-concept lesson id to successor lesson ids. Completed progress on the retired id counts as completed for every listed successor — Home unlocks, `startLesson` prereqs, review XP, zero-heart replay, and resume protection on submit / complete / `getCourseState`. Do not raw-`includes()` the stored id list for those checks; successors are not written back onto the profile until that successor is finished. A start request for a retired id opens the first successor still in the catalog. Gates live in `functions/src/lesson_split_map.ts` (client mirror: `lib/models/course/lesson_split_map.dart`). LPT-83+.
 Splits keep the retired lesson's unit as the container (successors `lesson-SS-UU-LL-0N-slug` sit in its place) and reuse its activity ids; `isLessonScreenFrameLesson` and `TableFeatures.forLessonId` resolve successors by their `SS-UU-LL` prefix. LPT-87+.
 

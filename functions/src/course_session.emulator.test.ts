@@ -483,7 +483,7 @@ describe("course session integration", () => {
     const steps: Array<Record<string, unknown>> = [
       {activityId: "act-04-10-02-jump-range", choiceId: "j4-range"},
       {activityId: "act-04-10-02-jump-3bet", choiceId: "j4-3bet"},
-      {activityId: "act-04-10-02-jump-spr", numericValue: 4},
+      {activityId: "act-04-10-02-jump-spr", choiceId: "spr-4"},
       {activityId: "act-04-10-02-jump-size", choiceId: "j4-10"},
       {activityId: "act-04-10-02-jump-station", choiceId: "j4-cs"},
       {activityId: "act-04-10-02-jump-nit", choiceId: "j4-nit"},
@@ -520,6 +520,83 @@ describe("course session integration", () => {
     expect(entitlement.data()?.unrestrictedAccess).toBe(true);
     expect(entitlement.data()?.source).toBe("section4_jump");
     expect(entitlement.data()?.grantedByLessonId).toBe(lessonId);
+  });
+
+  test("passing the section 4 jump test on a fresh profile places at section 4", async () => {
+    await seedFlags({placementTestsEnabled: true});
+    await initializeCourseProfileForUser({
+      uid: "placement-user",
+      raw: {clientVersion: "2.0.0", timezone: "UTC"},
+      db,
+    });
+    const lessonId = "lesson-04-10-02-section-four-jump-test";
+    const started = await startCourseLessonForUser({
+      uid: "placement-user",
+      raw: {
+        clientVersion: "2.0.0",
+        lessonId,
+        startRequestId: "start_placement_01",
+      },
+      db,
+    });
+    const steps: Array<Record<string, unknown>> = [
+      {activityId: "act-04-10-02-jump-range", choiceId: "j4-range"},
+      {activityId: "act-04-10-02-jump-3bet", choiceId: "j4-3bet"},
+      {activityId: "act-04-10-02-jump-spr", choiceId: "spr-4"},
+      {activityId: "act-04-10-02-jump-size", choiceId: "j4-10"},
+      {activityId: "act-04-10-02-jump-station", choiceId: "j4-cs"},
+      {activityId: "act-04-10-02-jump-nit", choiceId: "j4-nit"},
+      {activityId: "act-04-10-02-jump-maniac", choiceId: "j4-man"},
+    ];
+    for (const [i, step] of steps.entries()) {
+      await submitCourseStepForUser({
+        uid: "placement-user",
+        raw: {
+          clientVersion: "2.0.0",
+          attemptId: started.attempt.attemptId,
+          activityId: step.activityId,
+          idempotencyKey: `placement_step_${i}`,
+          ...("choiceId" in step ? {choiceId: step.choiceId} : {}),
+          ...("numericValue" in step ? {numericValue: step.numericValue} : {}),
+        },
+        db,
+      });
+    }
+    await completeCourseLessonForUser({
+      uid: "placement-user",
+      raw: {
+        clientVersion: "2.0.0",
+        attemptId: started.attempt.attemptId,
+        idempotencyKey: "placement_complete_01",
+      },
+      db,
+    });
+    const profile = (
+      await db.doc("users/placement-user/course/main").get()
+    ).data()!;
+    const completed = profile.completedLessonIds as string[];
+    expect(completed).toEqual(expect.arrayContaining([
+      "lesson-01-01-01-your-two-cards",
+      "lesson-02-07-02-section-two-jump",
+      "lesson-03-08-02-section-three-jump-test",
+      lessonId,
+    ]));
+    expect(completed.some((id) => id.startsWith("lesson-04-") &&
+      id !== lessonId)).toBe(false);
+    expect(profile.currentLessonId ?? null).toBeNull();
+    expect(profile.firstLessonCompletedAtMs).toEqual(expect.any(Number));
+
+    // Section 4's first lesson is now open on the server too.
+    const next = await startCourseLessonForUser({
+      uid: "placement-user",
+      raw: {
+        clientVersion: "2.0.0",
+        lessonId: "lesson-04-01-01-01-seat-as-range",
+        startRequestId: "start_placement_next_01",
+      },
+      db,
+    });
+    expect(next.attempt.lessonId).toBe("lesson-04-01-01-01-seat-as-range");
   });
 
   test("voluntary review does not restore a heart; Practice flag does", async () => {
