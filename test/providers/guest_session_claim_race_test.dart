@@ -93,6 +93,48 @@ void main() {
   });
 
   test(
+    'a reload keeps the guest this install already claimed (LPT-1031)',
+    () async {
+      // Web reload mid-lesson: localStorage still holds this install's claim
+      // and Firebase restores the same anonymous user. Both AppRoot's
+      // reconcile and the runner's ensureAnonymousSession must keep it.
+      SharedPreferences.setMockInitialValues({
+        guestInstallUidKey: 'this-install-guest',
+        discardRestoredAnonymousKey: false,
+        onboardingDraftPrefsKey: '{"step":"firstLesson"}',
+      });
+      final prefs = await SharedPreferences.getInstance();
+      final auth = MockFirebaseAuth(
+        signedIn: true,
+        mockUser: MockUser(isAnonymous: true, uid: 'this-install-guest'),
+      );
+      final container = containerFor(
+        auth: auth,
+        prefs: prefs,
+        authService: AuthService(firebaseAuth: auth),
+      );
+      final controller = container.read(authControllerProvider.notifier);
+
+      await markGuestInstallGeneration(prefs);
+      await controller.reconcileGuestInstall();
+      expect(auth.currentUser?.uid, 'this-install-guest');
+
+      final user = await controller.ensureAnonymousSession().timeout(
+        const Duration(seconds: 2),
+      );
+      expect(user.uid, 'this-install-guest');
+      expect(auth.currentUser?.uid, 'this-install-guest');
+
+      await controller.reconcileGuestInstall();
+      expect(
+        auth.currentUser?.uid,
+        'this-install-guest',
+        reason: 'guest was signed out after the lesson started',
+      );
+    },
+  );
+
+  test(
     'a guest restored from a previous install is still signed out',
     () async {
       SharedPreferences.setMockInitialValues({});
