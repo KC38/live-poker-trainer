@@ -1215,6 +1215,43 @@ describe("jumpTestPlacementCreditLessonIds", () => {
     expect(credit.some((id) => id.startsWith("lesson-04-"))).toBe(false);
   });
 
+  it("is generic: every section N jump test credits sections < N", () => {
+    const jumps: Array<[string, string]> = [];
+    for (const section of courseBank.sections) {
+      for (const unit of section.units) {
+        for (const lesson of unit.lessons) {
+          if (lessonRequiresPlacementFlag(lesson)) {
+            jumps.push([lesson.id, section.id]);
+          }
+        }
+      }
+    }
+    // Sections 1-4 each publish a jump test today.
+    expect(jumps.length).toBeGreaterThanOrEqual(4);
+    for (const [jumpId, sectionId] of jumps) {
+      const section = courseBank.sections.find((s) => s.id === sectionId)!;
+      const firstOfSection = section.units[0].lessons[0].id;
+      const credit = jumpTestPlacementCreditLessonIds(jumpId);
+      expect(credit).toEqual(ids.slice(0, ids.indexOf(firstOfSection)));
+      const first = findLesson(firstOfSection)!;
+      expect(missingStartPrerequisite({
+        prerequisites: first.lesson.prerequisites,
+        requiresPlacement: false,
+        completedLessonIds: credit,
+        lessonSplitMap: courseBank.lessonSplitMap,
+      })).toBeUndefined();
+    }
+  });
+
+  it("section 3 jump test credits sections 1-2 and opens section 3", () => {
+    const credit = jumpTestPlacementCreditLessonIds(
+      "lesson-03-08-02-section-three-jump-test",
+    );
+    expect(credit).toContain("lesson-02-07-02-section-two-jump");
+    expect(credit.some((id) => id.startsWith("lesson-03-"))).toBe(false);
+    expect(credit[credit.length - 1]).toBe("lesson-02-07-02-section-two-jump");
+  });
+
   it("credits nothing for section 1 jump or non-jump lessons", () => {
     expect(jumpTestPlacementCreditLessonIds(
       "lesson-01-06-02-section-one-jump",

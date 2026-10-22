@@ -27,6 +27,17 @@ import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  test('jump test offer copy names the placement section', () {
+    expect(
+      jumpTestOfferCopy(4),
+      'You asked for Regular. Pass this jump test to start at Section 4 — '
+      'Sections 1–3 count as done. Not ready? Start from the beginning '
+      'instead.',
+    );
+    expect(jumpTestOfferCopy(2), contains('Section 1 counts as done'));
+    expect(jumpTestOfferCopy(null), isNot(contains('never unlocks')));
+  });
+
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() async {
@@ -475,7 +486,7 @@ void main() {
     expect(find.byType(RexMascot), findsOneWidget);
     expect(find.text('Your experience'), findsNothing);
     expect(
-      find.textContaining('never unlocks content alone'),
+      find.textContaining('Pass this jump test'),
       findsNothing,
     );
     expect(
