@@ -7,6 +7,7 @@
  */
 
 import courseBankJson from "./generated/course_bank.json";
+import {expandCompletedLessonIds} from "./lesson_split_map";
 
 /** Soft grades reused from live coaching. */
 export type SoftGrade =
@@ -207,8 +208,10 @@ export function lessonRequiresPlacementFlag(lesson: CourseLesson): boolean {
  * A jump test places the learner at the start of the section it belongs to:
  * every lesson in the earlier sections (bank order) counts as completed, so
  * Home unlocks that section and lands on its first lesson instead of
- * Section 1, Unit 1. The jump test itself is recorded by the caller. Returns
- * an empty list for non-jump lessons and unknown ids.
+ * Section 1, Unit 1. The jump test itself is not credited: it is the last
+ * node of its section and the next section's first prerequisite, so the
+ * caller records it only when its own prerequisites are already complete
+ * (LPT-1032). Returns an empty list for non-jump lessons and unknown ids.
  */
 export function jumpTestPlacementCreditLessonIds(
   lessonId: string,
@@ -226,6 +229,64 @@ export function jumpTestPlacementCreditLessonIds(
     }
   }
   return ids;
+}
+
+/**
+ * True when [lessonId] is a jump test stored in [completed] only as a
+ * placement: its own catalog prerequisites are not all completed and no
+ * completed lesson builds on it (split-map aware).
+ *
+ * Jump tests sit at the end of their section, and the next section's first
+ * lesson lists the jump test as its prerequisite. A jump test passed as a
+ * placement (before the section's own lessons) therefore must not count as a
+ * completed lesson, or the next section unlocks too (LPT-1032: a Section 4
+ * placement also unlocked Section 5). A learner who already finished a lesson
+ * that requires the jump test keeps it so their path is not re-locked.
+ */
+export function isPlacementOnlyJumpTest(
+  lessonId: string,
+  completed: readonly string[],
+  bank: CourseBank = courseBank,
+): boolean {
+  const located = findLesson(lessonId, bank);
+  if (!located || !lessonRequiresPlacementFlag(located.lesson)) return false;
+  const expanded = expandCompletedLessonIds(completed, bank.lessonSplitMap);
+  if (located.lesson.prerequisites.every((id) => expanded.includes(id))) {
+    return false;
+  }
+  for (const section of bank.sections) {
+    for (const unit of section.units) {
+      for (const lesson of unit.lessons) {
+        if (
+          lesson.prerequisites.includes(lessonId) &&
+          expanded.includes(lesson.id)
+        ) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+
+/**
+ * Completed lesson ids that count for unlocks and Home progress.
+ *
+ * Drops placement-only jump tests (see [isPlacementOnlyJumpTest]) until no
+ * more drop, so profiles written before LPT-1032 stop unlocking the section
+ * after their placement. Accepts the raw Firestore value (non-arrays read as
+ * empty). Order is preserved.
+ */
+export function effectiveCompletedLessonIds(
+  completed: unknown,
+  bank: CourseBank = courseBank,
+): string[] {
+  let out = Array.isArray(completed) ? completed.map(String) : [];
+  for (;;) {
+    const next = out.filter((id) => !isPlacementOnlyJumpTest(id, out, bank));
+    if (next.length === out.length) return out;
+    out = next;
+  }
 }
 
 /**

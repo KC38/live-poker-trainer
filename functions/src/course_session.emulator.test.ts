@@ -14,6 +14,14 @@ import {
   startCourseLessonForUser,
   submitCourseStepForUser,
 } from "./course_session";
+import {courseBank} from "./course_catalog";
+
+/** Every lesson id in Section 1 (bank order). */
+function sectionOneLessonIds(): string[] {
+  return courseBank.sections[0].units.flatMap(
+      (unit) => unit.lessons.map((lesson) => lesson.id),
+  );
+}
 
 const PROJECT_ID = "live-poker-trainer-rules-test";
 const APP_NAME = "course-session-emulator-tests";
@@ -313,10 +321,11 @@ describe("course session integration", () => {
       raw: {clientVersion: "2.0.0"},
       db,
     });
-    // Seed the direct prerequisite so this isolation test can start mid-path
-    // without authoring the entire Section 1 completion chain.
+    // Seed Section 1 so this isolation test can start mid-path. A bare jump
+    // id no longer counts: a jump test without its own section done is a
+    // placement, not a completed node (LPT-1032).
     await db.doc("users/iso-user/course/main").set({
-      completedLessonIds: ["lesson-01-06-02-section-one-jump"],
+      completedLessonIds: sectionOneLessonIds(),
     }, {merge: true});
     const started = await startCourseLessonForUser({
       uid: "iso-user",
@@ -579,10 +588,14 @@ describe("course session integration", () => {
       "lesson-01-01-01-your-two-cards",
       "lesson-02-07-02-section-two-jump",
       "lesson-03-08-02-section-three-jump-test",
-      lessonId,
     ]));
-    expect(completed.some((id) => id.startsWith("lesson-04-") &&
-      id !== lessonId)).toBe(false);
+    // The placement pass is not a completed Section 4 node (LPT-1032):
+    // recording it would satisfy Section 5's first prerequisite.
+    expect(completed.some((id) => id.startsWith("lesson-04-"))).toBe(false);
+    expect(profile.passedJumpTestLessonIds).toEqual([lessonId]);
+    expect((await db.doc(
+      `users/placement-user/courseReviews/review_${lessonId}`,
+    ).get()).exists).toBe(false);
     expect(profile.currentLessonId ?? null).toBeNull();
     expect(profile.firstLessonCompletedAtMs).toEqual(expect.any(Number));
 
@@ -597,6 +610,57 @@ describe("course session integration", () => {
       db,
     });
     expect(next.attempt.lessonId).toBe("lesson-04-01-01-01-seat-as-range");
+
+    // Section 5 stays locked until Section 4 is finished.
+    await expect(startCourseLessonForUser({
+      uid: "placement-user",
+      raw: {
+        clientVersion: "2.0.0",
+        lessonId: "lesson-05-01-01-01-nut-potential",
+        startRequestId: "start_placement_sec5_01",
+      },
+      db,
+    })).rejects.toMatchObject({code: "failed-precondition"});
+  });
+
+  test("a pre-LPT-1032 Section 4 placement no longer unlocks Section 5", async () => {
+    await seedFlags();
+    await initializeCourseProfileForUser({
+      uid: "legacy-placement-user",
+      raw: {clientVersion: "2.0.0", timezone: "UTC"},
+      db,
+    });
+    const jumpId = "lesson-04-10-02-section-four-jump-test";
+    const before = courseBank.sections.slice(0, 3).flatMap(
+        (section) => section.units.flatMap(
+            (unit) => unit.lessons.map((lesson) => lesson.id),
+        ),
+    );
+    await db.doc("users/legacy-placement-user/course/main").set({
+      completedLessonIds: [...before, jumpId],
+    }, {merge: true});
+    await db.doc(
+      `users/legacy-placement-user/courseReviews/review_${jumpId}`,
+    ).set({reviewId: `review_${jumpId}`, lessonId: jumpId,
+      status: "scheduled", dueAtMs: 1});
+    const state = await getCourseStateForUser({
+      uid: "legacy-placement-user",
+      raw: {clientVersion: "2.0.0"},
+      db,
+    });
+    const ids = (state.profile as {completedLessonIds: string[]})
+      .completedLessonIds;
+    expect(ids).toEqual(before);
+    expect(JSON.stringify(state)).not.toContain(`review_${jumpId}`);
+    await expect(startCourseLessonForUser({
+      uid: "legacy-placement-user",
+      raw: {
+        clientVersion: "2.0.0",
+        lessonId: "lesson-05-01-01-01-nut-potential",
+        startRequestId: "start_legacy_sec5_01",
+      },
+      db,
+    })).rejects.toMatchObject({code: "failed-precondition"});
   });
 
   test("voluntary review does not restore a heart; Practice flag does", async () => {

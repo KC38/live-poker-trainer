@@ -474,6 +474,11 @@ export function mergeCourseProfiles(
   const destCompleted = stringArray(destination.completedLessonIds);
   const completedLessonIds = uniqueStrings([...destCompleted, ...sourceCompleted]);
   const newLessons = sourceCompleted.filter((id) => !destCompleted.includes(id));
+  // Placement-only jump passes live here, not in completedLessonIds (LPT-1032).
+  const passedJumpTestLessonIds = uniqueStrings([
+    ...stringArray(destination.passedJumpTestLessonIds),
+    ...stringArray(source.passedJumpTestLessonIds),
+  ]);
 
   const masteryByLessonId: Record<string, number> = {
     ...(destination.masteryByLessonId as Record<string, number> ?? {}),
@@ -570,6 +575,7 @@ export function mergeCourseProfiles(
         Math.min(1, acceptedAnswers / totalScoredAnswers),
       masteryByLessonId,
       completedLessonIds,
+      ...(passedJumpTestLessonIds.length > 0 ? {passedJumpTestLessonIds} : {}),
       currentLessonId:
         optionalString(destination.currentLessonId) ??
         optionalString(source.currentLessonId) ??

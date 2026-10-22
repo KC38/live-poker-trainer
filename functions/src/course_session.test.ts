@@ -1203,8 +1203,9 @@ describe("jumpTestPlacementCreditLessonIds", () => {
     const firstSec4 = ids.indexOf("lesson-04-01-01-01-seat-as-range");
     expect(credit).toEqual(ids.slice(0, firstSec4));
     expect(credit).toContain("lesson-03-08-02-section-three-jump-test");
-    // Section 4's first lesson is unlocked by the credit; the jump test
-    // itself is appended on completion, which also opens Section 5.
+    // Section 4's first lesson is unlocked by the credit. The jump test
+    // itself is not recorded on a placement pass, so Section 5 stays locked
+    // (LPT-1032, jump_test_placement_unlock.test.ts).
     const sec4First = findLesson("lesson-04-01-01-01-seat-as-range")!;
     expect(missingStartPrerequisite({
       prerequisites: sec4First.lesson.prerequisites,
