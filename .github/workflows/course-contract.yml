@@ -37,7 +37,8 @@ jobs:
           flutter test test/models/course/course_catalog_test.dart \
             test/ui/course/lesson_table_layout_contract_test.dart \
             test/ui/course/lesson_table_drill_scene_test.dart \
-            test/ui/course/lesson_copy_matches_felt_test.dart
+            test/ui/course/lesson_copy_matches_felt_test.dart \
+            test/ui/course/lesson_hint_off_bubble_test.dart
 
       # Copy never restates what the felt shows, and every action, seat,
       # player type and street the copy or answers name plays out on the felt.

@@ -1416,6 +1416,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               !_heartsGateActive &&
               _frameCanHint(activity) &&
               controller.canRequestHint,
+          hintOffReason: _heartsGateActive
+              ? null
+              : lessonFrameHintOffReason(
+                  activity,
+                  isReview: controller.isReview,
+                  bindGeneration: controller.bindGeneration,
+                ),
           onUndo: controller.undoDraft,
           onRedo: controller.redoDraft,
           onHint: () {
