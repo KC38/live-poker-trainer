@@ -14,8 +14,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 const _id = 'act-03-02-01-unguided';
-const _line =
-    'Board Qc 7d 2s. You hold 5h 4h multiway. Class — tap the matching label.';
+const _line = 'Multiway flop. Class your hand — tap the matching label.';
 const _templateHero = ['5h', '4h'];
 const _templateBoard = ['Qc', '7d', '2s'];
 
@@ -35,8 +34,9 @@ void main() {
     expect(speech, isNot(contains('little equity')));
     expect(speech, isNot(contains('pick Air')));
     expect(speech, isNot(contains('pick ')));
-    expect(speech.toLowerCase(), contains('board'));
-    expect(speech.toLowerCase(), contains('you hold'));
+    // The felt shows the board and your holes; the copy never restates them.
+    expect(speech, contains('Class your hand'));
+    expect(speech, isNot(matches(RegExp(r'\b[2-9TJQKA][shdc]\b'))));
     expect(speech, contains('tap the matching label'));
   });
 
@@ -65,14 +65,15 @@ void main() {
       templateBoard: _templateBoard,
       dealtBoard: dealtBoard,
     );
-    expect(
-      lessonFrameSpeech(activity!, bindGeneration: generation),
-      expected,
-    );
-    expect(expected, isNot(contains('Qc')));
-    expect(expected, isNot(contains('5h 4h')));
-    for (final code in [...dealtHero, ...dealtBoard]) {
-      expect(expected.toLowerCase(), contains(code.toLowerCase()));
+    expect(lessonFrameSpeech(activity!, bindGeneration: generation), expected);
+    // No card codes to remap: the felt shows the dealt board and holes.
+    for (final code in [
+      ..._templateHero,
+      ..._templateBoard,
+      ...dealtHero,
+      ...dealtBoard,
+    ]) {
+      expect(expected, isNot(contains(code)));
     }
   });
 }

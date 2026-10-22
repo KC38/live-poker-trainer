@@ -45,7 +45,7 @@ const _lines = <String, String>{
       'Seat right before the button — pick it on the map.',
   // LPT-674 / LPT-878: Section 3 jump densify — no correct tile spoil.
   'act-03-08-02-jump-table':
-      'Pot 16, shorter 40bb — tap what you track first.',
+      'Before you act — tap what you track first.',
   'act-03-08-02-jump-class':
       'Your holes on this flop — pick the hand class.',
   'act-03-08-02-jump-leak':
@@ -242,7 +242,7 @@ void main() {
     () {
     const expected = <String, String>{
       'act-03-08-02-jump-table':
-          'Pot 16, shorter 40bb — tap what you track first.',
+          'Before you act — tap what you track first.',
       'act-03-08-02-jump-class':
           'Your holes on this flop — pick the hand class.',
       'act-03-08-02-jump-leak':
@@ -267,7 +267,7 @@ void main() {
       'act-04-10-02-jump-range':
           'UTG open is best described as — tap the matching range.',
       'act-04-10-02-jump-spr':
-          'Stack 60bb, pot 15bb. SPR — tap the matching number.',
+          "What's the SPR? Tap the matching number.",
       'act-04-10-02-jump-station':
           'Sticky caller three streets. Label + exploit direction — tap the matching plan.',
       'act-04-10-02-jump-nit':

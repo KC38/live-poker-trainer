@@ -41,10 +41,9 @@ class SeatMetrics {
     bool review = false,
     double scale = 1,
   }) {
-    final base =
-        hero
-            ? (compact ? const Size(124, 44) : const Size(140, 48))
-            : (compact ? const Size(92, 40) : const Size(108, 44));
+    final base = hero
+        ? (compact ? const Size(124, 44) : const Size(140, 48))
+        : (compact ? const Size(92, 40) : const Size(108, 44));
     final extra = stats && !hero ? 11.0 : 0.0;
     return SeatMetrics._(
       pod: Size(base.width * scale, (base.height + extra) * scale),
@@ -203,14 +202,13 @@ class PlayerSeatWidget extends StatelessWidget {
     final m = metrics;
     final size = m.footprint;
     final faces = (showCards || revealHoleCards) && player.holeCards.isNotEmpty;
-    final cards =
-        player.folded
-            ? null
-            : faces
-            ? _faceCards(m)
-            : showHoleBacks
-            ? _backCards(m)
-            : null;
+    final cards = player.folded
+        ? null
+        : faces
+        ? _faceCards(m)
+        : showHoleBacks
+        ? _backCards(m)
+        : null;
     final pod = m.podIn(Offset.zero & size);
     return SizedBox(
       width: size.width,
@@ -315,6 +313,7 @@ class PlayerSeatWidget extends StatelessWidget {
         ),
       );
     }
+
     return Row(
       key: ValueKey<String>('seat-backs-${player.id}'),
       mainAxisSize: MainAxisSize.min,
@@ -329,21 +328,19 @@ class PlayerSeatWidget extends StatelessWidget {
 
   Widget _box(SeatMetrics m) {
     final s = scale;
-    final iconColor =
-        player.isHero
-            ? AppColors.hero
-            : features.playerTypes
-            ? player.archetype.color
-            : AppColors.slate;
+    final iconColor = player.isHero
+        ? AppColors.hero
+        : features.playerTypes
+        ? player.archetype.color
+        : AppColors.slate;
     final highlight = isWinner || isActive || isWaitingOnLlm;
-    final ring =
-        isWinner
-            ? AppColors.goldBright
-            : isWaitingOnLlm
-            ? AppColors.warning
-            : isActive
-            ? AppColors.goldBright
-            : AppColors.slateDark;
+    final ring = isWinner
+        ? AppColors.goldBright
+        : isWaitingOnLlm
+        ? AppColors.warning
+        : isActive
+        ? AppColors.goldBright
+        : AppColors.slateDark;
     final iconSize = math.min(m.pod.height - 12 * s, 34 * s);
     return AnimatedContainer(
       key: ValueKey<String>('seat-box-${player.id}'),
@@ -356,13 +353,10 @@ class PlayerSeatWidget extends StatelessWidget {
         border: Border.all(color: ring, width: highlight ? 2 : 1.2),
         boxShadow: [
           BoxShadow(
-            color:
-                highlight
-                    ? (isWaitingOnLlm
-                            ? AppColors.warning
-                            : AppColors.goldBright)
-                        .withValues(alpha: isWinner ? 0.45 : 0.3)
-                    : Colors.black.withValues(alpha: 0.35),
+            color: highlight
+                ? (isWaitingOnLlm ? AppColors.warning : AppColors.goldBright)
+                      .withValues(alpha: isWinner ? 0.45 : 0.3)
+                : Colors.black.withValues(alpha: 0.35),
             blurRadius: highlight ? 12 : 6,
             offset: highlight ? Offset.zero : const Offset(0, 2),
           ),
@@ -403,19 +397,28 @@ class PlayerSeatWidget extends StatelessWidget {
                     ],
                   ],
                 ),
+                // Flexible: a short stack ("$80") is not narrowed by the
+                // FittedBox, so let it shrink to the plate height instead of
+                // overflowing it.
                 if (features.stacks)
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      ChipFormat.chips(player.stack, bigBlind, chipDisplayMode),
-                      key: ValueKey<String>('seat-stack-${player.id}'),
-                      maxLines: 1,
-                      style: GoogleFonts.jetBrainsMono(
-                        fontSize: (compact ? 13 : 15) * s,
-                        height: 1.15,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.cream,
+                  Flexible(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        ChipFormat.chips(
+                          player.stack,
+                          bigBlind,
+                          chipDisplayMode,
+                        ),
+                        key: ValueKey<String>('seat-stack-${player.id}'),
+                        maxLines: 1,
+                        style: GoogleFonts.jetBrainsMono(
+                          fontSize: (compact ? 13 : 15) * s,
+                          height: 1.15,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.cream,
+                        ),
                       ),
                     ),
                   ),
@@ -712,8 +715,9 @@ class _SeatWaitTimerState extends State<_SeatWaitTimer> {
   @override
   Widget build(BuildContext context) {
     final seconds = _tenths / 10;
-    final label =
-        seconds < 10 ? seconds.toStringAsFixed(1) : seconds.toStringAsFixed(0);
+    final label = seconds < 10
+        ? seconds.toStringAsFixed(1)
+        : seconds.toStringAsFixed(0);
     return Text(
       '${label}s',
       maxLines: 1,

@@ -67,7 +67,7 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // (LPT-882; SoftPulse LPT-653; same class as LPT-881 / LPT-880 /
     // LPT-878 / LPT-877).
     'act-03-03-01-scaffolded' =>
-      'Pot 20, bet 10 — tap the matching call amount.',
+      'You face a bet — tap the matching call amount.',
     // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
     // situation + tap verb only; never name Call / Fold / Raise tile verbs
     // (LPT-881; SoftPulse LPT-653; same class as LPT-882 / LPT-880 /
@@ -88,13 +88,13 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Seat enters most pots — pick what you note.',
     // Patch the common leaks checkpoint densified ask (LPT-382) — same path.
     'act-03-08-01-checkpoint' =>
-      'Two seats, different frequencies — pick how often each seat enters.',
+      'Two players enter pots at very different rates — tap what you note.',
     // Section 3 jump select_identify densified asks (LPT-390) — same path.
     // jump-class stays felt-first (no hard-coded template ranks/suits).
     // SoftPulse off (kind: none); stems must not spoil the correct tile
     // (LPT-674 / LPT-878; SoftPulse LPT-653; same class as LPT-673).
     'act-03-08-02-jump-table' =>
-      'Pot 16, shorter 40bb — tap what you track first.',
+      'Before you act — tap what you track first.',
     // SoftPulse-off densify — situation + pick/tap verb only; never name
     // Draw / straight and flush in the idle bubble (LPT-878; SoftPulse
     // LPT-653; same class as LPT-674 / LPT-877).
@@ -104,7 +104,7 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Gutshot vs a 2x pot bet — tap the matching price plan.',
     // Think in ranges densified asks (LPT-403) — same path as LPT-390.
     'act-04-01-01-guided' =>
-      'UTG opens at 1/2 — pick the stronger, narrower range.',
+      'UTG opens — tap the stronger, narrower range.',
     // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
     // situation + tap verb only; never name Stronger / BB stronger
     // (LPT-880; SoftPulse LPT-653; same class as LPT-867 / LPT-866 /
@@ -133,7 +133,7 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Value sizes that both get calls — tap the matching grading idea.',
     // SPR decides commitment guided densified ask (LPT-412) — same path.
     'act-04-05-01-guided' =>
-      'Effective 80 into pot 20 — pick SPR 4.',
+      'Effective stack into the pot — tap SPR 4.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Weigh SPR first / append the dock footer (LPT-812; SoftPulse
     // LPT-653; same class as LPT-809 / LPT-808 / LPT-807).
@@ -203,13 +203,13 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-06-04-01-unguided' =>
       'Mismatch to avoid — pick the sizing leak.',
     'act-06-04-01-checkpoint' =>
-      'Merged betting aims to — pick the goal.',
+      'Merged sizing aims to — tap the goal.',
     // Use overbets densified asks (LPT-638) — same path as LPT-637.
     // Use pick/tap so withLessonTapInstruction does not append the footer.
     'act-06-05-01-guided' =>
       'Best overbet river — pick the polar candidate.',
     'act-06-05-01-unguided' =>
-      'Random 3x pot medium — pick the disciplined line.',
+      'Medium hand, giant size — tap the disciplined line.',
     'act-06-05-01-checkpoint' =>
       'Geometric sizing helps — pick what it links.',
     // Use blockers densified asks (LPT-639) — same path as LPT-638.
@@ -241,9 +241,9 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Navigate 3-bet densified asks (LPT-645) — same path as LPT-644.
     // Use pick/tap so withLessonTapInstruction does not append the footer.
     'act-06-09-01-guided' =>
-      '100bb 4-bet pot · top pair — pick the depth mindset.',
+      '4-bet pot, and you flop top pair — tap the depth mindset.',
     'act-06-09-01-unguided' =>
-      'Light 4-bet for ego — pick the discipline.',
+      'Facing a 3-bet, re-raising light just for ego — tap the discipline.',
     'act-06-09-01-checkpoint' =>
       'Depth change in 3-bet pots — pick what shifts.',
     // Difficult folds densified asks (LPT-646) — same path as LPT-645.
@@ -251,7 +251,7 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-06-10-01-scaffolded' =>
       'KK loses to AA all-in — pick the review label.',
     'act-06-10-01-unguided' =>
-      'Calling because you are "due" — pick the real reason.',
+      'Paying off because you feel “due” — tap the real reason.',
     'act-06-10-01-checkpoint' =>
       'Review after a big loss — pick the honest question.',
     // Observe selective densified asks (LPT-647) — same path as LPT-646.
@@ -293,7 +293,7 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Adjust versus LAG densified asks (LPT-651) — same path as LPT-650.
     // Use pick/tap so withLessonTapInstruction does not append the footer.
     'act-06-12-03-unguided' =>
-      'Inventing triple-barrel bluffs into a LAG — pick the discipline.',
+      'Bluffing three streets into a LAG — tap the discipline.',
     'act-06-12-03-checkpoint' => 'LAG exploit cites — pick the cite.',
     // Adjust versus TAG densified asks (LPT-652) — same path as LPT-651.
     // Use pick/tap so withLessonTapInstruction does not append the footer.
@@ -318,9 +318,9 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Carry a preflop plan densified asks (LPT-656) — same path as LPT-655.
     // Use pick/tap so withLessonTapInstruction does not append the footer.
     'act-07-01-01-guided' =>
-      'AQo 3-bet · 872tt — pick the plan update.',
+      'Your value 3-bet meets this flop — tap the plan update.',
     'act-07-01-01-scaffolded' =>
-      'BTN steal KTo · KT2r — pick the plan update.',
+      'Your button steal gets called and this flop lands — tap the plan update.',
     'act-07-01-01-unguided' =>
       'Best habit — pick what to do before flop act.',
     'act-07-01-01-checkpoint' => 'Dead plan — pick the response.',
@@ -328,7 +328,8 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Use pick/tap so withLessonTapInstruction does not append the footer.
     'act-07-02-01-guided' => 'AK c-bet · Q72r — pick the continue cards.',
     'act-07-02-01-scaffolded' => 'Gutshot · brick raise — pick the map call.',
-    'act-07-02-01-unguided' => 'No turn idea — pick what to do first.',
+    'act-07-02-01-unguided' => 
+      'No plan yet for the next card — tap what to do first.',
     'act-07-02-01-checkpoint' => 'Turn map — pick the definition.',
     // Compose river densified asks (LPT-658) — same path as LPT-657.
     // Guided is poker_action_sizing (not select_identify). Use pick/tap so
@@ -341,7 +342,8 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Use pick/tap so withLessonTapInstruction does not append the footer.
     'act-07-04-01-guided' => 'Multiway limped — pick the priority.',
     'act-07-04-01-scaffolded' => 'HU SRP IP — pick the default weapon.',
-    'act-07-04-01-unguided' => '4-bet 100bb — pick the mindset.',
+    'act-07-04-01-unguided' => 
+      '4-bet pot — tap the mindset.',
     'act-07-04-01-checkpoint' => 'Pot type — pick what changes.',
     // Switch gears HU vs multiway densified asks (LPT-660) — same path as LPT-659.
     'act-07-05-01-guided' => 'Four-way river — pick the air-bluff call.',
@@ -349,10 +351,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-07-05-01-unguided' => 'Multiway top set — pick the line lean.',
     'act-07-05-01-checkpoint' => 'Player count — pick how it ranks.',
     // Rewrite plans when stacks densified asks (LPT-661) — same path as LPT-660.
-    'act-07-06-01-guided' => '35bb TPTK — pick the commit lean.',
-    'act-07-06-01-scaffolded' => '250bb 55 — pick the set-mine lean.',
+    'act-07-06-01-guided' => 
+      'Short stacks, top pair strong kicker — tap the commit lean.',
+    'act-07-06-01-scaffolded' => 
+      'Very deep with a small pair — tap the set-mine lean.',
     'act-07-06-01-unguided' =>
-      'Hero 200 / Villain 40 — pick effective stack.',
+      'Your stack against the highlighted seat — tap the effective stack.',
     'act-07-06-01-checkpoint' => 'Stack depth — pick how often to check.',
     // Replay same hand vs each type densified checkpoint (LPT-664).
     'act-07-07-01-checkpoint' => 'No type evidence — pick the default.',
@@ -498,12 +502,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-02-02-01-checkpoint-trash' =>
       'Low unconnected offsuit holes — tap the matching family.',
     'act-02-05-01-guided-convert' =>
-      'Blinds 1/2. You have 200 chips. How many big blinds — pick 100bb.',
+      'How many big blinds is your stack? Tap 100bb.',
     // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
     // situation + tap verb only; never name the 60bb tile (LPT-849;
     // SoftPulse LPT-653; same class as LPT-845 / LPT-844 / LPT-843).
     'act-02-05-01-scaffolded-eff' =>
-      'You have 150bb. Villain has 60bb — tap the effective stack.',
+      'Your stack against the highlighted seat — tap the effective stack.',
     // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
     // situation + tap verb only; never name 50bb / 100bb / 200bb (LPT-850;
     // SoftPulse LPT-653; same class as LPT-849 / LPT-845 / LPT-844).
@@ -513,7 +517,7 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // name 200bb in the idle bubble (LPT-785; SoftPulse LPT-653; same class
     // as LPT-784 / LPT-783 / LPT-782 / LPT-672).
     'act-02-05-01-checkpoint-200' =>
-      'Blinds 2/5. You buy in for 1000 chips — tap the matching stack in big blinds.',
+      'Your buy-in sits in front of you — tap the matching stack in big blinds.',
     'act-02-06-01-guided-follow' =>
       'Two seats act before you. What first — pick Watch what they do, then decide.',
     // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
@@ -541,7 +545,7 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-02-07-02-jump-pos' =>
       'Seat right before the button — pick it on the map.',
     'act-03-01-01-guided' =>
-      'Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now — pick 19.',
+      'UTG opens, you call, BB calls. Pot now — tap 19.',
     // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
     // situation + tap verb only; never name UTG / Seat left of the big
     // blind (LPT-845; SoftPulse LPT-653; same class as LPT-844 / LPT-843 /
@@ -558,22 +562,22 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // name Effective 55bb / the 18 pot in the idle bubble (LPT-787;
     // SoftPulse LPT-653; same class as LPT-785 / LPT-786 / LPT-672).
     'act-03-01-01-checkpoint' =>
-      'Hero 140bb, villain 55bb, pot 18 — tap what matters most next.',
+      'Read the stacks and the pot — tap what matters most next.',
     'act-03-02-01-guided' =>
-      'Board Ks 9d 2c. You hold Kh Qh. Class — pick Made hand — top pair.',
+      'Class your hand on this flop — pick Made hand — top pair.',
     // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
     // situation + tap verb only; keep template board/holes for
     // alignLessonTableCopy; never name Strong draw / nut flush draw
     // (LPT-847; SoftPulse LPT-653; same class as LPT-846 / LPT-845 /
     // LPT-844).
     'act-03-02-01-scaffolded' =>
-      'Board Jh 8h 3c. You hold Ah 9h. Class — tap the matching label.',
+      'Class your hand on this flop — tap the matching label.',
     // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
     // situation + tap verb only; keep template board/holes for
     // alignLessonTableCopy; never name Air / little equity (LPT-848;
     // SoftPulse LPT-653; same class as LPT-847 / LPT-846 / LPT-845).
     'act-03-02-01-unguided' =>
-      'Board Qc 7d 2s. You hold 5h 4h multiway. Class — tap the matching label.',
+      'Multiway flop. Class your hand — tap the matching label.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Draw / open-ended straight draw, and never hardcode template
     // board/holes (LPT-805; SoftPulse LPT-653; remap honesty LPT-806 class;
@@ -665,7 +669,7 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-04-10-02-jump-range' =>
       'UTG open is best described as — tap the matching range.',
     'act-04-10-02-jump-spr' =>
-      'Stack 60bb, pot 15bb. SPR — tap the matching number.',
+      "What's the SPR? Tap the matching number.",
     'act-05-01-01-guided' =>
       'Four-way flop. Best continue with — pick Nut flush draw.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
@@ -674,7 +678,7 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-05-01-01-checkpoint' =>
       'Multiway construction priority — tap the matching priority.',
     'act-05-02-01-guided' =>
-      '200bb effective. Best reason to call a raise with 55 BTN — pick Implied odds if they pay sets.',
+      'Deep stacks. Best reason to call this raise with your small pair — tap Implied odds if they pay sets.',
     // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
     // situation + tap verb only; never name Map turn/river plans before
     // committing (LPT-859; SoftPulse LPT-653; same class as LPT-858 /
@@ -709,7 +713,7 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // bubble (LPT-742; same class as LPT-736 / LPT-734 / LPT-735 / LPT-723 /
     // LPT-717 / LPT-672 / LPT-653).
     'act-05-05-01-checkpoint' =>
-      'Delayed c-bet is best when — tap the matching timing.',
+      'You checked back the flop; they check the turn. Delayed c-bet is best when — tap the matching timing.',
     'act-05-06-01-guided' =>
       'Villain bets flop, checks turn. Range now — pick Capped — fewer nuts.',
     // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
@@ -761,7 +765,7 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // situation + tap verb only; never name Decline (LPT-857; SoftPulse
     // LPT-653; same class as LPT-856 / LPT-855 / LPT-854 / LPT-853 / LPT-850).
     'act-05-09-01-scaffolded' =>
-      'Bankroll 40 buy-ins for 1/2. Spot opens at 2/5. Action — tap the matching plan.',
+      'Bankroll 40 buy-ins for 1/2. A 2/5 game has room. Action — tap the matching plan.',
     // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
     // situation + tap verb only; never name Cash out (LPT-854; SoftPulse
     // LPT-653; same class as LPT-853 / LPT-850 / LPT-849 / LPT-846).
@@ -805,7 +809,7 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // situation + tap verb only; never name Fold equity (LPT-856; SoftPulse
     // LPT-653; same class as LPT-855 / LPT-854 / LPT-853 / LPT-850).
     'act-06-02-01-unguided' =>
-      'Semi-bluff check-raise with nut draw IP-denied. Purpose — tap the matching reason.',
+      'Semi-bluff check-raise with the nut draw. Purpose — tap the matching reason.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Position + initiative in the idle bubble (LPT-766; same class as
     // LPT-764 / LPT-746 / LPT-653).

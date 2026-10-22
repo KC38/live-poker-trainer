@@ -93,21 +93,27 @@ void main() {
       expect(checkpoint.bigBlind, 5);
     });
 
-    test('pot count: chips in front of seats add to the answer, pot hidden', () {
-      final spec = _spec('act-03-01-01-guided');
-      expect(spec.hidePot, isTrue);
-      final total = spec.streetBets!.fold<double>(0, (a, b) => a + b);
-      expect(total, 19);
-      expect(spec.seatActionLabels[spec.seatIndexOf('UTG')], 'RAISE');
-      expect(spec.seatActionLabels[0], 'CALL');
-      expect(spec.seatActionLabels[spec.seatIndexOf('BB')], 'CALL');
-      // SB folded its posted blind; HJ / CO folded too.
-      expect(spec.foldedSeatIndexes, containsAll([
-        spec.seatIndexOf('SB'),
-        spec.seatIndexOf('HJ'),
-        spec.seatIndexOf('CO'),
-      ]));
-    });
+    test(
+      'pot count: chips in front of seats add to the answer, pot hidden',
+      () {
+        final spec = _spec('act-03-01-01-guided');
+        expect(spec.hidePot, isTrue);
+        final total = spec.streetBets!.fold<double>(0, (a, b) => a + b);
+        expect(total, 19);
+        expect(spec.seatActionLabels[spec.seatIndexOf('UTG')], 'RAISE');
+        expect(spec.seatActionLabels[0], 'CALL');
+        expect(spec.seatActionLabels[spec.seatIndexOf('BB')], 'CALL');
+        // SB folded its posted blind; HJ / CO folded too.
+        expect(
+          spec.foldedSeatIndexes,
+          containsAll([
+            spec.seatIndexOf('SB'),
+            spec.seatIndexOf('HJ'),
+            spec.seatIndexOf('CO'),
+          ]),
+        );
+      },
+    );
 
     test('call price: 20 in the middle plus their 10', () {
       final spec = _spec('act-03-03-01-scaffolded');
@@ -122,8 +128,9 @@ void main() {
 
     test('hero seat follows the copy', () {
       expect(_spec('act-07-01-01-scaffolded').heroPosition, 'BTN');
+      expect(_spec('act-03-03-01-scaffolded').heroPosition, 'BB');
       final spec = resolveLessonTableDrillSpec(
-        activity: _step('act-04-10-02-jump-spr').activity,
+        activity: _step('act-05-01-01-guided').activity,
         caption: 'You are in the big blind',
       );
       expect(spec.heroPosition, 'BB');
@@ -226,7 +233,10 @@ void main() {
     await tester.pump(const Duration(milliseconds: 50));
 
     expect(find.byType(FeltTableView), findsOneWidget);
-    expect(find.byKey(const ValueKey('lesson-table-drill-scene')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('lesson-table-drill-scene')),
+      findsOneWidget,
+    );
     expect(find.byKey(const ValueKey('outcome-phases-felt')), findsNothing);
     expect(find.textContaining('POT 15 BB'), findsOneWidget);
     expect(find.text('60 BB'), findsWidgets);

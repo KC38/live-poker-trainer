@@ -12,7 +12,7 @@ import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 const _lines = <String, String>{
   'act-07-02-01-guided': 'AK c-bet · Q72r — pick the continue cards.',
   'act-07-02-01-scaffolded': 'Gutshot · brick raise — pick the map call.',
-  'act-07-02-01-unguided': 'No turn idea — pick what to do first.',
+  'act-07-02-01-unguided': 'No plan yet for the next card — tap what to do first.',
   'act-07-02-01-checkpoint': 'Turn map — pick the definition.',
 };
 

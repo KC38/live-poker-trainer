@@ -9,13 +9,21 @@
 /// the script; per-step overrides cover the few prompts plain parsing cannot.
 library;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/models/player_model.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_drill_stories.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_drill_story.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_felt_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+import 'package:live_poker_trainer/ui/widgets/felt_deal_ledger_scope.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
@@ -55,7 +63,57 @@ class LessonTableDrillSpec {
     this.holeCardsDealt = true,
     this.smallBlind = 1,
     this.bigBlind = 2,
+    this.seatTypes = const <String, PlayerArchetype>{},
+    this.focusPosition,
+    this.stacksByPosition = const <String, double>{},
+    this.holesByPosition = const <String, List<String>>{},
+    this.story,
+    this.foldedOverride,
   });
+
+  /// Felt for one frame of [story] (the last frame by default).
+  factory LessonTableDrillSpec.fromStory(
+    LessonDrillStory story, {
+    int? frameIndex,
+    List<String> heroCodes = const <String>[],
+  }) {
+    final frame = story.frames[frameIndex ?? story.frames.length - 1];
+    final hero = story.heroPosition;
+    String key(String pos) => pos == hero ? 'You' : pos;
+    final live = [
+      for (final p in lessonDrillPreflopOrder)
+        if (p != hero && !frame.folded.contains(p)) p,
+    ];
+    final opponent = story.focus ?? (live.isEmpty ? null : live.first);
+    return LessonTableDrillSpec(
+      heroCodes: story.heroCodes.isNotEmpty ? story.heroCodes : heroCodes,
+      heroStackChips: frame.stacks[hero],
+      villainStackChips: opponent == null ? null : frame.stacks[opponent],
+      boardCodes: frame.board,
+      heroPosition: hero,
+      liveVillainPositions: live,
+      postflop: frame.street != 'pre',
+      potChips: frame.potChips,
+      betsByPosition: {
+        for (final e in frame.bets.entries)
+          if (e.value > 0) key(e.key): e.value,
+      },
+      actionsByPosition: {
+        for (final e in frame.labels.entries)
+          if (e.value != 'FOLD') key(e.key): e.value,
+      },
+      showInBigBlinds: story.inBigBlinds,
+      hidePot: story.hidePot,
+      smallBlind: story.smallBlind,
+      bigBlind: story.bigBlind,
+      seatTypes: story.types,
+      focusPosition: story.focus,
+      stacksByPosition: frame.stacks,
+      holesByPosition: story.holesByPosition,
+      story: story,
+      foldedOverride: frame.folded,
+    );
+  }
 
   /// Face-up hero holes. Empty draws the hero's cards face down.
   final List<String> heroCodes;
@@ -111,6 +169,25 @@ class LessonTableDrillSpec {
   /// Stakes.
   final double bigBlind;
 
+  /// Player-type badge per position (drill stories).
+  final Map<String, PlayerArchetype> seatTypes;
+
+  /// Seat the question reads (highlighted).
+  final String? focusPosition;
+
+  /// Chips behind per position (drill stories). Wins over the hero /
+  /// villain stack fields.
+  final Map<String, double> stacksByPosition;
+
+  /// Face-up opponent holes by position.
+  final Map<String, List<String>> holesByPosition;
+
+  /// Scripted action line this felt replays before the question.
+  final LessonDrillStory? story;
+
+  /// Exact folded positions (drill stories) instead of the live-list rule.
+  final Set<String>? foldedOverride;
+
   /// Felt dealer index so the hero (seat 0) sits in [heroPosition].
   int get dealerIndex => lessonSixMaxDealerIndexForHero(heroPosition);
 
@@ -122,6 +199,10 @@ class LessonTableDrillSpec {
   /// Seats that have folded (all opponents not in [liveVillainPositions],
   /// once anyone is named live or the hand is past preflop).
   List<int> get foldedSeatIndexes {
+    final exact = foldedOverride;
+    if (exact != null) {
+      return [for (final p in exact) seatIndexOf(p)]..sort();
+    }
     if (!postflop && liveVillainPositions.isEmpty) return const <int>[];
     final live = {for (final p in liveVillainPositions) seatIndexOf(p)};
     return [
@@ -145,6 +226,30 @@ class LessonTableDrillSpec {
     for (final entry in actionsByPosition.entries)
       (entry.key == 'You' ? 0 : seatIndexOf(entry.key)): entry.value,
   };
+
+  /// Type badges in felt seat order.
+  Map<int, PlayerArchetype> get seatArchetypes => {
+    for (final e in seatTypes.entries) seatIndexOf(e.key): e.value,
+  };
+
+  /// Chips behind in felt seat order.
+  Map<int, double> get seatStacks => {
+    for (final e in stacksByPosition.entries) seatIndexOf(e.key): e.value,
+  };
+
+  /// Face-up opponent holes, one list per villain seat (felt seats 1–5).
+  List<List<String>> get villainHoleLists {
+    if (holesByPosition.isEmpty) return const <List<String>>[];
+    final out = List<List<String>>.generate(
+      lessonTableDrillVillainCount,
+      (_) => const <String>[],
+    );
+    holesByPosition.forEach((pos, codes) {
+      final seat = seatIndexOf(pos);
+      if (seat >= 1) out[seat - 1] = codes;
+    });
+    return out;
+  }
 
   /// Amount as the felt formats it (`60 BB` or `$120`).
   String format(double chips) => ChipFormat.chips(
@@ -285,6 +390,10 @@ LessonTableDrillSpec resolveLessonTableDrillSpec({
   int villainSeatCount = 1,
   String? caption,
 }) {
+  final story = lessonDrillStoryFor(activity.id);
+  if (story != null) {
+    return LessonTableDrillSpec.fromStory(story, heroCodes: heroCodes);
+  }
   final authored = _authoredDrillSpec(activity.id);
   if (authored != null) return authored;
   final prompt = activity.prompt ?? '';
@@ -396,6 +505,12 @@ LessonTableDrillSpec resolveLessonTableDrillSpec({
 }
 
 /// Six-max table + action-button row for a choice / number drill.
+///
+/// A spec with a [LessonTableDrillSpec.story] replays that action line on
+/// the felt (frame by frame, after the deal) and opens the answers once the
+/// last frame — the question — is up. Progress is kept in the lesson's
+/// [FeltDealLedgerScope], so a remount (answer tap, feedback, rebuild)
+/// never replays it.
 class LessonTableDrillScene extends StatelessWidget {
   /// Creates the scene.
   const LessonTableDrillScene({
@@ -424,56 +539,218 @@ class LessonTableDrillScene extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final preset = TableFeaturesScope.of(context);
-    final postflopNoBoard = spec.postflop && spec.boardCodes.isEmpty;
-    final features = preset.copyWith(
-      boardSlots: false,
-      // No dealt board: a PREFLOP street tag would contradict a flop spot.
-      street: postflopNoBoard ? false : null,
-      pot: !(spec.hidePot || (spec.postflop && spec.potChips == null)),
-      stacks: true,
-      positions: true,
-      bets: true,
-      actions: true,
-      opponentCards: spec.holeCardsDealt ? null : false,
-    );
-    final bets = spec.streetBets;
-    final table = LessonTableStage(
-      heroCodes: spec.heroCodes,
-      boardCodes: spec.boardCodes,
-      villainCodes: spec.villainCodes,
-      villainCount: lessonTableDrillVillainCount,
-      heroFaceUp: spec.heroCodes.isNotEmpty,
-      dealerIndex: spec.dealerIndex,
-      positionLabels: false,
-      smallBlind: spec.smallBlind,
-      bigBlind: spec.bigBlind,
-      postSmallBlind: spec.postBlinds && !spec.postflop,
-      postBigBlind: spec.postBlinds && !spec.postflop,
-      streetBets: bets ?? (spec.postflop ? const <double>[] : null),
-      potTotal: spec.potChips ?? (spec.postflop ? 0 : null),
-      heroStackChips: spec.heroStackChips,
-      villainStackChips: spec.villainStackChips,
-      foldedSeatIndexes: spec.foldedSeatIndexes,
-      seatActionLabels: spec.seatActionLabels,
-      features: features,
-      chipDisplayMode: spec.showInBigBlinds
-          ? ChipDisplayMode.bb
-          : ChipDisplayMode.dollars,
-      showHoleCardBacks: spec.holeCardsDealt,
+    final story = spec.story;
+    if (story != null) {
+      return _LessonDrillStoryScene(
+        story: story,
+        spec: spec,
+        options: options,
+        enabled: enabled,
+        semanticsLabel: semanticsLabel,
+        actions: actions,
+      );
+    }
+    return _drillSceneBody(
+      context,
+      spec: spec,
+      options: options,
       enabled: enabled,
+      answersOpen: true,
+      semanticsLabel: semanticsLabel,
+      actions: actions,
     );
-    return Semantics(
-      label: semanticsLabel,
-      child: Column(
-        key: const ValueKey<String>('lesson-table-drill-scene'),
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(child: table),
-          const SizedBox(height: 8),
-          actions ??
-              LessonTableDrillActionRow(options: options, enabled: enabled),
-        ],
+  }
+}
+
+Widget _drillSceneBody(
+  BuildContext context, {
+  required LessonTableDrillSpec spec,
+  required List<LessonTableDrillOption> options,
+  required bool enabled,
+  required bool answersOpen,
+  String? semanticsLabel,
+  Widget? actions,
+  bool holdDealReady = false,
+  ValueChanged<bool>? onFeltReady,
+  Key? gapKey,
+}) {
+  final preset = TableFeaturesScope.of(context);
+  final postflopNoBoard = spec.postflop && spec.boardCodes.isEmpty;
+  final features = preset.copyWith(
+    boardSlots: false,
+    // No dealt board: a PREFLOP street tag would contradict a flop spot.
+    street: postflopNoBoard ? false : null,
+    pot: !(spec.hidePot || (spec.postflop && spec.potChips == null)),
+    stacks: true,
+    positions: true,
+    bets: true,
+    actions: true,
+    opponentCards: spec.holeCardsDealt ? null : false,
+  );
+  final bets = spec.streetBets;
+  final focus = spec.focusPosition;
+  final table = LessonTableStage(
+    heroCodes: spec.heroCodes,
+    boardCodes: spec.boardCodes,
+    villainCodes: spec.villainCodes,
+    villainHoleCodes: spec.villainHoleLists,
+    villainCount: lessonTableDrillVillainCount,
+    heroFaceUp: spec.heroCodes.isNotEmpty,
+    dealerIndex: spec.dealerIndex,
+    activeSeatIndex: focus == null ? null : spec.seatIndexOf(focus),
+    positionLabels: false,
+    smallBlind: spec.smallBlind,
+    bigBlind: spec.bigBlind,
+    postSmallBlind: spec.postBlinds && !spec.postflop,
+    postBigBlind: spec.postBlinds && !spec.postflop,
+    streetBets: bets ?? (spec.postflop ? const <double>[] : null),
+    potTotal: spec.potChips ?? (spec.postflop ? 0 : null),
+    heroStackChips: spec.heroStackChips,
+    villainStackChips: spec.villainStackChips,
+    foldedSeatIndexes: spec.foldedSeatIndexes,
+    seatActionLabels: spec.seatActionLabels,
+    seatArchetypes: spec.seatArchetypes,
+    seatStackChips: spec.seatStacks,
+    features: features,
+    chipDisplayMode: spec.showInBigBlinds
+        ? ChipDisplayMode.bb
+        : ChipDisplayMode.dollars,
+    showHoleCardBacks: spec.holeCardsDealt,
+    enabled: enabled,
+    holdDealReady: holdDealReady,
+    onFeltReady: onFeltReady,
+  );
+  return Semantics(
+    label: semanticsLabel,
+    child: Column(
+      key: const ValueKey<String>('lesson-table-drill-scene'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(child: table),
+        SizedBox(key: gapKey, height: 8),
+        actions ??
+            LessonTableDrillActionRow(
+              options: options,
+              enabled: enabled && answersOpen,
+            ),
+      ],
+    ),
+  );
+}
+
+class _LessonDrillStoryScene extends StatefulWidget {
+  const _LessonDrillStoryScene({
+    required this.story,
+    required this.spec,
+    required this.options,
+    required this.enabled,
+    this.semanticsLabel,
+    this.actions,
+  });
+
+  final LessonDrillStory story;
+  final LessonTableDrillSpec spec;
+  final List<LessonTableDrillOption> options;
+  final bool enabled;
+  final String? semanticsLabel;
+  final Widget? actions;
+
+  @override
+  State<_LessonDrillStoryScene> createState() => _LessonDrillStoryState();
+}
+
+class _LessonDrillStoryState extends State<_LessonDrillStoryScene> {
+  late int _frame;
+  var _feltReady = false;
+  Timer? _timer;
+
+  int get _last => widget.story.frames.length - 1;
+  bool get _done => _frame >= _last;
+  String get _key => 'drill-story:${widget.story.source}';
+
+  @override
+  void initState() {
+    super.initState();
+    final ledger = FeltDealLedgerScope.maybeOf(context);
+    final resumed = ledger?.markFor(_key);
+    _frame = (!widget.enabled || CardDealPace.instant)
+        ? _last
+        : (resumed ?? 0).clamp(0, _last);
+  }
+
+  @override
+  void didUpdateWidget(covariant _LessonDrillStoryScene old) {
+    super.didUpdateWidget(old);
+    if (old.story.source != widget.story.source) {
+      _timer?.cancel();
+      _frame = CardDealPace.instant ? _last : 0;
+    }
+    if (!widget.enabled && !_done) _finish();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _onFeltReady(bool ready) {
+    _feltReady = ready;
+    if (ready && !_done) _schedule();
+  }
+
+  void _schedule() {
+    if (_timer?.isActive ?? false) return;
+    _timer = Timer(
+      CardDealPace.scaled(widget.story.frames[_frame].hold),
+      _advance,
+    );
+  }
+
+  void _advance() {
+    if (!mounted || _done) return;
+    setState(() => _frame += 1);
+    FeltDealLedgerScope.maybeOf(context)?.mark(_key, _frame);
+    if (_done) {
+      _released();
+    } else if (_feltReady) {
+      _schedule();
+    }
+  }
+
+  void _finish() {
+    _timer?.cancel();
+    _frame = _last;
+    FeltDealLedgerScope.maybeOf(context)?.mark(_key, _frame);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _released();
+    });
+  }
+
+  void _released() {
+    if (_feltReady) reportLessonFeltDealReady(context, ready: true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final spec = LessonTableDrillSpec.fromStory(
+      widget.story,
+      frameIndex: _frame,
+      heroCodes: widget.spec.heroCodes,
+    );
+    return _drillSceneBody(
+      context,
+      spec: spec,
+      options: widget.options,
+      enabled: widget.enabled,
+      answersOpen: _done,
+      semanticsLabel: widget.semanticsLabel,
+      actions: widget.actions,
+      holdDealReady: !_done,
+      onFeltReady: _onFeltReady,
+      // Only this spacer changes key — the felt above never remounts.
+      gapKey: ValueKey<String>(
+        _done ? 'drill-story-done' : 'drill-story-playing',
       ),
     );
   }

@@ -10,7 +10,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 const _id = 'act-03-03-01-scaffolded';
-const _line = 'Pot 20, bet 10 — tap the matching call amount.';
+const _line = 'You face a bet — tap the matching call amount.';
 
 void main() {
   final catalog = CourseCatalog.fromJson(

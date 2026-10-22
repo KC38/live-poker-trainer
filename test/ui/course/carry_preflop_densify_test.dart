@@ -10,8 +10,8 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 const _lines = <String, String>{
-  'act-07-01-01-guided': 'AQo 3-bet · 872tt — pick the plan update.',
-  'act-07-01-01-scaffolded': 'BTN steal KTo · KT2r — pick the plan update.',
+  'act-07-01-01-guided': 'Your value 3-bet meets this flop — tap the plan update.',
+  'act-07-01-01-scaffolded': 'Your button steal gets called and this flop lands — tap the plan update.',
   'act-07-01-01-unguided': 'Best habit — pick what to do before flop act.',
   'act-07-01-01-checkpoint': 'Dead plan — pick the response.',
 };

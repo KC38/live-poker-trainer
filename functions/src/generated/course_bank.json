@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "bb2a9bd3d713d8de7a2cb73bee3d5bab38e0b012a17273bb98a2679e1c0021db",
+  "contentChecksum": "13c94085755d90d7710f3411b510eb20593768b8c49c7fc72c1e1d75620dc800",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -8628,7 +8628,7 @@
                   "objectives": [
                     "Convert chips to big blinds"
                   ],
-                  "prompt": "Blinds 1/2. You have 200 chips. How many big blinds?",
+                  "prompt": "How many big blinds is your stack?",
                   "choices": [
                     {
                       "id": "bb-100",
@@ -8688,7 +8688,7 @@
                   "objectives": [
                     "Convert chips to big blinds"
                   ],
-                  "prompt": "Blinds 2/5. You buy in for 1000 chips. Stack in big blinds?",
+                  "prompt": "Your buy-in in big blinds?",
                   "choices": [
                     {
                       "id": "bb-200",
@@ -8813,7 +8813,7 @@
                   "objectives": [
                     "Use the shorter stack as effective"
                   ],
-                  "prompt": "You have 150bb. Villain has 60bb. Effective stack?",
+                  "prompt": "Effective stack against the highlighted seat?",
                   "choices": [
                     {
                       "id": "eff-60",
@@ -10475,7 +10475,7 @@
                   "objectives": [
                     "Track pot size and stack depths"
                   ],
-                  "prompt": "Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now?",
+                  "prompt": "UTG opens, you call, BB calls. Pot now?",
                   "choices": [
                     {
                       "id": "pot-19",
@@ -10535,7 +10535,7 @@
                   "objectives": [
                     "Track pot size and stack depths"
                   ],
-                  "prompt": "Hero 140bb, villain 55bb, pot 18. What matters most next?",
+                  "prompt": "Stacks and pot on the felt. What matters most next?",
                   "choices": [
                     {
                       "id": "eff-55",
@@ -10921,7 +10921,7 @@
                   "objectives": [
                     "Identify made hands on the flop"
                   ],
-                  "prompt": "Board Ks 9d 2c. You hold Kh Qh. Class?",
+                  "prompt": "Class your hand on this flop?",
                   "choices": [
                     {
                       "id": "made-tp",
@@ -11088,7 +11088,7 @@
                   "objectives": [
                     "Separate draws from showdown value"
                   ],
-                  "prompt": "Board Jh 8h 3c. You hold Ah 9h. Class?",
+                  "prompt": "Class your hand on this flop?",
                   "choices": [
                     {
                       "id": "nfd",
@@ -11196,7 +11196,7 @@
                   "objectives": [
                     "Separate draws from showdown value"
                   ],
-                  "prompt": "Board Ts 9s 4d. You hold Js 8d. Best label?",
+                  "prompt": "Best label for your hand on this flop?",
                   "choices": [
                     {
                       "id": "oesd",
@@ -11363,7 +11363,7 @@
                   "objectives": [
                     "Recognize air that needs equity or fold equity"
                   ],
-                  "prompt": "Board Qc 7d 2s. You hold 5h 4h multiway. Class?",
+                  "prompt": "Multiway flop. Class your hand?",
                   "choices": [
                     {
                       "id": "air",
@@ -11724,7 +11724,7 @@
                   "objectives": [
                     "Compare pot odds to draw equity"
                   ],
-                  "prompt": "Pot is 20. Villain bets 10. How many chips to call?",
+                  "prompt": "You face a bet. How many chips to call?",
                   "choices": [
                     {
                       "id": "call-10",
@@ -15097,7 +15097,7 @@
                   "objectives": [
                     "Confirm table reading"
                   ],
-                  "prompt": "Pot 16, shorter stack 40bb. What do you track first?",
+                  "prompt": "Before you act, what do you track first?",
                   "choices": [
                     {
                       "id": "j3-track",
@@ -15645,7 +15645,7 @@
                   "objectives": [
                     "Describe a seat as a range"
                   ],
-                  "prompt": "UTG opens at 1/2. Best description?",
+                  "prompt": "UTG opens. Best description?",
                   "choices": [
                     {
                       "id": "strong-narrow",
@@ -18036,7 +18036,7 @@
                   "objectives": [
                     "Estimate stack-to-pot ratio"
                   ],
-                  "prompt": "Effective stack 80bb, pot 20bb. SPR?",
+                  "prompt": "Effective stack and pot on the felt. SPR?",
                   "choices": [
                     {
                       "id": "spr-4",
@@ -23710,7 +23710,7 @@
                   "objectives": [
                     "Confirm sizing and SPR"
                   ],
-                  "prompt": "Stack 60bb, pot 15bb. SPR?",
+                  "prompt": "What's the SPR?",
                   "choices": [
                     {
                       "id": "spr-4",
@@ -24672,7 +24672,7 @@
                   "objectives": [
                     "Use depth for speculative implied odds"
                   ],
-                  "prompt": "200bb effective. Best reason to call a raise with 55 BTN?",
+                  "prompt": "Deep stacks. Best reason to call this raise with a small pair?",
                   "choices": [
                     {
                       "id": "impl",
@@ -28332,7 +28332,7 @@
                   "objectives": [
                     "Respect bankroll for stakes"
                   ],
-                  "prompt": "Bankroll 40 buy-ins for 1/2. Spot opens at 2/5. Action?",
+                  "prompt": "Bankroll 40 buy-ins for 1/2. A 2/5 game has room. Action?",
                   "choices": [
                     {
                       "id": "decline",
@@ -29764,7 +29764,7 @@
                   "objectives": [
                     "Use aggression to realize when appropriate"
                   ],
-                  "prompt": "Semi-bluff check-raise with nut draw IP-denied. Purpose?",
+                  "prompt": "Semi-bluff check-raise with the nut draw. Purpose?",
                   "choices": [
                     {
                       "id": "realize",
@@ -30656,7 +30656,7 @@
                   "objectives": [
                     "Use merged sizes for thin value"
                   ],
-                  "prompt": "Merged betting aims to?",
+                  "prompt": "Merged sizing aims to?",
                   "choices": [
                     {
                       "id": "thin",
@@ -30805,7 +30805,7 @@
                     "pressHints": [
                       {
                         "press": 1,
-                        "text": "A tiny bet rarely makes a believable bluff."
+                        "text": "Tiny bluffs rarely look believable."
                       }
                     ],
                     "cues": [
@@ -31258,7 +31258,7 @@
                   "objectives": [
                     "Avoid random huge bets"
                   ],
-                  "prompt": "Random 3x pot bet with medium strength?",
+                  "prompt": "Medium hand, giant size?",
                   "choices": [
                     {
                       "id": "avoid",
@@ -31287,7 +31287,7 @@
                     "pressHints": [
                       {
                         "press": 1,
-                        "text": "Huge overbets need a polarized hand, not a medium one."
+                        "text": "Save the biggest sizes for very strong hands or bluffs."
                       }
                     ],
                     "cues": [
@@ -32747,7 +32747,7 @@
                   "objectives": [
                     "Tighten 4-bet pots appropriately"
                   ],
-                  "prompt": "100bb 4-bet pot. Flop top pair. Default mindset?",
+                  "prompt": "4-bet pot, top pair on the flop. Default mindset?",
                   "choices": [
                     {
                       "id": "careful",
@@ -33083,7 +33083,7 @@
                   "objectives": [
                     "Avoid ego 4-bets"
                   ],
-                  "prompt": "Light 4-bet bluff with no blockers for ego?",
+                  "prompt": "Facing a 3-bet: re-raise light for ego?",
                   "choices": [
                     {
                       "id": "avoid",
@@ -33112,7 +33112,7 @@
                     "pressHints": [
                       {
                         "press": 1,
-                        "text": "Light 4-bets need blockers and a reason."
+                        "text": "Going bigger needs blockers and a reason, not ego."
                       }
                     ],
                     "cues": [
@@ -33562,7 +33562,7 @@
                   "objectives": [
                     "Avoid ego call-downs"
                   ],
-                  "prompt": "Calling because you are \"due\"?",
+                  "prompt": "Paying off because you feel “due”?",
                   "choices": [
                     {
                       "id": "ego",
@@ -34314,7 +34314,7 @@
                     "pressHints": [
                       {
                         "press": 1,
-                        "text": "Tight entry, folds to 3-bets, picks spots — which type?"
+                        "text": "Tight entry, gives up when re-raised, picks spots — which type?"
                       }
                     ],
                     "cues": [
@@ -35715,7 +35715,7 @@
                     "pressHints": [
                       {
                         "press": 1,
-                        "text": "Wide opens, light 3-bets, keeps betting — which type?"
+                        "text": "Wide opens, keeps betting street after street — which type?"
                       }
                     ],
                     "cues": [
@@ -36334,7 +36334,7 @@
                   "objectives": [
                     "Avoid fancy bluffs into pressure"
                   ],
-                  "prompt": "Inventing triple-barrel bluffs into a LAG?",
+                  "prompt": "Bluff three streets into a LAG?",
                   "choices": [
                     {
                       "id": "avoid",
@@ -37542,7 +37542,7 @@
                   "objectives": [
                     "Update on flop texture"
                   ],
-                  "prompt": "You 3-bet AQo for value. Flop 872tt. Update?",
+                  "prompt": "You 3-bet for value. This flop lands. Update?",
                   "choices": [
                     {
                       "id": "dead",
@@ -37592,7 +37592,7 @@
                   "objectives": [
                     "Update on flop texture"
                   ],
-                  "prompt": "BTN steal with KTo. Flop KT2r. Update?",
+                  "prompt": "Button steal called. This flop lands. Update?",
                   "choices": [
                     {
                       "id": "value",
@@ -38067,7 +38067,7 @@
                   "objectives": [
                     "Bet flop only with a turn map"
                   ],
-                  "prompt": "Bet flop with no turn idea?",
+                  "prompt": "No plan yet for the next card?",
                   "choices": [
                     {
                       "id": "avoid",
@@ -38096,7 +38096,7 @@
                     "pressHints": [
                       {
                         "press": 1,
-                        "text": "Every flop bet needs a turn plan."
+                        "text": "Before betting the flop, plan the next card."
                       }
                     ],
                     "cues": [
@@ -38843,7 +38843,7 @@
                     "pressHints": [
                       {
                         "press": 1,
-                        "text": "In position heads-up, a planned c-bet is the main tool."
+                        "text": "In position heads-up, your main tool is a planned bet."
                       }
                     ],
                     "cues": [
@@ -38934,7 +38934,7 @@
                   "objectives": [
                     "Plan 3-bet/4-bet pots from their ranges and SPR"
                   ],
-                  "prompt": "4-bet pot 100bb. Mindset?",
+                  "prompt": "4-bet pot. Mindset?",
                   "choices": [
                     {
                       "id": "commit",
@@ -39516,7 +39516,7 @@
                   "objectives": [
                     "Commit earlier short"
                   ],
-                  "prompt": "35bb effective. Top pair strong kicker vs raise. Lean?",
+                  "prompt": "Short stacks, top pair strong kicker. Lean?",
                   "choices": [
                     {
                       "id": "commit",
@@ -39630,7 +39630,7 @@
                   "objectives": [
                     "Use implied odds deep"
                   ],
-                  "prompt": "250bb. Set-mine 55?",
+                  "prompt": "Very deep with a small pair. Set-mine?",
                   "choices": [
                     {
                       "id": "yes",
@@ -39750,7 +39750,7 @@
                   "objectives": [
                     "Recalculate effective stacks each hand"
                   ],
-                  "prompt": "Hero 200bb, villain 40bb. Effective?",
+                  "prompt": "Effective stack against the highlighted seat?",
                   "choices": [
                     {
                       "id": "40",
