@@ -12,7 +12,7 @@ import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 const _lines = <String, String>{
   'act-07-04-01-guided': 'Multiway limped — pick the priority.',
   'act-07-04-01-scaffolded': 'HU SRP IP — pick the default weapon.',
-  'act-07-04-01-unguided': '4-bet 100bb — pick the mindset.',
+  'act-07-04-01-unguided': '4-bet pot — tap the mindset.',
   'act-07-04-01-checkpoint': 'Pot type — pick what changes.',
 };
 

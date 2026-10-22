@@ -10,9 +10,9 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 const _lines = <String, String>{
-  'act-07-06-01-guided': '35bb TPTK — pick the commit lean.',
-  'act-07-06-01-scaffolded': '250bb 55 — pick the set-mine lean.',
-  'act-07-06-01-unguided': 'Hero 200 / Villain 40 — pick effective stack.',
+  'act-07-06-01-guided': 'Short stacks, top pair strong kicker — tap the commit lean.',
+  'act-07-06-01-scaffolded': 'Very deep with a small pair — tap the set-mine lean.',
+  'act-07-06-01-unguided': 'Your stack against the highlighted seat — tap the effective stack.',
   'act-07-06-01-checkpoint': 'Stack depth — pick how often to check.',
 };
 

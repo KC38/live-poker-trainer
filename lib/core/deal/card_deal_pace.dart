@@ -41,6 +41,9 @@ class CardDealPace {
     return Duration(microseconds: (milliseconds * 1000 * testScale).round());
   }
 
+  /// [base] under the current pace (zero when instant, scaled in tests).
+  static Duration scaled(Duration base) => _scaled(base.inMilliseconds);
+
   /// Delay before the next card in a sequential deal.
   static Duration get dealCard => _scaled(dealCardMs);
 

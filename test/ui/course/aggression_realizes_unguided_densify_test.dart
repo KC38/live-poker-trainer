@@ -11,7 +11,7 @@ import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 const _id = 'act-06-02-01-unguided';
 const _line =
-    'Semi-bluff check-raise with nut draw IP-denied. Purpose — tap the matching reason.';
+    'Semi-bluff check-raise with the nut draw. Purpose — tap the matching reason.';
 
 void main() {
   final catalog = CourseCatalog.fromJson(

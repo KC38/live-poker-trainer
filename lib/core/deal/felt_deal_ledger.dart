@@ -62,8 +62,22 @@ class FeltDealLedger {
     );
   }
 
+  final Map<String, int> _marks = {};
+
+  /// How far a scripted felt sequence (drill story frames) got under [key].
+  int? markFor(String key) => debugDisableResume ? null : _marks[key];
+
+  /// Records [value] for [key]. Never moves backwards.
+  void mark(String key, int value) {
+    final old = _marks[key];
+    if (old == null || value > old) _marks[key] = value;
+  }
+
   /// Forgets every deal (new step, or a retry that deals a fresh hand).
-  void clear() => _byEpoch.clear();
+  void clear() {
+    _byEpoch.clear();
+    _marks.clear();
+  }
 
   /// Number of epochs recorded (tests).
   @visibleForTesting

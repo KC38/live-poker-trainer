@@ -11,7 +11,7 @@ import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 const _id = 'act-05-09-01-scaffolded';
 const _line =
-    'Bankroll 40 buy-ins for 1/2. Spot opens at 2/5. Action — tap the matching plan.';
+    'Bankroll 40 buy-ins for 1/2. A 2/5 game has room. Action — tap the matching plan.';
 
 void main() {
   final catalog = CourseCatalog.fromJson(

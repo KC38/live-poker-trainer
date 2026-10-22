@@ -84,15 +84,15 @@ const _lines = <String, String>{
   'act-02-02-01-checkpoint-trash':
       'Low unconnected offsuit holes — tap the matching family.',
   'act-02-05-01-guided-convert':
-      'Blinds 1/2. You have 200 chips. How many big blinds — pick 100bb.',
+      'How many big blinds is your stack? Tap 100bb.',
   // LPT-849: SoftPulse-quiet densify — no 60bb tile spoil.
   'act-02-05-01-scaffolded-eff':
-      'You have 150bb. Villain has 60bb — tap the effective stack.',
+      'Your stack against the highlighted seat — tap the effective stack.',
   'act-02-05-01-unguided-depth':
       'Which depth plays closest to a short-stack shove game — tap the matching depth.',
   // LPT-785: SoftPulse-off densify — no correct-tile spoil.
   'act-02-05-01-checkpoint-200':
-      'Blinds 2/5. You buy in for 1000 chips — tap the matching stack in big blinds.',
+      'Your buy-in sits in front of you — tap the matching stack in big blinds.',
   'act-02-06-01-guided-follow': 'Two seats act before you. What first — pick Watch what they do, then decide.',
   // LPT-843: SoftPulse-quiet densify — no Say "raise" spoil.
   'act-02-06-01-scaffolded-verbal':
@@ -110,7 +110,7 @@ const _lines = <String, String>{
   'act-02-07-02-jump-pos':
       'Seat right before the button — pick it on the map.',
   'act-03-01-01-guided':
-      'Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now — pick 19.',
+      'UTG opens, you call, BB calls. Pot now — tap 19.',
   // LPT-845: SoftPulse-quiet densify — no UTG / Seat left of the big blind spoil.
   'act-03-01-01-scaffolded':
       'Nine-handed. Dealer button is on seat 7 — tap who acts first preflop.',
@@ -119,15 +119,15 @@ const _lines = <String, String>{
       'You say "raise" then try to take it back to a call — tap the matching result.',
   // LPT-787: SoftPulse-off densify — no correct-tile spoil.
   'act-03-01-01-checkpoint':
-      'Hero 140bb, villain 55bb, pot 18 — tap what matters most next.',
+      'Read the stacks and the pot — tap what matters most next.',
   'act-03-02-01-guided':
-      'Board Ks 9d 2c. You hold Kh Qh. Class — pick Made hand — top pair.',
+      'Class your hand on this flop — pick Made hand — top pair.',
   // LPT-847: SoftPulse-quiet densify — no Strong draw / nut flush draw spoil.
   'act-03-02-01-scaffolded':
-      'Board Jh 8h 3c. You hold Ah 9h. Class — tap the matching label.',
+      'Class your hand on this flop — tap the matching label.',
   // LPT-848: SoftPulse-quiet densify — no Air / little equity spoil.
   'act-03-02-01-unguided':
-      'Board Qc 7d 2s. You hold 5h 4h multiway. Class — tap the matching label.',
+      'Multiway flop. Class your hand — tap the matching label.',
   // LPT-805: SoftPulse-off densify — no correct-tile / template-card spoil.
   'act-03-02-01-checkpoint':
       'Best label for this flop class — tap the matching label.',
@@ -180,12 +180,12 @@ const _lines = <String, String>{
   'act-04-10-02-jump-range':
       'UTG open is best described as — tap the matching range.',
   'act-04-10-02-jump-spr':
-      'Stack 60bb, pot 15bb. SPR — tap the matching number.',
+      "What's the SPR? Tap the matching number.",
   'act-05-01-01-guided':
       'Four-way flop. Best continue with — pick Nut flush draw.',
   'act-05-01-01-checkpoint':
       'Multiway construction priority — tap the matching priority.',
-  'act-05-02-01-guided': '200bb effective. Best reason to call a raise with 55 BTN — pick Implied odds if they pay sets.',
+  'act-05-02-01-guided': 'Deep stacks. Best reason to call this raise with your small pair — tap Implied odds if they pay sets.',
   // LPT-859: SoftPulse-quiet densify — no Map turn/river plans spoil.
   'act-05-02-01-unguided':
       'SPR ~12 on the flop. Your first job — tap the matching plan.',
@@ -205,7 +205,7 @@ const _lines = <String, String>{
       'BB donks large on A-high dry flop into PFR. Meaning — tap the matching read.',
   // LPT-742: SoftPulse-off densify — no correct-tile spoil.
   'act-05-05-01-checkpoint':
-      'Delayed c-bet is best when — tap the matching timing.',
+      'You checked back the flop; they check the turn. Delayed c-bet is best when — tap the matching timing.',
   'act-05-06-01-guided':
       'Villain bets flop, checks turn. Range now — pick Capped — fewer nuts.',
   // LPT-862: SoftPulse-quiet densify — no Rebuild after every action spoil.
@@ -235,7 +235,7 @@ const _lines = <String, String>{
       'You hit a planned stop-loss. Next step — pick Stop / move down.',
   // LPT-857: SoftPulse-quiet densify — no Decline spoil.
   'act-05-09-01-scaffolded':
-      'Bankroll 40 buy-ins for 1/2. Spot opens at 2/5. Action — tap the matching plan.',
+      'Bankroll 40 buy-ins for 1/2. A 2/5 game has room. Action — tap the matching plan.',
   // LPT-854: SoftPulse-quiet densify — no Cash out spoil.
   'act-05-09-01-unguided':
       'Tired, winning small, table getting wild — tap the matching plan.',
@@ -261,7 +261,7 @@ const _lines = <String, String>{
       'Weak showdown value OOP facing dual barrels. Default — tap the matching plan.',
   // LPT-856: SoftPulse-quiet densify — no Fold equity spoil.
   'act-06-02-01-unguided':
-      'Semi-bluff check-raise with nut draw IP-denied. Purpose — tap the matching reason.',
+      'Semi-bluff check-raise with the nut draw. Purpose — tap the matching reason.',
   // LPT-766: SoftPulse-off densify — no correct-tile spoil.
   'act-06-02-01-checkpoint':
       'Equity realization rises with — tap the matching levers.',

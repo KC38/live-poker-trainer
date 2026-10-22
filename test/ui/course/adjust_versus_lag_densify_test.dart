@@ -11,7 +11,7 @@ import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 const _lines = <String, String>{
   'act-06-12-03-unguided':
-      'Inventing triple-barrel bluffs into a LAG — pick the discipline.',
+      'Bluffing three streets into a LAG — tap the discipline.',
   'act-06-12-03-checkpoint': 'LAG exploit cites — pick the cite.',
 };
 

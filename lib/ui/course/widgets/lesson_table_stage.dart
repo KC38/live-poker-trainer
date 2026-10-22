@@ -143,6 +143,14 @@ GameState lessonTableStageGame({
 
   /// Seat ids that take [displayPot]. Empty leaves the pot in the middle.
   List<int> winnerIds = const [],
+
+  /// Player-type badge per seat index (drill stories). Wins over
+  /// [villainArchetypes] for the seats it names.
+  Map<int, PlayerArchetype> seatArchetypes = const {},
+
+  /// Chips behind per seat index (drill stories). Wins over the hero /
+  /// villain stack overrides.
+  Map<int, double> seatStackChips = const {},
 }) {
   final base = lessonBandGame(
     heroCodes: heroCodes,
@@ -181,9 +189,7 @@ GameState lessonTableStageGame({
             : types[villain % types.length],
         holeCards: holes == null
             ? player.holeCards
-            : [
-                for (final code in holes.take(2)) CardModel.fromCode(code),
-              ],
+            : [for (final code in holes.take(2)) CardModel.fromCode(code)],
       ),
     );
     villain += 1;
@@ -212,11 +218,22 @@ GameState lessonTableStageGame({
         for (final player in named.players)
           player.isHero
               ? (heroStackChips == null
-                  ? player
-                  : player.copyWith(stack: heroStackChips))
+                    ? player
+                    : player.copyWith(stack: heroStackChips))
               : (villainStackChips == null
-                  ? player
-                  : player.copyWith(stack: villainStackChips)),
+                    ? player
+                    : player.copyWith(stack: villainStackChips)),
+      ],
+    );
+  }
+  if (seatArchetypes.isNotEmpty || seatStackChips.isNotEmpty) {
+    named = named.copyWith(
+      players: [
+        for (var i = 0; i < named.players.length; i++)
+          named.players[i].copyWith(
+            archetype: seatArchetypes[i],
+            stack: seatStackChips[i],
+          ),
       ],
     );
   }
@@ -228,8 +245,7 @@ GameState lessonTableStageGame({
           named.players[i].copyWith(
             folded: folded.contains(i) ? true : null,
             lastActionLabel:
-                seatActionLabels[i] ??
-                (folded.contains(i) ? 'FOLD' : null),
+                seatActionLabels[i] ?? (folded.contains(i) ? 'FOLD' : null),
             clearLastAction:
                 !seatActionLabels.containsKey(i) && !folded.contains(i),
           ),
@@ -313,11 +329,7 @@ GameState _applyLessonStageStreetMoney(
             i > 1,
       ),
   ];
-  return base.copyWith(
-    players: players,
-    mainPot: mainPot,
-    highestBet: highest,
-  );
+  return base.copyWith(players: players, mainPot: mainPot, highestBet: highest);
 }
 
 /// Player type a step names for its opponent, read from [texts] in order.
@@ -423,6 +435,10 @@ class LessonTableStage extends StatelessWidget {
     this.awardingChips,
     this.chipDisplayMode = ChipDisplayMode.dollars,
     this.showHoleCardBacks = true,
+    this.seatArchetypes = const {},
+    this.seatStackChips = const {},
+    this.holdDealReady = false,
+    this.onFeltReady,
   });
 
   /// Hero hole cards. Hidden until [heroFaceUp] is true.
@@ -584,6 +600,19 @@ class LessonTableStage extends StatelessWidget {
   /// False draws the table before the deal (no card backs on any seat).
   final bool showHoleCardBacks;
 
+  /// Player-type badge per seat index (drill stories).
+  final Map<int, PlayerArchetype> seatArchetypes;
+
+  /// Chips behind per seat index (drill stories).
+  final Map<int, double> seatStackChips;
+
+  /// Keeps the lesson's felt-deal-ready flag false (SoftPulse, Hint, and the
+  /// idle coach wait) while a drill story is still playing its action.
+  final bool holdDealReady;
+
+  /// Raw felt deal readiness (before [holdDealReady]).
+  final ValueChanged<bool>? onFeltReady;
+
   GameState get _game => lessonTableStageGame(
     heroCodes: heroCodes,
     boardCodes: boardCodes,
@@ -610,13 +639,17 @@ class LessonTableStage extends StatelessWidget {
     foldedSeatIndexes: foldedSeatIndexes,
     seatActionLabels: seatActionLabels,
     winnerIds: winnerIds,
+    seatArchetypes: seatArchetypes,
+    seatStackChips: seatStackChips,
   );
 
   @override
   Widget build(BuildContext context) {
     final game = _game;
     final preset = features ?? TableFeaturesScope.of(context);
-    final table = villainArchetypes == null
+    final table = seatArchetypes.isNotEmpty
+        ? preset.copyWith(playerTypes: true, stats: false)
+        : villainArchetypes == null
         ? preset.copyWith(playerTypes: false, stats: false)
         : preset;
     final faceUp = <int>{if (heroFaceUp) 0};
@@ -644,9 +677,7 @@ class LessonTableStage extends StatelessWidget {
             // a lesson button grew the board (PREFLOP → FLOP → TURN → RIVER).
             dealKey:
                 'lesson-${heroCodes.join()}-${villainCodes.join()}'
-                '-${[
-                  for (final holes in villainHoleCodes) holes.join(),
-                ].join('|')}'
+                '-${[for (final holes in villainHoleCodes) holes.join()].join('|')}'
                 '-v$villainCount-d${dealerIndex ?? 0}',
             chipDisplayMode: chipDisplayMode,
             awardingChips: awardingChips ?? winnerIds.isNotEmpty,
@@ -658,30 +689,34 @@ class LessonTableStage extends StatelessWidget {
             // You name box. Board region cues still wrap the whole row;
             // per-card board taps SoftPulse each dealt card.
             highlightHero: cue == LessonTableCue.hero,
-            highlightBoard: cue == LessonTableCue.board &&
+            highlightBoard:
+                cue == LessonTableCue.board &&
                 highlightBoardIndexes.isEmpty &&
                 onBoardCardTap == null,
             selectedBoardIndexes: selectedBoardIndexes,
-            highlightBoardIndexes:
-                highlightBoardIndexes.isNotEmpty
-                    ? highlightBoardIndexes
-                    : (cue == LessonTableCue.board && onBoardCardTap != null
-                        ? {for (var i = 0; i < boardCodes.length; i++) i}
-                        : const <int>{}),
+            highlightBoardIndexes: highlightBoardIndexes.isNotEmpty
+                ? highlightBoardIndexes
+                : (cue == LessonTableCue.board && onBoardCardTap != null
+                      ? {for (var i = 0; i < boardCodes.length; i++) i}
+                      : const <int>{}),
             dimmedBoardIndexes: dimmedBoardIndexes,
             boardOrderBadges: boardOrderBadges,
             selectedHeroIndexes: selectedHeroIndexes,
             selectedSeatIndexes: selectedSeatIndexes,
-            highlightHeroIndexes:
-                highlightHeroIndexes.isNotEmpty
-                    ? highlightHeroIndexes
-                    : (cue == LessonTableCue.hero ? const {0, 1} : const <int>{}),
+            highlightHeroIndexes: highlightHeroIndexes.isNotEmpty
+                ? highlightHeroIndexes
+                : (cue == LessonTableCue.hero ? const {0, 1} : const <int>{}),
             dimmedHeroIndexes: dimmedHeroIndexes,
             seatOrderBadges: seatOrderBadges,
             cueSeatIndex: cueSeatIndex,
             cuePuckLabel: cuePuckLabel,
-            onDealReady: (ready) =>
-                reportLessonFeltDealReady(context, ready: ready),
+            onDealReady: (ready) {
+              onFeltReady?.call(ready);
+              reportLessonFeltDealReady(
+                context,
+                ready: ready && !holdDealReady,
+              );
+            },
             onBoardTap: !enabled || onBoardTap == null || onBoardCardTap != null
                 ? null
                 : () {
@@ -757,9 +792,7 @@ class _LessonPeekTableState extends State<LessonPeekTable> {
     // locked (answer dock / MediaQuery clamp). Locked means the peek graded.
     final revealed = _faceUp || !widget.enabled;
     // No empty board slot outlines: this step has no community cards.
-    final features = TableFeaturesScope.of(
-      context,
-    ).copyWith(boardSlots: false);
+    final features = TableFeaturesScope.of(context).copyWith(boardSlots: false);
     return LessonTableStage(
       villainCount: 3,
       heroFaceUp: revealed,
@@ -840,9 +873,7 @@ class _LessonBlindsClockwiseTableState
     );
     final showCue = teaching && LessonSoftPulseScope.isAllowed(context);
     // No empty board slot outlines: this explain step has no community cards.
-    final features = TableFeaturesScope.of(
-      context,
-    ).copyWith(boardSlots: false);
+    final features = TableFeaturesScope.of(context).copyWith(boardSlots: false);
     return LessonTableStage(
       villainCount: lessonBlindsVillainCount,
       dealerIndex: lessonBlindsButtonIndex,
@@ -1120,8 +1151,9 @@ class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
         if (!code.endsWith('*')) code,
     };
     _heroCodes = dealStartingHandFamily(
-      LessonStartingHandFamily
-          .values[rng.nextInt(LessonStartingHandFamily.values.length)],
+      LessonStartingHandFamily.values[rng.nextInt(
+        LessonStartingHandFamily.values.length,
+      )],
       rng,
       used: used,
     );
@@ -1164,9 +1196,12 @@ class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
     if (wasNext) {
       consumeLessonSequentialSoftPulse(context);
     }
-    final remaining = const {'h', 'd', 'c', 's'}
-        .where((s) => !_selected.contains(s))
-        .length;
+    final remaining = const {
+      'h',
+      'd',
+      'c',
+      's',
+    }.where((s) => !_selected.contains(s)).length;
     reportLessonSequentialPressProgress(
       context,
       remainingPressCount: remaining,
@@ -1187,9 +1222,12 @@ class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
     // same-concept steps gate showGuidance on showTargetCue; after the
     // learner takes a Hint SoftPulse press, guidance is false until Hint
     // reopens — reporting 0 here would leave canRequestHint false (LPT-72).
-    final remainingSuits = const {'h', 'd', 'c', 's'}
-        .where((s) => !_selected.contains(s))
-        .length;
+    final remainingSuits = const {
+      'h',
+      'd',
+      'c',
+      's',
+    }.where((s) => !_selected.contains(s)).length;
     reportLessonSequentialPressProgress(
       context,
       remainingPressCount: remainingSuits,
@@ -1436,8 +1474,9 @@ class LessonHoleHandTable extends StatelessWidget {
       cue: showGuidance && correctSeatIndex == 0
           ? LessonTableCue.hero
           : LessonTableCue.none,
-      cueSeatIndex:
-          showGuidance && correctSeatIndex > 0 ? correctSeatIndex : null,
+      cueSeatIndex: showGuidance && correctSeatIndex > 0
+          ? correctSeatIndex
+          : null,
       selectedSeatIndexes: selectedSeatIndexes,
       onSeatIndexTap: enabled ? onSeatChoice : null,
     );
@@ -1630,7 +1669,8 @@ class _RandomizedLessonShowdownOrderTableState
   @override
   void initState() {
     super.initState();
-    _spot = dealtHandRanksShowdownSpot(
+    _spot =
+        dealtHandRanksShowdownSpot(
           widget.activityId,
           generation: widget.generation,
         ) ??
@@ -1781,7 +1821,8 @@ class _LessonShowdownOrderExplainTableState
   @override
   void initState() {
     super.initState();
-    _spot = dealtHandRanksShowdownSpot(
+    _spot =
+        dealtHandRanksShowdownSpot(
           widget.activityId,
           generation: widget.generation,
         ) ??
@@ -1798,7 +1839,8 @@ class _LessonShowdownOrderExplainTableState
 
   @override
   Widget build(BuildContext context) {
-    final teaching = widget.enabled && _ordered.length < _spot.correctOrder.length;
+    final teaching =
+        widget.enabled && _ordered.length < _spot.correctOrder.length;
     return LessonShowdownOrderTable(
       spot: _spot,
       orderedIds: _ordered,

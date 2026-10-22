@@ -10,7 +10,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 const _id = 'act-02-05-01-scaffolded-eff';
-const _line = 'You have 150bb. Villain has 60bb — tap the effective stack.';
+const _line = 'Your stack against the highlighted seat — tap the effective stack.';
 
 void main() {
   final catalog = CourseCatalog.fromJson(

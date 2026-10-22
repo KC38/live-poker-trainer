@@ -39,6 +39,11 @@ jobs:
             test/ui/course/lesson_table_drill_scene_test.dart \
             test/ui/course/lesson_copy_matches_felt_test.dart
 
+      # Copy never restates what the felt shows, and every action, seat,
+      # player type and street the copy or answers name plays out on the felt.
+      - name: Drill copy matches the felt story
+        run: flutter test test/ui/course/lesson_scene_story_contract_test.dart
+
       # The felt deal runs once per step: every lesson step, right and wrong
       # answers, Hint and rebuilds, with real (scaled) deal pacing (~3 min).
       - name: Deal runs once per lesson step

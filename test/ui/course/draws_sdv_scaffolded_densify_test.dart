@@ -12,8 +12,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 const _id = 'act-03-02-01-scaffolded';
-const _line =
-    'Board Jh 8h 3c. You hold Ah 9h. Class — tap the matching label.';
+const _line = 'Class your hand on this flop — tap the matching label.';
 
 void main() {
   final catalog = CourseCatalog.fromJson(
@@ -31,8 +30,9 @@ void main() {
     expect(speech, isNot(contains('nut flush draw')));
     expect(speech, isNot(contains('pick Strong')));
     expect(speech, isNot(contains('pick ')));
-    expect(speech.toLowerCase(), contains('board'));
-    expect(speech.toLowerCase(), contains('you hold'));
+    // The felt shows the board and your holes; the copy never restates them.
+    expect(speech, contains('Class your hand'));
+    expect(speech, isNot(matches(RegExp(r'\b[2-9TJQKA][shdc]\b'))));
     expect(speech, contains('tap the matching label'));
   });
 }
