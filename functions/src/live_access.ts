@@ -158,7 +158,13 @@ export async function resolveLiveAccessForUser(
   const completed = Array.isArray(profileSnap.data()?.completedLessonIds) ?
     (profileSnap.data()!.completedLessonIds as string[]) :
     [];
-  const warmUpAvailable = completed.includes(LIVE_WARMUP_UNLOCK_LESSON_ID);
+  // A placement pass of the Section 2 jump is not a completed node
+  // (LPT-1032) but still earns the warm-up it always unlocked.
+  const passedJumps = Array.isArray(profileSnap.data()?.passedJumpTestLessonIds) ?
+    (profileSnap.data()!.passedJumpTestLessonIds as string[]) :
+    [];
+  const warmUpAvailable = completed.includes(LIVE_WARMUP_UNLOCK_LESSON_ID) ||
+    passedJumps.includes(LIVE_WARMUP_UNLOCK_LESSON_ID);
   if (warmUpAvailable) {
     return {
       tier: "warm_up",

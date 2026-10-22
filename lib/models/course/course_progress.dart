@@ -154,9 +154,9 @@ class CourseProgress {
         if (value is String && value.isNotEmpty) completedList.add(value);
       }
     }
-    final completed = expandCompletedLessonIds(
+    final completed = placementAwareCompletedLessonIds(
       completedList,
-      lessonSplitMap: catalog.lessonSplitMap,
+      catalog: catalog,
     );
 
     final currentId = _string(profile['currentLessonId']);

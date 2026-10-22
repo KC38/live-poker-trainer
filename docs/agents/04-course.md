@@ -43,6 +43,15 @@ the earlier sections onto `completedLessonIds`
 (`jumpTestPlacementCreditLessonIds`, `functions/src/course_catalog.ts`), so
 Home lands on the first lesson of the jump test's section — e.g. the Section 4
 jump check places a regular at Section 4, Unit 1, not Section 1, Unit 1.
+Only Section N opens: each jump test is the last node of its own section and
+the first prerequisite of Section N+1, so a placement pass (jump test taken
+before its section's lessons) is **not** recorded as a completed lesson
+(`completedLessonIdsAfterCompletion`); it is kept in `passedJumpTestLessonIds`
+(warm-up unlock still honors a passed Section 2 jump). Reads go through
+`effectiveCompletedLessonIds` (client mirror `placementAwareCompletedLessonIds`),
+which drops a stored jump id whose own prerequisites are incomplete unless the
+learner already finished a lesson that requires it, so pre-fix profiles stop
+showing Section N+1 unlocked. LPT-1032.
 
 Curriculum splits: catalog `lessonSplitMap` maps a retired multi-concept lesson id to successor lesson ids. Completed progress on the retired id counts as completed for every listed successor — Home unlocks, `startLesson` prereqs, review XP, zero-heart replay, and resume protection on submit / complete / `getCourseState`. Do not raw-`includes()` the stored id list for those checks; successors are not written back onto the profile until that successor is finished. A start request for a retired id opens the first successor still in the catalog. Gates live in `functions/src/lesson_split_map.ts` (client mirror: `lib/models/course/lesson_split_map.dart`). LPT-83+.
 Splits keep the retired lesson's unit as the container (successors `lesson-SS-UU-LL-0N-slug` sit in its place) and reuse its activity ids; `isLessonScreenFrameLesson` and `TableFeatures.forLessonId` resolve successors by their `SS-UU-LL` prefix. LPT-87+.

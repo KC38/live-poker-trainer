@@ -985,10 +985,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             ids.add(item.toString());
           }
         }
-        return expandCompletedLessonIds(
-          ids,
-          lessonSplitMap: catalog.lessonSplitMap,
-        );
+        return placementAwareCompletedLessonIds(ids, catalog: catalog);
       }
     } on Object {
       // Fall through to Home nodes.

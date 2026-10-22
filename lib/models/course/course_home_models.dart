@@ -398,12 +398,24 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
     );
   }
 
-  final completed = expandCompletedLessonIds(
+  // Placement-only jump tests do not count (LPT-1032): passing the Section 4
+  // jump must not satisfy Section 5's first prerequisite.
+  final completed = placementAwareCompletedLessonIds(
     profile?.completedLessonIds ?? const <String>[],
-    lessonSplitMap: catalog.lessonSplitMap,
+    catalog: catalog,
   );
   final mastery = profile?.masteryByLessonId ?? const <String, double>{};
-  final reviews = reviewLessonIds.toSet();
+  final jumpTestIds = <String>{
+    for (final section in catalog.sections)
+      for (final unit in section.units)
+        for (final lesson in unit.lessons)
+          if (deriveCourseNodeKind(lesson) == CourseNodeKind.jumpTest)
+            lesson.id,
+  };
+  // A review scheduled for a placement-only jump pass is not review-due.
+  final reviews = reviewLessonIds
+      .where((id) => !jumpTestIds.contains(id) || completed.contains(id))
+      .toSet();
   // Only a live first-run open attempt owns the Home progress pointer.
   // Replays of already-completed lessons must not move isNext / focus /
   // resume — otherwise reviewing an earlier node regresses the path.

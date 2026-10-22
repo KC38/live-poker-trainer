@@ -39,3 +39,53 @@ String? resolveSplitLessonId(
   final last = successors.last;
   return lessonExists(last) ? last : null;
 }
+
+/// Completed lesson ids that count for unlocks and progress.
+///
+/// Expands [completed] through the split map, then drops any jump test whose
+/// own prerequisites are not all completed and that no completed lesson
+/// builds on. Jump tests sit at the end of their section and the next
+/// section's first lesson requires them, so a jump test passed as a placement
+/// (Section N, before Section N's lessons) must not unlock Section N+1
+/// (LPT-1032). Repeats until stable. Mirrors `effectiveCompletedLessonIds` in
+/// Cloud Functions.
+Set<String> placementAwareCompletedLessonIds(
+  Iterable<String> completed, {
+  required CourseCatalog catalog,
+}) {
+  final out = expandCompletedLessonIds(
+    completed,
+    lessonSplitMap: catalog.lessonSplitMap,
+  );
+  final jumpPrereqs = <String, List<String>>{};
+  final dependents = <String, List<String>>{};
+  for (final section in catalog.sections) {
+    for (final unit in section.units) {
+      for (final lesson in unit.lessons) {
+        for (final prereq in lesson.prerequisites) {
+          (dependents[prereq] ??= <String>[]).add(lesson.id);
+        }
+        if (lesson.activities.any(
+          (a) => a.assessmentRole == AssessmentRole.jumpTest,
+        )) {
+          jumpPrereqs[lesson.id] = lesson.prerequisites;
+        }
+      }
+    }
+  }
+  bool placementOnly(String id) {
+    final prereqs = jumpPrereqs[id];
+    if (prereqs == null) return false;
+    if (prereqs.every(out.contains)) return false;
+    return !(dependents[id] ?? const <String>[]).any(out.contains);
+  }
+
+  for (;;) {
+    final drop = [
+      for (final id in out)
+        if (placementOnly(id)) id,
+    ];
+    if (drop.isEmpty) return out;
+    out.removeAll(drop);
+  }
+}

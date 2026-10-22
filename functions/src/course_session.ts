@@ -21,8 +21,10 @@ import {
 import {HttpsError} from "firebase-functions/v2/https";
 import {
   courseBank,
+  effectiveCompletedLessonIds,
   findActivity,
   findLesson,
+  isPlacementOnlyJumpTest,
   lessonGrantsLiveTrainingEntitlement,
   jumpTestPlacementCreditLessonIds,
   lessonRequiresPlacementFlag,
@@ -866,11 +868,9 @@ export async function startCourseLessonForUser(options: {
     }
 
     // Deep-link lock: new starts require catalog prerequisites completed.
-    const completedForPrereqs = Array.isArray(
+    const completedForPrereqs = effectiveCompletedLessonIds(
       profileSnap.data()?.completedLessonIds,
-    ) ?
-      profileSnap.data()!.completedLessonIds as string[] :
-      [];
+    );
     const lessonAlreadyCompleted = hasCompletedLessonId(
       completedForPrereqs,
       lessonId,
@@ -1057,11 +1057,9 @@ export async function submitCourseStepForUser(options: {
     }
     // First-run lessons stop at 0 hearts until a refill restores the attempt.
     // Practice / replay may start at 0 so learners can earn a heart back.
-    const priorCompletedForHearts = Array.isArray(
+    const priorCompletedForHearts = effectiveCompletedLessonIds(
       profileSnap.data()?.completedLessonIds,
-    ) ?
-      profileSnap.data()!.completedLessonIds as string[] :
-      [];
+    );
     // Expand retired parents. A stored suits-and-ranks completion does not
     // list the successor id; raw includes() would block a zero-heart review.
     const isPracticeOrReplaySubmit = allowsZeroHeartPlay({
@@ -1168,9 +1166,9 @@ export async function submitCourseStepForUser(options: {
 
     // Track full first-run step XP on the attempt. Reviews defer the ledger
     // grant to completion so TOTAL XP can be 25% of what this run earned.
-    const priorCompleted = Array.isArray(profileSnap.data()?.completedLessonIds) ?
-      profileSnap.data()!.completedLessonIds as string[] :
-      [];
+    const priorCompleted = effectiveCompletedLessonIds(
+      profileSnap.data()?.completedLessonIds,
+    );
     // Same expansion as startLesson. Otherwise reviewing a split successor
     // looks like a first run and overwrites the frontier resume.
     const isReview = hasCompletedLessonId(
@@ -1430,9 +1428,9 @@ export async function completeCourseLessonForUser(options: {
       );
     }
 
-    const priorCompleted = Array.isArray(profileSnap.data()?.completedLessonIds) ?
-      profileSnap.data()!.completedLessonIds as string[] :
-      [];
+    const priorCompleted = effectiveCompletedLessonIds(
+      profileSnap.data()?.completedLessonIds,
+    );
     const isReview = hasCompletedLessonId(
       priorCompleted,
       attempt.lessonId,
@@ -1495,36 +1493,35 @@ export async function completeCourseLessonForUser(options: {
       }
     }
 
-    // A passed jump test places the learner at its section: earlier sections
-    // count as completed so Home lands there, not on Section 1, Unit 1.
-    const placementCredit = attempt.jumpTestPassed ?
-      jumpTestPlacementCreditLessonIds(attempt.lessonId) :
-      [];
-    const completedLessonIds = uniqueStrings([
-      ...priorCompleted,
-      ...placementCredit,
-      attempt.lessonId,
-    ]);
+    const completedLessonIds = completedLessonIdsAfterCompletion({
+      priorCompleted,
+      lessonId: attempt.lessonId,
+      jumpTestPassed: attempt.jumpTestPassed,
+    });
+    const placementOnlyPass = !completedLessonIds.includes(attempt.lessonId);
     const masteryByLessonId = {
       ...(profileSnap.data()?.masteryByLessonId as Record<string, number> ?? {}),
       [attempt.lessonId]: mastery,
     };
 
     const reviewId = `review_${attempt.lessonId}`;
-    tx.set(
-      db.collection("users").doc(options.uid)
-        .collection("courseReviews").doc(reviewId),
-      {
-        reviewId,
-        lessonId: attempt.lessonId,
-        status: "scheduled",
-        dueAtMs: nowMs + REVIEW_DELAY_MS,
-        sourceAttemptId: attemptId,
-        createdAt: FieldValue.serverTimestamp(),
-        updatedAt: FieldValue.serverTimestamp(),
-      },
-      {merge: true},
-    );
+    // No spaced review for a placement-only pass: the node is not done.
+    if (!placementOnlyPass) {
+      tx.set(
+        db.collection("users").doc(options.uid)
+          .collection("courseReviews").doc(reviewId),
+        {
+          reviewId,
+          lessonId: attempt.lessonId,
+          status: "scheduled",
+          dueAtMs: nowMs + REVIEW_DELAY_MS,
+          sourceAttemptId: attemptId,
+          createdAt: FieldValue.serverTimestamp(),
+          updatedAt: FieldValue.serverTimestamp(),
+        },
+        {merge: true},
+      );
+    }
 
     tx.set(attemptDoc, {
       status: "completed",
@@ -1580,6 +1577,9 @@ export async function completeCourseLessonForUser(options: {
       longestStreak: streak.longestStreak,
       lastStudyLocalDate: streak.lastStudyLocalDate,
       completedLessonIds,
+      ...(attempt.jumpTestPassed ?
+        {passedJumpTestLessonIds: FieldValue.arrayUnion(attempt.lessonId)} :
+        {}),
       masteryByLessonId,
       ...(clearProgressPointer ?
         {currentLessonId: null, resume: null} :
@@ -1735,6 +1735,12 @@ export async function getCourseStateForUser(options: {
       return {id: docSnap.id, ...data};
     })
     .filter((row) => Number((row as {dueAtMs?: unknown}).dueAtMs ?? 0) <= nowMs)
+    // Pre-LPT-1032 placement passes scheduled a review for a node that is
+    // not done; it must not surface as review-due on Home.
+    .filter((row) => !isPlacementOnlyJumpTest(
+      String((row as {lessonId?: unknown}).lessonId ?? ""),
+      profile?.completedLessonIds ?? [],
+    ))
     .slice(0, 20);
   const entitlementSnap = await db
     .collection("users")
@@ -1876,6 +1882,32 @@ function findChoiceOnActivity(
  * activity. Explain steps always advance. Multi-step hands stay put until the
  * graded choice belongs to the last authored street.
  */
+/**
+ * Profile `completedLessonIds` after a lesson completes.
+ *
+ * A passed jump test places the learner at its section: every lesson in the
+ * earlier sections counts as completed so Home lands there, not on Section 1,
+ * Unit 1. A placement pass (jump test taken before its own section's
+ * lessons) is not itself recorded: it is the next section's first
+ * prerequisite, so recording it unlocked Section N+1 too (LPT-1032).
+ */
+export function completedLessonIdsAfterCompletion(options: {
+  priorCompleted: readonly string[];
+  lessonId: string;
+  jumpTestPassed: boolean;
+  bank?: CourseBank;
+}): string[] {
+  const bank = options.bank ?? courseBank;
+  const placementCredit = options.jumpTestPassed ?
+    jumpTestPlacementCreditLessonIds(options.lessonId, bank) :
+    [];
+  return effectiveCompletedLessonIds(uniqueStrings([
+    ...options.priorCompleted,
+    ...placementCredit,
+    options.lessonId,
+  ]), bank);
+}
+
 /**
  * First catalog prerequisite blocking a new lesson start, if any.
  *
@@ -2120,9 +2152,9 @@ function profileFromData(data: DocumentData): CourseProfile {
     totalScoredAnswers,
     acceptedAccuracy: acceptedAccuracyRatio(acceptedAnswers, totalScoredAnswers),
     masteryByLessonId: (data.masteryByLessonId as Record<string, number>) ?? {},
-    completedLessonIds: Array.isArray(data.completedLessonIds) ?
-      data.completedLessonIds.map(String) :
-      [],
+    // Placement-only jump tests never count as completed (LPT-1032); this
+    // also repairs profiles written before the fix for every client build.
+    completedLessonIds: effectiveCompletedLessonIds(data.completedLessonIds),
     currentLessonId: optionalString(data.currentLessonId) ?? null,
     resume: data.resume && typeof data.resume === "object" ?
       {
