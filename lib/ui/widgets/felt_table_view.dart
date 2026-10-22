@@ -20,11 +20,13 @@ import 'package:live_poker_trainer/core/constants/money.dart';
 import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
 import 'package:live_poker_trainer/core/deal/felt_action_reveal_controller.dart';
 import 'package:live_poker_trainer/core/deal/felt_deal_controller.dart';
+import 'package:live_poker_trainer/core/deal/felt_deal_ledger.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/ui/widgets/action_badge.dart';
 import 'package:live_poker_trainer/ui/widgets/community_cards_view.dart';
+import 'package:live_poker_trainer/ui/widgets/felt_deal_ledger_scope.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
@@ -223,16 +225,46 @@ class _FeltTableViewState extends State<FeltTableView> {
   String? _soundEpoch;
   Timer? _cueSettleTimer;
   var _cuesSettled = false;
+  FeltDealLedger? _ledger;
+
+  /// True for the first frame after this felt resumed a deal from the
+  /// ledger: cards mounting now were already on the table.
+  var _restoringFrame = false;
+
+  /// Card keys that finished landing in the current deal epoch.
+  final Set<Key> _landedCards = {};
 
   @override
   void initState() {
     super.initState();
+    _ledger = FeltDealLedgerScope.maybeOf(context);
     _deal = FeltDealController(onDealt: _playDealSound);
     _actions = FeltActionRevealController(onRevealed: _playActionSound);
     _deal.addListener(_syncActions);
+    _deal.addListener(_recordDeal);
     _deal.addListener(_onDealProgress);
     _actions.addListener(_onDealProgress);
     _syncDeal();
+    if (_deal.resumed) {
+      _restoringFrame = true;
+      // Already-dealt teaching cards are settled — no SoftPulse delay and
+      // no "Watch the deal." flash after a remount.
+      if (_softPulseCardsReady) _cuesSettled = true;
+      _onDealProgress();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _restoringFrame) setState(() => _restoringFrame = false);
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _ledger = FeltDealLedgerScope.maybeOf(context);
+  }
+
+  void _recordDeal() {
+    _ledger?.record(_deal.epoch, _deal.progress);
   }
 
   @override
@@ -245,6 +277,7 @@ class _FeltTableViewState extends State<FeltTableView> {
   void dispose() {
     _cueSettleTimer?.cancel();
     _deal.removeListener(_syncActions);
+    _deal.removeListener(_recordDeal);
     _deal.removeListener(_onDealProgress);
     _actions.removeListener(_onDealProgress);
     _deal.dispose();
@@ -282,18 +315,22 @@ class _FeltTableViewState extends State<FeltTableView> {
         'hand-${game.handCount}-d${game.dealerIndex}-n${game.players.length}';
     if (epoch != _soundEpoch) {
       _soundEpoch = epoch;
+      _landedCards.clear();
       _resetDealSound();
     }
     final dealHoles =
         widget.showHoleCardBacks ||
         game.players.any((player) => player.holeCards.isNotEmpty);
+    final fresh = epoch != _deal.epoch;
     _deal.bind(
       epoch: epoch,
       seatCount: game.players.length,
       dealerIndex: game.dealerIndex,
       boardTarget: game.community.length,
       dealHoles: dealHoles,
+      resume: fresh ? _ledger?.progressFor(epoch) : null,
     );
+    if (fresh) _recordDeal();
     _syncActions();
     _onDealProgress();
   }
@@ -487,6 +524,14 @@ class _FeltTableViewState extends State<FeltTableView> {
   @override
   Widget build(BuildContext context) {
     final features = widget.features ?? TableFeaturesScope.of(context);
+    return DealtCardRevealSettledScope(
+      settled: _restoringFrame,
+      landed: _landedCards,
+      child: _buildTable(context, features),
+    );
+  }
+
+  Widget _buildTable(BuildContext context, TableFeatures features) {
     return AnimatedBuilder(
       animation: Listenable.merge([_deal, _actions]),
       builder: (context, _) {

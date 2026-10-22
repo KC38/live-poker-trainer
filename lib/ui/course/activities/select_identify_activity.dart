@@ -2328,11 +2328,13 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                 ),
               ],
             ],
-            if (!locked &&
-                (widget.controller.submitting ||
-                    widget.controller.lastResult == null)) ...[
+            // Always keep this trailing slot: dropping it on lock shifted the
+            // Column so Flutter could not match the table child and remounted
+            // the felt — every card dealt again after an answer tap.
+            ...[
               Builder(
                 builder: (context) {
+                  if (locked) return const SizedBox.shrink();
                   final status =
                       widget.controller.submitting
                           ? 'Checking…'

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
+import 'package:live_poker_trainer/ui/widgets/felt_deal_ledger_scope.dart';
 
 /// Plays the deal SFX once when this card first appears, then eases it in.
 class DealtCardReveal extends StatefulWidget {
@@ -44,12 +45,20 @@ class _DealtCardRevealState extends State<DealtCardReveal> {
   @override
   void initState() {
     super.initState();
+    if (DealtCardRevealSettledScope.settledAt(context, widget.key)) {
+      // Already on the felt before a remount — no second deal.
+      _visible = true;
+      _progress = 1;
+      _soundPlayed = true;
+      return;
+    }
     final delay = CardDealPace.instant ? Duration.zero : widget.delay;
     _visible = delay <= Duration.zero;
     if (_visible) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         setState(() => _progress = 1);
+        DealtCardRevealSettledScope.markLanded(context, widget.key);
         _playDealOnce();
       });
     } else {
@@ -63,6 +72,7 @@ class _DealtCardRevealState extends State<DealtCardReveal> {
       _visible = true;
       _progress = 1;
     });
+    DealtCardRevealSettledScope.markLanded(context, widget.key);
     _playDealOnce();
   }
 
