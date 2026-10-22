@@ -74,6 +74,17 @@ behavior.
   functions tooling when needed, repo clone with `make-change` worktrees.
 - Validate with `flutter run -d chrome` (or a headless Chrome drive) at a
   phone-sized window; do not claim the Mac mini simulator lock.
+- Headless Chrome e2e must launch the real binary
+  (`/usr/bin/google-chrome-stable`, or `SAND_REAL_CHROME=1`) with a fresh
+  temp `--user-data-dir` per run. `~/.local/bin/google-chrome` is a Brave
+  shim that rewrites every `--user-data-dir` to the shared main Brave
+  profile, so "fresh" runs reuse another session's localStorage /
+  IndexedDB for the served origin. Stale guest-install prefs plus a synced
+  Firebase web auth session then sign the guest out mid-lesson
+  ("Sign in required for course lessons" / "Sign-in failed before the
+  lesson could start") — a harness artifact, not an app bug (LPT-1031).
+  For emulator runs, keep helper scripts outside `functions/` so the
+  Functions emulator does not hot-reload mid-run.
 - Ship through `.cursor/skills/make-change/SKILL.md` (worktree → PR →
   squash-merge). Skip iPhone 13 mini refresh when the change is web-only
   chrome that does not need a sim proof.
