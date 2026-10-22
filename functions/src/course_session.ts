@@ -24,6 +24,7 @@ import {
   findActivity,
   findLesson,
   lessonGrantsLiveTrainingEntitlement,
+  jumpTestPlacementCreditLessonIds,
   lessonRequiresPlacementFlag,
   type ActivityStage,
   type CourseActivity,
@@ -1494,8 +1495,14 @@ export async function completeCourseLessonForUser(options: {
       }
     }
 
+    // A passed jump test places the learner at its section: earlier sections
+    // count as completed so Home lands there, not on Section 1, Unit 1.
+    const placementCredit = attempt.jumpTestPassed ?
+      jumpTestPlacementCreditLessonIds(attempt.lessonId) :
+      [];
     const completedLessonIds = uniqueStrings([
       ...priorCompleted,
+      ...placementCredit,
       attempt.lessonId,
     ]);
     const masteryByLessonId = {
@@ -1554,7 +1561,7 @@ export async function completeCourseLessonForUser(options: {
 
     const firstLessonCompletedAtMs =
       Number(profileSnap.data()?.firstLessonCompletedAtMs ?? 0) ||
-      (completedLessonIds.length === 1 ? nowMs : null);
+      (priorCompleted.length === 0 ? nowMs : null);
     const existingResume = profileSnap.data()?.resume as
       | DocumentData
       | undefined;

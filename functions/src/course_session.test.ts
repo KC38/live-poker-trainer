@@ -13,6 +13,8 @@ import {
   activityIdsInOrder,
   courseBank,
   findLesson,
+  jumpTestPlacementCreditLessonIds,
+  lessonIdsInOrder,
   lessonGrantsLiveTrainingEntitlement,
   lessonRequiresPlacementFlag,
   LIVE_UNLOCK_SECTION_ID,
@@ -1188,5 +1190,75 @@ describe("missingStartPrerequisite (deep-link lock)", () => {
       completedLessonIds: [...located.lesson.prerequisites],
       lessonSplitMap: splitMap,
     })).toBeUndefined();
+  });
+});
+
+describe("jumpTestPlacementCreditLessonIds", () => {
+  const ids = lessonIdsInOrder();
+
+  it("credits sections 1-3 for the section 4 jump test, not section 4", () => {
+    const credit = jumpTestPlacementCreditLessonIds(
+      "lesson-04-10-02-section-four-jump-test",
+    );
+    const firstSec4 = ids.indexOf("lesson-04-01-01-01-seat-as-range");
+    expect(credit).toEqual(ids.slice(0, firstSec4));
+    expect(credit).toContain("lesson-03-08-02-section-three-jump-test");
+    // Section 4's first lesson is unlocked by the credit; the jump test
+    // itself is appended on completion, which also opens Section 5.
+    const sec4First = findLesson("lesson-04-01-01-01-seat-as-range")!;
+    expect(missingStartPrerequisite({
+      prerequisites: sec4First.lesson.prerequisites,
+      requiresPlacement: false,
+      completedLessonIds: credit,
+      lessonSplitMap: courseBank.lessonSplitMap,
+    })).toBeUndefined();
+    expect(credit.some((id) => id.startsWith("lesson-04-"))).toBe(false);
+  });
+
+  it("is generic: every section N jump test credits sections < N", () => {
+    const jumps: Array<[string, string]> = [];
+    for (const section of courseBank.sections) {
+      for (const unit of section.units) {
+        for (const lesson of unit.lessons) {
+          if (lessonRequiresPlacementFlag(lesson)) {
+            jumps.push([lesson.id, section.id]);
+          }
+        }
+      }
+    }
+    // Sections 1-4 each publish a jump test today.
+    expect(jumps.length).toBeGreaterThanOrEqual(4);
+    for (const [jumpId, sectionId] of jumps) {
+      const section = courseBank.sections.find((s) => s.id === sectionId)!;
+      const firstOfSection = section.units[0].lessons[0].id;
+      const credit = jumpTestPlacementCreditLessonIds(jumpId);
+      expect(credit).toEqual(ids.slice(0, ids.indexOf(firstOfSection)));
+      const first = findLesson(firstOfSection)!;
+      expect(missingStartPrerequisite({
+        prerequisites: first.lesson.prerequisites,
+        requiresPlacement: false,
+        completedLessonIds: credit,
+        lessonSplitMap: courseBank.lessonSplitMap,
+      })).toBeUndefined();
+    }
+  });
+
+  it("section 3 jump test credits sections 1-2 and opens section 3", () => {
+    const credit = jumpTestPlacementCreditLessonIds(
+      "lesson-03-08-02-section-three-jump-test",
+    );
+    expect(credit).toContain("lesson-02-07-02-section-two-jump");
+    expect(credit.some((id) => id.startsWith("lesson-03-"))).toBe(false);
+    expect(credit[credit.length - 1]).toBe("lesson-02-07-02-section-two-jump");
+  });
+
+  it("credits nothing for section 1 jump or non-jump lessons", () => {
+    expect(jumpTestPlacementCreditLessonIds(
+      "lesson-01-06-02-section-one-jump",
+    )).toEqual([]);
+    expect(jumpTestPlacementCreditLessonIds(
+      "lesson-04-10-01-02-combine-factors",
+    )).toEqual([]);
+    expect(jumpTestPlacementCreditLessonIds("lesson-missing")).toEqual([]);
   });
 });

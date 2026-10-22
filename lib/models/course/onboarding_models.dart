@@ -83,6 +83,7 @@ class OnboardingRecommendation {
     required this.jumpTestOffered,
     this.jumpTestLessonId,
     this.sectionTitle,
+    this.sectionOrder,
   });
 
   final ExperienceBand experienceBand;
@@ -98,6 +99,27 @@ class OnboardingRecommendation {
 
   /// Matching section title when present.
   final String? sectionTitle;
+
+  /// 1-based order of the matching section when present.
+  final int? sectionOrder;
+}
+
+/// "Your start" copy for an offered jump test.
+///
+/// Passing the Section N jump test places the learner at Section N: every
+/// lesson in earlier sections counts as done (server
+/// `jumpTestPlacementCreditLessonIds`).
+String jumpTestOfferCopy(int? sectionOrder) {
+  if (sectionOrder == null || sectionOrder <= 1) {
+    return 'You asked for Regular. Pass this jump test to start at '
+        'this section. Not ready? Start from the beginning instead.';
+  }
+  final earlier = sectionOrder == 2
+      ? 'Section 1 counts'
+      : 'Sections 1–${sectionOrder - 1} count';
+  return 'You asked for Regular. Pass this jump test to start at Section '
+      '$sectionOrder — $earlier as done. Not ready? Start from the '
+      'beginning instead.';
 }
 
 /// Resolves recommended start + optional jump test without linking to missing nodes.
@@ -128,6 +150,7 @@ OnboardingRecommendation resolveOnboardingRecommendation({
     jumpTestOffered: offerJump,
     jumpTestLessonId: offerJump ? jumpId : null,
     sectionTitle: section?.title,
+    sectionOrder: section?.order,
   );
 }
 
