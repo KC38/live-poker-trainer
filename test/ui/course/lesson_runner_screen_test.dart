@@ -2698,8 +2698,8 @@ void main() {
       expect(find.textContaining('best described as'), findsOneWidget);
       expect(find.byTooltip('Undo'), findsOneWidget);
       expect(find.byTooltip('Hint'), findsOneWidget);
-      expect(find.text('Narrower'), findsOneWidget);
-      expect(find.text('Any two'), findsOneWidget);
+      expect(find.text('NARROWER'), findsOneWidget);
+      expect(find.text('ANY TWO'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
   );
@@ -3104,7 +3104,7 @@ void main() {
       await tester.pump();
       for (
         var i = 0;
-        i < 40 && find.text('Nut potential').evaluate().isEmpty;
+        i < 40 && find.text('NUT POTENTIAL').evaluate().isEmpty;
         i++
       ) {
         await tester.pump(const Duration(milliseconds: 50));
@@ -3120,8 +3120,8 @@ void main() {
       );
       expect(find.byTooltip('Undo'), findsOneWidget);
       expect(find.byTooltip('Hint'), findsOneWidget);
-      expect(find.text('Nut potential'), findsAtLeastNWidgets(1));
-      expect(find.text('Bluff more'), findsAtLeastNWidgets(1));
+      expect(find.text('NUT POTENTIAL'), findsAtLeastNWidgets(1));
+      expect(find.text('BLUFF MORE'), findsAtLeastNWidgets(1));
       expect(tester.takeException(), isNull);
     },
   );
@@ -3885,8 +3885,8 @@ void main() {
     expect(find.textContaining('dry A-high'), findsAtLeastNWidgets(1));
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.text('Range advantage'), findsAtLeastNWidgets(1));
-    expect(find.text('No concept'), findsAtLeastNWidgets(1));
+    expect(find.text('RANGE ADVANTAGE'), findsAtLeastNWidgets(1));
+    expect(find.text('NO CONCEPT'), findsAtLeastNWidgets(1));
     expect(tester.takeException(), isNull);
   });
 
@@ -4576,8 +4576,8 @@ void main() {
     expect(find.textContaining('Sticky calls'), findsAtLeastNWidgets(1));
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.text('Station value'), findsOneWidget);
-    expect(find.text('Station bluff'), findsOneWidget);
+    expect(find.text('STATION VALUE'), findsOneWidget);
+    expect(find.text('STATION BLUFF'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

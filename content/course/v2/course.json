@@ -10102,12 +10102,22 @@
                   "prompt": "Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now?",
                   "choices": [
                     {
+                      "id": "pot-19",
+                      "label": "19",
+                      "accessibilityText": "19",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "6+6+6 plus the folded small blind's 1 = 19. BB's 2 is already inside its 6."
+                      }
+                    },
+                    {
                       "id": "pot-21",
                       "label": "21",
                       "accessibilityText": "21",
                       "grading": {
-                        "grade": "recommended",
-                        "feedback": "1+2+6+6+6 = 21 before the flop."
+                        "grade": "clear_mistake",
+                        "feedback": "BB's 2 is part of its call to 6 — don't count it twice.",
+                        "betterChoiceId": "pot-19"
                       }
                     },
                     {
@@ -10116,18 +10126,8 @@
                       "accessibilityText": "18",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "You dropped a blind.",
-                        "betterChoiceId": "pot-21"
-                      }
-                    },
-                    {
-                      "id": "pot-12",
-                      "label": "12",
-                      "accessibilityText": "12",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Only counted the open.",
-                        "betterChoiceId": "pot-21"
+                        "feedback": "You dropped the small blind — its 1 stays in the pot after SB folds.",
+                        "betterChoiceId": "pot-19"
                       }
                     }
                   ],
@@ -10138,7 +10138,7 @@
                     "cues": [
                       {
                         "press": 1,
-                        "target": "pot-21",
+                        "target": "pot-19",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -11356,7 +11356,7 @@
                       "accessibilityText": "10",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "You must call 10 into a 30 pot after calling."
+                        "feedback": "Match their 10 — you call 10 into a 30 pot (20 + their bet)."
                       }
                     },
                     {
@@ -11375,7 +11375,7 @@
                       "accessibilityText": "30",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "That is the pot after you call — you only put in 10.",
+                        "feedback": "30 is the pot you are calling into (20 + their 10) — you only put in 10.",
                         "betterChoiceId": "call-10"
                       }
                     }
@@ -26099,7 +26099,7 @@
                   "objectives": [
                     "Use probes and delayed c-bets with a plan"
                   ],
-                  "prompt": "Preflop raiser checks flop. You are BB with middle pair. Action?",
+                  "prompt": "Preflop raiser checked back the flop. Turn: you are BB with middle pair. Action?",
                   "choices": [
                     {
                       "id": "probe",
@@ -26125,11 +26125,11 @@
                     },
                     {
                       "id": "never",
-                      "label": "Check back",
-                      "accessibilityText": "Check back",
+                      "label": "Check",
+                      "accessibilityText": "Check",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Misses value and folds.",
+                        "feedback": "Passive — the raiser already showed weakness; take a cheap stab.",
                         "betterChoiceId": "probe"
                       },
                       "action": "CHECK"
@@ -26146,7 +26146,8 @@
                         "board": [
                           "Kc",
                           "9s",
-                          "3h"
+                          "3h",
+                          "2d"
                         ]
                       },
                       "variants": [
@@ -26160,7 +26161,8 @@
                             "board": [
                               "Kh",
                               "9d",
-                              "3s"
+                              "3s",
+                              "2c"
                             ]
                           },
                           "label": "Same spot, suits rotated (1)"
@@ -26175,7 +26177,8 @@
                             "board": [
                               "Kh",
                               "9c",
-                              "3d"
+                              "3d",
+                              "2s"
                             ]
                           },
                           "label": "Same spot, suits rotated (2)"

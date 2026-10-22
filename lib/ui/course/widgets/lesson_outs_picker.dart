@@ -9,6 +9,7 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_drill_scene.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 
 /// Felt picker: tap the three remaining aces (clean outs) on the king-high flop.
@@ -24,7 +25,12 @@ class OutsCleanAcesPicker extends StatefulWidget {
     required this.locked,
     this.showGuidance = true,
     this.height,
+    this.onTable = false,
   });
+
+  /// Lesson frame: board and holes sit on the full six-max table; the out
+  /// cards and "No clean outs" form the answer row under the felt.
+  final bool onTable;
 
   final CourseActivity activity;
   final LessonActivityController controller;
@@ -260,6 +266,31 @@ class _OutsCleanAcesPickerState extends State<OutsCleanAcesPicker> {
         ),
       ),
     );
+
+    if (widget.onTable) {
+      return LessonTableDrillScene(
+        key: const ValueKey('outs-clean-aces-table'),
+        enabled: !widget.locked,
+        semanticsLabel: 'Flop — select every clean out',
+        spec: LessonTableDrillSpec(
+          heroCodes: _heroCodes,
+          boardCodes: _boardCodes,
+          heroPosition: 'BTN',
+          liveVillainPositions: const ['BB'],
+          postflop: true,
+        ),
+        options: const [],
+        actions: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(height: 64, child: Center(child: outsRow())),
+            const SizedBox(height: 8),
+            noneTile,
+          ],
+        ),
+      );
+    }
 
     final teach = Column(
       mainAxisSize: MainAxisSize.min,

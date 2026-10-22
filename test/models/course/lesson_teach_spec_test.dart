@@ -1488,7 +1488,7 @@ void main() {
     test('guided/scaffolded SoftPulse; checkpoint quiet', () {
       expect(
         _list(act('act-03-01-01-guided'), 'cues').single['target'],
-        'pot-21',
+        'pot-19',
       );
       expect(
         _list(act('act-03-01-01-scaffolded'), 'cues').single['target'],
@@ -3171,7 +3171,7 @@ void main() {
       expect(
         act('act-05-05-01-scaffolded')
             .teachSpec!['deal']['fixedCards']['board'],
-        ['Kc', '9s', '3h'],
+        ['Kc', '9s', '3h', '2d'],
       );
       expect(
         _list(act('act-05-05-01-unguided'), 'cues').single['target'],

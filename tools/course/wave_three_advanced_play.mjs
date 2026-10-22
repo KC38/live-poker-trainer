@@ -620,7 +620,7 @@ export function buildSectionFive() {
               }),
               actionAct({
                 id: "act-05-05-01-scaffolded", order: 3, stage: "scaffolded",
-                prompt: "Preflop raiser checks flop. You are BB with middle pair. Action?",
+                prompt: "Preflop raiser checked back the flop. Turn: you are BB with middle pair. Action?",
                 a11y: "Small probe can be reasonable.",
                 objectives: ["Use probes and delayed c-bets with a plan"],
                 choices: [
@@ -628,23 +628,23 @@ export function buildSectionFive() {
                     "Test capped ranges; prepare to give up.", {action: "BET", amountBb: 4}),
                   choice("huge", "Pot-size probe", "questionable",
                     "Too large without equity.", {action: "BET", amountBb: 12}),
-                  choice("never", "Check back", "clear_mistake",
-                    "Misses value and folds.", {action: "CHECK", betterChoiceId: "probe"})
+                  choice("never", "Check", "clear_mistake",
+                    "Passive — the raiser already showed weakness; take a cheap stab.", {action: "CHECK", betterChoiceId: "probe"})
                 ],
                 // LPT-234, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
-                    fixedCards: {hero: ["9h", "8d"], board: ["Kc", "9s", "3h"]},
+                    fixedCards: {hero: ["9h", "8d"], board: ["Kc", "9s", "3h", "2d"]},
                     variants: [
                       {
                         id: "var-scaffolded-suits-1",
-                        fixedCards: {hero: ["9s", "8c"], board: ["Kh", "9d", "3s"]},
+                        fixedCards: {hero: ["9s", "8c"], board: ["Kh", "9d", "3s", "2c"]},
                         label: "Same spot, suits rotated (1)",
                       },
                       {
                         id: "var-scaffolded-suits-2",
-                        fixedCards: {hero: ["9d", "8s"], board: ["Kh", "9c", "3d"]},
+                        fixedCards: {hero: ["9d", "8s"], board: ["Kh", "9c", "3d", "2s"]},
                         label: "Same spot, suits rotated (2)",
                       },
                     ],

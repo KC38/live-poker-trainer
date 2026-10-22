@@ -541,7 +541,7 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-02-07-02-jump-pos' =>
       'Seat right before the button — pick it on the map.',
     'act-03-01-01-guided' =>
-      'Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now — pick 21.',
+      'Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now — pick 19.',
     // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
     // situation + tap verb only; never name UTG / Seat left of the big
     // blind (LPT-845; SoftPulse LPT-653; same class as LPT-844 / LPT-843 /

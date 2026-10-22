@@ -12,6 +12,7 @@ import 'package:live_poker_trainer/ui/course/activities/order_sequence_activity.
 import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_open_pot_deal.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_drill_scene.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
@@ -174,7 +175,10 @@ enum LessonTableRegion {
   /// Effective stack distractor: sum of stacks.
   effectiveStackSum,
 
-  /// Multiway pot: correct total after blinds + open + callers.
+  /// Multiway pot: correct total (open + two callers + folded SB's blind).
+  potChipsNineteen,
+
+  /// Multiway pot distractor: counted the BB's posted blind twice.
   potChipsTwentyOne,
 
   /// Multiway pot distractor: dropped a blind.
@@ -4133,9 +4137,9 @@ String? mapTableRegionToChoiceId({
       };
     case 'act-03-01-01-guided':
       return switch (region) {
+        LessonTableRegion.potChipsNineteen => pick('pot-19'),
         LessonTableRegion.potChipsTwentyOne => pick('pot-21'),
         LessonTableRegion.potChipsEighteen => pick('pot-18'),
-        LessonTableRegion.potChipsTwelve => pick('pot-12'),
         _ => null,
       };
     case 'act-02-02-01-guided-pair':
@@ -5345,6 +5349,14 @@ String? mapTableRegionToChoiceId({
 }
 
 /// Whether this activity is answered by tapping the mini-table.
+/// Answer layouts that draw on the full table as a drill in the lesson frame
+/// (every `…Outcomes` tile layout plus the two timing rows). Seat / hole-card
+/// layouts are already table taps.
+bool lessonTableLayoutIsDrill(LessonTableLayout layout) =>
+    layout.name.endsWith('Outcomes') ||
+    layout == LessonTableLayout.blindsTiming ||
+    layout == LessonTableLayout.streetEndPhases;
+
 bool isTableRegionTapActivity(CourseActivity activity) {
   if (activity.renderer == ActivityRenderer.coachDialogue) {
     // SoftPulse explains: tap the demo instead of Continue. Authored
@@ -5711,9 +5723,15 @@ class LessonTableContext extends StatelessWidget {
     this.enabled = true,
     this.showSoftPulse = false,
     this.showInviteCue = true,
+    this.drillSpec,
   });
 
   final LessonTableScene scene;
+
+  /// When set, answer layouts draw on the full six-max table with the
+  /// answers in the action-button row ([LessonTableDrillScene]) instead of a
+  /// standalone panel of tiles. The lesson frame always sets it.
+  final LessonTableDrillSpec? drillSpec;
 
   /// Currently selected region (gold border).
   final LessonTableRegion? selectedRegion;
@@ -6611,6 +6629,20 @@ class LessonTableContext extends StatelessWidget {
   }
 
   Widget _buildBlindsTiming(BuildContext context) {
+    if (drillSpec != null) {
+      return _buildDrillScene(
+        semanticsLabel:
+            _interactive
+                ? 'Interactive hand timing — when blinds post'
+                : 'Hand timing phases',
+        guideRegion: LessonTableRegion.beforeDeal,
+        phases: const [
+          (region: LessonTableRegion.beforeDeal, title: 'Before deal'),
+          (region: LessonTableRegion.afterFlop, title: 'After flop'),
+          (region: LessonTableRegion.showdown, title: 'Showdown'),
+        ],
+      );
+    }
     final densifyShell = true;
     final feltHeight = MediaQuery.sizeOf(context).height * 0.58;
 
@@ -6693,6 +6725,26 @@ class LessonTableContext extends StatelessWidget {
   }
 
   Widget _buildStreetEndPhases(BuildContext context) {
+    if (drillSpec != null) {
+      return _buildDrillScene(
+        semanticsLabel:
+            _interactive
+                ? 'Interactive street timing — when betting ends'
+                : 'Street end phases',
+        guideRegion: LessonTableRegion.streetActionMatched,
+        phases: const [
+          (
+            region: LessonTableRegion.streetActionMatched,
+            title: 'Bets matched',
+          ),
+          (region: LessonTableRegion.streetFlopDealt, title: 'Flop appears'),
+          (
+            region: LessonTableRegion.streetSomeoneFolds,
+            title: 'Someone folds',
+          ),
+        ],
+      );
+    }
     // Tall-phone teach: fill navy void under the three end-of-street tiles.
     // Unguided SoftPulse stays off until Hint, then SoftPulses Bets matched.
     final densifyShell = true;
@@ -7389,28 +7441,28 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive pot size — tap the chip total',
       semanticsStatic: 'Multiway pot size outcomes',
       caption: scene.caption ?? '1/2 · UTG opens · callers',
-      // SoftPulse + Rex own the cue — no math spoiler / gold tip on 21.
+      // SoftPulse + Rex own the cue — no math spoiler / gold tip on 19.
       cueLabel: '',
-      guideRegion: LessonTableRegion.potChipsTwentyOne,
+      guideRegion: LessonTableRegion.potChipsNineteen,
       phases: [
+        (
+          region: LessonTableRegion.potChipsTwentyOne,
+          title: '21 chips',
+          detail: 'BB twice',
+          visual: const _PotChipDot(label: '21', gold: false),
+        ),
+        (
+          region: LessonTableRegion.potChipsNineteen,
+          title: '19 chips',
+          // Structural — not “6+6+6+1” answering the pot for the learner.
+          detail: 'Full pot',
+          visual: const _PotChipDot(label: '19', gold: false),
+        ),
         (
           region: LessonTableRegion.potChipsEighteen,
           title: '18 chips',
           detail: 'Short',
           visual: const _PotChipDot(label: '18', gold: false),
-        ),
-        (
-          region: LessonTableRegion.potChipsTwentyOne,
-          title: '21 chips',
-          // Structural — not “1+2+6+6+6” answering the pot for the learner.
-          detail: 'Full pot',
-          visual: const _PotChipDot(label: '21', gold: false),
-        ),
-        (
-          region: LessonTableRegion.potChipsTwelve,
-          title: '12 chips',
-          detail: 'Open only',
-          visual: const _PotChipDot(label: '12', gold: false),
         ),
       ],
     );
@@ -14350,6 +14402,35 @@ class LessonTableContext extends StatelessWidget {
     );
   }
 
+  Widget _buildDrillScene({
+    required String semanticsLabel,
+    required List<({LessonTableRegion region, String title})> phases,
+    LessonTableRegion? guideRegion,
+  }) {
+    final invitePulse =
+        showSoftPulse && selectedRegion == null && enabled && _interactive;
+    return LessonTableDrillScene(
+      key: const ValueKey('outcome-phases-table'),
+      spec: drillSpec!,
+      enabled: enabled && _interactive,
+      semanticsLabel: semanticsLabel,
+      options: [
+        for (final phase in phases)
+          LessonTableDrillOption(
+            label: phase.title,
+            selected: selectedRegion == phase.region,
+            highlighted:
+                invitePulse &&
+                (guideRegion == null || phase.region == guideRegion),
+            onTap:
+                _interactive
+                    ? () => onRegionTap!(LessonTableTapTarget(phase.region))
+                    : null,
+          ),
+      ],
+    );
+  }
+
   Widget _buildOutcomePhases({
     required String semanticsInteractive,
     required String semanticsStatic,
@@ -14370,6 +14451,16 @@ class LessonTableContext extends StatelessWidget {
     /// Optional teach strip above the caption (e.g. Stack ÷ Pot chips).
     Widget? header,
   }) {
+    if (drillSpec != null) {
+      return _buildDrillScene(
+        semanticsLabel:
+            _interactive ? semanticsInteractive : semanticsStatic,
+        guideRegion: guideRegion,
+        phases: [
+          for (final p in phases) (region: p.region, title: p.title),
+        ],
+      );
+    }
     Widget phase({
       required LessonTableRegion region,
       required String title,

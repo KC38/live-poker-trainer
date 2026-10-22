@@ -782,7 +782,7 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Nit checked · second pair — pick Check or Bet thin.',
     // SoftPulse owns Probe small — don’t gold-tip the dock.
     'act-05-05-01-scaffolded' =>
-      'PFR checks · middle pair BB — capped ranges invite small probes.',
+      'PFR checked back the flop · middle pair BB — capped ranges invite a small turn probe.',
     // SoftPulse owns Fold — don’t gold-tip the dock.
     'act-05-06-01-scaffolded' =>
       'Draw faces bomb — re-price when the turn bricks.',

@@ -421,6 +421,8 @@ class LessonTableStage extends StatelessWidget {
     this.seatActionLabels = const {},
     this.winnerIds = const [],
     this.awardingChips,
+    this.chipDisplayMode = ChipDisplayMode.dollars,
+    this.showHoleCardBacks = true,
   });
 
   /// Hero hole cards. Hidden until [heroFaceUp] is true.
@@ -575,6 +577,13 @@ class LessonTableStage extends StatelessWidget {
   /// [winnerIds] is not empty.
   final bool? awardingChips;
 
+  /// Stack, bet, and pot units. Drills whose copy talks in big blinds
+  /// (`Stack 60bb, pot 15bb`) draw `60 BB` instead of `$120`.
+  final ChipDisplayMode chipDisplayMode;
+
+  /// False draws the table before the deal (no card backs on any seat).
+  final bool showHoleCardBacks;
+
   GameState get _game => lessonTableStageGame(
     heroCodes: heroCodes,
     boardCodes: boardCodes,
@@ -639,10 +648,10 @@ class LessonTableStage extends StatelessWidget {
                   for (final holes in villainHoleCodes) holes.join(),
                 ].join('|')}'
                 '-v$villainCount-d${dealerIndex ?? 0}',
-            chipDisplayMode: ChipDisplayMode.dollars,
+            chipDisplayMode: chipDisplayMode,
             awardingChips: awardingChips ?? winnerIds.isNotEmpty,
             features: table,
-            showHoleCardBacks: true,
+            showHoleCardBacks: showHoleCardBacks,
             heroCardsFaceUp: heroFaceUp,
             faceUpPlayerIds: faceUp,
             // Hole-card Hint / SoftPulse rings each hole card, never the

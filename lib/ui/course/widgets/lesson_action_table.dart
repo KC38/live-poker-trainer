@@ -1096,16 +1096,19 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         feltStatusLine: 'Checked to you',
       );
     case 'act-05-05-01-scaffolded':
+      // Probe = turn lead after the raiser checked back the flop. The BB acts
+      // first on the turn, so no seat has acted on this street yet (a BTN
+      // CHECK tag on a flop board with BB to act was out of turn).
       return const LessonActionSpot(
         heroCodes: ['9h', '8d'],
-        boardCodes: ['Kc', '9s', '3h'],
+        boardCodes: ['Kc', '9s', '3h', '2d'],
         potLabel: 'Pot 14',
-        villainLine: 'PFR checks flop',
+        villainLine: 'PFR checked back the flop',
         // Structural — SoftPulse + Rex own Probe small.
-        streetLabel: 'Flop · middle pair · BB',
+        streetLabel: 'Turn · middle pair · BB',
         facingBet: false,
         openPot: true,
-        feltStatusLine: 'Checked to you',
+        feltStatusLine: 'Raiser checked back the flop',
       );
     case 'act-05-06-01-scaffolded':
       return const LessonActionSpot(

@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "540bfc558bc57ef11cf289301c203537c34fcb5226fe3e3dba2a9fa7a91b4e1b",
+  "contentChecksum": "bb2a9bd3d713d8de7a2cb73bee3d5bab38e0b012a17273bb98a2679e1c0021db",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -8918,6 +8918,11 @@
                   "prompt": "Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now?",
                   "choices": [
                     {
+                      "id": "pot-19",
+                      "label": "19",
+                      "accessibilityText": "19"
+                    },
+                    {
                       "id": "pot-21",
                       "label": "21",
                       "accessibilityText": "21"
@@ -8926,11 +8931,6 @@
                       "id": "pot-18",
                       "label": "18",
                       "accessibilityText": "18"
-                    },
-                    {
-                      "id": "pot-12",
-                      "label": "12",
-                      "accessibilityText": "12"
                     }
                   ],
                   "teachSpec": {
@@ -8940,7 +8940,7 @@
                     "cues": [
                       {
                         "press": 1,
-                        "target": "pot-21",
+                        "target": "pot-19",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -23055,7 +23055,7 @@
                   "objectives": [
                     "Use probes and delayed c-bets with a plan"
                   ],
-                  "prompt": "Preflop raiser checks flop. You are BB with middle pair. Action?",
+                  "prompt": "Preflop raiser checked back the flop. Turn: you are BB with middle pair. Action?",
                   "choices": [
                     {
                       "id": "probe",
@@ -23073,8 +23073,8 @@
                     },
                     {
                       "id": "never",
-                      "label": "Check back",
-                      "accessibilityText": "Check back",
+                      "label": "Check",
+                      "accessibilityText": "Check",
                       "action": "CHECK"
                     }
                   ],
@@ -23089,7 +23089,8 @@
                         "board": [
                           "Kc",
                           "9s",
-                          "3h"
+                          "3h",
+                          "2d"
                         ]
                       },
                       "variants": [
@@ -23103,7 +23104,8 @@
                             "board": [
                               "Kh",
                               "9d",
-                              "3s"
+                              "3s",
+                              "2c"
                             ]
                           },
                           "label": "Same spot, suits rotated (1)"
@@ -23118,7 +23120,8 @@
                             "board": [
                               "Kh",
                               "9c",
-                              "3d"
+                              "3d",
+                              "2s"
                             ]
                           },
                           "label": "Same spot, suits rotated (2)"
