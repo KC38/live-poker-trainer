@@ -314,7 +314,18 @@ List<String> parseLessonNamedCallerPositions(String? villainLine) {
 /// Opener / bettor position from [villainLine], when named.
 String? parseLessonActionVillainPosition(String? villainLine) {
   if (villainLine == null || villainLine.isEmpty) return null;
-  final lower = villainLine.toLowerCase();
+  // `MP opens to 6 · CO + BTN call`: the actor is in the first segment;
+  // later segments name callers.
+  final segments = villainLine.split('·');
+  if (segments.length > 1) {
+    final first = _parsePositionToken(segments.first);
+    if (first != null) return first;
+  }
+  return _parsePositionToken(villainLine);
+}
+
+String? _parsePositionToken(String text) {
+  final lower = text.toLowerCase();
   if (lower.contains('hijack') || RegExp(r'\bhj\b').hasMatch(lower)) {
     return 'HJ';
   }
@@ -462,6 +473,99 @@ List<int> lessonNineMaxFoldsBetween({
   ];
 }
 
+/// Preflop act order for the ring ([nineMax] or six-max).
+List<String> lessonPreflopOrder({required bool nineMax}) =>
+    nineMax ? _nineMaxPreflopOrder : _sixMaxPreflopOrder;
+
+/// Seat index for [position] on a six- or nine-max ring.
+int lessonRingSeatIndex({
+  required String position,
+  required int dealerIndex,
+  required bool nineMax,
+}) =>
+    nineMax
+        ? lessonNineMaxSeatIndex(position: position, dealerIndex: dealerIndex)
+        : lessonSixMaxSeatIndex(position: position, dealerIndex: dealerIndex);
+
+/// Seats whose preflop turn came before the hero's decision.
+///
+/// Seats ahead of the hero in act order always acted. When the facing
+/// action comes from a seat that acts after the hero ([actorPosition] later
+/// in the order, e.g. BB 3-bets the hero's BTN open) the action has gone all
+/// the way round, so every other seat acted too. Never includes the hero.
+List<int> lessonPreflopSeatsActedBeforeHero({
+  required String heroPosition,
+  required int dealerIndex,
+  required bool nineMax,
+  String? actorPosition,
+}) {
+  final order = lessonPreflopOrder(nineMax: nineMax);
+  String norm(String p) => nineMax ? p : lessonSixMaxPositionAlias(p);
+  final heroOrder = order.indexOf(norm(heroPosition));
+  if (heroOrder < 0) return const <int>[];
+  final actorOrder =
+      actorPosition == null ? -1 : order.indexOf(norm(actorPosition));
+  final wrapped = actorOrder > heroOrder;
+  final seats = <int>[];
+  for (var i = 0; i < order.length; i++) {
+    if (i == heroOrder) continue;
+    if (!wrapped && i > heroOrder) continue;
+    final seat = lessonRingSeatIndex(
+      position: order[i],
+      dealerIndex: dealerIndex,
+      nineMax: nineMax,
+    );
+    if (seat != 0 && !seats.contains(seat)) seats.add(seat);
+  }
+  return seats;
+}
+
+/// Villain position named in [villainLine] that is not the hero's seat.
+///
+/// `BB called BTN open` with the hero on BTN must resolve the BB, not the
+/// hero's own BTN token. Falls back to [fallback] (BB, or BTN when the hero
+/// is the BB) so the live villain is never drawn in the hero's chair.
+String lessonVillainPositionExcludingHero(
+  String? villainLine, {
+  required String heroPosition,
+}) {
+  final fallback = heroPosition == 'BB' ? 'BTN' : 'BB';
+  final primary = parseLessonActionVillainPosition(villainLine);
+  if (primary != null && primary != heroPosition) return primary;
+  if (villainLine == null || villainLine.isEmpty) return fallback;
+  final lower = villainLine.toLowerCase();
+  const tokens = <String, String>{
+    'utg+1': 'UTG+1',
+    'mp+1': 'MP+1',
+    'utg': 'UTG',
+    'mp': 'MP',
+    'hj': 'HJ',
+    'hijack': 'HJ',
+    'co': 'CO',
+    'cutoff': 'CO',
+    'btn': 'BTN',
+    'button': 'BTN',
+    'sb': 'SB',
+    'small blind': 'SB',
+    'bb': 'BB',
+    'big blind': 'BB',
+  };
+  var bestIndex = -1;
+  String? best;
+  for (final entry in tokens.entries) {
+    final match = RegExp(
+      '(^|[^a-z0-9+])${RegExp.escape(entry.key)}(?![a-z0-9+])',
+    ).firstMatch(lower);
+    if (match == null || entry.value == heroPosition) continue;
+    final at = match.start;
+    if (bestIndex < 0 || at < bestIndex) {
+      bestIndex = at;
+      best = entry.value;
+    }
+  }
+  return best ?? fallback;
+}
+
 String _raiseOrBetLabel(String? villainLine) {
   final lower = villainLine?.toLowerCase() ?? '';
   if (lower.contains('open') ||
@@ -539,14 +643,13 @@ LessonActionFeltLayout _resolveRingLayout({
               );
       // "UTG opens · 2 callers" — keep the first N seats after the opener as
       // live CALL seats; fold the rest (BTN/SB) so dead money stays (LPT-1021).
-      // "BTN open · BB + MP call" — named callers are not between BTN and SB
-      // (BB acts after SB); resolve those seats and fold everyone else
-      // (LPT-1024).
+      // "MP opens to 6 · CO + BTN call" — named callers are resolved by seat
+      // (LPT-1024); seats that acted before the hero and are not named fold.
       final namedCallerPositions = parseLessonNamedCallerPositions(
         spot.villainLine,
       );
       final List<int> callers;
-      final List<int> folded;
+      List<int> folded;
       if (namedCallerPositions.isNotEmpty) {
         final namedSeats = <int>[
           for (final pos in namedCallerPositions)
@@ -558,11 +661,10 @@ LessonActionFeltLayout _resolveRingLayout({
           for (final seat in namedSeats)
             if (seat != 0 && seat != openerSeat) seat,
         ];
-        final live = <int>{0, openerSeat, ...callers};
-        folded = [
-          for (var i = 1; i < seatCount; i++)
-            if (!live.contains(i)) i,
-        ];
+        // Seats that acted before the hero and are not named fold below;
+        // seats still to act after the hero (e.g. the BB behind an SB hero)
+        // keep their blind and stay live.
+        folded = <int>[];
       } else {
         final callerCount = parseLessonCallerCount(spot.villainLine) ?? 0;
         callers =
@@ -574,6 +676,22 @@ LessonActionFeltLayout _resolveRingLayout({
                 ? between
                 : between.skip(callerCount).toList(growable: false);
       }
+      // Every seat whose turn came before the hero's decision shows an
+      // action: seats ahead of the opener fold too (CO opens → UTG/HJ fold),
+      // and when the raise comes from behind the hero (BB 3-bets the BTN
+      // open) the whole ring has acted. No seat is silently skipped.
+      final live = <int>{0, openerSeat, ...callers};
+      final acted = lessonPreflopSeatsActedBeforeHero(
+        heroPosition: heroPos,
+        dealerIndex: dealer,
+        nineMax: nineMax,
+        actorPosition: opener,
+      );
+      folded = [
+        ...folded,
+        for (final seat in acted)
+          if (!live.contains(seat) && !folded.contains(seat)) seat,
+      ]..sort();
       final labels = <int, String>{
         openerSeat: _raiseOrBetLabel(spot.villainLine),
         for (final seat in callers) seat: 'CALL',
@@ -592,7 +710,43 @@ LessonActionFeltLayout _resolveRingLayout({
       );
     }
 
-    // Preflop without a named open/facing line — ring, hero to act.
+    // Preflop without a facing bet: the hero opened (or is to act). Seats
+    // ahead of the hero folded. `Blinds fold` / `Hand over` lines fold the
+    // blinds too; `BB calls your open` keeps the caller live and folds the
+    // seats between the hero and the caller.
+    final lower = spot.villainLine?.toLowerCase() ?? '';
+    final blindsFold =
+        lower.contains('blinds fold') || lower.contains('both blinds fold');
+    final callsOpen =
+        lower.contains('calls your open') ||
+        lower.contains('called your open') ||
+        (lower.contains('call') && lower.contains('open'));
+    final callerPos =
+        callsOpen
+            ? lessonVillainPositionExcludingHero(
+              spot.villainLine,
+              heroPosition: heroPos,
+            )
+            : null;
+    final callerSeat =
+        callerPos == null
+            ? null
+            : lessonRingSeatIndex(
+              position: callerPos,
+              dealerIndex: dealer,
+              nineMax: nineMax,
+            );
+    final acted = lessonPreflopSeatsActedBeforeHero(
+      heroPosition: heroPos,
+      dealerIndex: dealer,
+      nineMax: nineMax,
+      // A caller / folding blinds acted after the hero: whole ring acted.
+      actorPosition: blindsFold ? 'BB' : callerPos,
+    );
+    final defaultFolded = [
+      for (final seat in acted)
+        if (seat != callerSeat) seat,
+    ]..sort();
     return LessonActionFeltLayout(
       villainCount: villainCount,
       seatCount: seatCount,
@@ -600,7 +754,8 @@ LessonActionFeltLayout _resolveRingLayout({
       sbIndex: sb,
       bbIndex: bb,
       activeSeatIndex: 0,
-      villainSeatIndex: bb == 0 ? sb : bb,
+      foldedSeatIndexes: defaultFolded,
+      villainSeatIndex: callerSeat ?? (bb == 0 ? sb : bb),
     );
   }
 
@@ -634,8 +789,10 @@ LessonActionFeltLayout _resolveRingLayout({
   }
 
   // Postflop: ring with one villain still in (unless heads-up above).
-  final villainPos =
-      parseLessonActionVillainPosition(spot.villainLine) ?? 'BB';
+  final villainPos = lessonVillainPositionExcludingHero(
+    spot.villainLine,
+    heroPosition: heroPos,
+  );
   final villainSeat =
       nineMax
           ? lessonNineMaxSeatIndex(position: villainPos, dealerIndex: dealer)

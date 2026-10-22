@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "b301acb0e82f8e74b16fd10a1a5d5b61a7f997e036e5cad4049cd26910e62aeb",
+  "contentChecksum": "540bfc558bc57ef11cf289301c203537c34fcb5226fe3e3dba2a9fa7a91b4e1b",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -21112,7 +21112,7 @@
                   "objectives": [
                     "Tighten speculative hands multiway"
                   ],
-                  "prompt": "BTN open, BB + MP call. You have 76s in SB. Action?",
+                  "prompt": "MP opens to 6, CO and BTN call. You have 76s in SB. Action?",
                   "choices": [
                     {
                       "id": "fold-76",

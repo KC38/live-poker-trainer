@@ -23937,7 +23937,7 @@
                   "objectives": [
                     "Tighten speculative hands multiway"
                   ],
-                  "prompt": "BTN open, BB + MP call. You have 76s in SB. Action?",
+                  "prompt": "MP opens to 6, CO and BTN call. You have 76s in SB. Action?",
                   "choices": [
                     {
                       "id": "fold-76",

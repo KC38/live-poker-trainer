@@ -10,6 +10,7 @@
  *   node tools/course/validate_course.mjs --fixture path/to.json
  */
 
+import {preflopActionOrderProblems} from "./preflop_action_order.mjs";
 import {createHash} from "node:crypto";
 import {
   existsSync,
@@ -501,6 +502,17 @@ export function validateAndGenerate(course) {
                   }
                 }
               }
+            }
+          }
+          // Seats acting before the hero must act in live preflop order.
+          for (const [label, text] of [
+            ["prompt", act.prompt],
+            ...(Array.isArray(act.handSteps) ? act.handSteps : []).map(
+              (st, si) => [`handSteps[${si}].prompt`, st?.prompt],
+            ),
+          ]) {
+            for (const problem of preflopActionOrderProblems(text)) {
+              errors.push(`${actPath}.${label} (${actId}): seat order: ${problem}`);
             }
           }
           if (!RENDERERS.has(/** @type {string} */ (act.renderer))) {

@@ -84,7 +84,7 @@ export function buildSectionFive() {
               }),
               actionAct({
                 id: "act-05-01-01-scaffolded", order: 3, stage: "scaffolded",
-                prompt: "BTN open, BB + MP call. You have 76s in SB. Action?",
+                prompt: "MP opens to 6, CO and BTN call. You have 76s in SB. Action?",
                 a11y: "Fold speculative suited connectors multiway OOP.",
                 objectives: ["Tighten speculative hands multiway"],
                 choices: [

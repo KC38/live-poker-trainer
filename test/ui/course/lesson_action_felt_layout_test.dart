@@ -91,11 +91,11 @@ void main() {
       expect(layout.foldedSeatIndexes.toSet(), {4, 5});
     });
 
-    test('LPT-1024: BTN open + named BB/MP callers keep CALL seats', () {
+    test('LPT-1024: MP open + named CO/BTN callers keep CALL seats', () {
       const spot = LessonActionSpot(
         heroCodes: ['7h', '6h'],
-        potLabel: 'Pot 3 → 9 → 19',
-        villainLine: 'BTN open · BB + MP call',
+        potLabel: 'Pot 3 → 9 → 21',
+        villainLine: 'MP opens to 6 · CO + BTN call',
         streetLabel: 'Preflop · SB · 76s',
         facingBet: true,
       );
@@ -103,18 +103,20 @@ void main() {
       final layout = resolveLessonActionFeltLayout(spot);
 
       expect(
-        parseLessonNamedCallerPositions('BTN open · BB + MP call').toSet(),
-        {'BB', 'MP'},
+        parseLessonNamedCallerPositions('MP opens to 6 · CO + BTN call')
+            .toSet(),
+        {'CO', 'BTN'},
       );
-      expect(parseLessonCallerCount('BTN open · BB + MP call'), 2);
-      // Hero SB → dealer 5; BTN=5, BB=1, MP→HJ=3.
+      expect(parseLessonCallerCount('MP opens to 6 · CO + BTN call'), 2);
+      // Hero SB → dealer 5; BTN=5, BB=1, UTG=2, MP→HJ=3, CO=4.
       expect(layout.dealerIndex, 5);
-      expect(layout.villainSeatIndex, 5);
-      expect(layout.callerSeatIndexes.toSet(), {1, 3});
-      expect(layout.seatActionLabels[5], 'RAISE');
-      expect(layout.seatActionLabels[1], 'CALL');
-      expect(layout.seatActionLabels[3], 'CALL');
-      expect(layout.foldedSeatIndexes.toSet(), {2, 4});
+      expect(layout.villainSeatIndex, 3);
+      expect(layout.callerSeatIndexes.toSet(), {4, 5});
+      expect(layout.seatActionLabels[3], 'RAISE');
+      expect(layout.seatActionLabels[4], 'CALL');
+      expect(layout.seatActionLabels[5], 'CALL');
+      // UTG folded ahead of the open; BB is still to act behind the hero.
+      expect(layout.foldedSeatIndexes.toSet(), {2});
     });
 
     test('LPT-1025: postflop Three callers keeps three villains live', () {

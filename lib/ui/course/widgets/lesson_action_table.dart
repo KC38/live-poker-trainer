@@ -698,7 +698,7 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
     case 'act-04-02-01-scaffolded':
       return const LessonActionSpot(
         heroCodes: ['7h', '2d'],
-        potLabel: 'Pot 3 → 9 → 29',
+        potLabel: 'Pot 3 → 9 → 27',
         villainLine: 'BB 3-bets to 20',
         streetLabel: 'Preflop · BTN · 72o',
         facingBet: true,
@@ -988,11 +988,12 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         feltStatusLine: 'Value language — half pot',
       );
     case 'act-05-01-01-scaffolded':
-      // Pot 3 → 9 → 19: blinds → BTN open-to 6 → BB + MP call (LPT-1024).
+      // Pot 3 → 9 → 21: blinds → MP open-to 6 → CO + BTN call. UTG folds;
+      // BB acts after the SB hero, so it cannot have called yet.
       return const LessonActionSpot(
         heroCodes: ['7h', '6h'],
-        potLabel: 'Pot 3 → 9 → 19',
-        villainLine: 'BTN open · BB + MP call',
+        potLabel: 'Pot 3 → 9 → 21',
+        villainLine: 'MP opens to 6 · CO + BTN call',
         streetLabel: 'Preflop · SB · 76s',
         facingBet: true,
         feltStatusLine: 'OOP multiway — fold medium connectors',

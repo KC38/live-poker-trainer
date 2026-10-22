@@ -19191,7 +19191,7 @@ await tester.tap(find.text('NIT'));
       estimatedSeconds: 45,
       accessibilityText: 'Fold speculative suited connectors multiway OOP.',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'BTN open, BB + MP call. You have 76s in SB. Action?',
+      prompt: 'MP opens to 6, CO and BTN call. You have 76s in SB. Action?',
       choices: const [
         CourseChoice(id: 'fold-76', label: 'Fold', action: 'FOLD'),
         CourseChoice(id: 'call-76', label: 'Call', action: 'CALL'),
